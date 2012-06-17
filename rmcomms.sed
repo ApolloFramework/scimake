@@ -1,4 +1,3 @@
-
 #!/bin/sed -f
 # Simple Sed Program to remove all comments from c program
 # --------------------------------------------------------------------
