@@ -29,7 +29,7 @@
 #    package not found
 #(default - not defined, which is treated as false)
 #
-#  ${scipkguc}_DIR - a search directory hint
+#  ${scipkguc}_ROOT_DIR, ${scipkguc}_DIR - search directory hints
 #
 #  SUPRA_SEARCH_PATH - used to specify various top-level search directories
 #
@@ -319,17 +319,24 @@ macro(SciFindPackage)
     message("SciFindPackage] SUPRA_SEARCH_PATH = ${SUPRA_SEARCH_PATH}")
   endif ()
   set(scipath)
-# Command-line define
-  set(scidir ${${scipkguc}_DIR})
-  if (scidir)
-    SciGetRealDir(${scidir} scipath)
+# Command-line define overrides all.
+  if (${scipkg}_ROOT_DIR)
+    SciGetRealDir(${${scipkg}_ROOT_DIR} scipath)
+  elseif (${scipkg}_DIR)
+# JRC 20120617: Remove this July 31, 2012.
+    message(WARNING "Use of ${scipkg}_DIR define is deprecated.  Please use ${scipkg}_ROOT_DIR")
+    SciGetRealDir(${${scipkg}_DIR} scipath)
   endif ()
-# Environment variable
-  set(idir $ENV{${scipkguc}_DIR})
-  if (idir)
-    SciGetRealDir(${idir} scidir)
-    set(scipath ${scipath} ${scidir})
+  if (NOT DEFINED ${scipath})
+    if ($ENV{${scipkg}_ROOT_DIR})
+      SciGetRealDir($ENV{${scipkg}_ROOT_DIR} scipath)
+    elseif (${scipkg}_DIR)
+# JRC 20120617: Remove this July 31, 2012.
+      message(WARNING "Use of ${scipkg}_DIR environment variable is deprecated.  Please use ${scipkg}_ROOT_DIR")
+      SciGetRealDir($ENV{${scipkg}_DIR} scipath)
+    endif ()
   endif ()
+# Next try environment variable
 # Supra-search-path dirs
   foreach (instdir ${scipkginst})
     foreach (spdir ${SUPRA_SEARCH_PATH})
