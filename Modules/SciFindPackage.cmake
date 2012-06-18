@@ -777,7 +777,7 @@ macro(SciFindPackage)
         # CACHE STRING "All include directories for ${scipkgreg}"
       # )
     else ()
-      message(WARNING "None of ${TFP_HEADERS} found.  Define ${scipkguc}_DIR to find them.")
+      message(WARNING "None of ${TFP_HEADERS} found.  Define ${scipkguc}_ROOT_DIR to the root directory of the installation.")
     endif ()
   endif ()
 
