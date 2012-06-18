@@ -335,7 +335,7 @@ macro(SciFindPackage)
   if (NOT DEFINED ${scipath})
     if ($ENV{${scipkgreg}_ROOT_DIR})
       SciGetRealDir($ENV{${scipkgreg}_ROOT_DIR} scipath)
-    elseif (${scipkgreg}_DIR)
+    elseif ($ENV{${scipkgreg}_DIR})
 # JRC 20120617: Remove this July 31, 2012.
       message(WARNING "Use of ${scipkgreg}_DIR environment variable is deprecated.  Please use ${scipkgreg}_ROOT_DIR")
       SciGetRealDir($ENV{${scipkgreg}_DIR} scipath)
