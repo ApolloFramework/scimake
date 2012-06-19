@@ -29,7 +29,9 @@
 #    package not found
 #(default - not defined, which is treated as false)
 #
-#  ${scipkguc}_ROOT_DIR, ${scipkguc}_DIR - search directory hints
+#  ${scipkgreg}_ROOT_DIR - search directory hints
+#    ${scipkguc}_DIR, ${scipkgreg}_DIR: Deprecated search directory hints 
+#    (to be retired in July 2012)
 #
 #  SUPRA_SEARCH_PATH - used to specify various top-level search directories
 #
@@ -335,7 +337,7 @@ macro(SciFindPackage)
     message(WARNING "Use of ${scipkguc}_DIR define is deprecated.  Please use ${scipkgreg}_ROOT_DIR")
     SciGetRealDir(${${scipkguc}_DIR} scipath)
   elseif (DEBUG_CMAKE)
-    message(STATUS "Neither ${scipkgreg}_ROOT_DIR nor ${scipkgreg}_DIR defined.")
+    message(STATUS "Neither ${scipkgreg}_ROOT_DIR, ${scipkgreg}_DIR, nor ${scipkguc}_DIR defined.")
   endif ()
   if (NOT DEFINED ${scipath})
     if ($ENV{${scipkgreg}_ROOT_DIR})
@@ -344,6 +346,10 @@ macro(SciFindPackage)
 # JRC 20120617: Remove this July 31, 2012.
       message(WARNING "Use of ${scipkgreg}_DIR environment variable is deprecated.  Please use ${scipkgreg}_ROOT_DIR")
       SciGetRealDir($ENV{${scipkgreg}_DIR} scipath)
+    elseif ($ENV{${scipkguc}_DIR})
+# MD 20120619: Remove this July 31, 2012.
+      message(WARNING "Use of ${scipkguc}_DIR environment variable is deprecated.  Please use ${scipkgreg}_ROOT_DIR")
+      SciGetRealDir($ENV{${scipkguc}_DIR} scipath)
     endif ()
   endif ()
 # Next try environment variable
@@ -782,7 +788,7 @@ macro(SciFindPackage)
         # CACHE STRING "All include directories for ${scipkgreg}"
       # )
     else ()
-      message(WARNING "None of ${TFP_HEADERS} found.  Define ${scipkguc}_ROOT_DIR to the root directory of the installation.")
+      message(WARNING "None of ${TFP_HEADERS} found.  Define ${scipkgreg}_ROOT_DIR to the root directory of the installation.")
     endif ()
   endif ()
 
@@ -901,17 +907,17 @@ macro(SciFindPackage)
 # Clean up and commit variables to cache
     list(LENGTH ${scipkgreg}_LIBRARIES sciliblistlen)
     if (NOT ${sciliblistlen})
-      message("WARNING - None of the libraries, ${TFP_LIBRARIES}, found.  Define ${scipkguc}_DIR to find them.")
+      message("WARNING - None of the libraries, ${TFP_LIBRARIES}, found.  Define ${scipkgreg}_ROOT_DIR to find them.")
     else ()
       list(REMOVE_DUPLICATES "${scipkgreg}_LIBRARIES")
       list(REMOVE_DUPLICATES "${scipkgreg}_LIBRARY_DIRS")
 # The first dir is the library dir
       list(GET "${scipkgreg}_LIBRARY_DIRS" 0 ${scipkgreg}_LIBRARY_DIR)
-      if (NOT DEFINED ${scipkgreg}_DIR)
-        get_filename_component(${scipkgreg}_DIR ${${scipkgreg}_LIBRARY_DIR}/.. REALPATH)
+      if (NOT DEFINED ${scipkgreg}_ROOT_DIR)
+        get_filename_component(${scipkgreg}_ROOT_DIR ${${scipkgreg}_LIBRARY_DIR}/.. REALPATH)
       endif ()
       if (DEBUG_CMAKE)
-        message(STATUS "${scipkgreg}_DIR = ${${scipkgreg}_DIR}")
+        message(STATUS "${scipkgreg}_ROOT_DIR = ${${scipkgreg}_ROOT_DIR}")
         message(STATUS "${scipkgreg}_LIBRARIES = ${${scipkgreg}_LIBRARIES}")
         message(STATUS "${scipkgreg}_LIBRARY_DIRS = ${${scipkgreg}_LIBRARY_DIRS}")
       endif ()
