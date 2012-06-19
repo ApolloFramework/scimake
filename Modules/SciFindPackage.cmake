@@ -329,6 +329,11 @@ macro(SciFindPackage)
 # JRC 20120617: Remove this July 31, 2012.
     message(WARNING "Use of ${scipkgreg}_DIR define is deprecated.  Please use ${scipkgreg}_ROOT_DIR")
     SciGetRealDir(${${scipkgreg}_DIR} scipath)
+  elseif (${scipkguc}_DIR)
+# The deprecated variable name is commonly ${scipkguc}_DIR, so check for that too
+# MD 20120619: Remove this July 31, 2012.
+    message(WARNING "Use of ${scipkguc}_DIR define is deprecated.  Please use ${scipkgreg}_ROOT_DIR")
+    SciGetRealDir(${${scipkguc}_DIR} scipath)
   elseif (DEBUG_CMAKE)
     message(STATUS "Neither ${scipkgreg}_ROOT_DIR nor ${scipkgreg}_DIR defined.")
   endif ()
