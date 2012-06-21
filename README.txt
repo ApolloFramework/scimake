@@ -24,3 +24,4 @@ If we change the external, one could do
   svn switch --relocate http://svn.code.sf.net/p/scimake/code/trunk https://SOURCEFORGE_USERNAME@svn.code.sf.net/p/scimake/code/trunk
 
 
+
