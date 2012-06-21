@@ -22,4 +22,3 @@ If we change the external, one could do
   svn co http://svn.code.sf.net/p/scimake/code/trunk scimake
   cd scimake
   svn switch --relocate http://svn.code.sf.net/p/scimake/code/trunk https://SOURCEFORGE_USERNAME@svn.code.sf.net/p/scimake/code/trunk
-
