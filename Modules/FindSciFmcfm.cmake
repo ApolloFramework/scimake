@@ -37,7 +37,7 @@ if (FMCFM_FOUND)
   # message(STATUS "Found FMCFM")
   set(HAVE_FMCFM 1 CACHE BOOL "Whether have the FMCFM library")
 # Find gacodes
-  include(${SCICMAKE_DIR}/SciGetDepsFromInstall.cmake)
+  include(${SCIMAKE_DIR}/SciGetDepsFromInstall.cmake)
 # Get gacodes libraries
   SciGetDepsFromInstall(GaCode ${Fmcfm_DIR} GACODE)
 # Get ntcctransport libraries

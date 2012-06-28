@@ -91,7 +91,7 @@ find_program(MAKE_EXECUTABLE NAMES make gmake)
 macro(PETSC_GET_TARGET_VARIABLE name var)
   set(${var} "NOTFOUND" CACHE INTERNAL "Cleared" FORCE)
   execute_process(COMMAND ${MAKE_EXECUTABLE} PETSC_DIR=${PETSC_DIR}
-    -f "${SCICMAKE_DIR}/Makefile.show" ${name}
+    -f "${SCIMAKE_DIR}/Makefile.show" ${name}
     OUTPUT_VARIABLE ${var}
     OUTPUT_STRIP_TRAILING_WHITESPACE
     RESULT_VARIABLE return)
@@ -101,7 +101,7 @@ endmacro(PETSC_GET_TARGET_VARIABLE)
 macro(PETSC_GET_VARIABLE name var)
   set(${var} "NOTFOUND" CACHE INTERNAL "Cleared" FORCE)
   execute_process(COMMAND ${MAKE_EXECUTABLE} PETSC_DIR=${PETSC_DIR}
-    --no-print-directory -f "${SCICMAKE_DIR}/Makefile.show"
+    --no-print-directory -f "${SCIMAKE_DIR}/Makefile.show"
     showvar PKG_VARIABLE=${name}
     OUTPUT_VARIABLE ${var}
     RESULT_VARIABLE return

@@ -26,7 +26,7 @@ foreach (configfile config configrev)
     )
     if (CMAKE_Fortran_COMPILER_WORKS)
       execute_process(
-        COMMAND sed -f ${SCICMAKE_DIR}/rmcomms.sed
+        COMMAND sed -f ${SCIMAKE_DIR}/rmcomms.sed
         INPUT_FILE ${CMAKE_BINARY_DIR}/${configfile}.h
         OUTPUT_FILE ${CMAKE_BINARY_DIR}/${configfile}.f
       )

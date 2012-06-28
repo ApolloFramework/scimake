@@ -159,7 +159,8 @@ if (TRILINOS_FOUND)
     get_filename_component(libname ${lib} NAME_WE)
     if (${libname} MATCHES "blas$" OR ${libname} MATCHES "lapack$" OR
         ${libname} MATCHES "acml$" OR ${libname} MATCHES "mkl$" OR
-        ${libname} MATCHES "f2c$" OR ${libname} MATCHES "atlas$"
+        ${libname} MATCHES "f2c$" OR ${libname} MATCHES "atlas$" OR
+        ${libname} MATCHES "sci_pgi$"
     )
     set(Trilinos_LINALG_LIBRARIES ${Trilinos_LINALG_LIBRARIES} ${lib})
     elseif (${libname} MATCHES "msmpi$")

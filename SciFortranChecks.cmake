@@ -11,7 +11,7 @@
 #
 ######################################################################
 
-include(${SCICMAKE_DIR}/SciFortranFindVersion.cmake)
+include(${SCIMAKE_DIR}/SciFortranFindVersion.cmake)
 
 # Set the lib subdir from the Compiler ID and version
 if (DEBUG_CMAKE)
@@ -211,6 +211,7 @@ endforeach ()
 list(REMOVE_DUPLICATES Fortran_IMPLICIT_LIBRARIES)
 list(REMOVE_DUPLICATES Fortran_IMPLICIT_LIBRARY_NAMES)
 list(REMOVE_DUPLICATES Fortran_IMPLICIT_LIBRARY_DIRS)
+SciGetStaticLibs("${Fortran_IMPLICIT_LIBRARIES}" Fortran_IMPLICIT_STLIBS)
 
 # JRC, 20111203: Why are we doing this?  We can use the other variables.
 if (0)
@@ -232,6 +233,7 @@ SciPrintString("RESULTS FOR fortran implicit libraries after removing duplicates
 SciPrintVar(Fortran_IMPLICIT_LIBRARIES)
 SciPrintVar(Fortran_IMPLICIT_LIBRARY_NAMES)
 SciPrintVar(Fortran_IMPLICIT_LIBRARY_DIRS)
+SciPrintVar(Fortran_IMPLICIT_STLIBS)
 SciPrintVar(Fortran_IMPLICIT_LIBFLAGS)
 if (DEBUG_CMAKE)
   SciPrintVar(Fortran_IGNORED_LIBRARIES)
@@ -272,7 +274,7 @@ set(FC_FUNC_ "FC_FUNC_(name,NAME) ${CMAKE_MATCH_1}")
 #
 message(STATUS "Compiling trycompile/modulesrcfile.f90.")
 execute_process(
-  COMMAND ${CMAKE_Fortran_COMPILER} -c ${SCICMAKE_DIR}/trycompile/modulesrcfile.f90 -o modulesrcfile.o
+  COMMAND ${CMAKE_Fortran_COMPILER} -c ${SCIMAKE_DIR}/trycompile/modulesrcfile.f90 -o modulesrcfile.o
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 set(SCI_FC_MODULENAME_CAPITALIZED FALSE)

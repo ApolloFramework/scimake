@@ -147,7 +147,7 @@ macro(SciGrabPackage)
     ## Install the bins and the libraries
     #
     install(CODE
-      "include(${SCICMAKE_DIR}/SciFixDyLibEx.cmake)
+      "include(${SCIMAKE_DIR}/SciFixDyLibEx.cmake)
       SciFixDyLibEx(FROM_DIR ${verdir} FROM_BINDIR bin FROM_LIBDIR lib 
            BINDIR ${INSTBINDIR} LIBDIR ${INSTSTLIBDIR} SHLIBDIR ${INSTSHLIBDIR} 
            INSTALL_PYTHON ${ENABLE_PYTHON} DEBUG)"

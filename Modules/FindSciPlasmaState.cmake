@@ -41,7 +41,7 @@ if (PLASMASTATE_FOUND)
   set(HAVE_PLASMASTATE 1 CACHE BOOL "Whether have the PlasmaState library")
   set(HAVE_PlasmaState 1 CACHE BOOL "Whether have the PlasmaState library")
 # Find gacodes
-  include(${SCICMAKE_DIR}/SciGetDepsFromInstall.cmake)
+  include(${SCIMAKE_DIR}/SciGetDepsFromInstall.cmake)
 # Get dependencies
   SciGetDepsFromInstall(NetlibLite ${PLASMASTATE_DIR} NETLIB_LITE)
 endif ()

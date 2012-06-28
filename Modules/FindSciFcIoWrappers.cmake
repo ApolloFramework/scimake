@@ -38,7 +38,7 @@ SciFindPackage(PACKAGE "FcIoWrappers"
 if (FCIOWRAPPERS_FOUND)
   set(HAVE_FCIOWRAPPERS 1 CACHE BOOL "Whether have the FCIOWRAPPERS library")
   set(HAVE_FcIoWrappers 1 CACHE BOOL "Whether have the FCIOWRAPPERS library")
-  include(${SCICMAKE_DIR}/SciGetDepsFromInstall.cmake)
+  include(${SCIMAKE_DIR}/SciGetDepsFromInstall.cmake)
 # Get hdf5 libraries
   SciGetDepsFromInstall(Hdf5 ${FcIoWrappers_DIR} HDF5)
 # Get netcdf libraries

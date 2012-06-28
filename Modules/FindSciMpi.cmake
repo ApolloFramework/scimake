@@ -38,7 +38,7 @@ set(HAVE_MPI 0 CACHE BOOL "Whether have MPI")
 
 # Determine whether mpi is already in the C++ compiler
 try_compile(SCI_HAVE_MPICXX_COMPILER_WRAPPER ${PROJECT_BINARY_DIR}/scimake
-  ${SCICMAKE_DIR}/trycompile/mpi_h.cxx)
+  ${SCIMAKE_DIR}/trycompile/mpi_h.cxx)
 if (SCI_HAVE_MPICXX_COMPILER_WRAPPER)
   message(STATUS "Using C/C++ compiler wrappers.")
 # If so, set that to the compiler
@@ -54,7 +54,7 @@ endif ()
 # If have fortran determine whether mpi is already in the Fortran compiler
 if (CMAKE_Fortran_COMPILER_WORKS)
   try_compile(SCI_HAVE_MPIFC_COMPILER_WRAPPER ${PROJECT_BINARY_DIR}/scimake
-    ${SCICMAKE_DIR}/trycompile/mpi_mod.f90)
+    ${SCIMAKE_DIR}/trycompile/mpi_mod.f90)
   if (SCI_HAVE_MPIFC_COMPILER_WRAPPER)
     message(STATUS "Using Fortran compiler wrapper.")
     set(MPI_Fortran_COMPILER ${CMAKE_Fortran_COMPILER})

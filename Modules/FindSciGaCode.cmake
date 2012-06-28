@@ -40,7 +40,7 @@ SciFindPackage(PACKAGE GaCode
 if (GACODE_FOUND)
   set(HAVE_GACODE 1 CACHE BOOL "Whether have the gacode library")
   set(HAVE_GaCode 1 CACHE BOOL "Whether have the gacode library")
-  include(${SCICMAKE_DIR}/SciGetDepsFromInstall.cmake)
+  include(${SCIMAKE_DIR}/SciGetDepsFromInstall.cmake)
 # Get fciowrappers libraries
   SciGetDepsFromInstall(Fciowrappers ${GaCode_DIR} FCIOWRAPPERS)
 # Get hdf5 libraries

@@ -44,7 +44,7 @@
 #
 ######################################################################
 
-include(${SCICMAKE_DIR}/SciSeparateLibs.cmake)
+include(${SCIMAKE_DIR}/SciSeparateLibs.cmake)
 # Heading
 message("")
 message("--------- FindSciBlasLapack looking for Blas and Lapack ---------")

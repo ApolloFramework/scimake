@@ -10,7 +10,7 @@
 #
 ######################################################################
 
-include(${SCICMAKE_DIR}/SciSeparateLibs.cmake)
+include(${SCIMAKE_DIR}/SciSeparateLibs.cmake)
 
 # SciGetDepsFromInstall
 #

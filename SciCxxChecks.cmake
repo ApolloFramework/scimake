@@ -11,7 +11,7 @@
 
 # Determine compiler version
 SciPrintString("")
-include(${SCICMAKE_DIR}/SciCxxFindVersion.cmake)
+include(${SCIMAKE_DIR}/SciCxxFindVersion.cmake)
 if (CXX_VERSION)
   SciPrintVar(CXX_VERSION)
 else ()
@@ -74,38 +74,38 @@ check_include_file_cxx(sstream HAVE_SSTREAM)
 
 # See whether generally declared statics work
 try_compile(HAVE_GENERALLY_DECLARED_STATICS ${PROJECT_BINARY_DIR}/scimake
-  ${SCICMAKE_DIR}/trycompile/gendeclstatics.cxx)
+  ${SCIMAKE_DIR}/trycompile/gendeclstatics.cxx)
 if (HAVE_GENERALLY_DECLARED_STATICS)
   if (DEBUG_CMAKE)
-    message("${SCICMAKE_DIR}/trycompile/gendeclstatics.cxx compiled.")
+    message("${SCIMAKE_DIR}/trycompile/gendeclstatics.cxx compiled.")
   endif ()
   set(HAVE_GENERALLY_DECLARED_STATICS 1 CACHE BOOL "Whether the C++ compiler allows generally declared templated static variables")
 else ()
   if (DEBUG_CMAKE)
-    message("${SCICMAKE_DIR}/trycompile/gendeclstatics.cxx did not compile.")
+    message("${SCIMAKE_DIR}/trycompile/gendeclstatics.cxx did not compile.")
   endif ()
 endif ()
 
 # See whether std::abs<double> known.
 try_compile(HAVE_STD_ABS_DOUBLE ${PROJECT_BINARY_DIR}/scimake
-  ${SCICMAKE_DIR}/trycompile/stdabsdbl.cxx)
+  ${SCIMAKE_DIR}/trycompile/stdabsdbl.cxx)
 if (HAVE_STD_ABS_DOUBLE)
   if (DEBUG_CMAKE)
-    message("${SCICMAKE_DIR}/trycompile/stdabsdbl.cxx compiled.")
+    message("${SCIMAKE_DIR}/trycompile/stdabsdbl.cxx compiled.")
   endif ()
 else ()
   if (DEBUG_CMAKE)
-    message("${SCICMAKE_DIR}/trycompile/stdabsdbl.cxx did not compile.")
+    message("${SCIMAKE_DIR}/trycompile/stdabsdbl.cxx did not compile.")
   endif ()
   set(NOT_HAVE_STD_ABS_DOUBLE 1 CACHE BOOL "Define when the C++ compiler does not understand std::abs with double arg")
 endif ()
 
 # See whether compiler RTTI typeid is working properly
 try_run(IS_RTTI_COMPATIBLE DID_RTTI_TEST_COMPILE ${PROJECT_BINARY_DIR}/scimake
-  ${SCICMAKE_DIR}/trycompile/checkCompilerRTTI.cxx)
+  ${SCIMAKE_DIR}/trycompile/checkCompilerRTTI.cxx)
 if (DID_RTTI_TEST_COMPILE)
   if (DEBUG_CMAKE)
-    message("${SCICMAKE_DIR}/trycompile/checkCompilerRTTI.cxx compiled.")
+    message("${SCIMAKE_DIR}/trycompile/checkCompilerRTTI.cxx compiled.")
   endif ()
   if (IS_RTTI_COMPATIBLE EQUAL 0)
     set(COMPILER_TYPEID_IS_VALID 1)
@@ -119,7 +119,7 @@ if (DID_RTTI_TEST_COMPILE)
   endif ()
 else ()
   if (DEBUG_CMAKE)
-    message("${SCICMAKE_DIR}/trycompile/checkCompilerRTTI.cxx did not compile.")
+    message("${SCIMAKE_DIR}/trycompile/checkCompilerRTTI.cxx did not compile.")
   endif ()
 endif ()
 

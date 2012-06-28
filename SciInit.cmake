@@ -15,11 +15,11 @@
 #
 #####################################################################
 
-if (NOT DEFINED SCICMAKE_DIR)
-  set(SCICMAKE_DIR ${PROJECT_SOURCE_DIR}/scimake)
+if (NOT DEFINED SCIMAKE_DIR)
+  set(SCIMAKE_DIR ${PROJECT_SOURCE_DIR}/scimake)
 endif ()
-include(${SCICMAKE_DIR}/SciFuncsMacros.cmake)
-include(${SCICMAKE_DIR}/SciGetDepsFromInstall.cmake)
+include(${SCIMAKE_DIR}/SciFuncsMacros.cmake)
+include(${SCIMAKE_DIR}/SciGetDepsFromInstall.cmake)
 
 #####################################################################
 #
@@ -91,7 +91,7 @@ SciPrintString("CMAKE_SYSTEM_PROCESSOR = ${CMAKE_SYSTEM_PROCESSOR}.")
 # message(STATUS "CMAKE_MODULE_PATH = ${CMAKE_MODULE_PATH}.")
 cmake_policy(SET CMP0017 OLD) # Use our modules over theirs
 set(CMAKE_MODULE_PATH
-  ${SCICMAKE_DIR}/Modules
+  ${SCIMAKE_DIR}/Modules
 )
 
 set(TXCMAKE_DIR ${PROJECT_SOURCE_DIR}/txcmake)
@@ -161,7 +161,7 @@ set(SCRATCHNAME $ENV{SCRATCH})
 #
 ######################################################################
 
-include(${SCICMAKE_DIR}/SciSvnInfo.cmake)
+include(${SCIMAKE_DIR}/SciSvnInfo.cmake)
 
 ######################################################################
 #
@@ -183,7 +183,15 @@ endif ()
 #
 ######################################################################
 
-include(${SCICMAKE_DIR}/SciWinFlags.cmake)
+include(${SCIMAKE_DIR}/SciWinFlags.cmake)
+
+######################################################################
+#
+# Load Find Package (also contains code for computing static libraries)
+#
+######################################################################
+
+include(${SCIMAKE_DIR}/Modules/SciFindPackage.cmake)
 
 ######################################################################
 #
@@ -191,9 +199,9 @@ include(${SCICMAKE_DIR}/SciWinFlags.cmake)
 #
 ######################################################################
 
-include(${SCICMAKE_DIR}/SciCChecks.cmake)
+include(${SCIMAKE_DIR}/SciCChecks.cmake)
 if (NOT NOCXX)
-  include(${SCICMAKE_DIR}/SciCxxChecks.cmake)
+  include(${SCIMAKE_DIR}/SciCxxChecks.cmake)
 endif ()
 if (NOT NOFORTRAN)
   message("")
@@ -201,7 +209,7 @@ if (NOT NOFORTRAN)
 # Enable Fortran to all those variables
   enable_language(Fortran)
   include(${CMAKE_ROOT}/Modules/CMakeDetermineFortranCompiler.cmake)
-  include(${SCICMAKE_DIR}/SciFortranChecks.cmake)
+  include(${SCIMAKE_DIR}/SciFortranChecks.cmake)
 else ()
   message(STATUS "No Fortran, so no implicit fortran link libraries known.")
 endif ()
@@ -252,14 +260,6 @@ if (USING_MINGW)
   message(STATUS "CMAKE_STATIC_LIBRARY_PREFIX = ${CMAKE_STATIC_LIBRARY_PREFIX}.")
   message(STATUS "CMAKE_STATIC_LIBRARY_SUFFIX = ${CMAKE_STATIC_LIBRARY_SUFFIX}.")
 endif ()
-
-######################################################################
-#
-# Load Find Package
-#
-######################################################################
-
-include(${SCICMAKE_DIR}/Modules/SciFindPackage.cmake)
 
 ######################################################################
 #
