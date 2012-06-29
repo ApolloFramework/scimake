@@ -160,7 +160,7 @@ if (TRILINOS_FOUND)
     if (${libname} MATCHES "blas$" OR ${libname} MATCHES "lapack$" OR
         ${libname} MATCHES "acml$" OR ${libname} MATCHES "mkl$" OR
         ${libname} MATCHES "f2c$" OR ${libname} MATCHES "atlas$" OR
-        ${libname} MATCHES "sci_pgi$"
+        ${libname} MATCHES "sci_pgi$" OR ${libname} MATCHES "sci_gnu$"
     )
     set(Trilinos_LINALG_LIBRARIES ${Trilinos_LINALG_LIBRARIES} ${lib})
     elseif (${libname} MATCHES "msmpi$")
