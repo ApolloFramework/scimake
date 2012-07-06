@@ -46,15 +46,21 @@ set(Petsc_LIBRARY_LIST
   metis
 )
 
+if (DEFINED PETSC_FIND_VERSION)
+  set(Petsc_SEARCH "petsc${PETSC_FIND_VERSION}")
+else()
+  set(Petsc_SEARCH "petsc")
+endif()
+
 if (ENABLE_PARALLEL)
   SciFindPackage(PACKAGE "Petsc"
-    INSTALL_DIR petsc-par
+    INSTALL_DIR ${Petsc_SEARCH}-par
     HEADERS petsc.h
     LIBRARIES ${Petsc_LIBRARY_LIST}
   )
 else ()
   SciFindPackage(PACKAGE "Petsc"
-    INSTALL_DIR petsc
+    INSTALL_DIR ${Petsc_SEARCH}
     HEADERS petsc.h mpi.h
     INCLUDE_SUBDIRS include include/mpiuni
     LIBRARIES ${Petsc_LIBRARY_LIST}
