@@ -19,19 +19,20 @@
 # convenience variable for ITT's install dir, should
 # be fixed to use Program Files env var but it is problematic in cygwin
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
-  set(_Idl_PROGRAM_FILES_DIR "C:/Program Files/Exelis")
+  set(_Idl_PROGRAM_FILES_DIR "C:/Program Files")
   set(_Idl_NAME "IDL")
   set(_Idl_OS "")
+  set(_Idl_KNOWN_COMPANIES "ITT" "Exelis")
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-  set(_Idl_PROGRAM_FILES_DIR "/Applications/itt")
-
+  set(_Idl_PROGRAM_FILES_DIR "/Applications")
   set(_Idl_NAME "idl")
   set(_Idl_OS ".darwin")
+  set(_Idl_KNOWN_COMPANIES "itt" "exelis")
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
-  set(_Idl_PROGRAM_FILES_DIR "/usr/local/itt")
-
+  set(_Idl_PROGRAM_FILES_DIR "/usr/local")
   set(_Idl_NAME "idl")
   set(_Idl_OS ".linux")
+  set(_Idl_KNOWN_COMPANIES "itt" "exelis")
 endif ()
 
 # check for IDL 8.0's new location
@@ -47,11 +48,15 @@ if (NOT DEFINED Idl_FIND_VERSION)
   set(_Idl_KNOWN_VERSIONS "82" "81" "80" "71" "706")
 # IDL 8.0 is in a different location than other versions on Windows
 #(extra IDL directory in path)
-  list(APPEND _Idl_SEARCH_DIRS "${_Idl_PROGRAM_FILES_DIR}/IDL/IDL80")
-  foreach (_Idl_KNOWN_VERSION ${_Idl_KNOWN_VERSIONS})
-    list(APPEND _Idl_SEARCH_DIRS
-      "${_Idl_PROGRAM_FILES_DIR}/${_Idl_NAME}${_Idl_KNOWN_VERSION}")
-  endforeach (_Idl_KNOWN_VERSION ${_Idl_KNOWN_VERSIONS})
+  foreach (_Idl_COMPANY ${_Idl_KNOWN_COMPANIES})
+    list(APPEND _Idl_SEARCH_DIRS "${_Idl_PROGRAM_FILES_DIR}/${_Idl_COMPANY}/IDL/IDL80")
+	list(APPEND _Idl_SEARCH_DIRS "${_Idl_PROGRAM_FILES_DIR}/${_Idl_COMPANY}/IDL/IDL81")
+    foreach (_Idl_KNOWN_VERSION ${_Idl_KNOWN_VERSIONS})
+      list(APPEND _Idl_SEARCH_DIRS
+	    "${_Idl_PROGRAM_FILES_DIR}/${_Idl_COMPANY}/${_Idl_NAME}${_Idl_KNOWN_VERSION}")
+    endforeach (_Idl_KNOWN_VERSION ${_Idl_KNOWN_VERSIONS})
+  endforeach (_Idl_COMPANY ${_Idl_KNOWN_COMPANIES})
+  message(STATUS "${_Idl_SEARCH_DIRS}")
 endif ()
 
 if (NOT "$ENV{IDL_DIR}" STREQUAL "")
