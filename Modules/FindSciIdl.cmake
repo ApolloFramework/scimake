@@ -16,8 +16,8 @@
 #
 ######################################################################
 
-# convenience variable for ITT's install dir, should
-# be fixed to use Program Files env var but it is problematic in cygwin
+# convenience variable for ITT's install dir, should be fixed to use 
+# Program Files env var but it is problematic in cygwin
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
   set(_Idl_PROGRAM_FILES_DIR "C:/Program Files")
   set(_Idl_NAME "IDL")
@@ -35,28 +35,23 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
   set(_Idl_KNOWN_COMPANIES "itt" "exelis")
 endif ()
 
-# check for IDL 8.0's new location
-if (UNIX)
-  if (NOT IS_SYMLINK ${_Idl_PROGRAM_FILES_DIR}/idl)
-    set(_Idl_PROGRAM_FILES_DIR ${_Idl_PROGRAM_FILES_DIR}/idl)
-  endif ()
-endif ()
-
 # find idl based on version numbers, if you want a specific one, set
 # it prior to running configure
 if (NOT DEFINED Idl_FIND_VERSION)
   set(_Idl_KNOWN_VERSIONS "82" "81" "80" "71" "706")
-# IDL 8.0 is in a different location than other versions on Windows
-#(extra IDL directory in path)
+# IDL 8.0 is in a different location than other versions on Windows (extra IDL directory in path)
   foreach (_Idl_COMPANY ${_Idl_KNOWN_COMPANIES})
-    list(APPEND _Idl_SEARCH_DIRS "${_Idl_PROGRAM_FILES_DIR}/${_Idl_COMPANY}/IDL/IDL80")
-	list(APPEND _Idl_SEARCH_DIRS "${_Idl_PROGRAM_FILES_DIR}/${_Idl_COMPANY}/IDL/IDL81")
+    list(APPEND 
+         _Idl_SEARCH_DIRS 
+         "${_Idl_PROGRAM_FILES_DIR}/${_Idl_COMPANY}/${_Idl_NAME}/${_Idl_NAME}80")
+    list(APPEND 
+         _Idl_SEARCH_DIRS 
+         "${_Idl_PROGRAM_FILES_DIR}/${_Idl_COMPANY}/${_Idl_NAME}/${_Idl_NAME}81")
     foreach (_Idl_KNOWN_VERSION ${_Idl_KNOWN_VERSIONS})
       list(APPEND _Idl_SEARCH_DIRS
-	    "${_Idl_PROGRAM_FILES_DIR}/${_Idl_COMPANY}/${_Idl_NAME}${_Idl_KNOWN_VERSION}")
+           "${_Idl_PROGRAM_FILES_DIR}/${_Idl_COMPANY}/${_Idl_NAME}${_Idl_KNOWN_VERSION}")
     endforeach (_Idl_KNOWN_VERSION ${_Idl_KNOWN_VERSIONS})
   endforeach (_Idl_COMPANY ${_Idl_KNOWN_COMPANIES})
-  message(STATUS "${_Idl_SEARCH_DIRS}")
 endif ()
 
 if (NOT "$ENV{IDL_DIR}" STREQUAL "")
@@ -89,7 +84,7 @@ if (IDL_FOUND)
   set(HAVE_IDL 1 CACHE BOOL "Whether have IDL")
 else ()
    if (SciIdl_FIND_REQUIRED)
-      message(FATAL_ERROR "Could not find IDL")
+      message(FATAL_ERROR "Could not find IDL: specify with Idl_INCLUDE_DIR and Idl_LIBRARY")
    endif ()
 endif ()
 
