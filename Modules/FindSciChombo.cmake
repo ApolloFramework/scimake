@@ -113,15 +113,27 @@ message(STATUS "Looking for Chombo with directory name ${CHOMBO_SHORTCUT}")
 SciFindPackage(PACKAGE "Chombo"
               INSTALL_DIR "chombo"
               HEADERS "Box.H;CH_assert.H;CH_HDF5.H"
-              LIBRARIES ${CHOMBO_LIBRARY_LIST}
+              LIBRARIES ${CHOMBO_LIBRARY_LIST_WITHOUT_SUFFIX}
               )
 
 if (CHOMBO_FOUND)
   message(STATUS "Found Chombo")
   set(HAVE_CHOMBO 1 CACHE BOOL "Whether have the Chombo library")
 else ()
-  message(STATUS "Did not find Chombo.  Use -DCHOMBO_DIR to specify the installation directory.")
-  if (SciChombo_FIND_REQUIRED)
-    message(FATAL_ERROR "Failed.")
+  message(STATUS "Did not find Chombo, perhaps the library names are mangled? Will try again")
+
+  SciFindPackage(PACKAGE "Chombo"
+                 INSTALL_DIR "chombo"
+                 HEADERS "Box.H;CH_assert.H;CH_HDF5.H"
+                 LIBRARIES ${CHOMBO_LIBRARY_LIST}
+                 )
+
+  if (CHOMBO_FOUND)
+    message(STATUS "Found Chombo")
+  else ()
+    message(STATUS "Did not find Chombo.  Use -DCHOMBO_DIR to specify the installation directory.")
+    if (SciChombo_FIND_REQUIRED)
+      message(FATAL_ERROR "Failed.")
+    endif ()
   endif ()
 endif ()
