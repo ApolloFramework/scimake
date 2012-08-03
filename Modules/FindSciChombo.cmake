@@ -86,6 +86,20 @@ set(CHOMBO_LIBRARY_LIST
   "basetools${suffix}"
 )
 
+set(CHOMBO_LIBRARY_LIST_WITHOUT_SUFFIX
+  "${CHOMBO_LIBRARY_LIST}"
+  "ebamrelliptic"
+  "ebamrtimedependent"
+  "ebamrtools"
+  "ebtools"
+  "workshop"
+  "amrelliptic"
+  "amrtimedependent"
+  "amrtools"
+  "boxtools"
+  "basetools"
+)
+
 set(CHOMBO_SHORTCUT)
 
 #if(ENABLE_PARALLEL)
