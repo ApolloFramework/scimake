@@ -101,39 +101,65 @@ set(CHOMBO_LIBRARY_LIST_WITHOUT_SUFFIX
 )
 
 set(CHOMBO_SHORTCUT)
-
 #if(ENABLE_PARALLEL)
 #  set(CHOMBO_SHORTCUT "chombo-3.1.0-par${CH_DEBUG_DIR}${CH_SPACEDIM}d")
 #else()
 #  set(CHOMBO_SHORTCUT "chombo-3.1.0-ser${CH_DEBUG_DIR}${CH_SPACEDIM}d")
 #endif()
-
 message(STATUS "Looking for Chombo with directory name ${CHOMBO_SHORTCUT}")
+message(STATUS "If Chombo lib names mangled, will look for non-mangled")
 
-SciFindPackage(PACKAGE "Chombo"
-              INSTALL_DIR "chombo"
-              HEADERS "Box.H;CH_assert.H;CH_HDF5.H"
-              LIBRARIES ${CHOMBO_LIBRARY_LIST_WITHOUT_SUFFIX}
-              )
+
+# Sets name for debug builds
+if (CH_DEBUG)
+  set(DEBUG_NAME "dbg")
+endif ()
+
+####################################################################################
+# Look for par(ser)2d(3d)dbg version of chombo
+
+if (ENABLE_PARALLEL)
+
+   if (CH_SPACEDIM MATCHES "2")
+     message(STATUS "Looking for parallel 2D Chombo")
+     SciFindPackage(PACKAGE "Chombo"
+  	INSTALL_DIR "chombo-par2d${DEBUG_NAME}"
+	LIBRARIES ${CHOMBO_LIBRARY_LIST_WITHOUT_SUFFIX};${CHOMBO_LIBRARY_LIST}
+        HEADERS "Box.H;CH_assert.H;CH_HDF5.H" )
+   endif ()
+
+   if (CH_SPACEDIM MATCHES "3")
+     message(STATUS "Looking for parallel 3D Chombo")
+     SciFindPackage(PACKAGE "Chombo"
+  	INSTALL_DIR "chombo-par3d"
+	LIBRARIES ${CHOMBO_LIBRARY_LIST_WITHOUT_SUFFIX};${CHOMBO_LIBRARY_LIST}
+        HEADERS "Box.H;CH_assert.H;CH_HDF5.H" )
+   endif ()
+
+else ()
+
+   if (CH_SPACEDIM MATCHES "2")
+     message(STATUS "Looking for serial 2D Chombo")
+     SciFindPackage(PACKAGE "Chombo"
+  	INSTALL_DIR "chombo-ser2d${DEBUG_NAME}"
+	LIBRARIES ${CHOMBO_LIBRARY_LIST_WITHOUT_SUFFIX};${CHOMBO_LIBRARY_LIST}
+        HEADERS "Box.H;CH_assert.H;CH_HDF5.H" )
+   endif ()
+
+   if (CH_SPACEDIM MATCHES "3")
+     message(STATUS "Looking for serial 3D Chombo")
+     SciFindPackage(PACKAGE "Chombo"
+  	INSTALL_DIR "chombo-ser3d"
+	LIBRARIES ${CHOMBO_LIBRARY_LIST_WITHOUT_SUFFIX};${CHOMBO_LIBRARY_LIST}
+        HEADERS "Box.H;CH_assert.H;CH_HDF5.H" )
+   endif ()
+
+endif (ENABLE_PARALLEL)
+####################################################################################
 
 if (CHOMBO_FOUND)
   message(STATUS "Found Chombo")
   set(HAVE_CHOMBO 1 CACHE BOOL "Whether have the Chombo library")
 else ()
-  message(STATUS "Did not find Chombo, perhaps the library names are mangled? Will try again")
-
-  SciFindPackage(PACKAGE "Chombo"
-                 INSTALL_DIR "chombo"
-                 HEADERS "Box.H;CH_assert.H;CH_HDF5.H"
-                 LIBRARIES ${CHOMBO_LIBRARY_LIST}
-                 )
-
-  if (CHOMBO_FOUND)
-    message(STATUS "Found Chombo")
-  else ()
-    message(STATUS "Did not find Chombo.  Use -DCHOMBO_DIR to specify the installation directory.")
-    if (SciChombo_FIND_REQUIRED)
-      message(FATAL_ERROR "Failed.")
-    endif ()
-  endif ()
+  message(STATUS "Did not find Chombo.  Use -DCHOMBO_DIR to specify the installation directory.")
 endif ()
