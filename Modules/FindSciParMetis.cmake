@@ -26,7 +26,7 @@
 set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 
 SciFindPackage(PACKAGE "ParMetis"
-              INSTALL_DIR "parmetis"
+              INSTALL_DIR "parmetis-par"
               HEADERS "parmetis.h"
               LIBRARIES "parmetis;metis"
               )
