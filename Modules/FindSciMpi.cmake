@@ -66,9 +66,11 @@ if (CMAKE_Fortran_COMPILER_WORKS)
   endif ()
 endif ()
 
-# If building parallel Fortran on 64 bit Windows and using the MinGW compiler(s), as
-# instructed on https://ice.txcorp.com/trac/bilder/wiki/InstallMinGW, the following
-# code sets the mpi variables directly because find_package(MPI REQUIRED) gets this wrong.
+# If building parallel Fortran on 64 bit Windows
+# and using the MinGW compiler(s), as instructed on
+# https://ice.txcorp.com/trac/bilder/wiki/InstallMinGW, the
+# following sets the mpi variables directly because
+# find_package(MPI REQUIRED) gets this wrong.
 if (WIN32 AND "$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "AMD64" AND
   ("${CMAKE_Fortran_COMPILER}" STREQUAL "C:/MinGW/bin/mingw32-gfortran.exe"))
   message(STATUS "Using mingw32-gfortran.exe and linking to the MPI libraries distributed with HPC (To get the MPI libraries to link correctly, follow the instructions on https://ice.txcorp.com/trac/bilder/wiki/InstallMinGW exactly).")
@@ -102,7 +104,7 @@ if (WIN32 AND "$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "AMD64" AND
       C:/winsame/contrib-mingw/microsoft-hpc-mingw/lib/amd64/msmpi.lib)
   set(MPI_DLLS C:/winsame/contrib-mingw/microsoft-hpc-mingw/Lib/amd64/msmpi.dll)
   set(MPI_LINK_FLAGS -L/winsame/contrib-mingw/microsoft-hpc-mingw/Lib/amd64 -lmsmpifec -lmsmpi)
-  set(SCIMPI_FOUND TRUE) 
+  set(SCIMPI_FOUND TRUE)
   set(SEARCH_FOR_MPI FALSE)
   message(STATUS "Enabling MPI")
   SciPrintCMakeResults("MPI")
@@ -221,3 +223,4 @@ if (NOT SCIMPI_FOUND)
     message(STATUS "MPI not enabled.")
   endif ()
 endif ()
+
