@@ -255,12 +255,19 @@ ENDFUNCTION()
 # NOTE: lists should be delimited by semicolons.
 #(which is the default format used by scimake)
 #
+
+#******************************************************************************************************
+#Note: Jon Rood added the optional ALLOW_LIBRARY_DUPLICATES parameter 8/24/2012 for use
+#in a part of building GPULib with the Atlas and MAGMA packages that have circular library dependencies
+#THIS COMMENT CAN GO AWAY WHEN SUFFICIENT TIME HAS PASSED AND IT HASN'T BROKEN ANY OTHER PROJECTS
+#******************************************************************************************************
+
 include(CMakeParseArguments)
 macro(SciFindPackage)
   CMAKE_PARSE_ARGUMENTS(TFP
     ""
     "PACKAGE;INSTALL_DIR"
-    "INSTALL_DIRS;EXECUTABLES;HEADERS;LIBRARIES;FILES;MODULES;EXECUTABLE_SUBDIRS;INCLUDE_SUBDIRS;MODULE_SUBDIRS;LIBRARY_SUBDIRS;FILE_SUBDIRS"
+    "INSTALL_DIRS;EXECUTABLES;HEADERS;LIBRARIES;FILES;MODULES;EXECUTABLE_SUBDIRS;INCLUDE_SUBDIRS;MODULE_SUBDIRS;LIBRARY_SUBDIRS;FILE_SUBDIRS;ALLOW_LIBRARY_DUPLICATES"
     ${ARGN}
   )
 
@@ -281,7 +288,8 @@ macro(SciFindPackage)
     MODULES = ${TFP_MODULES}
     EXECUTABLE_SUBDIRS = ${TFP_EXECUTABLE_SUBDIRS}
     INCLUDE_SUBDIRS = ${TFP_INCLUDE_SUBDIRS}
-    LIBRARY_SUBDIRS = ${TFP_LIBRARY_SUBDIRS}")
+    LIBRARY_SUBDIRS = ${TFP_LIBRARY_SUBDIRS}
+    ALLOW_LIBRARY_DUPLICATES = ${TFP_ALLOW_LIBRARY_DUPLICATES}")
   endif ()
 
 # Construct various names(upper/lower case) for package
@@ -909,7 +917,9 @@ macro(SciFindPackage)
     if (NOT ${sciliblistlen})
       message("WARNING - None of the libraries, ${TFP_LIBRARIES}, found.  Define ${scipkgreg}_ROOT_DIR to find them.")
     else ()
-      list(REMOVE_DUPLICATES "${scipkgreg}_LIBRARIES")
+      if (NOT DEFINED ALLOW_LIBRARY_DUPLICATES OR NOT ALLOW_LIBRARY_DUPLICATES)
+        list(REMOVE_DUPLICATES "${scipkgreg}_LIBRARIES")
+      endif ()
       list(REMOVE_DUPLICATES "${scipkgreg}_LIBRARY_DIRS")
 # The first dir is the library dir
       list(GET "${scipkgreg}_LIBRARY_DIRS" 0 ${scipkgreg}_LIBRARY_DIR)
