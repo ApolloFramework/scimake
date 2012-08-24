@@ -259,7 +259,7 @@ ENDFUNCTION()
 #******************************************************************************************************
 #Note: Jon Rood added the optional ALLOW_LIBRARY_DUPLICATES parameter 8/24/2012 for use
 #in a part of building GPULib with the Atlas and MAGMA packages that have circular library dependencies
-#THIS COMMENT CAN GO AWAY WHEN SUFFICIENT TIME HAS PASSED AND IT HASN'T BROKEN ANY OTHER PROJECTS
+#THIS COMMENT CAN GO AWAY WHEN SUFFICIENT TIME HAS PASSED AND IT HASN'T BROKEN ANY OTHER PROJECTS 
 #******************************************************************************************************
 
 include(CMakeParseArguments)
