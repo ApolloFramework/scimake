@@ -26,6 +26,9 @@
 #(To distribute this file outside of scimake, substitute the full
 #  License text for the above reference.)
 
+message("")
+message("--------- FindSciOpenSsl looking for OpenSSL  ---------")
+
 # http://www.slproweb.com/products/Win32OpenSSL.html
 set(_OPENSSL_ROOT_HINTS
   "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (32-bit)_is1;Inno Setup: App Path]"
@@ -79,9 +82,10 @@ if (WIN32 AND NOT CYGWIN)
       set(OpenSsl_LIBRARIES
         optimized ${SSL_EAY_RELEASE} debug ${SSL_EAY_DEBUG}
         optimized ${LIB_EAY_RELEASE} debug ${LIB_EAY_DEBUG}
+        CACHE
         )
     else ()
-      set(OpenSsl_LIBRARIES ${SSL_EAY_RELEASE} ${LIB_EAY_RELEASE} )
+      set(OpenSsl_LIBRARIES ${SSL_EAY_RELEASE} ${LIB_EAY_RELEASE} CACHE)
     endif ()
     MARK_AS_ADVANCED(SSL_EAY_DEBUG SSL_EAY_RELEASE)
     MARK_AS_ADVANCED(LIB_EAY_DEBUG LIB_EAY_RELEASE)
@@ -94,7 +98,7 @@ if (WIN32 AND NOT CYGWIN)
       PATHS ${OPENSSL_ROOT_DIR}/lib/MinGW
       )
     MARK_AS_ADVANCED(SSL_EAY LIB_EAY)
-    set(OpenSsl_LIBRARIES ${SSL_EAY} ${LIB_EAY} )
+    set(OpenSsl_LIBRARIES ${SSL_EAY} ${LIB_EAY} CACHE)
   else ()
     # Not sure what to pick for -say- intel, let's use the toplevel ones and hope someone report issues:
     find_library(LIB_EAY NAMES libeay32
@@ -104,7 +108,7 @@ if (WIN32 AND NOT CYGWIN)
       PATHS ${OPENSSL_ROOT_DIR}/lib
       )
     MARK_AS_ADVANCED(SSL_EAY LIB_EAY)
-    set(OpenSsl_LIBRARIES ${SSL_EAY} ${LIB_EAY} )
+    set(OpenSsl_LIBRARIES ${SSL_EAY} ${LIB_EAY} CACHE)
   endif ()
 else ()
 
@@ -112,7 +116,7 @@ else ()
   find_library(OPENSSL_CRYPTO_LIBRARIES NAMES crypto)
   MARK_AS_ADVANCED(OPENSSL_CRYPTO_LIBRARIES OPENSSL_SSL_LIBRARIES)
 
-  set(OpenSsl_LIBRARIES ${OPENSSL_SSL_LIBRARIES} ${OPENSSL_CRYPTO_LIBRARIES})
+  set(OpenSsl_LIBRARIES ${OPENSSL_SSL_LIBRARIES} ${OPENSSL_CRYPTO_LIBRARIES} CACHE)
 
 endif ()
 
@@ -124,4 +128,11 @@ endif ()
 
 MARK_AS_ADVANCED(OpenSsl_INCLUDE_DIR OpenSsl_LIBRARIES)
 
-set(OpenSsl_INCLUDE_DIRS "${OpenSsl_INCLUDE_DIR}")
+set(OpenSsl_INCLUDE_DIRS "${OpenSsl_INCLUDE_DIR}" CACHE)
+
+# Finish up with some print outs.
+message("--   OpenSsl_INCLUDE_DIRS=${OpenSsl_INCLUDE_DIRS}")
+message("--   OpenSsl_LIBRARIES=${OpenSsl_LIBRARIES}")
+message("--------- FindSciOpenSsl done with OpenSSL -----------")
+message("")
+
