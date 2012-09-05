@@ -84,7 +84,7 @@ if (IDL_FOUND)
   set(HAVE_IDL 1 CACHE BOOL "Whether have IDL")
 else ()
    if (SciIdl_FIND_REQUIRED)
-      message(FATAL_ERROR "Did not find IDL. Use -DIdl_INCLUDE_DIR and -DIdl_LIBRARY to specify IDL locatin.")
+      message(FATAL_ERROR "Did not find IDL. Use -DIdl_INCLUDE_DIR and -DIdl_LIBRARY to specify IDL location.")
    endif ()
 endif ()
 
