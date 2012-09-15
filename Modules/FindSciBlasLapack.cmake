@@ -37,7 +37,7 @@
 #
 # FindSciBlasLapack.cmake: find includes and libraries Blas and Lapack
 #
-# $Id: FindSciBlasLapack.cmake 1353 2012-06-01 18:17:27Z veitzer $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

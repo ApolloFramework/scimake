@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: xvfb-run.sh 1349 2012-05-31 13:45:09Z jdelamere $
+# $Id$
 
 # This script starts an instance of Xvfb, the "fake" X server, runs a command
 # with that server available, and kills the X server when done.  The return

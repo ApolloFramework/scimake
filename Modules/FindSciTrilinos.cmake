@@ -35,7 +35,7 @@
 #
 # FindSciTrilinos: find includes and libraries for Trilinos
 #
-# $Id: FindSciTrilinos.cmake 1347 2012-05-28 12:41:11Z cary $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

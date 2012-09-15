@@ -1,6 +1,6 @@
 SciMake CONVENTIONS FOR CMAKE FILES AND MODULES
 
-$Id: README.txt 1162 2011-12-17 16:42:43Z cary $
+$Id$
 
 The txcmake document is at
 https://ice.txcorp.com/support/wiki/CmakeCodingStandards.

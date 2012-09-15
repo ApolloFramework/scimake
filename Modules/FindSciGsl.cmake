@@ -14,7 +14,7 @@
 #
 # FindGsl: find includes and libraries for GSL
 #
-# $Id: FindSciGsl.cmake 1161 2011-12-17 15:44:00Z cary $
+# $Id$
 #
 ######################################################################
 

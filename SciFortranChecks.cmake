@@ -2,7 +2,7 @@
 #
 # SciFortranChecks: check various Fortran capabilities
 #
-# $Id: SciFortranChecks.cmake 1357 2012-06-05 19:50:29Z cary $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

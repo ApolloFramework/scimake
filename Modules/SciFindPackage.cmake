@@ -2,7 +2,7 @@
 #
 # SciFindPackage: find includes and libraries of a package
 #
-# $Id: SciFindPackage.cmake 1285 2012-03-05 20:50:05Z cary $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

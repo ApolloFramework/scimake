@@ -14,7 +14,7 @@
 #
 # Find module for VisIt includes and libs from VisIt
 #
-# $Id: FindSciVisIt.cmake 1252 2012-02-07 19:45:49Z mdurant $
+# $Id$
 #
 #################################################
 

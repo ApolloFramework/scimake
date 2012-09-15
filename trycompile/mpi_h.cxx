@@ -1,5 +1,5 @@
 /**
- * $Id: mpi_h.cxx 1158 2011-12-17 14:18:42Z cary $
+ * $Id$
  */
 
 #include<mpi.h>

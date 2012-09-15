@@ -1,4 +1,4 @@
-# $Id: SciSvnInfo.cmake 1170 2011-12-31 02:58:47Z cary $
+# $Id$
 #
 # For getting the svn revision of a directory
 

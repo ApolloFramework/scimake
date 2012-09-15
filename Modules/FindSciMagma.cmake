@@ -9,7 +9,7 @@
 #
 # FindSciMagma.cmake: Find the MAGMA library.
 #
-# $Id: FindSciMagma.cmake 1350 2012-05-31 21:19:48Z mgalloy $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

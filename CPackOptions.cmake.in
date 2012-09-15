@@ -2,7 +2,7 @@
 #
 # CMakeCPackOptions.cmake.in for the Composers
 #
-# $Id: CPackOptions.cmake.in 1151 2011-12-17 13:51:42Z cary $
+# $Id$
 #
 # Needed to install in a subdir.  See
 # http://cmake.3232098.n2.nabble.com/CMake-Cpack-and-NSIS-woes-td3778664.html

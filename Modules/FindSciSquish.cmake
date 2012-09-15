@@ -15,7 +15,7 @@
 #
 # SciFindSquish: find includes and libraries for Squish.
 #
-# $Id: FindSciSquish.cmake 1306 2012-04-02 22:07:07Z jdelamere $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

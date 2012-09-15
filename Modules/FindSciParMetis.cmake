@@ -17,7 +17,7 @@
 #
 # SciFindParMetis: find includes and libraries for ParMetis.
 #
-# $Id: FindSciParMetis.cmake 1305 2012-04-02 14:49:31Z jdelamere $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

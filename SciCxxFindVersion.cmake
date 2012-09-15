@@ -2,7 +2,7 @@
 #
 # SciCxxFindVersion: Determine compiler version for any compiler
 #
-# $Id: SciCxxFindVersion.cmake 1295 2012-03-16 19:41:18Z swsides $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

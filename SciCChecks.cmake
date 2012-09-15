@@ -2,7 +2,7 @@
 #
 # SciCChecks: check various C capabilities
 #
-# $Id: SciCChecks.cmake 1303 2012-03-27 08:24:22Z cary $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

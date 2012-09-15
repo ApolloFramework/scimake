@@ -2,7 +2,7 @@
 #
 # FindPCRE: find includes and libraries for PCRE
 #
-# $Id: FindSciPcre.cmake 1324 2012-04-21 13:31:24Z cary $
+# $Id$
 #
 ######################################################################
 

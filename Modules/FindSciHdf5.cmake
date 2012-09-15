@@ -15,7 +15,7 @@
 #
 # FindHdf5: find includes and libraries for hdf5
 #
-# $Id: FindSciHdf5.cmake 1255 2012-02-09 00:51:27Z cary $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

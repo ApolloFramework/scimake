@@ -16,7 +16,7 @@
 #
 # SciFindLibXml2: find includes and libraries for LibXml2.
 #
-# $Id: FindSciLibXml2.cmake 1323 2012-04-19 18:59:43Z dws $
+# $Id$
 #
 # Copyright 2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

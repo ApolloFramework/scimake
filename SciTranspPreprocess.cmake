@@ -3,7 +3,7 @@
 # SciTranspPreprocess:
 #    Macros for handling transp 
 #
-# $Id: SciTranspPreprocess.cmake 1324 2012-04-21 13:31:24Z cary $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

@@ -2,7 +2,7 @@
 #
 # FindSciQt4: find includes and libraries for Qt4
 #
-# $Id: FindSciQt4.cmake 1366 2012-06-12 17:32:19Z alexanda $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

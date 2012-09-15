@@ -2,7 +2,7 @@
 #
 # SciFortranFindVersion: Determine compiler version for any compiler
 #
-# $Id: SciFortranFindVersion.cmake 1293 2012-03-15 01:26:36Z swsides $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

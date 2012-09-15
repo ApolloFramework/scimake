@@ -26,7 +26,7 @@
 #
 # FindSciMpi: check whether the compiler wraps MPI, if not, find MPI
 #
-# $Id: FindSciMpi.cmake 1336 2012-04-27 17:05:37Z dws $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

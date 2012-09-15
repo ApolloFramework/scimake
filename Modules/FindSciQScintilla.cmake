@@ -14,7 +14,7 @@
 #
 # Find module for QScintilla includes and lib
 #
-# $Id: FindSciQScintilla.cmake 1161 2011-12-17 15:44:00Z cary $
+# $Id$
 #
 #################################################
 

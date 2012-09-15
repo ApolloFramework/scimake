@@ -16,7 +16,7 @@
 #
 # Find module for Composer Toolkit includes and lib
 #
-# $Id: FindSciComposerToolkit.cmake 1161 2011-12-17 15:44:00Z cary $
+# $Id$
 #
 #################################################
 

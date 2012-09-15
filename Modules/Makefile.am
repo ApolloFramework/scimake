@@ -4,7 +4,7 @@
 ##
 ## Purpose: Needed for when cmake in in an autotools project
 ##
-## $Id: Makefile.am 1236 2012-01-28 00:17:20Z kruger $
+## $Id$
 ##
 ## ############################################################
 

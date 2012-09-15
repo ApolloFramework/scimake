@@ -14,7 +14,7 @@
 #
 # SciFindMxml: find includes and libraries for txbase
 #
-# $Id: FindSciMxml.cmake 1245 2012-01-31 21:36:22Z dws $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

@@ -2,7 +2,7 @@
 #
 # SciInit: Do the startup stuff for any package
 #
-# $Id: SciInit.cmake 1330 2012-04-23 18:36:31Z cary $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

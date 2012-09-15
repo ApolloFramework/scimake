@@ -2,7 +2,7 @@
 #
 # SciCxxChecks: check various C++ capabilities
 #
-# $Id: SciCxxChecks.cmake 1265 2012-02-18 21:35:12Z cary $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

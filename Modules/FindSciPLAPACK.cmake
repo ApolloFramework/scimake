@@ -14,7 +14,7 @@
 #
 # FindGpulib.cmake: Find the GPU libraries
 #
-# $Id: FindSciPLAPACK.cmake 1342 2012-05-09 19:30:36Z lagae $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

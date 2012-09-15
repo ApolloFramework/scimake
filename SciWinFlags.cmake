@@ -1,7 +1,7 @@
 #
 # Include for common Windows flags and settings.
 #
-# $Id: SciWinFlags.cmake 1331 2012-04-24 18:52:42Z mkoch $
+# $Id$
 #
 ######################################################################
 

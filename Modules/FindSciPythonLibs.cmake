@@ -30,7 +30,7 @@
 #
 # FindSciPythonLibs.cmake: Wrap cmake's python finder to fix for mingw
 #
-# $Id: FindSciPythonLibs.cmake 1301 2012-03-23 20:14:15Z cary $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.
