@@ -3,7 +3,13 @@
 # Module usage:
 #   find_package(SciIdl ...)
 #
-# Should probably be modified to use SciFindPackage...
+# Specify IDL_ROOT to indicate the location of an IDL distribution.
+#
+# This module will define the following variables:
+#   IDL_FOUND           = whether IDL was found
+#   Idl_PLATFORM_EXT    = DLM extension, i.e., darwin.x86_64, linux.x86, x86_64...
+#   Idl_INCLUDE_DIR     = IDL include directory
+#   Idl_LIBRARY         = IDL shared library location
 
 ######################################################################
 #
@@ -26,12 +32,12 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   set(_Idl_PROGRAM_FILES_DIR "/Applications")
   set(_Idl_NAME "idl")
-  set(_Idl_OS ".darwin")
+  set(_Idl_OS "darwin.")
   set(_Idl_KNOWN_COMPANIES "exelis" "itt")
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
   set(_Idl_PROGRAM_FILES_DIR "/usr/local")
   set(_Idl_NAME "idl")
-  set(_Idl_OS ".linux")
+  set(_Idl_OS "linux.")
   set(_Idl_KNOWN_COMPANIES "exelis" "itt")
 endif ()
 
@@ -66,11 +72,21 @@ find_path(Idl_INCLUDE_DIR
   PATH_SUFFIXES external/include
 )
 
+IF (${CMAKE_SIZEOF_VOID_P} STREQUAL "4")
+  SET(Idl_BIN_EXT "x86")
+ELSEIF (${CMAKE_SIZEOF_VOID_P} STREQUAL "8")
+  SET(Idl_BIN_EXT "x86_64")
+ELSE ()
+  SET (Idl_BIN_EXT "unknown")
+ENDIF ()
+
+SET(Idl_PLATFORM_EXT ${_Idl_OS}${Idl_BIN_EXT})
+
 find_library(Idl_LIBRARY
   NAMES idl
   PATHS ${_Idl_SEARCH_DIRS}
   HINTS ${IDL_ROOT}
-  PATH_SUFFIXES /bin/bin${_Idl_OS}.x86_64 /bin/bin${_Idl_OS}.x86
+  PATH_SUFFIXES /bin/bin.${Idl_PLATFORM_EXT}
 )
 
 if (Idl_INCLUDE_DIR AND Idl_LIBRARY)
