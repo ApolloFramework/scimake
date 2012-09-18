@@ -246,21 +246,27 @@ ENDFUNCTION()
 # EXECUTABLES: the executables to look for
 # HEADERS: the header files to look for.
 # LIBRARIES: the libraries
+# FILES: other files to look for
 # MODULES: Fortran module files
 # EXECUTABLE_SUBDIRS: executable subdirs
 # INCLUDE_SUBDIRS: include subdirectories
 # LIBRARY_SUBDIRS: library subdirectories
+# FILE_SUBDIRS: file subdirectories
 #
 # NOTE: One cannot reset calling variables
 # NOTE: lists should be delimited by semicolons.
 #(which is the default format used by scimake)
 #
 
-#******************************************************************************************************
-#Note: Jon Rood added the optional ALLOW_LIBRARY_DUPLICATES parameter 8/24/2012 for use
-#in a part of building GPULib with the Atlas and MAGMA packages that have circular library dependencies
-#THIS COMMENT CAN GO AWAY WHEN SUFFICIENT TIME HAS PASSED AND IT HASN'T BROKEN ANY OTHER PROJECTS 
-#******************************************************************************************************
+######################################################################
+#
+# Jon Rood added the optional ALLOW_LIBRARY_DUPLICATES parameter 8/24/2012
+# for use in a part of building GPULib with the Atlas and MAGMA packages
+# that have circular library dependencies
+# THIS COMMENT CAN GO AWAY WHEN SUFFICIENT TIME HAS PASSED AND IT HASN'T
+# BROKEN ANY OTHER PROJECTS
+#
+######################################################################
 
 include(CMakeParseArguments)
 macro(SciFindPackage)
