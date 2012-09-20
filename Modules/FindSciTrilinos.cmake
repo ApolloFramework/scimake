@@ -25,6 +25,7 @@
 # Trilinos_STLIBS       : the full paths to the static libs if found, otherwise
 #                         the same as in the above variable
 # Trilinos_TPL_LIBRARIES: third-party libraries needed for linking to Trilinos
+# Trilinos_SLU_LIBRARIES: libraries specific to SuperLU and SuperLU_Dist
 #
 # and separate those into
 #
@@ -155,6 +156,7 @@ if (TRILINOS_FOUND)
   set(Trilinos_LINALG_LIBRARIES)
   set(Trilinos_MPI_LIBRARIES)
   set(Trilinos_SYSTEM_LIBRARIES)
+  set(Trilinos_SLU_LIBRARIES)
   foreach (lib ${Trilinos_TPL_LIBRARIES})
     get_filename_component(libname ${lib} NAME_WE)
     if (${libname} MATCHES "blas$" OR ${libname} MATCHES "lapack$" OR
@@ -162,7 +164,10 @@ if (TRILINOS_FOUND)
         ${libname} MATCHES "f2c$" OR ${libname} MATCHES "atlas$" OR
         ${libname} MATCHES "sci_pgi$" OR ${libname} MATCHES "sci_gnu$"
     )
-    set(Trilinos_LINALG_LIBRARIES ${Trilinos_LINALG_LIBRARIES} ${lib})
+      set(Trilinos_LINALG_LIBRARIES ${Trilinos_LINALG_LIBRARIES} ${lib})
+    elseif (${libname} MATCHES "superlu$" OR ${libname} MATCHES "superlu_dist$" 
+    )
+      set(Trilinos_SLU_LIBRARIES ${Trilinos_SLU_LIBRARIES} ${lib})
     elseif (${libname} MATCHES "msmpi$")
       set(Trilinos_MPI_LIBRARIES ${Trilinos_MPI_LIBRARIES} ${lib})
     else ()
@@ -170,7 +175,7 @@ if (TRILINOS_FOUND)
     endif ()
   endforeach ()
 # Find the libdirs of all groups
-  foreach (grp TPL LINALG MPI SYSTEM)
+  foreach (grp TPL LINALG SLU MPI SYSTEM)
     set(libs ${Trilinos_${grp}_LIBRARIES})
     unset(Trilinos_${grp}_LIBRARY_DIRS)
     unset(Trilinos_${grp}_LIBRARY_NAMES)
@@ -184,7 +189,7 @@ if (TRILINOS_FOUND)
     if (Trilinos_${grp}_LIBRARY_DIRS)
       list(REMOVE_DUPLICATES Trilinos_${grp}_LIBRARY_DIRS)
     endif ()
-    # message(STATUS "  Trilinos_${grp}_LIBRARY_DIRS = ${Trilinos_${grp}_LIBRARY_DIRS}")
+    # message(STATUS " Trilinos_${grp}_LIBRARY_DIRS = ${Trilinos_${grp}_LIBRARY_DIRS}")
   endforeach ()
 
 # For windows only, find f2c
@@ -214,7 +219,7 @@ if (TRILINOS_FOUND)
   endif ()
 
 # Final calculations
-  foreach (grp TPL LINALG MPI SYSTEM)
+  foreach (grp TPL LINALG SLU MPI SYSTEM)
     # if (Trilinos_${grp}_LIBRARIES)
       # list(REMOVE_DUPLICATES Trilinos_TPL_LIBRARIES)
     # endif ()
