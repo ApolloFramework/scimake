@@ -24,17 +24,17 @@
 
 # convenience variable for ITT's install dir, should be fixed to use 
 # Program Files env var but it is problematic in cygwin
-if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
   set(_Idl_PROGRAM_FILES_DIR "C:/Program Files")
   set(_Idl_NAME "IDL")
   set(_Idl_OS "")
   set(_Idl_KNOWN_COMPANIES "Exelis" "ITT")
-elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+elseif ("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
   set(_Idl_PROGRAM_FILES_DIR "/Applications")
   set(_Idl_NAME "idl")
   set(_Idl_OS "darwin.")
   set(_Idl_KNOWN_COMPANIES "exelis" "itt")
-elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+elseif ("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
   set(_Idl_PROGRAM_FILES_DIR "/usr/local")
   set(_Idl_NAME "idl")
   set(_Idl_OS "linux.")
@@ -72,15 +72,15 @@ find_path(Idl_INCLUDE_DIR
   PATH_SUFFIXES external/include
 )
 
-IF (${CMAKE_SIZEOF_VOID_P} STREQUAL "4")
-  SET(Idl_BIN_EXT "x86")
-ELSEIF (${CMAKE_SIZEOF_VOID_P} STREQUAL "8")
-  SET(Idl_BIN_EXT "x86_64")
-ELSE ()
-  SET (Idl_BIN_EXT "unknown")
-ENDIF ()
+if ("${CMAKE_SIZEOF_VOID_P}" STREQUAL "4")
+  set(Idl_BIN_EXT "x86")
+elseif ("${CMAKE_SIZEOF_VOID_P}" STREQUAL "8")
+  set(Idl_BIN_EXT "x86_64")
+else ()
+  set (Idl_BIN_EXT "unknown")
+endif ()
 
-SET(Idl_PLATFORM_EXT ${_Idl_OS}${Idl_BIN_EXT})
+set(Idl_PLATFORM_EXT "${_Idl_OS}${Idl_BIN_EXT}")
 
 find_library(Idl_LIBRARY
   NAMES idl
