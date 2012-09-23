@@ -12,25 +12,25 @@
 # Variables which can be used to change the behavior of this script
 #
 # Where "scipkgreg" is the regularized package name
-#(package name with all "." and "-" replaced with "_")
+# (package name with all "." and "-" replaced with "_")
 # Where "scipkguc" is the UPPERCASE regularized package name
 #
 #  DEBUG_CMAKE - if true, outputs verbose debugging information
-#(default false)
+#  (default false)
 #
 #  ENABLE_${scipkguc} - if false, will not search for package
-#(default true)
+#  (default true)
 #  DISABLE_${scipkguc} - if true, sets ENABLE_${scipkguc} to false
 #
 #  ${scipkgreg}_FIND_QUIETLY - if true, will succeed silently
-#(default - not defined, which is treated as false)
+#  (default - not defined, which is treated as false)
 #
 #  ${scipkgreg}_FIND_REQUIRED - if true, will issue a fatal error if
 #    package not found
-#(default - not defined, which is treated as false)
+#  (default - not defined, which is treated as false)
 #
 #  ${scipkgreg}_ROOT_DIR - search directory hints
-#    ${scipkguc}_DIR, ${scipkgreg}_DIR: Deprecated search directory hints 
+#  ${scipkguc}_DIR, ${scipkgreg}_DIR: Deprecated search directory hints
 #    (to be retired in July 2012)
 #
 #  SUPRA_SEARCH_PATH - used to specify various top-level search directories

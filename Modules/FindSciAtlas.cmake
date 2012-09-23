@@ -21,13 +21,13 @@
 #
 ######################################################################
 
-#Note from Jon Rood 8/24/2012:
-#The library order in this probably isn't ideal, but after trying 
-#several permutations of linking order, this LIBRARIES line with 
-#duplicates works for linking Atlas and MAGMA to GPULib and the optional 
-#ALLOW_LIBRARY_DUPLICATES parameter for SciFindPackage was created
-#specifically for doing this. If someone is looking to use SciFindAtlas
-#and wants to change anything here, you should consult the GPULib project.
+# Note from Jon Rood 8/24/2012:
+# The library order in this probably isn't ideal, but after trying
+# several permutations of linking order, this LIBRARIES line with
+# duplicates works for linking Atlas and MAGMA to GPULib and the optional
+# ALLOW_LIBRARY_DUPLICATES parameter for SciFindPackage was created
+# specifically for doing this. If someone is looking to use SciFindAtlas
+# and wants to change anything here, you should consult the GPULib project.
 
 set(ALLOW_LIBRARY_DUPLICATES TRUE)
 

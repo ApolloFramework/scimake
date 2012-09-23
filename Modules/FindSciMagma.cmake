@@ -24,14 +24,14 @@ find_path(Magma_INCLUDE_DIR
 )
 
 find_library(Magma_LIBRARY
-  NAMES magma 
+  NAMES magma
   HINTS ${MAGMA_ROOT}
   PATH_SUFFIXES lib
   DOC "MAGMA library location"
 )
 
 find_library(MagmaBlas_LIBRARY
-  NAMES magmablas 
+  NAMES magmablas
   PATHS ${_Magma_SEARCH_DIRS}
   HINTS ${MAGMA_ROOT}
   PATH_SUFFIXES lib

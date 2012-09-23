@@ -22,7 +22,7 @@ message("--------- FindSciQt4 looking for Qt4 ---------")
 
 if (SciQt4_FIND_COMPONENTS)
   message(STATUS "Looking for Qt with version greater than 4.7.1 with components: ${SciQt4_FIND_COMPONENTS}")
-  find_package(Qt4 4.7.1 
+  find_package(Qt4 4.7.1
     COMPONENTS ${SciQt4_FIND_COMPONENTS}
     REQUIRED)
 else ()

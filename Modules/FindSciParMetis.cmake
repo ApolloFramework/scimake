@@ -1,6 +1,6 @@
 # - FindSciParMetis: Module to find include directories and libraries
 #   for ParMetis. This module was implemented as there is no stock
-#   CMake module for ParMetis. 
+#   CMake module for ParMetis.
 #   It also looks for the corresponding libmetis.a
 #
 # This module can be included in CMake builds in find_package:

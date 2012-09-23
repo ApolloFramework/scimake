@@ -99,7 +99,7 @@ if (WIN32 AND NOT CYGWIN)
       PATHS ${OPENSSL_ROOT_DIR}/lib/MinGW
       )
     MARK_AS_ADVANCED(SSL_EAY LIB_EAY)
-    set(OpenSsl_LIBRARIES ${SSL_EAY} ${LIB_EAY} 
+    set(OpenSsl_LIBRARIES ${SSL_EAY} ${LIB_EAY}
         CACHE STRING "Variable used to set libaries at link time.")
   else ()
     # Not sure what to pick for -say- intel, let's use the toplevel ones and hope someone report issues:
@@ -110,7 +110,7 @@ if (WIN32 AND NOT CYGWIN)
       PATHS ${OPENSSL_ROOT_DIR}/lib
       )
     MARK_AS_ADVANCED(SSL_EAY LIB_EAY)
-    set(OpenSsl_LIBRARIES ${SSL_EAY} ${LIB_EAY} 
+    set(OpenSsl_LIBRARIES ${SSL_EAY} ${LIB_EAY}
         CACHE  STRING "Variable used to set libaries at link time.")
   endif ()
 else ()
@@ -119,7 +119,7 @@ else ()
   find_library(OPENSSL_CRYPTO_LIBRARIES NAMES crypto)
   MARK_AS_ADVANCED(OPENSSL_CRYPTO_LIBRARIES OPENSSL_SSL_LIBRARIES)
 
-  set(OpenSsl_LIBRARIES ${OPENSSL_SSL_LIBRARIES} ${OPENSSL_CRYPTO_LIBRARIES} 
+  set(OpenSsl_LIBRARIES ${OPENSSL_SSL_LIBRARIES} ${OPENSSL_CRYPTO_LIBRARIES}
       CACHE STRING "Variable used to set libaries at link time.")
 
 endif ()
@@ -132,7 +132,7 @@ endif ()
 
 MARK_AS_ADVANCED(OpenSsl_INCLUDE_DIR OpenSsl_LIBRARIES)
 
-set(OpenSsl_INCLUDE_DIRS "${OpenSsl_INCLUDE_DIR}" 
+set(OpenSsl_INCLUDE_DIRS "${OpenSsl_INCLUDE_DIR}"
     CACHE STRING "Variable used to set directory for include files.")
 
 # Finish up with some print outs.

@@ -165,8 +165,7 @@ if (TRILINOS_FOUND)
         ${libname} MATCHES "sci_pgi$" OR ${libname} MATCHES "sci_gnu$"
     )
       set(Trilinos_LINALG_LIBRARIES ${Trilinos_LINALG_LIBRARIES} ${lib})
-    elseif (${libname} MATCHES "superlu$" OR ${libname} MATCHES "superlu_dist$" 
-    )
+    elseif (${libname} MATCHES "superlu$" OR ${libname} MATCHES "superlu_dist$")
       set(Trilinos_SLU_LIBRARIES ${Trilinos_SLU_LIBRARIES} ${lib})
     elseif (${libname} MATCHES "msmpi$")
       set(Trilinos_MPI_LIBRARIES ${Trilinos_MPI_LIBRARIES} ${lib})

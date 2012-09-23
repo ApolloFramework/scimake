@@ -1,6 +1,6 @@
 # - FindSciSquish: Module to find executables and libraries
 #   for Squish. A stock CMake FindSquish.cmake does exist but
-#   is supported only for Squish version 3.  
+#   is supported only for Squish version 3.
 #
 # This module can be included in CMake builds in find_package:
 #   find_package(SciSquish REQUIRED)

@@ -1,7 +1,7 @@
 ######################################################################
 #
 # SciTranspPreprocess:
-#    Macros for handling transp 
+#    Macros for handling transp
 #
 # $Id$
 #
