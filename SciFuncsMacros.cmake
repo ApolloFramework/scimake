@@ -77,9 +77,19 @@ endmacro()
 #
 # Create a pdf from Sphinx documentation
 # Args:
-#  MRST_FILE_BASE  the base name of the file
 #
-macro(SciCreateSphinxPdf rstFileBase exampleFiles)
+macro(SciCreateSphinxPdf rstFileBase authorName exampleFiles superInstallDir)
+
+# Configure sphinx
+  configure_file(${CMAKE_SOURCE_DIR}/conf.py.in conf.py)
+
+# Sanity check
+  get_filename_component(thissubdir ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+  if (NOT "${thissubdir}" STREQUAL "${rstFileBase}")
+    message(WARNING "Main rst file base, ${rstFileBase}, does not match subdirectory name, ${thissubdir}.")
+  endif ()
+
+# Creation of pdf
   message(STATUS "Setting up pdf creation for ${rstFileBase}, which uses the files, ${exampleFiles}.")
   set(pdfdir ${CMAKE_CURRENT_BINARY_DIR}/pdf)
   set(texfile ${pdfdir}/${rstFileBase}.tex)
@@ -99,5 +109,15 @@ macro(SciCreateSphinxPdf rstFileBase exampleFiles)
     WORKING_DIRECTORY ${pdfdir}
   )
   add_custom_target(${rstFileBase}-pdf ALL DEPENDS ${pdffile})
+
+# Installation of pdf
+  install(FILES ${EXAMPLE_FILES}
+      ${CMAKE_CURRENT_BINARY_DIR}/pdf/${rstFileBase}.pdf
+    DESTINATION "${superInstallDir}/${thissubdir}"
+    PERMISSIONS OWNER_WRITE OWNER_READ
+                GROUP_WRITE GROUP_READ
+                WORLD_READ
+  )
+
 endmacro()
 
