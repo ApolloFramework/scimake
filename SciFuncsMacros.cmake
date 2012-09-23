@@ -74,3 +74,30 @@ macro(SciPrintAutotoolsResults pkg)
   endif ()
 endmacro()
 
+#
+# Create a pdf from Sphinx documentation
+# Args:
+#  MRST_FILE_BASE  the base name of the file
+#
+macro(SciCreateSphinxPdf rstFileBase exampleFiles)
+  message(STATUS "Setting up pdf creation for ${rstFileBase}, which uses the files, ${exampleFiles}.")
+  set(pdfdir ${CMAKE_CURRENT_BINARY_DIR}/pdf)
+  set(texfile ${pdfdir}/${rstFileBase}.tex)
+  set(pdffile ${pdfdir}/${rstFileBase}.pdf)
+  add_custom_command(
+    OUTPUT ${texfile}
+    COMMAND ${Sphinx_EXECUTABLE} -b latex -c . ${SPHINX_MATHARG} -d
+  ${CMAKE_CURRENT_BINARY_DIR}/doctrees ${CMAKE_CURRENT_SOURCE_DIR} ${pdfdir}
+    DEPENDS ${exampleFiles}
+  )
+  add_custom_target(${rstFileBase}-latex DEPENDS ${texfile})
+  # This must be make, as sphinx generates a unix makefile
+  add_custom_command(
+    OUTPUT ${pdffile}
+    COMMAND make all-pdf
+    DEPENDS ${texfile}
+    WORKING_DIRECTORY ${pdfdir}
+  )
+  add_custom_target(${rstFileBase}-pdf ALL DEPENDS ${pdffile})
+endmacro()
+
