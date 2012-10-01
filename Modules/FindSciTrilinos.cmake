@@ -100,7 +100,7 @@ else () # Use SciFindPackage
   SciFindPackage(PACKAGE "Trilinos"
     INSTALL_DIR ${trilinosdir}
     HEADERS "az_aztec.h"
-    LIBRARIES "aztecoo;ml;zoltan;amesos;ifpack;epetraext;galeri;triutils;epetra;shards;intrepid;komplex;teuchos"
+    LIBRARIES "intrepid;ml;komplex;ifpack;amesos;galeri;aztecoo;epetraext;triutils;shards;zoltan;epetra;teuchos"
   )
 # Above sets TRILINOS_FOUND to TRUE?
 
