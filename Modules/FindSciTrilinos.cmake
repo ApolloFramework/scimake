@@ -44,9 +44,9 @@
 ######################################################################
 
 if (ENABLE_PARALLEL)
-  set(trilinosdir trilinos-par)
+  set(trilinosdir trilinos-parcomm)
 else ()
-  set(trilinosdir trilinos)
+  set(trilinosdir trilinos-sercomm)
 endif ()
 
 if (USE_TRILINOS_CONFIG_CMAKE)
