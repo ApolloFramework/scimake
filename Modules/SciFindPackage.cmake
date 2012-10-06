@@ -277,8 +277,8 @@ macro(SciFindPackage)
     ${ARGN}
   )
 
-  # This message is purposefully NOT a STATUS message
-  # To provide more readable output
+# This message is purposefully NOT a STATUS message
+# To provide more readable output
   message("")
   message("--------- SciFindPackage looking for ${TFP_PACKAGE} ---------")
 
