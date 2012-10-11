@@ -10,9 +10,15 @@
 # FindQt4 relies on qmake, which VisIt does not install.
 # So we find them here, and then we replace with the VisIt versions
 # if they are found.
-set(QT_REQUIRED_LIBRARIES
-  QtCore QtGui QtOpenGL QtXml QtXmlPatterns QtNetwork QtWebKit QtDBus
-)
+if (LINUX)
+  set(QT_REQUIRED_LIBRARIES
+    QtCore QtGui QtOpenGL QtXml QtXmlPatterns QtNetwork QtWebKit QtDBus
+  )
+else()
+  set(QT_REQUIRED_LIBRARIES
+    QtCore QtGui QtOpenGL QtXml QtXmlPatterns QtNetwork QtWebKit
+  )
+endif()
 
 # The following is included here for the call to QT4_ADD_RESOURCES
 find_package(SciQt4 COMPONENTS ${QT_REQUIRED_LIBRARIES})
