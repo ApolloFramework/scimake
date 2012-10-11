@@ -31,11 +31,21 @@ else ()
     REQUIRED)
 endif ()
 
+# Use file sets up variables
 if (DEBUG_CMAKE)
   message(STATUS "QT_USE_FILE = ${QT_USE_FILE}")
 endif ()
 include(${QT_USE_FILE})
 set(QT_INCLUDE_DIRS ${QT_INCLUDES}) # Regularize the variable the FindQt4 sets
+
+# Add in optional libaries to QT_LIBARIES, if they are found
+foreach (qtoptlib ${QT_OPTIONAL_LIBRARIES})
+ STRING(TOUPPER ${qtoptlib} _uppercaseoptlib )
+ if (QT_${_uppercaseoptlib}_FOUND)
+   set(QT_LIBRARIES ${QT_LIBRARIES} ${QT_${_uppercaseoptlib}_LIBRARY}) 
+ endif ()
+endforeach ()
+
 message(STATUS "QT_INCLUDE_DIR = ${QT_INCLUDE_DIR}")
 message(STATUS "QT_INCLUDE_DIRS = ${QT_INCLUDE_DIRS}")
 message(STATUS "QT_LIBRARY_DIR = ${QT_LIBRARY_DIR}")
