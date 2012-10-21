@@ -281,10 +281,35 @@ endif ()
 
 ######################################################################
 #
-# Host information
+# Any needed results
 #
 ######################################################################
 
+message("")
+if (NOT RESULTS_DIR)
+  message(STATUS "RESULTS_DIR not specified.")
+endif ()
+if (RESULTS_DIR_BASE AND NOT RESULTS_DIR)
+  message(STATUS "Looking for results starting with ${RESULTS_DIR_BASE}.")
+# Get potential files
+  file(GLOB resultsdirs RELATIVE ${CMAKE_SOURCE_DIR}
+    "${RESULTS_DIR_BASE}-*" "${RESULTS_DIR_BASE}"
+  )
+  message(STATUS "resultsdirs = ${resultsdirs}.")
+# Looks for first that is a directory
+  foreach (resdir ${resultsdirs})
+   if (IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${resdir})
+     set(RESULTS_DIR ${CMAKE_SOURCE_DIR}/${resdir})
+     break()
+   endif ()
+  endforeach ()
+  if (NOT RESULTS_DIR)
+    message(STATUS "RESULTS_DIR not found.")
+  endif ()
+endif ()
+if (RESULTS_DIR)
+  message(STATUS "RESULTS_DIR = ${RESULTS_DIR}.")
+endif ()
 
 ######################################################################
 #
