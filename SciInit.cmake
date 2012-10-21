@@ -220,7 +220,6 @@ endif ()
 #
 ######################################################################
 
-
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL Linux)
   message("")
   message("--------- Checking for rpath ---------")
