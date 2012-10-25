@@ -85,7 +85,6 @@ macro(SciSphinxTarget)
     # There is something weird about passing blank spaces into COMMAND 
     # so this method fixes the problems that arise if Sphinx_OPTS is not defined
     set(all_opts -b ${build} ${Sphinx_OPTS} ${FD_SPHINX_ADDL_OPTS})
-    message(STATUS "[SciSphinxFunctions]: all_opts= ${all_opts} ")
 
     add_custom_command(
       OUTPUT ${${build}_OUTPUT}
