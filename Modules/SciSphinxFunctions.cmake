@@ -18,7 +18,7 @@ include(CMakeParseArguments)
 # SciSphinxTarget.cmake
 # Define the target for making HTML
 # Args:
-#   TARGET:  Name to make the target.  Actual target will be #   ${TARGET_NAME}-html
+#   TARGET:  Name to make the target.  Actual target will be ${TARGET_NAME}-<build>
 #   RST_FILE_BASE:  Root name of Latex file.  From conf.py
 #   SOURCE_DIR:  Directory containing the index.rst.  Defaults to CMAKE_CURRENT_SOURCE_DIR
 #   SPHINX_ADDL_OPTS:  Additional options to Sphinx
@@ -55,11 +55,11 @@ macro(SciSphinxTarget)
     set(FD_SPHINX_INSTALLS ${FD_SPHINX_BUILDS})
   endif()
   if (FD_INSTALL_SUBDIR)
-    set(instdir ${DOC_INSTALL_SUBDIR})
-  elseif (DOC_INSTALL_SUPERDIR)
-    set(instdir ${DOC_INSTALL_SUPERDIR}/${thissubdir})
+    set(instdir ${FD_INSTALL_SUBDIR})
+  elseif (FD_INSTALL_SUPERDIR)
+    set(instdir ${FD_INSTALL_SUPERDIR}/${thissubdir})
   else ()
-    set(instdir share)
+    set(instdir ${CMAKE_INSTALL_PREFIX})
   endif ()
   ###
   ##  Basic sanity checks
@@ -92,7 +92,7 @@ macro(SciSphinxTarget)
   endif()
   if (FD_DEBUG)
     message("")
-    message("--------- SciSphinxTarget defining ${FD_TARGET}-html ---------")
+    message("--------- SciSphinxTarget defining targets for ${FD_TARGET} ---------")
     message(STATUS "[SciSphinxFunctions]: TARGET= ${FD_TARGET} ")
     message(STATUS "[SciSphinxFunctions]: RST_FILE_BASE= ${FD_RST_FILE_BASE} ")
     message(STATUS "[SciSphinxFunctions]: Sphinx_EXECUTABLE= ${Sphinx_EXECUTABLE} ")
@@ -102,7 +102,11 @@ macro(SciSphinxTarget)
   ###
   ##  Do the standard builds
   #
-  set(html_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/html/index.html)
+  if (NOT EXISTS ${FD_SOURCE_DIR}/${FD_RST_FILE_BASE}.rst)
+     set(html_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/html/${FD_RST_FILE_BASE}.html)
+  else()
+     set(html_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/html/index.html)
+  endif()
   set(singlehtml_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/singlehtml/index.html)
   set(latex_OUTPUT ${BLDDIR}/pdf/${FD_RST_FILE_BASE}.tex)
   set(pdf_OUTPUT ${BLDDIR}/pdf/${FD_RST_FILE_BASE}.pdf)
@@ -117,12 +121,13 @@ macro(SciSphinxTarget)
     
     # There is something weird about passing blank spaces into COMMAND 
     # so this method fixes the problems that arise if Sphinx_OPTS is not defined
-    set(all_opts -b ${build} ${Sphinx_OPTS} ${FD_SPHINX_ADDL_OPTS})
+    set(all_opts -b ${build} -c ${CMAKE_CURRENT_BINARY_DIR} ${Sphinx_OPTS} ${FD_SPHINX_ADDL_OPTS})
 
     if(NOT ${build} STREQUAL pdf)
       add_custom_command(
         OUTPUT ${${build}_OUTPUT}
-        COMMAND ${Sphinx_EXECUTABLE} ${all_opts} ${FD_SOURCE_DIR} ${${build}_DIR}
+        COMMAND ${Sphinx_EXECUTABLE} 
+        ARGS ${all_opts} ${FD_SOURCE_DIR} ${${build}_DIR}
         DEPENDS ${FD_FILE_DEPS}
       )
       add_custom_target(${FD_TARGET}-${build} DEPENDS ${${build}_OUTPUT})
@@ -144,21 +149,21 @@ macro(SciSphinxTarget)
   ###
   ##  Each install is a one-off
   # 
-  list(FIND SPHINX_INSTALLS "pdf" indx)
+  list(FIND FD_SPHINX_INSTALLS "pdf" indx)
   if (NOT indx EQUAL -1)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pdf/${FD_RST_FILE_BASE}.pdf
       DESTINATION "${instdir}"
       PERMISSIONS OWNER_WRITE OWNER_READ GROUP_WRITE GROUP_READ WORLD_READ
     )
   endif ()
-  list(FIND SPHINX_INSTALLS "html" indx)
+  list(FIND FD_SPHINX_INSTALLS "html" indx)
   if (NOT indx EQUAL -1)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
       DESTINATION ${instdir}
       FILE_PERMISSIONS OWNER_WRITE OWNER_READ GROUP_WRITE GROUP_READ WORLD_READ
     )
   endif ()
-  list(FIND SPHINX_INSTALLS "man" indx)
+  list(FIND FD_SPHINX_INSTALLS "man" indx)
   if (NOT indx EQUAL -1)
     install(
       DIRECTORY ${BLDDIR}/man
