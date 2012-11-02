@@ -6,6 +6,12 @@
 #   Sphinx_EXECUTABLE     = The path to the sphinx command.
 #   Sphinx_OPTS           = Options for sphinx
 #
+# The SciSphinxTarget automates the creation of build and install
+# targets.  The make targets are not added to all, and the install's are
+# optional.  To make the install options work with install, use the
+# add_dependencies command.  For example:
+#  add_dependencies(install install-userdocs)
+#
 
 #################################################################
 #
@@ -16,7 +22,7 @@
 include(CMakeParseArguments)
 
 # SciSphinxTarget.cmake
-# Define the target for making HTML
+# Automate the defining of the CMake targets
 # Args:
 #   TARGET:  Name to make the target.  Actual target will be ${TARGET_NAME}-<build>
 #   RST_FILE_BASE:  Root name of Latex file.  From conf.py
@@ -154,6 +160,7 @@ macro(SciSphinxTarget)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pdf/${FD_RST_FILE_BASE}.pdf
       DESTINATION "${instdir}"
       PERMISSIONS OWNER_WRITE OWNER_READ GROUP_WRITE GROUP_READ WORLD_READ
+      OPTIONAL
     )
   endif ()
   list(FIND FD_SPHINX_INSTALLS "html" indx)
@@ -161,6 +168,7 @@ macro(SciSphinxTarget)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
       DESTINATION ${instdir}
       FILE_PERMISSIONS OWNER_WRITE OWNER_READ GROUP_WRITE GROUP_READ WORLD_READ
+      OPTIONAL
     )
   endif ()
   list(FIND FD_SPHINX_INSTALLS "man" indx)
@@ -170,6 +178,7 @@ macro(SciSphinxTarget)
       OPTIONAL
       DESTINATION ${instdir}/man
       COMPONENT userdocs
+      OPTIONAL
     )
   endif ()
 endmacro()
