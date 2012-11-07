@@ -184,5 +184,6 @@ macro(SciSphinxTarget)
       OPTIONAL
     )
   endif ()
+
 endmacro()
 
