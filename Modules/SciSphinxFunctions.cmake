@@ -30,6 +30,7 @@ include(CMakeParseArguments)
 #   SOURCE_DIR:    Directory containing the index.rst.  Defaults
 #                  to CMAKE_CURRENT_SOURCE_DIR
 #   SPHINX_ADDL_OPTS: Additional options to Sphinx
+#   SPHINX_DOCTREE_DIR: Select cache directory (default .doctrees)
 #   FILE_DEPS:      Files that are the dependencies.
 #   SPHINX_BUILDS:  Which builds to include.  Default is "html latex pdf"
 #                   Possible choices are "html latex pdf singlehtml man"
@@ -45,10 +46,10 @@ macro(SciSphinxTarget)
 
 # Parse out the args
   set(opts DEBUG;NOWARN_NOTMATCH_DIR) # no-value args
-  set(oneValArgs RST_FILE_BASE;TARGET;SPHINX_ADDL_OPTS;SOURCE_DIR;INSTALL_SUPERDIR;INSTALL_SUBDIR)
+  set(oneValArgs RST_FILE_BASE;TARGET;SPHINX_ADDL_OPTS;SPHINX_DOCTREE_DIR;
+        SOURCE_DIR;INSTALL_SUPERDIR;INSTALL_SUBDIR)
   set(multValArgs FILE_DEPS;ALL_BUILDS) # e.g., lists
   cmake_parse_arguments(FD "${opts}" "${oneValArgs}" "${multValArgs}" ${ARGN})
-
   ###
   ## Defaults
   #
@@ -107,6 +108,7 @@ macro(SciSphinxTarget)
     message(STATUS "[SciSphinxFunctions]: Sphinx_EXECUTABLE= ${Sphinx_EXECUTABLE} ")
     message(STATUS "[SciSphinxFunctions]: Sphinx_OPTS= ${Sphinx_OPTS} ")
     message(STATUS "[SciSphinxFunctions]: SPHINX_ADDL_OPTS= ${FD_SPHINX_ADDL_OPTS} ")
+    message(STATUS "[SciSphinxFunctions]: SPHINX_DOCTREE_DIR= ${FD_SPHINX_DOCTREE_DIR} ")
   endif()
 
   ###
@@ -131,7 +133,7 @@ macro(SciSphinxTarget)
 
 # There is something weird about passing blank spaces into COMMAND
 # so this method fixes the problems that arise if Sphinx_OPTS is not defined
-    set(all_opts -b ${build} -c ${CMAKE_CURRENT_BINARY_DIR} ${Sphinx_OPTS} ${FD_SPHINX_ADDL_OPTS})
+    set(all_opts -b ${build} -c ${CMAKE_CURRENT_BINARY_DIR} ${Sphinx_OPTS} ${FD_SPHINX_ADDL_OPTS} ${FD_SPHINX_DOCTREE_DIR})
     if(NOT ${build} STREQUAL pdf)
       add_custom_command(
         OUTPUT ${${build}_OUTPUT}
