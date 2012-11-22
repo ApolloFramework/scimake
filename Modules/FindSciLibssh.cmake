@@ -17,7 +17,7 @@
 #
 # SciFindLibssh: find includes and libraries for Libssh.
 #
-# $Id: FindSciLibssh.cmake 58 2012-09-15 13:43:53Z jrobcary $
+# $Id$
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.
