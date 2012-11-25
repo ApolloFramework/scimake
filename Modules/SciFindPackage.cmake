@@ -819,7 +819,7 @@ macro(SciFindPackage)
 ###########################################################################
 
 # Build list of search directories
-  string(LENGTH "${TFP_LIBRARIES}" scilibslen)
+  string(LENGTH TFP_LIBRARIES scilibslen)
   if (${scilibslen})
 # Add in user-supplied subdirs
     string(LENGTH "${TFP_LIBRARY_SUBDIRS}" scilen)

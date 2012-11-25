@@ -25,11 +25,11 @@ if (ENABLE_PARALLEL)
   if (BUILD_WITH_SHARED_RUNTIME OR USE_SHARED_HDF5)
     set(instdirs txbase-parsh)
   else ()
-    set(instdirs "txbase-par;txbase-ben")
+    set(instdirs txbase-par txbase-ben)
   endif ()
 else ()
   if (BUILD_WITH_CC4PY_RUNTIME OR USE_CC4PY_HDF5)
-    set(instdirs "txbase-cc4py;txbase-sersh")
+    set(instdirs txbase-cc4py txbase-sersh)
   elseif (BUILD_WITH_SHARED_RUNTIME OR USE_SHARED_HDF5)
     set(instdirs txbase-sersh)
   else ()
@@ -38,13 +38,13 @@ else ()
 endif ()
 
 if (NOT_HAVE_STD_ABS_DOUBLE)
-  set(txbasefindlibs "txbase;txstd")
+  set(txbasefindlibs txbase txstd)
 else ()
   set(txbasefindlibs txbase)
 endif ()
 
 SciFindPackage(PACKAGE "TxBase"
-  INSTALL_DIR "${instdirs}"
+  INSTALL_DIRS "${instdirs}"
   HEADERS "txbase_version.h"
   LIBRARIES "${txbasefindlibs}"
   LIBRARY_SUBDIRS "lib/${CXX_COMP_LIB_SUBDIR};lib"
