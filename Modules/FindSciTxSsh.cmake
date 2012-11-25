@@ -20,13 +20,21 @@
 # Arbitrary redistribution allowed provided this copyright remains.
 #
 ######################################################################
+
+if (BUILD_WITH_CC4PY_RUNTIME OR BUILD_WITH_SHARED_RUNTIME)
+  set(instdirs txssh-cc4py txssh-sersh)
+else ()
+  set(instdirs txssh)
+endif ()
+
 set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 
-SciFindPackage(PACKAGE "TxSsh"
-              INSTALL_DIR "txssh"
-              HEADERS "TxSsh.h"
-              LIBRARIES "txssh"
-              )
+SciFindPackage(
+  PACKAGE "TxSsh"
+  INSTALL_DIRS ${instdirs}
+  HEADERS "TxSsh.h"
+  LIBRARIES "txssh"
+)
 
 if (TXSSH_FOUND)
   message(STATUS "Found TxSsh")

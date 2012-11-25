@@ -23,13 +23,21 @@
 # Arbitrary redistribution allowed provided this copyright remains.
 #
 ######################################################################
+
 set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 
-SciFindPackage(PACKAGE "Ne7ssh"
-              INSTALL_DIR "ne7ssh"
-              HEADERS "ne7ssh.h"
-              LIBRARIES "net7ssh"
-              )
+if (BUILD_WITH_CC4PY_RUNTIME OR BUILD_WITH_SHARED_RUNTIME)
+  set(instdirs ne7ssh-cc4py ne7ssh-sersh)
+else ()
+  set(instdirs ne7ssh)
+endif ()
+
+SciFindPackage(
+  PACKAGE "Ne7ssh"
+  INSTALL_DIRS ${instdirs}
+  HEADERS "ne7ssh.h"
+  LIBRARIES "net7ssh"
+)
 
 if (NE7SSH_FOUND)
   message(STATUS "Found Ne7ssh")

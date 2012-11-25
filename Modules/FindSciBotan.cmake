@@ -23,13 +23,21 @@
 # Arbitrary redistribution allowed provided this copyright remains.
 #
 ######################################################################
+
 set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 
-SciFindPackage(PACKAGE "Botan"
-              INSTALL_DIR "botan"
-              HEADERS "botan/botan.h"
-              LIBRARIES "botan"
-              )
+if (BUILD_WITH_CC4PY_RUNTIME OR BUILD_WITH_SHARED_RUNTIME)
+  set(instdirs botan-cc4py botan-sersh)
+else ()
+  set(instdirs botan)
+endif ()
+
+SciFindPackage(
+  PACKAGE "Botan"
+  INSTALL_DIRS ${instdirs}
+  HEADERS "botan/botan.h"
+  LIBRARIES "botan"
+)
 
 if (BOTAN_FOUND)
   message(STATUS "Found Botan")
