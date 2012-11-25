@@ -217,6 +217,17 @@ if (TRILINOS_FOUND)
     message(STATUS "  F2C_LIBRARY not found.")
   endif ()
 
+# IF Trilinos_LINALG_LIBRARY_NAMES contains blas but not lapack, warn.
+  list(FIND Trilinos_LINALG_LIBRARY_NAMES blas indx)
+  if (NOT ${indx} EQUAL -1)
+    list(FIND Trilinos_LINALG_LIBRARY_NAMES lapack indx)
+    if (${indx} EQUAL -1)
+      message(WARNING "Trilinos_LINALG_LIBRARY_NAMES contains blas but not lapack.  Fixing.")
+    endif ()
+  else ()
+    message(STATUS "Trilinos_LINALG_LIBRARY_NAMES does not contain blas.")
+  endif ()
+
 # Final calculations
   foreach (grp TPL LINALG SLU MPI SYSTEM)
     # if (Trilinos_${grp}_LIBRARIES)
