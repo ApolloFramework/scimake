@@ -18,6 +18,12 @@ else ()
   message(FATAL_ERROR "Could not determine compiler version.")
 endif ()
 
+# Set linker flags for windows machines to fix duplicate definition conflicts.
+if (WIN32)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -NODEFAULTLIB:MSVCRT -NODEFAULTLIB:MSVCPRT")
+endif ()
+
+
 # Set the lib subdir from the Compiler ID and version
 if (DEBUG_CMAKE)
   SciPrintVar(CMAKE_CXX_COMPILER_ID)
