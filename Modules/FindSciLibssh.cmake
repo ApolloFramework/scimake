@@ -28,12 +28,12 @@
 #
 ######################################################################
 
-# set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
-
-if (ENABLE_SHARED OR USE_SHARED_LIBS)
-  set(instdirs "libssh-cc4py;libssh-sersh")
+if (USE_CC4PY_LIBS)
+  set(instdirs libssh-cc4py libssh-sersh)
+elseif (BUILD_WITH_SHARED_RUNTIME OR USE_SHARED_LIBS OR ENABLE_SHARED)
+  set(instdirs libssh-sersh)
 else ()
-  set(instdirs "libssh")
+  set(instdirs libssh)
 endif ()
 
 SciFindPackage(

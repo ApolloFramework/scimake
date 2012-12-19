@@ -21,8 +21,10 @@
 #
 ######################################################################
 
-if (BUILD_WITH_CC4PY_RUNTIME OR BUILD_WITH_SHARED_RUNTIME)
+if (USE_CC4PY_LIBS)
   set(instdirs txssh-cc4py txssh-sersh)
+elseif (BUILD_WITH_SHARED_RUNTIME OR USE_SHARED_LIBS OR ENABLE_SHARED)
+  set(instdirs txssh-sersh)
 else ()
   set(instdirs txssh)
 endif ()
