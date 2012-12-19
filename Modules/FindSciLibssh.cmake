@@ -29,9 +29,8 @@
 ######################################################################
 
 if (USE_CC4PY_LIBS)
-  set(instdirs libssh-cc4py libssh-sersh)
-elseif (BUILD_WITH_SHARED_RUNTIME OR USE_SHARED_LIBS OR ENABLE_SHARED)
-  set(instdirs libssh-sersh)
+# Shared libs in ser for libssh
+  set(instdirs libssh-cc4py libssh)
 else ()
   set(instdirs libssh)
 endif ()
