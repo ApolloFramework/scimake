@@ -801,7 +801,7 @@ macro(SciFindPackage)
         # ${${scipkgreg}_INCLUDE_DIRS}
         # CACHE STRING "All include directories for ${scipkgreg}"
       # )
-    else ()
+    elseif (TFP_HEADERS)
       message(WARNING "None of ${TFP_HEADERS} found.  Define ${scipkgreg}_ROOT_DIR to the root directory of the installation.")
     endif ()
   endif ()
@@ -920,13 +920,11 @@ macro(SciFindPackage)
 
 # Clean up and commit variables to cache
     list(LENGTH ${scipkgreg}_LIBRARIES sciliblistlen)
-    if (NOT ${sciliblistlen})
+    if (TFP_LIBRARIES AND NOT ${sciliblistlen})
       message("WARNING - None of the libraries, ${TFP_LIBRARIES}, found.  Define ${scipkgreg}_ROOT_DIR to find them.")
-    else ()
-      if (NOT DEFINED ALLOW_LIBRARY_DUPLICATES OR NOT ALLOW_LIBRARY_DUPLICATES)
-        list(REMOVE_DUPLICATES "${scipkgreg}_LIBRARIES")
-      endif ()
-      list(REMOVE_DUPLICATES "${scipkgreg}_LIBRARY_DIRS")
+    elseif (${sciliblistlen})
+      list(REMOVE_DUPLICATES ${scipkgreg}_LIBRARIES)
+      list(REMOVE_DUPLICATES ${scipkgreg}_LIBRARY_DIRS)
 # The first dir is the library dir
       list(GET "${scipkgreg}_LIBRARY_DIRS" 0 ${scipkgreg}_LIBRARY_DIR)
       if (NOT DEFINED ${scipkgreg}_DIR)
