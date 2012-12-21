@@ -36,9 +36,11 @@
 #
 set(SciBoost_LIBRARY_LIST "")
 foreach (COMPONENT ${SciBoost_FIND_COMPONENTS})
-  if (WIN32)
+# Static windows boost has libboost prepended to the name
+  if (WIN32 AND NOT (USE_SHARED_LIBS OR BUILD_WITH_SHARED_RUNTIME))
     set(SciBoost_LIBRARY_LIST ${SciBoost_LIBRARY_LIST} libboost_${COMPONENT})
   else ()
+# Other cases just have boost prepended to the name
     set(SciBoost_LIBRARY_LIST ${SciBoost_LIBRARY_LIST} boost_${COMPONENT})
   endif ()
 endforeach ()
