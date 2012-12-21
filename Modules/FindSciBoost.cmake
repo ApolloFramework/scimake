@@ -32,18 +32,22 @@
 ######################################################################
 
 #
-# Append boost_ to all the component names
+# Prepend boost_ to all the component names
 #
 set(SciBoost_LIBRARY_LIST "")
 foreach (COMPONENT ${SciBoost_FIND_COMPONENTS})
-  set(SciBoost_LIBRARY_LIST ${SciBoost_LIBRARY_LIST} boost_${COMPONENT})
+  if (WIN32)
+    set(SciBoost_LIBRARY_LIST ${SciBoost_LIBRARY_LIST} libboost_${COMPONENT})
+  else ()
+    set(SciBoost_LIBRARY_LIST ${SciBoost_LIBRARY_LIST} boost_${COMPONENT})
+  endif ()
 endforeach ()
 
 SciFindPackage(PACKAGE "Boost"
-              INSTALL_DIR "boost"
-              HEADERS "boost/mpi.hpp"
-              LIBRARIES "${SciBoost_LIBRARY_LIST}"
-              )
+  INSTALL_DIR "boost"
+  HEADERS "boost/thread.hpp"
+  LIBRARIES "${SciBoost_LIBRARY_LIST}"
+)
 unset(SciBoost_LIBRARY_LIST CACHE)
 
 if (BOOST_FOUND AND NOT Boost_INCLUDE_DIRS)
