@@ -28,16 +28,15 @@ else ()
 endif ()
 
 SciFindPackage(PACKAGE "Sz"
-              HEADERS "szlib.h"
-              LIBRARIES "sz"
-              MODULES ${desiredmods}
-              )
+  HEADERS "szlib.h"
+  LIBRARIES "sz"
+  MODULES ${desiredmods}
+)
 
 if (SZ_FOUND)
   message(STATUS "Found SZ")
   set(HAVE_SZ 1 CACHE BOOL "Whether have the sz(compression) library")
 else ()
-  message(STATUS "Did not find SZ.  Use -DSZ_DIR to specify the installation directory.")
   if (SciSz_FIND_REQUIRED)
     message(FATAL_ERROR "Failed.")
   endif ()

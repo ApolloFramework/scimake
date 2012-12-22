@@ -23,6 +23,7 @@
 
 SciFindPackage(
   PACKAGE "Z"
+  INSTALL_DIRS zlib
   LIBRARIES "z"
 )
 
@@ -30,7 +31,7 @@ if (Z_FOUND)
   # message(STATUS "Found Z(compression library)")
   set(HAVE_Z 1 CACHE BOOL "Whether have the z(compression) library")
 else ()
-  message(STATUS "Did not find Z(compression).  Use -DZ_DIR to specify the installation directory.")
+  message(STATUS "Did not find Z(compression).")
   if (SciZ_FIND_REQUIRED)
     message(FATAL_ERROR "Failed.")
   endif ()
