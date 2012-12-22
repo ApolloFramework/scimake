@@ -45,13 +45,13 @@ foreach (COMPONENT ${SciBoost_FIND_COMPONENTS})
   endif ()
 endforeach ()
 if (USE_SHARED_LIBS OR BUILD_WITH_SHARED_RUNTIME)
-  set(instdir "boost-sersh")
+  set(instdirs boost-sersh)
 else ()
-  set(instdir "boost")
+  set(instdirs boost)
 endif ()
 
 SciFindPackage(PACKAGE "Boost"
-  INSTALL_DIRS ${instdir}
+  INSTALL_DIRS ${instdirs}
   HEADERS "boost/thread.hpp"
   LIBRARIES "${SciBoost_LIBRARY_LIST}"
 )
