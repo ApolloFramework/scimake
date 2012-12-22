@@ -28,17 +28,23 @@
 #
 ######################################################################
 
+set(libsubdirs lib)
 if (USE_CC4PY_LIBS)
 # Shared libs in ser for libssh
   set(instdirs libssh-cc4py libssh)
 else ()
   set(instdirs libssh)
+  if (NOT (USE_SHARED_LIBS OR BUILD_WITH_SHARED_RUNTIME))
+    set(libsubdirs lib/static ${libsubdirs})
+  endif ()
 endif ()
+# message(STATUS "libsubdirs = ${libsubdirs}.")
 
 SciFindPackage(
   PACKAGE "Libssh"
   INSTALL_DIRS ${instdirs}
   HEADERS "libssh/libssh.h"
+  LIBRARY_SUBDIRS ${libsubdirs}
   LIBRARIES "ssh"
 )
 
