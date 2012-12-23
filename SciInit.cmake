@@ -16,7 +16,9 @@
 #####################################################################
 
 if (NOT DEFINED SCIMAKE_DIR)
-  set(SCIMAKE_DIR ${PROJECT_SOURCE_DIR}/scimake)
+  message(STATUS "[SciInit]: CMAKE_CURRENT_LIST_DIR = ${CMAKE_CURRENT_LIST_DIR}.")
+  # set(SCIMAKE_DIR ${PROJECT_SOURCE_DIR}/scimake)
+  set(SCIMAKE_DIR ${CMAKE_CURRENT_LIST_DIR})
 endif ()
 include(${SCIMAKE_DIR}/SciFuncsMacros.cmake)
 include(${SCIMAKE_DIR}/SciGetDepsFromInstall.cmake)
