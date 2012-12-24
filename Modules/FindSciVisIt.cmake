@@ -125,11 +125,12 @@ endif ()
 # Note that although we want to find the base VisIt include dir,
 # there are no headers in that directory.  So we search for the
 # vtkqt include directory, and then derive the base include dir.
-set(VisIt_INST_SUBDIR visit)
+# Should not set the below, as then how will we ever find visit_trunk?
+# set(VisIt_INST_SUBDIR visit)
 SciFindPackage(PACKAGE VisIt
-  INSTALL_DIR "${VisIt_INST_SUBDIR}"
+  # INSTALL_DIRS ${VisIt_INST_SUBDIR}
   HEADERS vtkQtRenderWindow.h
-  LIBRARIES "${VisIt_LIBRARY_NAMES_SEARCHED}"
+  LIBRARIES ${VisIt_LIBRARY_NAMES_SEARCHED}
   INCLUDE_SUBDIRS "${VisIt_INC_SUBDIR}"
   LIBRARY_SUBDIRS "${VisIt_LIB_SUBDIR}"
 )

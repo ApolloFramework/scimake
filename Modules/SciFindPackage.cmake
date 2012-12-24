@@ -283,7 +283,7 @@ macro(SciFindPackage)
   message("--------- SciFindPackage looking for ${TFP_PACKAGE} ---------")
 
   if (DEBUG_CMAKE)
-    message(STATUS "Using verbose options")
+    message(STATUS "Outputting debug information.")
     message(STATUS "SciFindPackage called with arguments:
     PACKAGE = ${TFP_PACKAGE}
     INSTALL_DIR = ${TFP_INSTALL_DIR}
@@ -332,14 +332,12 @@ macro(SciFindPackage)
 # Order: command-line define, environment variable, supra-search-path subdirs,
 # supra-search-path dirs
   if (DEBUG_CMAKE)
-    message("SciFindPackage] SUPRA_SEARCH_PATH = ${SUPRA_SEARCH_PATH}")
+    message(STATUS "${scipkgreg}_ROOT_DIR = ${${scipkgreg}_ROOT_DIR}.")
+    message("[SciFindPackage] SUPRA_SEARCH_PATH = ${SUPRA_SEARCH_PATH}")
   endif ()
   set(scipath)
 # Command-line define overrides all.
   if (${scipkgreg}_ROOT_DIR)
-    if (DEBUG_CMAKE)
-      message(STATUS "${scipkgreg}_ROOT_DIR = ${${scipkgreg}_ROOT_DIR}.")
-    endif ()
     SciGetRealDir(${${scipkgreg}_ROOT_DIR} scipath)
   elseif (${scipkgreg}_DIR)
 # JRC 20120617: Remove this July 31, 2012.
@@ -755,6 +753,9 @@ macro(SciFindPackage)
       set(scihdrdirvar ${scihdrvar}_INCLUDE_DIR)
 
 # First look in specified path
+      if (DEBUG_CMAKE)
+        message(STATUS "Looking for ${scihdr} under ${scipath} with subdirs, ${sciincsubdirs}, with NO_DEFAULT_PATH.")
+      endif ()
       find_path(${scihdrdirvar}
         ${scihdr}
         PATHS ${scipath}
@@ -763,6 +764,9 @@ macro(SciFindPackage)
 
 # If not found, also look in default paths
       if (NOT ${scihdrdirvar})
+        if (DEBUG_CMAKE)
+          message(STATUS "Looking for ${scihdr} under ${scipath} with subdirs, ${sciincsubdirs}, without NO_DEFAULT_PATH.")
+        endif ()
         find_path(${scihdrdirvar}
           ${scihdr}
           PATHS ${scipath}
