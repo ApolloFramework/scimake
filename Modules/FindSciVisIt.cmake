@@ -67,6 +67,7 @@ set(VisIt_LIBRARY_NAMES_SEARCHED
   lightweight_visit_vtk
   mdserverproxy
   mdserverrpc
+  tess2
   vclproxy
   vclrpc
   viewerproxy
@@ -308,6 +309,7 @@ if (VISIT_FOUND)
     ${VisIt_INCLUDE_DIR}/third_party_builtin/slivr/teem-1.9.0-src/src/unrrdu
     ${VisIt_INCLUDE_DIR}/third_party_builtin/slivr/teem-1.9.0-src/win32/include
     ${VisIt_INCLUDE_DIR}/third_party_builtin/slivr/teem-1.9.0-src/win32/src/pv
+    ${VisIt_INCLUDE_DIR}/third_party_builtin/tess2
     ${VisIt_INCLUDE_DIR}/third_party_builtin/tuvok/tuvok/3rdParty/bzip2
     ${VisIt_INCLUDE_DIR}/third_party_builtin/tuvok/tuvok/3rdParty/jpeglib
     ${VisIt_INCLUDE_DIR}/third_party_builtin/tuvok/tuvok/3rdParty/tiff
