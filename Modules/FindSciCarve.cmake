@@ -24,9 +24,10 @@ set(Carve_LIBRARY_LIST
 
 SciFindPackage(
   PACKAGE Carve
-  INSTALL_DIR visit_vtk
-  HEADERS vtkObject.h
-  LIBRARIES "${Carve_LIBRARY_LIST}"
+  HEADERS carve.hpp
+  INCLUDE_SUBDIRS include/carve include
+  LIBRARIES ${Carve_LIBRARY_LIST}
+  EXECUTABLES convert intersect slice triangulate view
 )
 
 if (CARVE_FOUND)
