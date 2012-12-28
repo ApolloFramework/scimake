@@ -77,6 +77,8 @@ SciPrintVar(CXX_COMP_LIB_SUBDIR)
 include(CheckIncludeFileCXX)
 check_include_file_cxx(iostream HAVE_STD_STREAMS)
 check_include_file_cxx(sstream HAVE_SSTREAM)
+check_include_file_cxx(array HAVE_STD_ARRAY)
+check_include_file_cxx(tr1/array HAVE_STD_TR1_ARRAY)
 
 # See whether generally declared statics work
 try_compile(HAVE_GENERALLY_DECLARED_STATICS ${PROJECT_BINARY_DIR}/scimake
