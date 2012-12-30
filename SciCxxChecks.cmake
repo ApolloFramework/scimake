@@ -31,11 +31,6 @@ endif ()
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL GNU OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL Clang)
   if (NOT USING_MINGW)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ansi -pipe")
-    if (${CMAKE_PROJECT_NAME} STREQUAL vorpal)
-# Greg found that this flag reduces a cell update from 47 to 34 ns on verus
-# for either float or double.
-      set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} --param inline-unit-growth=300")
-    endif ()
   endif ()
   string(SUBSTRING ${CXX_VERSION} 0 1 CXX_MAJOR_VERSION)
   set(CXX_COMP_LIB_SUBDIR gcc${CXX_MAJOR_VERSION})
