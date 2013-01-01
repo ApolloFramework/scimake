@@ -19,12 +19,21 @@ message(STATUS "Execution succeeded.")
 
 # Test all the output
 set(diffres)
-foreach (res ${TEST_RESULTS})
+# There must be an easier way to pass a list
+# message(STATUS "TEST_RESULTS = ${TEST_RESULTS}.")
+string(REPLACE "\"" "" RESULTS_LIST "${TEST_RESULTS}")
+string(REPLACE " " ";" RESULTS_LIST "${RESULTS_LIST}")
+# message(STATUS "RESULTS_LIST = ${RESULTS_LIST}.")
+foreach (res ${RESULTS_LIST})
   execute_process(COMMAND ${CMAKE_COMMAND} -E compare_files
     ${res} ${TEST_RESULTS_DIR}/${res}
     RESULT_VARIABLE DIFFERS)
-  if(DIFFERS)
+  if (DIFFERS)
     set(diffres ${diffres} "${res}")
+  else ()
+    # if (VERBOSE)
+      message(STATUS "Comparison of ${res} succeeded.")
+    # endif()
   endif()
 endforeach ()
 if (diffres)
