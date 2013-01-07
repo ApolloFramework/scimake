@@ -309,9 +309,19 @@ if (USE_OPENMP)
   endif ()
 endif ()
 
+# Remove /MD etc for static builds on Windows
+if (WIN32 AND NOT BUILD_WITH_SHARED_RUNTIME)
+  foreach(flag_var CMAKE_C_FLAGS_FULL CMAKE_C_FLAGS_RELEASE CMAKE_C_FLAGS_RELWITHDEBINFO CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_DEBUG)
+    string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+    string(REGEX REPLACE "/MDd" "/MTd" ${flag_var} "${${flag_var}}")
+  endforeach(flag_var)
+endif ()
+
+# Print results
 SciPrintVar(CMAKE_C_FLAGS_FULL)
 SciPrintVar(CMAKE_C_FLAGS_RELEASE)
 SciPrintVar(CMAKE_C_FLAGS_RELWITHDEBINFO)
+SciPrintVar(CMAKE_C_FLAGS_MINSIZEREL)
 SciPrintVar(CMAKE_C_FLAGS_DEBUG)
 SciPrintVar(CMAKE_C_FLAGS)
 

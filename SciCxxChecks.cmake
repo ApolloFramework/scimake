@@ -149,12 +149,19 @@ else ()
   set(VECTOR_ITERATOR_IS_NOT_POINTER 1 CACHE BOOL "Whether std::vector<int>::iterator is the same as int*")
 endif ()
 
+# Remove /MD etc for static builds on Windows
+if (WIN32 AND NOT BUILD_WITH_SHARED_RUNTIME)
+  foreach(flag_var CMAKE_CXX_FLAGS_FULL CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_DEBUG)
+    string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+    string(REGEX REPLACE "/MDd" "/MTd" ${flag_var} "${${flag_var}}")
+  endforeach(flag_var)
+endif ()
+
 # Check flags
-set(CMAKE_CXX_FLAGS_FULL ${CMAKE_C_FLAGS_FULL})
-set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
 SciPrintVar(CMAKE_CXX_FLAGS_FULL)
 SciPrintVar(CMAKE_CXX_FLAGS_RELEASE)
 SciPrintVar(CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+SciPrintVar(CMAKE_CXX_FLAGS_MINSIZEREL)
 SciPrintVar(CMAKE_CXX_FLAGS_DEBUG)
 SciPrintVar(CMAKE_CXX_FLAGS)
 
