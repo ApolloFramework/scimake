@@ -26,6 +26,7 @@ set(Oce_SEARCHLIBS
   TKPrim
   TKSTEP TKSTEP209 TKSTEPAttr TKSTEPBase
   TKSTL
+  TKernel
 )
 
 SciFindPackage(PACKAGE "Oce"
