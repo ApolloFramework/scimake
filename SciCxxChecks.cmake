@@ -154,6 +154,7 @@ if (WIN32 AND NOT BUILD_WITH_SHARED_RUNTIME)
   foreach(flag_var CMAKE_CXX_FLAGS_FULL CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_DEBUG)
     string(REPLACE "/MDd" "" ${flag_var} "${${flag_var}}")
     string(REPLACE "/MD" "" ${flag_var} "${${flag_var}}")
+    string(${flag_var} "${${flag_var}} /bigobj")
   endforeach(flag_var)
 endif ()
 
