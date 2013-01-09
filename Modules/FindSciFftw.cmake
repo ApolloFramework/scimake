@@ -21,37 +21,25 @@
 #
 ######################################################################
 
-# This is for finding 'dev' cmake version
-if (DEFINED FFTW_FIND_VERSION)
-  set(Fftw_SEARCH "fftw${FFTW_FIND_VERSION}")
-else()
-  set(Fftw_SEARCH "fftw")
-endif()
-
-
 if (ENABLE_PARALLEL)
   message(STATUS "Looking for parallel FFTW")
   SciFindPackage(PACKAGE "Fftw"
-                INSTALL_DIR ${Fftw_SEARCH}-par
-#                INSTALL_DIR "fftw-par"
+                INSTALL_DIR "fftw-par"
                 HEADERS "fftw.h;rfftw.h;fftw_mpi.h;rfftw_mpi.h"
                 LIBRARIES "fftw;rfftw;fftw_mpi;rfftw_mpi"
-                MODULES "fftw"
                 )
 else ()
   message(STATUS "Looking for serial FFTW")
   SciFindPackage(PACKAGE "Fftw"
-                INSTALL_DIR ${Fftw_SEARCH}
-#                INSTALL_DIR "fftw"
+                INSTALL_DIR "fftw"
                 HEADERS "fftw.h;rfftw.h"
                 LIBRARIES "fftw;rfftw"
-                MODULES "fftw"
                 )
 endif ()
 
 if (FFTW_FOUND)
   message(STATUS "Found Fftw")
-  set(HAVE_FFTW 1 CACHE BOOL "Whether have the FFTWlibrary")
+  set(HAVE_FFTW 1 CACHE BOOL "Whether have the FFTW library")
 else ()
   message(STATUS "Did not find Fftw.  Use -DFFTW_DIR to specify the installation directory.")
   if (SciFftw_FIND_REQUIRED)
