@@ -21,25 +21,43 @@
 #
 ######################################################################
 
-# Uses of these libs found from CMakeLists.txt in OCE
-# Analyze dependencies using otool -L on OS X.
+# Uses of these libs found from CMakeLists.txt in OCE, and
+# in doxygen documentation, which shows
+#    Module FoundationClasses
+#    Module ModelingData
+#    Module ModelingAlgorithms
+#    Module Visualization
+#    Module ApplicationFramework
+#    Module DataExchange
+#    Module Draw
+#
+# Analyze dependencies using otool -L on OS X for more discreteness.
 # Below is a layered list, top to bottom, left to right.
 # ToDo: define the SEARCHHDRS
+#
+# Mesh contains triangulation
+set(OceMesh_SEARCHLIBS TKXMesh TKMesh)
+set(OceMesh_SEARCHHDRS XBRepMesh.hxx) # contains triangulation
 set(OceIges_SEARCHLIBS TKIGES)
-# IGES dependency
-set(OceAdvGeom_SEARCHLIBS TKFillet TKBool TKPrim TKBO)
+set(OceIges_SEARCHHDRS IGESFile_Read.hxx)
+# IGES dependends on AdvAlgo
+set(OceAdvAlgo_SEARCHLIBS TKFillet TKBool TKPrim TKBO)
 set(OceStep_SEARCHLIBS TKSTEP TKSTEP209 TKSTEPAttr TKSTEPBase)
+set(OceStep_SEARCHHDRS STEPControl_Reader.hxx)
 # STEP and IGES depend on this, but not STL
 set(OceIoBase_SEARCHLIBS TKXSBase)
 set(OceStl_SEARCHLIBS TKSTL)
-set(OceAlgo_SEARCHLIBS TKShHealing TKTopAlgo TKGeomAlgo)
-set(OceGeom_SEARCHLIBS TKBrep TKGeomBase TKG3d TKG2d)
+set(OceAlgo_SEARCHLIBS TKShHealing TKTopAlgo TKModelDataAlgo)
+set(OceModelData_SEARCHLIBS TKBrep TKModelDataBase TKG3d TKG2d)
 set(OceTools_SEARCHLIBS TKMath TKAdvTools)
 set(OceKernel_SEARCHLIBS TKernel)
 
 # Enforce dependencies
+if (OceMesh_FIND)
+  set(OceBrep_FIND TRUE)
+endif ()
 if (OceIges_FIND)
-  set(OceAdvGeom_FIND TRUE)
+  set(OceAdvAlgo_FIND TRUE)
   set(OceIoBase_FIND TRUE)
 endif ()
 if (OceStep_FIND)
@@ -49,9 +67,9 @@ if (OceIoBase_FIND OR OceStl_FIND)
   set(OceAlgo_FIND TRUE)
 endif ()
 if (OceAlgo_FIND)
-  set(OceGeom_FIND TRUE)
+  set(OceModelData_FIND TRUE)
 endif ()
-if (OceGeom_FIND)
+if (OceModelData_FIND)
   set(OceTools_FIND TRUE)
 endif ()
 if (OceTools_FIND)
@@ -60,7 +78,7 @@ endif ()
 
 # Set the libraries
 set(Oce_SEARCHLIBS)
-foreach (pkg Iges AdvGeom Step IoBase Stl Algo Geom Tools Kernel)
+foreach (pkg Mesh Iges AdvAlgo Step IoBase Stl Algo ModelData Tools Kernel)
   message(STATUS "Oce${pkg}_FIND = ${Oce${pkg}_FIND}.")
   if (Oce${pkg}_FIND)
     set(Oce_SEARCHLIBS ${Oce_SEARCHLIBS} ${Oce${pkg}_SEARCHLIBS})
