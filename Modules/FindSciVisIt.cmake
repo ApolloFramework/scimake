@@ -129,7 +129,7 @@ endif ()
 # Should not set the below, as then how will we ever find visit_trunk?
 # set(VisIt_INST_SUBDIR visit)
 SciFindPackage(PACKAGE VisIt
-  # INSTALL_DIRS ${VisIt_INST_SUBDIR}
+  INSTALL_DIRS visit-sersh visit
   HEADERS vtkQtRenderWindow.h
   LIBRARIES ${VisIt_LIBRARY_NAMES_SEARCHED}
   INCLUDE_SUBDIRS "${VisIt_INC_SUBDIR}"
