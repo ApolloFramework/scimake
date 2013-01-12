@@ -19,46 +19,50 @@
 ##################################################################
 
 set(Vtk_LIBRARY_LIST
-        vtkCommon
-        vtkCommonPythonD
-        vtkDICOMParser
-        vtkFiltering
-        vtkFilteringPythonD
-        vtkGenericFiltering
-        vtkGenericFilteringPythonD
-        vtkGraphics
-        vtkGraphicsPythonD
-        vtkHybrid
-        vtkHybridPythonD
-        vtkIO
-        vtkIOPythonD
-        vtkImaging
-        vtkImagingPythonD
-        vtkPythonCore
-        vtkRendering
-        vtkRenderingPythonD
-        vtkVolumeRendering
-        vtkVolumeRenderingPythonD
-        vtkWidgets
-        vtkWidgetsPythonD
-        vtkalglib
-        vtkexpat
-        vtkfreetype
-        vtkftgl
-        vtklibxml2
-        vtkjpeg
-        vtkpng
-        vtkproj4
-        vtksqlite
-        vtksys
-        vtktiff
-        vtkverdict
-        vtkzlib
+  vtkCommon
+  vtkCommonPythonD
+  vtkDICOMParser
+  vtkFiltering
+  vtkFilteringPythonD
+  vtkGenericFiltering
+  vtkGenericFilteringPythonD
+  vtkGraphics
+  vtkGraphicsPythonD
+  vtkHybrid
+  vtkHybridPythonD
+  vtkIO
+  vtkIOPythonD
+  vtkImaging
+  vtkImagingPythonD
+  vtkPythonCore
+  vtkRendering
+  vtkRenderingPythonD
+  vtkVolumeRendering
+  vtkVolumeRenderingPythonD
+  vtkWidgets
+  vtkWidgetsPythonD
+  vtkalglib
+  vtkexpat
+  vtkfreetype
+  vtkftgl
+  vtklibxml2
+  vtkjpeg
+  vtkpng
+  vtkproj4
+  vtksqlite
+  vtksys
+  vtktiff
+  vtkverdict
+  vtkzlib
 )
+
+if (NOT VTK_INSTALL_DIRS)
+  set(VTK_INSTALL_DIRS vtk-sersh vtk)
+endif ()
 
 SciFindPackage(
   PACKAGE Vtk
-  INSTALL_DIR visit_vtk
+  INSTALL_DIRS ${VTK_INSTALL_DIRS}
   HEADERS vtkObject.h
   LIBRARIES "${Vtk_LIBRARY_LIST}"
 )
