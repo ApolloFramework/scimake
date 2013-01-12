@@ -63,6 +63,7 @@ endif ()
 SciFindPackage(
   PACKAGE Vtk
   INSTALL_DIRS ${VTK_INSTALL_DIRS}
+  INCLUDE_SUBDIRS include include/vtk/include # Second for visit installation
   HEADERS vtkObject.h
   LIBRARIES "${Vtk_LIBRARY_LIST}"
 )
@@ -73,7 +74,7 @@ if (VTK_FOUND)
   message(STATUS "[FindSciVtk.cmake] - Vtk_LIBRARIES = ${Vtk_LIBRARIES}")
   set(HAVE_VTK 1 CACHE BOOL "Whether have Vtk.")
 else ()
-  message(STATUS "[FindSciVtk.cmake] - Did not find VTK, use -DVTK_DIR to supply the VTK installation directory.")
+  message(STATUS "[FindSciVtk.cmake] - Did not find VTK, use -DVtk_ROOT_DIR to supply the VTK installation directory.")
   if (SciVtk_FIND_REQUIRED)
     message(FATAL_ERROR "[FindSciVtk.cmake] - Failing.")
   endif ()
