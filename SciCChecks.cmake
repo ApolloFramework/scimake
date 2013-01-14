@@ -309,12 +309,14 @@ if (USE_OPENMP)
   endif ()
 endif ()
 
-# Remove /MD etc for static builds on Windows
-if (WIN32 AND NOT BUILD_WITH_SHARED_RUNTIME)
+# Remove /MD etc for static builds on Windows, Add /bigobj.
+if (WIN32)
   foreach(flag_var CMAKE_C_FLAGS_FULL CMAKE_C_FLAGS_RELEASE CMAKE_C_FLAGS_RELWITHDEBINFO CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_DEBUG)
-    string(REPLACE "/MDd" "" ${flag_var} "${${flag_var}}")
-    string(REPLACE "/MD" "" ${flag_var} "${${flag_var}}")
-    string(REPLACE ${flag_var} "${${flag_var}} /bigobj" ${flag_var} "${${flag_var}}")
+    if (NOT BUILD_WITH_SHARED_RUNTIME)
+      string(REPLACE "/MDd" "" ${flag_var} "${${flag_var}}")
+      string(REPLACE "/MD" "" ${flag_var} "${${flag_var}}")
+    endif ()
+    set(${flag_var} "${${flag_var}} /bigobj")
   endforeach(flag_var)
 endif ()
 
