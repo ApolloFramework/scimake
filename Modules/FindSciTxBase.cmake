@@ -50,3 +50,13 @@ SciFindPackage(PACKAGE "TxBase"
   LIBRARY_SUBDIRS "lib/${CXX_COMP_LIB_SUBDIR};lib"
 )
 
+if (TXBASE_FOUND)
+  # message(STATUS "Found TxBase.")
+  set(HAVE_TXBASE 1 CACHE BOOL "Whether have TxBase library")
+else ()
+  message(STATUS "Did not find TxBase.  Use -DTXBASE_DIR to specify the installation directory.")
+  if (TxBase_FIND_REQUIRED)
+    message(FATAL_ERROR "Failed.")
+  endif ()
+endif ()
+
