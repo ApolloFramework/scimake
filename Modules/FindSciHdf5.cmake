@@ -23,10 +23,14 @@
 ######################################################################
 
 if (ENABLE_PARALLEL)
-  set(instdirs hdf5-par)
+  if (BUILD_WITH_SHARED_RUNTIME OR USE_SHARED_HDF5)
+    set(instdirs hdf5-parsh)
+  else ()
+    set(instdirs hdf5-par)
+  endif ()
 else ()
   if (BUILD_WITH_CC4PY_RUNTIME OR USE_CC4PY_HDF5)
-    set(instdirs "hdf5-cc4py;hdf5-sersh")
+    set(instdirs hdf5-cc4py hdf5-sersh)
   elseif (BUILD_WITH_SHARED_RUNTIME OR USE_SHARED_HDF5)
     set(instdirs hdf5-sersh)
   else ()
