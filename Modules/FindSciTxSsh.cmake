@@ -21,13 +21,16 @@
 #
 ######################################################################
 
-if (USE_CC4PY_LIBS)
-  set(instdirs txssh-cc4py txssh-sersh)
-elseif (BUILD_WITH_SHARED_RUNTIME OR USE_SHARED_LIBS OR ENABLE_SHARED)
-  set(instdirs txssh-sersh)
-else ()
-  set(instdirs txssh)
-endif ()
+# Only sersh built from comments in txssh.sh
+set(instdirs txssh-sersh)
+
+# if (USE_CC4PY_LIBS)
+#  set(instdirs txssh-cc4py txssh-sersh)
+# elseif (BUILD_WITH_SHARED_RUNTIME OR USE_SHARED_LIBS OR ENABLE_SHARED)
+#  set(instdirs txssh-sersh)
+# else ()
+#  set(instdirs txssh)
+# endif ()
 
 set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 
