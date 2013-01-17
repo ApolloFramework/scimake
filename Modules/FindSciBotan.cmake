@@ -11,7 +11,21 @@
 #  Botan_INCLUDE_DIRS = Location of Botan includes
 #  Botan_LIBRARY_DIRS = Location of Botan libraries
 #  Botan_LIBRARIES    = Required libraries
-#  Botan_STLIBS       = Location of Botan static library
+#  Botan_STLIBS       = Static libraries (if found in same directory)
+#  Botan_DLLS         = Windows DLLs (if found in same dir or sister bin dir)
+#
+# ========= ========= ========= ========= ========= =============== ==========
+#
+# Variables used by this module, which can be set before calling find_package
+# to influence default behavior
+#
+# Botan_ROOT_DIR           Specifies the root dir of the Botan installation
+#
+# BUILD_WITH_CC4PY_RUNTIME Specifies to look for installation dirs,
+#                          botan-cc4py or botan-sersh
+# ENABLE_SHARED OR BUILD_WITH_SHARED_RUNTIME OR BUILD_SHARED_LIBS
+#                          operative if BUILD_WITH_CC4PY_RUNTIME not set
+#                          Specify to look for installation dir, botan-sersh.
 
 ######################################################################
 #
@@ -26,17 +40,19 @@
 
 set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 
-if (BUILD_WITH_CC4PY_RUNTIME OR BUILD_WITH_SHARED_RUNTIME)
+if (BUILD_WITH_CC4PY_RUNTIME)
   set(instdirs botan-cc4py botan-sersh)
+elseif (ENABLE_SHARED OR BUILD_WITH_SHARED_RUNTIME OR BUILD_SHARED_LIBS)
+  set(instdirs botan-sersh)
 else ()
   set(instdirs botan)
 endif ()
 
 SciFindPackage(
-  PACKAGE "Botan"
+  PACKAGE Botan
   INSTALL_DIRS ${instdirs}
-  HEADERS "botan/botan.h"
-  LIBRARIES "botan"
+  HEADERS botan/botan.h
+  LIBRARIES botan
 )
 
 if (BOTAN_FOUND)

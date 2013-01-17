@@ -9,6 +9,19 @@
 #  TxBase_INCLUDE_DIRS       = Location of TxBase includes
 #  TxBase_LIBRARY_DIRS       = Location of TxBase libraries
 #  TxBase_LIBRARIES          = Required libraries
+#
+# ========= ========= ========= ========= ========= ========= ==========
+#
+# Variables used by this module, which can be set before calling find_package
+# to influence default behavior
+#
+# TxBase_ROOT_DIR          Specifies the root dir of the TxBase installation
+#
+# BUILD_WITH_CC4PY_RUNTIME Specifies to look for installation dirs,
+#                          txbase-cc4py or txbase-sersh
+# ENABLE_SHARED OR BUILD_WITH_SHARED_RUNTIME OR BUILD_SHARED_LIBS
+#                          operative if BUILD_WITH_CC4PY_RUNTIME not set
+#                          Specify to look for installation dir, txbase-sersh.
 
 ######################################################################
 #
@@ -30,7 +43,7 @@ if (ENABLE_PARALLEL)
 else ()
   if (BUILD_WITH_CC4PY_RUNTIME OR USE_CC4PY_HDF5)
     set(instdirs txbase-cc4py txbase-sersh)
-  elseif (BUILD_WITH_SHARED_RUNTIME OR USE_SHARED_HDF5)
+  elseif (ENABLE_SHARED OR BUILD_WITH_SHARED_RUNTIME OR BUILD_SHARED_LIBS OR USE_SHARED_HDF5)
     set(instdirs txbase-sersh)
   else ()
     set(instdirs txbase)
