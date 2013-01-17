@@ -31,28 +31,32 @@
 #
 ######################################################################
 
-#
+# Default: libraries have boost_ prepended.
+set(BOOST_LIB_PREFIX boost_)
+if (BUILD_WITH_CC4PY_RUNTIME)
+  set(instdirs boost-cc4py boost-sersh)
+# Shared windows boost has libboost_ prepended to the name
+  set(BOOST_LIB_PREFIX boost_)
+elseif (BUILD_WITH_SHARED_RUNTIME OR BUILD_SHARED_LIBS OR ENABLE_SHARED)
+  set(instdirs boost-sersh)
+  set(BOOST_LIB_PREFIX boost_)
+else ()
+  message(STATUS "Setting boost up for static linking")
+  set(Boost_USE_STATIC_RUNTIME OFF)
+  set(Boost_USE_STATIC_LIBS ON)
+  set(Boost_USE_MULTITHREADED ON)
+  set(instdirs boost)
+# Static cases Windows has libboost_ prepended to the name
+  if (WIN32)
+    set(BOOST_LIB_PREFIX libboost_)
+  endif ()
+endif ()
+
 # Set names and dirs for finding boost
-#
 set(SciBoost_LIBRARY_LIST "")
 foreach (COMPONENT ${SciBoost_FIND_COMPONENTS})
-# Static windows boost has libboost_ prepended to the name
-  if (WIN32 AND NOT (USE_SHARED_LIBS OR BUILD_WITH_SHARED_RUNTIME))
-    set(SciBoost_LIBRARY_LIST ${SciBoost_LIBRARY_LIST} libboost_${COMPONENT})
-  else ()
-# Other cases just have boost_ prepended to the name
-    set(SciBoost_LIBRARY_LIST ${SciBoost_LIBRARY_LIST} boost_${COMPONENT})
-  endif ()
+  set(SciBoost_LIBRARY_LIST ${SciBoost_LIBRARY_LIST} ${BOOST_LIB_PREFIX}${COMPONENT})
 endforeach ()
-if (USE_SHARED_LIBS)
-  set(instdirs boost-sersh)
-else ()
-    message(STATUS "Setting boost up for static linking")
-    set(Boost_USE_STATIC_RUNTIME OFF)
-    set(Boost_USE_STATIC_LIBS ON)
-    set(Boost_USE_MULTITHREADED ON)
-  set(instdirs boost)
-endif ()
 
 SciFindPackage(PACKAGE "Boost"
   INSTALL_DIRS ${instdirs}
