@@ -26,7 +26,7 @@ set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 SciFindPackage(PACKAGE "Squish"
               INSTALL_DIR "squish"
               FILES ".squish-3-license"
-              EXECUTABLES "squishrunner;squishserver"
+              EXECUTABLES "squishrunner;squishserver;nchcompare"
               LIBRARIES "squishqtpre"
 )
 
