@@ -35,13 +35,13 @@
 ######################################################################
 
 if (ENABLE_PARALLEL)
-  if (BUILD_WITH_SHARED_RUNTIME OR USE_SHARED_HDF5)
+  if (BUILD_WITH_SHARED_RUNTIME)
     set(instdirs txbase-parsh)
   else ()
     set(instdirs txbase-par txbase-ben)
   endif ()
 else ()
-  if (BUILD_WITH_CC4PY_RUNTIME OR USE_CC4PY_HDF5)
+  if (BUILD_WITH_CC4PY_RUNTIME)
     set(instdirs txbase-cc4py txbase-sersh)
   elseif (ENABLE_SHARED OR BUILD_WITH_SHARED_RUNTIME OR BUILD_SHARED_LIBS OR USE_SHARED_HDF5)
     set(instdirs txbase-sersh)

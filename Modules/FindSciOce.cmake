@@ -90,7 +90,10 @@ message(STATUS "Oce_SEARCHLIBS = ${Oce_SEARCHLIBS}.")
 #  TKVRML TKXCAF TKXCAFSchema TKXmlXCAF TKBinXCAF TKXDEIGES TKXDESTEP
 
 # To Do: Set variables for each group individually
+
+# Only sersh build exists
 SciFindPackage(PACKAGE "Oce"
+  INSTALL_DIRS oce-sersh
   HEADERS "TopoDS_Builder.hxx"
   LIBRARIES "${Oce_SEARCHLIBS}"
 )

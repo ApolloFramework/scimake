@@ -18,12 +18,21 @@
 #
 ##################################################################
 
+if (BUILD_WITH_CC4PY_RUNTIME )
+  set(instdirs carve-cc4py carve-sersh)
+elseif (BUILD_WITH_SHARED_RUNTIME OR USE_SHARED_HDF5)
+  set(instdirs carve-sersh)
+else ()
+  set(instdirs carve)
+endif ()
+
 set(Carve_LIBRARY_LIST
   carve
 )
 
 SciFindPackage(
   PACKAGE Carve
+  INSTALL_DIRS ${instdirs}
   HEADERS carve.hpp
   INCLUDE_SUBDIRS include/carve include
   LIBRARIES ${Carve_LIBRARY_LIST}

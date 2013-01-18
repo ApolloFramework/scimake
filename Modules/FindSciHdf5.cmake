@@ -51,7 +51,7 @@ else ()
 endif ()
 
 SciFindPackage(PACKAGE "Hdf5"
-  INSTALL_DIR ${instdirs}
+  INSTALL_DIRS ${instdirs}
   EXECUTABLES h5diff
   HEADERS hdf5.h
   LIBRARIES ${desiredlibs}

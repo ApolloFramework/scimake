@@ -22,13 +22,10 @@ message("--------- FindSciQt4 looking for Qt4 ---------")
 
 if (SciQt4_FIND_COMPONENTS)
   message(STATUS "Looking for Qt with version greater than 4.7.1 with components: ${SciQt4_FIND_COMPONENTS}")
-  find_package(Qt4 4.7.1
-    COMPONENTS ${SciQt4_FIND_COMPONENTS}
-    REQUIRED)
+  find_package(Qt4 4.7.1 COMPONENTS ${SciQt4_FIND_COMPONENTS} REQUIRED)
 else ()
   message(STATUS "Looking for Qt with version greater than 4.7.1, components not specified")
-  find_package(Qt4 4.7.1
-    REQUIRED)
+  find_package(Qt4 4.7.1 REQUIRED)
 endif ()
 
 # Use file sets up variables
@@ -42,7 +39,7 @@ set(QT_INCLUDE_DIRS ${QT_INCLUDES}) # Regularize the variable the FindQt4 sets
 foreach (qtoptlib ${QT_OPTIONAL_LIBRARIES})
  STRING(TOUPPER ${qtoptlib} _uppercaseoptlib )
  if (QT_${_uppercaseoptlib}_FOUND)
-   set(QT_LIBRARIES ${QT_LIBRARIES} ${QT_${_uppercaseoptlib}_LIBRARY}) 
+   set(QT_LIBRARIES ${QT_LIBRARIES} ${QT_${_uppercaseoptlib}_LIBRARY})
  endif ()
 endforeach ()
 
@@ -69,16 +66,17 @@ else ()
       set(libtype ${qtlib})
     else ()
       if ("${libtype}" MATCHES "optimized" AND
-("${CMAKE_BUILD_TYPE}" MATCHES "Release" OR
-                                          "${CMAKE_BUILD_TYPE}" MATCHES "RELEASE" OR
-                                          "${CMAKE_BUILD_TYPE}" MATCHES "RelWithDebInfo" OR
-                                          "${CMAKE_BUILD_TYPE}" MATCHES "RELWITHDEBINFO")
-                                 )
+           ("${CMAKE_BUILD_TYPE}" MATCHES "Release" OR
+               "${CMAKE_BUILD_TYPE}" MATCHES "RELEASE" OR
+               "${CMAKE_BUILD_TYPE}" MATCHES "RelWithDebInfo" OR
+               "${CMAKE_BUILD_TYPE}" MATCHES "RELWITHDEBINFO"
+           )
+         )
         set(QT_LIBS ${QT_LIBS} ${qtlib})
       elseif ("${libtype}" MATCHES "debug" AND
-("${CMAKE_BUILD_TYPE}" MATCHES "Debug" OR
-                                                          "${CMAKE_BUILD_TYPE}" MATCHES "DEBUG")
-                                                 )
+               ("${CMAKE_BUILD_TYPE}" MATCHES "Debug" OR
+                 "${CMAKE_BUILD_TYPE}" MATCHES "DEBUG")
+               )
         set(QT_LIBS ${QT_LIBS} ${qtlib})
       endif ()
     endif ()
@@ -101,3 +99,4 @@ endif ()
 
 message("--------- FindSciQt4 done with Qt4 -----------")
 message("")
+
