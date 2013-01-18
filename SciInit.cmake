@@ -218,6 +218,26 @@ endif ()
 
 ######################################################################
 #
+# Other link flags
+#
+######################################################################
+
+if (BUILD_SHARED_LIBS)
+  if (APPLE)
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -undefined dynamic_lookup")
+  endif ()
+endif ()
+
+# Print results
+message(STATUS "")
+message(STATUS "Link flags:")
+foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
+  SciPrintVar(CMAKE_SHARED_LINKER_FLAGS_${bld})
+endforeach ()
+SciPrintVar(CMAKE_SHARED_LINKER_FLAGS)
+
+######################################################################
+#
 # Need to add library paths from compiler for rpath
 #
 ######################################################################

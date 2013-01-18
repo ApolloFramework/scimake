@@ -321,10 +321,8 @@ if (WIN32)
 endif ()
 
 # Print results
-SciPrintVar(CMAKE_C_FLAGS_FULL)
-SciPrintVar(CMAKE_C_FLAGS_RELEASE)
-SciPrintVar(CMAKE_C_FLAGS_RELWITHDEBINFO)
-SciPrintVar(CMAKE_C_FLAGS_MINSIZEREL)
-SciPrintVar(CMAKE_C_FLAGS_DEBUG)
+foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
+  SciPrintVar(CMAKE_C_FLAGS_${bld})
+endforeach ()
 SciPrintVar(CMAKE_C_FLAGS)
 
