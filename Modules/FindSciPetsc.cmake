@@ -46,11 +46,16 @@ set(Petsc_LIBRARY_LIST
   metis
 )
 
+
 if (DEFINED PETSC_FIND_VERSION)
-  set(Petsc_SEARCH "petsc${PETSC_FIND_VERSION}")
+  message(STATUS "--- scimake/Modules/FindSciPetsc, petsc find version logic used ---")
+  set(Petsc_SEARCH "petsc-${PETSC_FIND_VERSION}")
 else()
   set(Petsc_SEARCH "petsc")
 endif()
+
+# Check the petsc search path
+message(STATUS "Petsc_SEARCH = ${Petsc_SEARCH}")
 
 if (ENABLE_PARALLEL)
   SciFindPackage(PACKAGE "Petsc"
