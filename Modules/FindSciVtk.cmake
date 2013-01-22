@@ -56,13 +56,13 @@ set(Vtk_LIBRARY_LIST
   vtkzlib
 )
 
-if (NOT VTK_INSTALL_DIRS)
-  set(VTK_INSTALL_DIRS vtk-sersh vtk)
+if (NOT Vtk_INSTALL_DIRS)
+  set(Vtk_INSTALL_DIRS vtk-sersh vtk)
 endif ()
 
 SciFindPackage(
   PACKAGE Vtk
-  INSTALL_DIRS ${VTK_INSTALL_DIRS}
+  INSTALL_DIRS ${Vtk_INSTALL_DIRS}
   INCLUDE_SUBDIRS include include/vtk/include # Second for visit installation
   HEADERS vtkObject.h
   LIBRARIES "${Vtk_LIBRARY_LIST}"
