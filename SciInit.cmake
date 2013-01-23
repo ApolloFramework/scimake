@@ -340,6 +340,6 @@ endif ()
 ######################################################################
 
 if (APPLE)
-  set (CMAKE_INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX})
+  # set (CMAKE_INSTALL_NAME_DIR @rpath)
 endif ()
 
