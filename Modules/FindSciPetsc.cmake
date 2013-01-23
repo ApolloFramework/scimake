@@ -164,8 +164,10 @@ foreach (var Petsc_All_FLAGS Petsc_All_LIBRARIES
 endforeach ()
 
 # Separate out the libraries into groups
-set(Petsc_MPI_LIBRARY_NAMES)
+set(Petsc_SUPERLU_LIBRARY_NAMES)
 set(Petsc_LINALG_LIBRARY_NAMES)
+set(Petsc_MPI_LIBRARY_NAMES)
+set(Petsc_DL_LIBRARY_NAMES)
 set(Petsc_SYSTEM_LIBRARY_NAMES)
 foreach (i ${Petsc_All_LIBRARY_NAMES})
   set(libfound FALSE)
@@ -189,11 +191,29 @@ foreach (i ${Petsc_All_LIBRARY_NAMES})
   if (NOT libfound)
     if (${i} STREQUAL "rt" OR ${i} STREQUAL "m" OR
         ${i} STREQUAL "stdc++" OR ${i} STREQUAL "util" OR
-        ${i} STREQUAL "pthread" OR ${i} STREQUAL "dl")
+        ${i} STREQUAL "pthread")
       message(STATUS "${i} is an ignored system library.")
       set(libfound TRUE)
     endif ()
   endif ()
+
+# Pull out the superlu libraries
+  if (NOT libfound)
+    if (${i} MATCHES "^superlu")
+      message(STATUS "${i} is a superlu library.")
+      set(Petsc_SUPERLU_LIBRARY_NAMES ${Petsc_SUPERLU_LIBRARY_NAMES} ${i})
+      set(libfound TRUE)
+    endif ()
+  endif ()
+
+# Pull out the dl library 
+  if (NOT libfound)
+    if (${i} STREQUAL "dl")
+      message(STATUS "${i} is a DL library.")
+      set(Petsc_DL_LIBRARY_NAMES ${Petsc_DL_LIBRARY_NAMES} ${i})
+      set(libfound TRUE)
+    endif()
+  endif()
 
 # Pull out MPI libraries
   if (NOT libfound)
@@ -222,7 +242,7 @@ foreach (i ${Petsc_All_LIBRARY_NAMES})
 endforeach ()
 
 # Find the ext libraries
-foreach (vartype MPI LINALG SYSTEM)
+foreach (vartype SUPERLU LINALG MPI DL SYSTEM)
   foreach (lib ${Petsc_${vartype}_LIBRARY_NAMES})
     find_library(${lib}_LIBRARY ${lib} ${Petsc_${vartype}_LIBRARY_DIRS} ${Petsc_ALLEXT_LIBRARY_DIRS} NO_DEFAULT_PATH)
     if (NOT ${lib}_LIBRARY)
@@ -241,7 +261,7 @@ foreach (vartype MPI LINALG SYSTEM)
 endforeach ()
 
 # Print all out
-foreach (vartype MPI LINALG SYSTEM)
+foreach (vartype SUPERLU LINALG MPI DL SYSTEM)
   foreach (var LIBRARY_NAMES LIBRARY_DIRS LIBRARIES STLIBS)
     SciPrintvar(Petsc_${vartype}_${var})
   endforeach ()
