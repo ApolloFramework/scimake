@@ -40,6 +40,7 @@ set(Petsc_LIBRARY_LIST
   blacs
   superlu_dist_2.3
   superlu_dist_2.4
+  superlu_dist_3.1
   superlu_4.0
   HYPRE
   parmetis
