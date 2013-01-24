@@ -60,7 +60,7 @@ SciFindPackage(PACKAGE "TxBase"
   INSTALL_DIRS ${instdirs}
   HEADERS "txbase_version.h"
   LIBRARIES "${txbasefindlibs}"
-  LIBRARY_SUBDIRS "lib/${CXX_COMP_LIB_SUBDIR};lib"
+  LIBRARY_SUBDIRS lib/${CXX_COMP_LIB_SUBDIR} lib
 )
 
 if (TXBASE_FOUND)
