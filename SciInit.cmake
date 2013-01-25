@@ -85,24 +85,14 @@ SciPrintString("CMAKE_SYSTEM_PROCESSOR = ${CMAKE_SYSTEM_PROCESSOR}.")
 #
 ######################################################################
 
-# message(STATUS "CMAKE_MODULE_PATH = ${CMAKE_MODULE_PATH}.")
-# message(STATUS "CMAKE_ROOT = ${CMAKE_ROOT}.")
-# if (NOT DEFINED CMAKE_MODULE_PATH)
-#  set(CMAKE_MODULE_PATH ${CMAKE_ROOT}/Modules)
-# endif ()
-# message(STATUS "CMAKE_MODULE_PATH = ${CMAKE_MODULE_PATH}.")
 cmake_policy(SET CMP0017 OLD) # Use our modules over theirs
 set(CMAKE_MODULE_PATH
   ${SCIMAKE_DIR}/Modules
 )
 
-set(TXCMAKE_DIR ${PROJECT_SOURCE_DIR}/txcmake)
-if (EXISTS ${TXCMAKE_DIR})
-  set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${TXCMAKE_DIR}/Modules)
-endif ()
-
 if (DEBUG_CMAKE)
   message(STATUS "CMAKE_MODULE_PATH = ${CMAKE_MODULE_PATH}")
+  set(SCI_DEBUG_VAR DEBUG)
 endif ()
 
 # message("SUPRA_SEARCH_PATH = ${SUPRA_SEARCH_PATH}")
@@ -222,12 +212,6 @@ endif ()
 #
 ######################################################################
 
-if (BUILD_SHARED_LIBS)
-  if (APPLE)
-    # set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -undefined dynamic_lookup")
-  endif ()
-endif ()
-
 # Print results
 message(STATUS "")
 message(STATUS "Link flags:")
@@ -245,9 +229,7 @@ SciPrintVar(CMAKE_SHARED_LINKER_FLAGS)
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL Linux)
   message("")
   message("--------- Checking for rpath ---------")
-  # message("is Linux")
   if ("${CMAKE_C_COMPILER_ID}" STREQUAL GNU)
-    # message("is GNU")
     execute_process(COMMAND ${CMAKE_C_COMPILER} -print-file-name=libstdc++.so
       OUTPUT_VARIABLE libcxx)
     message("libcxx is ${libcxx}")
@@ -256,13 +238,6 @@ if ("${CMAKE_SYSTEM_NAME}" STREQUAL Linux)
       message(STATUS "libstdc++ is in ${CXX_LIBDIR}.")
 # Add to build rpath
       set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,${CXX_LIBDIR}")
-# For the installation rpath, the below works
-      # set(CMAKE_INSTALL_RPATH ${CXX_LIBDIR})
-# but it puts this in front on the installation rpath
-# Since we want this after the origin stuff we instead add it to
-# particular target properties as shown below in the particular dirs.
-      # set_target_properties(mytarget
-        # PROPERTIES INSTALL_RPATH "\$ORIGIN:\$ORIGIN/../lib:${CXX_LIBDIR}")
     endif ()
   endif ()
 endif()
