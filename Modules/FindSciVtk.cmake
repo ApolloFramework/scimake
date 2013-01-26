@@ -65,6 +65,7 @@ SciFindPackage(
   INSTALL_DIRS ${Vtk_INSTALL_DIRS}
   INCLUDE_SUBDIRS include include/vtk/include # Second for visit installation
   HEADERS vtkObject.h
+  LIBRARY_SUBDIRS lib . # Second for visit installation
   LIBRARIES "${Vtk_LIBRARY_LIST}"
 )
 

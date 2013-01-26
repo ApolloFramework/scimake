@@ -58,6 +58,10 @@ SciFindPackage(
 if (BOTAN_FOUND)
   message(STATUS "Found Botan")
   set(HAVE_BOTAN 1 CACHE BOOL "Whether have the BOTAN library")
+  if (WIN32 AND Botan_DLLS)
+# Botan sets this in its installed include files
+    # set(Botan_DEFINITIONS {$Botan_DEFINITIONS})
+  endif ()
 else ()
   message(STATUS "Did not find Botan.  Use -DBOTAN_DIR to specify the installation directory.")
   if (SciBotan_FIND_REQUIRED)
