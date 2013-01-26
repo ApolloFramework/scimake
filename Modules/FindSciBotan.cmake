@@ -62,6 +62,7 @@ if (BOTAN_FOUND)
 # Botan sets this in its installed include files
     # set(Botan_DEFINITIONS {$Botan_DEFINITIONS})
   endif ()
+  message(STATUS "Botan_DEFINITIONS = ${Botan_DEFINITIONS}.")
 else ()
   message(STATUS "Did not find Botan.  Use -DBOTAN_DIR to specify the installation directory.")
   if (SciBotan_FIND_REQUIRED)
