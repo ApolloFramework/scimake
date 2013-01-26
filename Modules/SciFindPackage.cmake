@@ -1047,11 +1047,8 @@ macro(SciFindPackage)
     endif ()
   endif ()
 
+  message(STATUS "${scipkguc}_FOUND = ${${scipkguc}_FOUND}.")
   message("--------- SciFindPackage done with ${TFP_PACKAGE} -----------")
-  message("")
-  # if (DEBUG_CMAKE)
-    message(STATUS "${scipkguc}_FOUND = ${${scipkguc}_FOUND}.")
-  # endif ()
 
 endmacro(SciFindPackage)
 
