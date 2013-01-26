@@ -263,6 +263,6 @@ endforeach ()
 # Print all out
 foreach (vartype SUPERLU LINALG MPI DL SYSTEM)
   foreach (var LIBRARY_NAMES LIBRARY_DIRS LIBRARIES STLIBS)
-    SciPrintvar(Petsc_${vartype}_${var})
+    SciPrintVar(Petsc_${vartype}_${var})
   endforeach ()
 endforeach ()

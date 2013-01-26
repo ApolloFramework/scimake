@@ -29,7 +29,7 @@ endmacro()
 # Args:
 #   var the name of the variable
 #
-macro(SciPrintvar var)
+macro(SciPrintVar var)
   string(LENGTH "${var}" lens)
   math(EXPR lenb "35 - ${lens}")
   if (lenb GREATER 0)
