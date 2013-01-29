@@ -2,7 +2,7 @@ SciMake CONVENTIONS FOR CMAKE FILES AND MODULES
 
 $Id$
 
-The txcmake document is at
+The scimake document is at
 https://ice.txcorp.com/support/wiki/CmakeCodingStandards.
 This needs to be rewritten for the new structure.
 
