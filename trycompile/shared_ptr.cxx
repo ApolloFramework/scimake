@@ -1,3 +1,5 @@
+// $Id$
+
 #include <sci_shared_ptr>
 
 struct S {
