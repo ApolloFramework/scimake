@@ -18,12 +18,6 @@ else ()
   message(FATAL_ERROR "Could not determine compiler version.")
 endif ()
 
-# Set linker flags for windows machines to fix duplicate definition conflicts.
-#if (WIN32)
-  #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -NODEFAULTLIB:MSVCRT -NODEFAULTLIB:MSVCPRT")
-#endif ()
-
-
 # Set the lib subdir from the Compiler ID and version
 if (DEBUG_CMAKE)
   SciPrintVar(CMAKE_CXX_COMPILER_ID)
@@ -36,7 +30,6 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL GNU OR "${CMAKE_CXX_COMPILER_ID}" STREQU
   set(CXX_COMP_LIB_SUBDIR gcc${CXX_MAJOR_VERSION})
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL Intel)
   string(REGEX REPLACE "\\.[0-9]+.*$" "" CXX_MAJOR_VERSION ${CXX_VERSION})
-  # string(SUBSTRING ${CXX_VERSION} 0 2 CXX_MAJOR_VERSION) # should match
   set(CXX_COMP_LIB_SUBDIR icpc${CXX_MAJOR_VERSION})
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL PathScale)
   string(SUBSTRING ${CXX_VERSION} 0 1 CXX_MAJOR_VERSION)
@@ -92,7 +85,6 @@ if (NOT HAVE_STD_SHARED_PTR)
   message(STATUS "HAVE_STD_TR1_SHARED_PTR = ${HAVE_STD_TR1_SHARED_PTR}.")
 endif ()
 
-if (FALSE)
 # See whether generally declared statics work
 try_compile(HAVE_GENERALLY_DECLARED_STATICS ${PROJECT_BINARY_DIR}/scimake
   ${SCIMAKE_DIR}/trycompile/gendeclstatics.cxx)
@@ -145,7 +137,6 @@ else ()
   if (DEBUG_CMAKE)
     message("${SCIMAKE_DIR}/trycompile/checkCompilerRTTI.cxx did not compile.")
   endif ()
-endif ()
 endif ()
 
 include(CheckCXXSourceCompiles)
