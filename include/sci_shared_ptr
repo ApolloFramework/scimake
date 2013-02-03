@@ -1,0 +1,28 @@
+/**
+ *
+ * @file    sci_shared_ptr
+ *
+ * @brief   Define for an shared_ptr type that works with C++ 11 or tr1
+ *
+ * @version $Id: sci_shared_ptr 84 2013-01-07 00:33:35Z cary $
+ *
+ * Copyright &copy; 2012-2013, Tech-X Corporation
+ * See LICENSE file for conditions of use.
+ *
+ */
+
+#ifndef SCI_SHARED_PTR
+#define SCI_SHARED_PTR
+
+#ifdef HAVE_STD_SHARED_PTR
+  #include <memory>
+  #define sci_shared_ptr std::shared_ptr
+#elif defined(HAVE_STD_TR1_SHARED_PTR)
+  #include <tr1/memory>
+  #define sci_shared_ptr std::tr1::shared_ptr
+#else
+  #error shared_ptr not found
+#endif
+
+#endif // SCI_SHARED_PTR
+

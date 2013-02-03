@@ -1,0 +1,28 @@
+/**
+ *
+ * @file    sci_array
+ *
+ * @brief   Define for an array type that works with C++ 11 or tr1
+ *
+ * @version $Id: sci_array 84 2013-01-07 00:33:35Z cary $
+ *
+ * Copyright &copy; 2012-2013, Tech-X Corporation
+ * See LICENSE file for conditions of use.
+ *
+ */
+
+#ifndef SCI_ARRAY
+#define SCI_ARRAY
+
+#ifdef HAVE_STD_ARRAY
+  #include <array>
+  #define sci_array std::array
+#elif defined(HAVE_STD_TR1_ARRAY)
+  #include <tr1/array>
+  #define sci_array std::tr1::array
+#else
+  #error array not found
+#endif
+
+#endif // SCI_ARRAY
+

@@ -69,20 +69,38 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL XL)
 endif ()
 SciPrintVar(CXX_COMP_LIB_SUBDIR)
 
+# Look for needed classes
 include(CheckIncludeFileCXX)
 check_include_file_cxx(iostream HAVE_STD_STREAMS)
 check_include_file_cxx(sstream HAVE_SSTREAM)
 check_include_file_cxx(array HAVE_STD_ARRAY)
-check_include_file_cxx(tr1/array HAVE_STD_TR1_ARRAY)
+if (NOT HAVE_STD_ARRAY)
+  check_include_file_cxx(tr1/array HAVE_STD_TR1_ARRAY)
+endif ()
+try_compile(HAVE_STD_SHARED_PTR
+  ${PROJECT_BINARY_DIR}/scimake ${SCIMAKE_DIR}/trycompile/shared_ptr.cxx
+  CMAKE_FLAGS
+  COMPILE_DEFINITIONS "-DHAVE_STD_SHARED_PTR -I${SCIMAKE_DIR}/include"
+)
+message(STATUS "HAVE_STD_SHARED_PTR = ${HAVE_STD_SHARED_PTR}.")
+if (NOT HAVE_STD_SHARED_PTR)
+  try_compile(HAVE_STD_TR1_SHARED_PTR
+    ${PROJECT_BINARY_DIR}/scimake ${SCIMAKE_DIR}/trycompile/shared_ptr.cxx
+    CMAKE_FLAGS
+    COMPILE_DEFINITIONS "-DHAVE_STD_TR1_SHARED_PTR -I${SCIMAKE_DIR}/include"
+  )
+  message(STATUS "HAVE_STD_TR1_SHARED_PTR = ${HAVE_STD_TR1_SHARED_PTR}.")
+endif ()
 
+if (FALSE)
 # See whether generally declared statics work
 try_compile(HAVE_GENERALLY_DECLARED_STATICS ${PROJECT_BINARY_DIR}/scimake
   ${SCIMAKE_DIR}/trycompile/gendeclstatics.cxx)
+set(HAVE_GENERALLY_DECLARED_STATICS ${HAVE_GENERALLY_DECLARED_STATICS} CACHE BOOL "Whether the C++ compiler allows generally declared templated static variables")
 if (HAVE_GENERALLY_DECLARED_STATICS)
   if (DEBUG_CMAKE)
     message("${SCIMAKE_DIR}/trycompile/gendeclstatics.cxx compiled.")
   endif ()
-  set(HAVE_GENERALLY_DECLARED_STATICS 1 CACHE BOOL "Whether the C++ compiler allows generally declared templated static variables")
 else ()
   if (DEBUG_CMAKE)
     message("${SCIMAKE_DIR}/trycompile/gendeclstatics.cxx did not compile.")
@@ -92,6 +110,7 @@ endif ()
 # See whether std::abs<double> known.
 try_compile(HAVE_STD_ABS_DOUBLE ${PROJECT_BINARY_DIR}/scimake
   ${SCIMAKE_DIR}/trycompile/stdabsdbl.cxx)
+set(HAVE_STD_ABS_DOUBLE ${HAVE_STD_ABS_DOUBLE} CACHE BOOL "Whether the C++ compiler understands std::abs with double arg")
 if (HAVE_STD_ABS_DOUBLE)
   if (DEBUG_CMAKE)
     message("${SCIMAKE_DIR}/trycompile/stdabsdbl.cxx compiled.")
@@ -106,6 +125,8 @@ endif ()
 # See whether compiler RTTI typeid is working properly
 try_run(IS_RTTI_COMPATIBLE DID_RTTI_TEST_COMPILE ${PROJECT_BINARY_DIR}/scimake
   ${SCIMAKE_DIR}/trycompile/checkCompilerRTTI.cxx)
+set(IS_RTTI_COMPATIBLE ${IS_RTTI_COMPATIBLE} CACHE BOOL "Whether the C++ compiler builds executables that understand run-time type identification.")
+set(DID_RTTI_COMPATIBLE ${DID_RTTI_COMPATIBLE} CACHE BOOL "Whether the C++ compiler compiles source using run-time type identification.")
 if (DID_RTTI_TEST_COMPILE)
   if (DEBUG_CMAKE)
     message("${SCIMAKE_DIR}/trycompile/checkCompilerRTTI.cxx compiled.")
@@ -124,6 +145,7 @@ else ()
   if (DEBUG_CMAKE)
     message("${SCIMAKE_DIR}/trycompile/checkCompilerRTTI.cxx did not compile.")
   endif ()
+endif ()
 endif ()
 
 include(CheckCXXSourceCompiles)
