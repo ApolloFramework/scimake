@@ -115,15 +115,17 @@ else ()
 endif ()
 
 # See whether compiler RTTI typeid is working properly
-try_run(IS_RTTI_COMPATIBLE DID_RTTI_TEST_COMPILE ${PROJECT_BINARY_DIR}/scimake
+try_run(RTTI_RUN_RESULT RTTI_COMPILES ${PROJECT_BINARY_DIR}/scimake
   ${SCIMAKE_DIR}/trycompile/checkCompilerRTTI.cxx)
-set(IS_RTTI_COMPATIBLE ${IS_RTTI_COMPATIBLE} CACHE BOOL "Whether the C++ compiler builds executables that understand run-time type identification.")
-set(DID_RTTI_COMPATIBLE ${DID_RTTI_COMPATIBLE} CACHE BOOL "Whether the C++ compiler compiles source using run-time type identification.")
-if (DID_RTTI_TEST_COMPILE)
+message(STATUS "RTTI_RUN_RESULT = ${RTTI_RUN_RESULT}.")
+message(STATUS "RTTI_COMPILES = ${RTTI_COMPILES}.")
+set(RTTI_RUN_RESULT ${RTTI_RUN_RESULT} CACHE BOOL "Whether the C++ compiler builds executables that understand run-time type identification.")
+set(RTTI_COMPILES ${RTTI_COMPILES} CACHE BOOL "Whether the C++ compiler compiles source using run-time type identification.")
+if (RTTI_COMPILES)
   if (DEBUG_CMAKE)
     message("${SCIMAKE_DIR}/trycompile/checkCompilerRTTI.cxx compiled.")
   endif ()
-  if (IS_RTTI_COMPATIBLE EQUAL 0)
+  if (RTTI_RUN_RESULT EQUAL 0)
     set(COMPILER_TYPEID_IS_VALID 1)
     if (DEBUG_CMAKE)
       message(STATUS "Compiler RTTI typeid test passed.")
