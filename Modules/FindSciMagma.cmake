@@ -16,6 +16,10 @@
 #
 ######################################################################
 
+if (WIN32)
+  set(LIB_PREFIX "lib")
+endif ()
+
 find_path(Magma_INCLUDE_DIR
   magma.h
   HINTS ${MAGMA_ROOT}
@@ -24,14 +28,14 @@ find_path(Magma_INCLUDE_DIR
 )
 
 find_library(Magma_LIBRARY
-  NAMES magma
+  NAMES ${LIB_PREFIX}magma
   HINTS ${MAGMA_ROOT}
   PATH_SUFFIXES lib
   DOC "MAGMA library location"
 )
 
 find_library(MagmaBlas_LIBRARY
-  NAMES magmablas
+  NAMES ${LIB_PREFIX}magmablas
   PATHS ${_Magma_SEARCH_DIRS}
   HINTS ${MAGMA_ROOT}
   PATH_SUFFIXES lib
@@ -43,9 +47,9 @@ if (Magma_INCLUDE_DIR AND Magma_LIBRARY AND MagmaBlas_LIBRARY)
 endif ()
 
 if (MAGMA_FOUND)
-  if (NOT SciMagma_FIND_QUIETLY)
-    message(STATUS "Found MAGMA: ${Magma_LIBRARY}")
-  endif ()
+#  if (NOT SciMagma_FIND_QUIETLY)
+    message(STATUS "Found MAGMA: ${Magma_LIBRARY}, ${MagmaBlas_LIBRARY}, magma.h")
+#  endif ()
   set(HAVE_MAGMA 1 CACHE BOOL "Whether have MAGMA")
 else ()
    if (SciMagma_FIND_REQUIRED)
@@ -58,4 +62,3 @@ else ()
      endif ()
    endif ()
 endif ()
-
