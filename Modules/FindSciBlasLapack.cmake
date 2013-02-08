@@ -16,7 +16,7 @@
 #
 # If the libraries are still not found, we use the following search order
 # Optionally: use whatever trilinos linked against
-#   if trilinos found.(This is the VORPAL preference.)
+#   if trilinos found.
 # Optionally: use whatever PETSc linked against if PETSc
 #   found.(This is the FACETS preference.)
 # System optimized(use FCLIBS or equiv to help link):
