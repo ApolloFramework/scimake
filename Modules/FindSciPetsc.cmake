@@ -22,31 +22,34 @@
 #
 ######################################################################
 
-set(Petsc_LIBRARY_LIST
-  petscts
-  petscsnes
-  petscksp
-  petscdm
-  petscmat
-  petscvec
-  petsc
-  cmumps
-  dmumps
-  smumps
-  zmumps
-  mumps_common
-  pord
-  scalapack
-  blacs
-  superlu_dist_2.3
-  superlu_dist_2.4
-  superlu_dist_3.1
-  superlu_4.0
-  HYPRE
-  parmetis
-  metis
-)
+if (WIN32)
+  set(LIB_PREFIX "lib")
+endif (WIN32)
 
+set(Petsc_LIBRARY_LIST
+  "${LIB_PREFIX}petscts"
+  "${LIB_PREFIX}petscsnes"
+  "${LIB_PREFIX}petscksp"
+  "${LIB_PREFIX}petscdm"
+  "${LIB_PREFIX}petscmat"
+  "${LIB_PREFIX}petscvec"
+  "${LIB_PREFIX}petsc"
+  "${LIB_PREFIX}cmumps"
+  "${LIB_PREFIX}dmumps"
+  "${LIB_PREFIX}smumps"
+  "${LIB_PREFIX}zmumps"
+  "${LIB_PREFIX}mumps_common"
+  "${LIB_PREFIX}pord"
+  "${LIB_PREFIX}scalapack"
+  "${LIB_PREFIX}blacs"
+  "${LIB_PREFIX}superlu_dist_2.3"
+  "${LIB_PREFIX}superlu_dist_2.4"
+  "${LIB_PREFIX}superlu_dist_3.1"
+  "${LIB_PREFIX}superlu_4.0"
+  "${LIB_PREFIX}HYPRE"
+  "${LIB_PREFIX}parmetis"
+  "${LIB_PREFIX}metis"
+)
 
 if (DEFINED PETSC_FIND_VERSION)
   message(STATUS "--- scimake/Modules/FindSciPetsc, petsc find version logic used ---")
@@ -263,6 +266,6 @@ endforeach ()
 # Print all out
 foreach (vartype SUPERLU LINALG MPI DL SYSTEM)
   foreach (var LIBRARY_NAMES LIBRARY_DIRS LIBRARIES STLIBS)
-    SciPrintVar(Petsc_${vartype}_${var})
+    SciPrintvar(Petsc_${vartype}_${var})
   endforeach ()
 endforeach ()
