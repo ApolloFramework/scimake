@@ -107,7 +107,11 @@ if (IDL_FOUND)
     string(STRIP "${_Idl_VERSION}" Idl_VERSION)
   endif ()
 
-  set(Idl_EXECUTABLE "${Idl_ROOT}/bin/idl${_Idl_EXECUTABLE_EXT}")
+  if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
+    set(Idl_EXECUTABLE "${Idl_ROOT}/bin/bin.${Idl_BIN_EXT}/idl${_Idl_EXECUTABLE_EXT}")
+  else ()
+    set(Idl_EXECUTABLE "${Idl_ROOT}/bin/idl${_Idl_EXECUTABLE_EXT}")
+  endif ()
 
   if (NOT SciIdl_FIND_QUIETLY)
     if (DEFINED Idl_VERSION)
