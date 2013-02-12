@@ -11,6 +11,7 @@
 #   Idl_INCLUDE_DIR     = IDL include directory
 #   Idl_LIBRARY         = IDL shared library location
 #   Idl_EXECUTABLE      = IDL command
+#   Idl_PATH_SEP        = character to separate IDL paths
 
 ######################################################################
 #
@@ -31,18 +32,21 @@ if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows" OR "${CMAKE_SYSTEM_NAME}" STREQUAL
   set(_Idl_OS "")
   set(_Idl_KNOWN_COMPANIES "Exelis" "ITT")
   set(_Idl_EXECUTABLE_EXT ".exe")
+  set(Idl_PATH_SEP ";")
 elseif ("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
   set(_Idl_PROGRAM_FILES_DIR "/Applications")
   set(_Idl_NAME "idl")
   set(_Idl_OS "darwin.")
   set(_Idl_KNOWN_COMPANIES "exelis" "itt")
   set(_Idl_EXECUTABLE_EXT "")
+  set(Idl_PATH_SEP ":")
 elseif ("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
   set(_Idl_PROGRAM_FILES_DIR "/usr/local")
   set(_Idl_NAME "idl")
   set(_Idl_OS "linux.")
   set(_Idl_KNOWN_COMPANIES "exelis" "itt")
   set(_Idl_EXECUTABLE_EXT "")
+  set(Idl_PATH_SEP ":")
 endif ()
 
 # find idl based on version numbers, if you want a specific one, set
