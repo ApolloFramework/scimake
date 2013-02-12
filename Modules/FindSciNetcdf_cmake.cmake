@@ -23,11 +23,7 @@
 #
 ######################################################################
 
-if (ENABLE_PARALLEL)
-  set(instdirs netcdf_cmake-par)
-else ()
-  set(instdirs netcdf_cmake)
-endif ()
+set(instdirs netcdf_cmake)
 
 set(desiredlibs netcdf)
 
