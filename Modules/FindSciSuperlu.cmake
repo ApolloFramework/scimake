@@ -42,13 +42,13 @@
 set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 
 if (NOT WIN32)
-  (set LIB_PREFIX "lib")
+  set(LIB_PREFIX "lib")
 endif (NOT WIN32)
 
 if (WIN32)
-  (set LIB_SUFFIX "lib")
+  set(LIB_SUFFIX "lib")
 else (WIN32)
-  (set LIB_SUFFIX "a")
+  set(LIB_SUFFIX "a")
 endif (WIN32)
 
 if (DEFINED SUPERLU_FIND_VERSION)
