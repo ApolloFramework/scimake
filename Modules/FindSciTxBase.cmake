@@ -2,7 +2,7 @@
 #   libraries for TxBase.
 #
 # Module usage:
-#   find_package(TxBase ...)
+#   find_package(SciTxBase ...)
 #
 # This module will define the following variables:
 #  HAVE_TXBASE, TXBASE_FOUND = Whether libraries and includes are found
@@ -67,7 +67,7 @@ if (TXBASE_FOUND)
   # message(STATUS "Found TxBase.")
   set(HAVE_TXBASE 1 CACHE BOOL "Whether have TxBase library")
 else ()
-  message(STATUS "Did not find TxBase.  Use -DTXBASE_DIR to specify the installation directory.")
+  message(STATUS "Did not find TxBase.  Use -DTXBASE_ROOT_DIR to specify the installation directory.")
   if (TxBase_FIND_REQUIRED)
     message(FATAL_ERROR "Failed.")
   endif ()
