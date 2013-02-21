@@ -23,34 +23,34 @@
 ######################################################################
 
 if (WIN32)
-  set(LIB_PREFIX "lib")
+  set(PETSC_LIB_PREFIX "lib")
 endif (WIN32)
 
 set(Petsc_LIBRARY_LIST
-  "${LIB_PREFIX}petscts"
-  "${LIB_PREFIX}petscsnes"
-  "${LIB_PREFIX}petscksp"
-  "${LIB_PREFIX}petscdm"
-  "${LIB_PREFIX}petscmat"
-  "${LIB_PREFIX}petscvec"
-  "${LIB_PREFIX}petsc"
-  "${LIB_PREFIX}cmumps"
-  "${LIB_PREFIX}dmumps"
-  "${LIB_PREFIX}smumps"
-  "${LIB_PREFIX}zmumps"
-  "${LIB_PREFIX}mumps_common"
-  "${LIB_PREFIX}pord"
-  "${LIB_PREFIX}scalapack"
-  "${LIB_PREFIX}blacs"
-  "${LIB_PREFIX}superlu_dist_2.3"
-  "${LIB_PREFIX}superlu_dist_2.4"
-  "${LIB_PREFIX}superlu_dist_3.1"
-  "${LIB_PREFIX}superlu_4.0"
-  "${LIB_PREFIX}superlu_4.3"
-  "${LIB_PREFIX}superlu"
-  "${LIB_PREFIX}HYPRE"
-  "${LIB_PREFIX}parmetis"
-  "${LIB_PREFIX}metis"
+  "${PETSC_LIB_PREFIX}petscts"
+  "${PETSC_LIB_PREFIX}petscsnes"
+  "${PETSC_LIB_PREFIX}petscksp"
+  "${PETSC_LIB_PREFIX}petscdm"
+  "${PETSC_LIB_PREFIX}petscmat"
+  "${PETSC_LIB_PREFIX}petscvec"
+  "${PETSC_LIB_PREFIX}petsc"
+  "${PETSC_LIB_PREFIX}cmumps"
+  "${PETSC_LIB_PREFIX}dmumps"
+  "${PETSC_LIB_PREFIX}smumps"
+  "${PETSC_LIB_PREFIX}zmumps"
+  "${PETSC_LIB_PREFIX}mumps_common"
+  "${PETSC_LIB_PREFIX}pord"
+  "${PETSC_LIB_PREFIX}scalapack"
+  "${PETSC_LIB_PREFIX}blacs"
+  "${PETSC_LIB_PREFIX}superlu_dist_2.3"
+  "${PETSC_LIB_PREFIX}superlu_dist_2.4"
+  "${PETSC_LIB_PREFIX}superlu_dist_3.1"
+  "${PETSC_LIB_PREFIX}superlu_4.0"
+  "${PETSC_LIB_PREFIX}superlu_4.3"
+  "${PETSC_LIB_PREFIX}superlu"
+  "${PETSC_LIB_PREFIX}HYPRE"
+  "${PETSC_LIB_PREFIX}parmetis"
+  "${PETSC_LIB_PREFIX}metis"
 )
 
 if (DEFINED PETSC_FIND_VERSION)
