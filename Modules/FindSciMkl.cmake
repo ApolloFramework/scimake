@@ -22,7 +22,7 @@
 ######################################################################
 
 SciFindPackage(PACKAGE "Mkl"
-              LIBRARIES "mkl_intel_thread;mkl_blas95_lp64;mkl_lapack95_lp64;mkl_core;mkl_rt.lib"
+              LIBRARIES "mkl_intel_thread;mkl_blas95_lp64;mkl_lapack95_lp64;mkl_core"
               )
 
 if (MKL_FOUND)
@@ -32,19 +32,35 @@ else ()
   if (WIN32)
     foreach(year 2011 2012 2013)
       set(Mkl_ROOT_DIR "C:/Program Files (x86)/Intel/Composer XE ${year}/mkl/lib/intel64")
-	  SciFindPackage(PACKAGE "Mkl"
-                    LIBRARIES "mkl_intel_thread;mkl_blas95_lp64;mkl_lapack95_lp64;mkl_core;mkl_rt.lib"
-                    )
-	  if (MKL_FOUND)
+        SciFindPackage(PACKAGE "Mkl"
+                      LIBRARIES "mkl_intel_thread;mkl_blas95_lp64;mkl_lapack95_lp64;mkl_core;mkl_rt"
+                      )
+      if (MKL_FOUND)
         message(STATUS "Mkl found.")
         set(HAVE_MKL 1 CACHE BOOL "Whether have Mkl")
-	    break()
-	  endif ()
+        break()
+      endif ()
     endforeach()
-    message(STATUS "Did not find Mkl.  Use -DMkl_ROOT_DIR to specify the installation directory.")
-    if (SciMkl_FIND_REQUIRED)
-      message(FATAL_ERROR "Finding MKL failed")
-    endif ()
   endif (WIN32)
+  if (UNIX)
+    #foreach(year 2011 2012 2013)
+      set(Mkl_ROOT_DIR "/usr/local/intel/mkl/lib/intel64")
+        SciFindPackage(PACKAGE "Mkl"
+                      LIBRARIES "mkl_intel_lp64;mkl_intel_thread;mkl_core;mkl_blas95_lp64;mkl_lapack95_lp64"
+                      )
+      if (MKL_FOUND)
+        message(STATUS "Mkl found.")
+        set(HAVE_MKL 1 CACHE BOOL "Whether have Mkl")
+        break()
+      endif ()
+    #endforeach()
+  endif (UNIX)
+endif ()
+
+if (NOT MKL_FOUND)
+  message(STATUS "Did not find Mkl.  Use -DMkl_ROOT_DIR to specify the installation directory.")
+  if (SciMkl_FIND_REQUIRED)
+    message(FATAL_ERROR "Finding MKL failed.")
+  endif ()
 endif ()
 
