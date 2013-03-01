@@ -20,18 +20,7 @@
 #
 #################################################
 
-if (NOT DEFINED ENABLE_VISIT)
-  message(STATUS "ENABLE_VISIT not defined, using false.")
-  set(ENABLE_VISIT false)
-else ()
-  message(STATUS "ENABLE_VISIT is ${ENABLE_VISIT}")
-endif ()
-
-if (ENABLE_VISIT)
-  set(SHORTCUT_NAME composertoolkit-visit)
-else ()
-  set(SHORTCUT_NAME composertoolkit-novisit)
-endif ()
+set(SHORTCUT_NAME composertoolkit-sersh)
 
 message(STATUS "Looking for composertoolkit version ${SHORTCUT_NAME}")
 
