@@ -71,7 +71,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL GNU OR
 
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL Intel)
   if (CMAKE_CXX_COMPILER MATCHES "icc" OR CMAKE_CXX_COMPILER MATCHES "icpc" OR
-  CMAKE_CXX_COMPILER MATCHES "mpi")
+  CMAKE_CXX_COMPILER MATCHES "mpi" OR CMAKE_CXX_COMPILER MATCHES "CC")
     execute_process(
       COMMAND ${CMAKE_CXX_COMPILER} --version
       OUTPUT_VARIABLE cxx_version_str
@@ -81,9 +81,10 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL Intel)
     string(REGEX MATCH ".ICC. [0-9]+\\.[0-9]+"
       cxx_version_tmp "${cxx_version_str}"
     )
-    message(STATUS "Evaluating '${cxx_version_str}'")
-    message(STATUS "Got '${cxx_version_tmp}'")
-
+    if (DEBUG_CMAKE)
+      message(STATUS "Evaluating '${cxx_version_str}'")
+      message(STATUS "Got '${cxx_version_tmp}'")
+    endif ()
 
     if (NOT cxx_version_tmp)
       message(ERROR "Unable to extract version from '${cxx_version_str}'")
