@@ -644,6 +644,7 @@ macro(SciFindPackage)
         set(scimodfile ${scimodule})
       endif ()
       set(scimodfile "${scimodfile}.${SCI_FC_MODULE_SUFFIX}")
+      string(TOLOWER ${scimodfile} scimodfilel)
 
 # Create the variable that's specific to this file
       string(REGEX REPLACE "[./-]" "_" scimodulevar ${scimodule})
@@ -662,6 +663,16 @@ macro(SciFindPackage)
         NO_DEFAULT_PATH
         DOC "Path to the ${scimodfile} file"
       )
+      # Check for the lower case version
+      if (NOT ${scimodulevar})
+	find_file(${scimodulevar}
+	  "${scimodfilel}"
+	  PATHS ${scipath}
+	  PATH_SUFFIXES ${scimodulesubdirs}
+	  NO_DEFAULT_PATH
+	  DOC "Path to the ${scimodfilel} file"
+	)
+      endif()
 
 # If not found, try again with default paths
       if (NOT ${scimodulevar})
