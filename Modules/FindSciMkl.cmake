@@ -37,7 +37,7 @@ else (WIN32)
   #foreach(year 2011 2012 2013)
     set(Mkl_ROOT_DIR "/usr/local/intel/mkl/lib/intel64")
       SciFindPackage(PACKAGE "Mkl"
-                    LIBRARIES "mkl_gf_lp64;mkl_gnu_thread;mkl_core;mkl_rt"
+                    LIBRARIES "mkl_rt"
                     )
     if (MKL_FOUND)
       message(STATUS "Mkl found.")
