@@ -9,6 +9,8 @@
 #  Mkl_INCLUDE_DIRS = Location of Mkl includes
 #  Mkl_LIBRARY_DIRS = Location of Mkl libraries
 #  Mkl_LIBRARIES    = Required libraries
+#  Mkl_STLIB        = Static libraries
+#  Iomp5_LIBRARIES  = Openmp intel libraries
 
 ######################################################################
 #
@@ -25,7 +27,11 @@ if (WIN32)
   foreach(year 2011 2012 2013)
     set(Mkl_ROOT_DIR "C:/Program Files (x86)/Intel/Composer XE ${year}/mkl/lib/intel64")
       SciFindPackage(PACKAGE "Mkl"
-                    LIBRARIES "mkl_intel_lp64;mkl_intel_thread;mkl_core;mkl_rt"
+                    LIBRARIES "mkl_intel_lp64;mkl_intel_thread;mkl_core"
+                    )
+    set(Iomp5_ROOT_DIR "C:/Program Files (x86)/Intel/Composer XE ${year}/compiler/lib/intel64")
+      SciFindPackage(PACKAGE "Iomp5"
+                    LIBRARIES "libiomp5md"
                     )
     if (MKL_FOUND)
       message(STATUS "Mkl found.")
