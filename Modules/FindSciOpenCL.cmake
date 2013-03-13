@@ -34,7 +34,11 @@ SciFindPackage(PACKAGE "OpenCL"
     INCLUDE_SUBDIRS "include"
     LIBRARY_SUBDIRS "lib64;lib"
     )
-    
+
+if (OpenCL_INCLUDE_DIRS AND OpenCL_LIBRARIES)
+  set(OpenCL_FOUND TRUE)
+endif ()
+
 if (OpenCL_FOUND)
   message(STATUS "Found OpenCL")
   set(HAVE_OpenCL 1 CACHE BOOL "Whether have OpenCL")
