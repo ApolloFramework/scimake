@@ -24,12 +24,14 @@
 ######################################################################
 
 if (WIN32)
-  foreach(year 2011 2012 2013)
-    set(Mkl_ROOT_DIR "C:/Program Files (x86)/Intel/Composer XE ${year}/mkl/lib/intel64")
+  #foreach(year 2011 2012 2013)
+    #set(Mkl_ROOT_DIR "C:/Program Files (x86)/Intel/Composer XE ${year}/mkl/lib/intel64")
+    set(Mkl_ROOT_DIR "C:/Program Files (x86)/Intel/Composer XE/mkl/lib/intel64")
       SciFindPackage(PACKAGE "Mkl"
                     LIBRARIES "mkl_rt"
                     )
-    set(Iomp5_ROOT_DIR "C:/Program Files (x86)/Intel/Composer XE ${year}/compiler/lib/intel64")
+    #set(Iomp5_ROOT_DIR "C:/Program Files (x86)/Intel/Composer XE ${year}/compiler/lib/intel64")
+    set(Iomp5_ROOT_DIR "C:/Program Files (x86)/Intel/Composer XE/compiler/lib/intel64")
       SciFindPackage(PACKAGE "Iomp5"
                     LIBRARIES "libiomp5md"
                     )
@@ -38,7 +40,7 @@ if (WIN32)
       set(HAVE_MKL 1 CACHE BOOL "Whether have Mkl")
       break()
     endif ()
-  endforeach()
+  #endforeach()
 else (WIN32)
   #foreach(year 2011 2012 2013)
     set(Mkl_ROOT_DIR "/usr/local/intel/mkl/lib/intel64")
