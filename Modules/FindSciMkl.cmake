@@ -45,7 +45,7 @@ else (WIN32)
   #foreach(year 2011 2012 2013)
     set(Mkl_ROOT_DIR "/usr/local/intel/mkl/lib/intel64")
       SciFindPackage(PACKAGE "Mkl"
-                    LIBRARIES "mkl_intel_lp64;mkl_intel_thread;mkl_core"
+                    LIBRARIES "mkl_rt"
                     )
     set(Iomp5_ROOT_DIR "/usr/local/intel/lib/intel64")
       SciFindPackage(PACKAGE "Iomp5"
