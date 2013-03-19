@@ -32,7 +32,7 @@ SciFindPackage(PACKAGE "OpenCL"
     HEADERS "${OpenCL_HEADERS}"
     LIBRARIES "OpenCL"
     INCLUDE_SUBDIRS "include"
-    LIBRARY_SUBDIRS "lib64;lib"
+    LIBRARY_SUBDIRS "lib64;lib;lib/x64"
     )
 
 if (OpenCL_INCLUDE_DIRS AND OpenCL_LIBRARIES)
