@@ -57,7 +57,7 @@ set(Vtk_LIBRARY_LIST
 )
 
 if (NOT Vtk_INSTALL_DIRS)
-  set(Vtk_INSTALL_DIRS vtk-sersh vtk)
+  set(Vtk_INSTALL_DIRS vtk-cc4py vtk-sersh vtk)
 endif ()
 
 SciFindPackage(
