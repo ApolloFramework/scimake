@@ -33,11 +33,11 @@
 
 # Default: libraries have boost_ prepended.
 set(BOOST_LIB_PREFIX boost_)
-if (BUILD_WITH_CC4PY_RUNTIME)
+if (USE_CC4PY_LIBS)
   set(instdirs boost-cc4py boost-sersh)
 # Shared windows boost has libboost_ prepended to the name
   set(BOOST_LIB_PREFIX boost_)
-elseif (BUILD_WITH_SHARED_RUNTIME OR BUILD_SHARED_LIBS OR ENABLE_SHARED)
+elseif (USE_SHARED_LIBS OR BUILD_SHARED_LIBS OR ENABLE_SHARED OR BUILD_WITH_SHARED_RUNTIME)
   set(instdirs boost-sersh)
   set(BOOST_LIB_PREFIX boost_)
 else ()
