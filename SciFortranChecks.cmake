@@ -21,7 +21,10 @@ if ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL GNU)
   # Not sure if we need an option to specify whether or not to add
   # openmp: Just always add it for now.  Another alternative is to add
   # an openmp variable that can be added on a case-by-case basis.
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffixed-line-length-132 -fopenmp")
+  # -ffixed-line-length-132 is a very specific fortran flag and should
+  # be done on a per-project basis
+  #set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffixed-line-length-132 -fopenmp")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fopenmp")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fopenmp")
   if (NOT USING_MINGW)
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -pipe")
