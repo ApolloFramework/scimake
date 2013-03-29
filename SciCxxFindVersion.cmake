@@ -69,6 +69,19 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL GNU OR
     message(ERROR "Unable to extract version from '${cxx_version_str}'")
   endif ()
 
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL Cray)
+  exec_program(${CMAKE_CXX_COMPILER}
+    ARGS -V
+    OUTPUT_VARIABLE cxx_version_tmp
+  )
+  string(REGEX MATCH
+    "Version [0-9]+\\.[0-9]+\\.[0-9]+"
+    cxx_version_tmp
+    ${cxx_version_tmp}
+  )
+  # MESSAGE("cxx_version_tmp = ${cxx_version_tmp}.")
+  string(REPLACE "Version " "" cxx_version_tmp ${cxx_version_tmp})
+  # MESSAGE("cxx_version_tmp = ${cxx_version_tmp}.")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL Intel)
   if (CMAKE_CXX_COMPILER MATCHES "icc" OR CMAKE_CXX_COMPILER MATCHES "icpc" OR
   CMAKE_CXX_COMPILER MATCHES "mpi" OR CMAKE_CXX_COMPILER MATCHES "CC")

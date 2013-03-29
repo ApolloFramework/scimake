@@ -10,7 +10,20 @@
 ######################################################################
 
 SciPrintString("CMAKE_Fortran_COMPILER_ID = '${CMAKE_Fortran_COMPILER_ID}'.")
-if ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL GNU)
+if ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL Cray)
+  exec_program(${CMAKE_Fortran_COMPILER}
+    ARGS -V
+    OUTPUT_VARIABLE fc_version_tmp
+  )
+  string(REGEX MATCH
+    "Version [0-9]+\\.[0-9]+\\.[0-9]+"
+    fc_version_tmp
+    ${fc_version_tmp}
+  )
+  # MESSAGE("fc_version_tmp = ${fc_version_tmp}.")
+  string(REPLACE "Version " "" fc_version_tmp ${fc_version_tmp})
+  # MESSAGE("fc_version_tmp = ${fc_version_tmp}.")
+elseif ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL GNU)
 # exec_program is deprecated
   execute_process(
     COMMAND ${CMAKE_Fortran_COMPILER} --version

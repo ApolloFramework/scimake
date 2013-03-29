@@ -190,6 +190,8 @@ if (${C_COMPILER_ID} STREQUAL GNU OR ${C_COMPILER_ID} STREQUAL Clang)
     set(OPENMP_FLAG -fopenmp)
   endif ()
 
+elseif (${C_COMPILER_ID} STREQUAL Cray)
+
 elseif (${C_COMPILER_ID} STREQUAL Intel)
 
 elseif (${C_COMPILER_ID} STREQUAL MSVC)
