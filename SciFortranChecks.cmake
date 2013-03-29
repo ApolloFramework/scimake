@@ -288,7 +288,7 @@ set(FC_FUNC_ "FC_FUNC_(name,NAME) ${CMAKE_MATCH_1}")
 #
 message(STATUS "Compiling trycompile/modulesrcfile.f90.")
 execute_process(
-  COMMAND ${CMAKE_Fortran_COMPILER} ${FC_MOD_FLAGS} -c ${SCIMAKE_DIR}/trycompile/modulesrcfile.f90 -o modulesrcfile.o
+  COMMAND ${CMAKE_Fortran_COMPILER};${FC_MOD_FLAGS};-c;${SCIMAKE_DIR}/trycompile/modulesrcfile.f90;-o;modulesrcfile.o
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 set(SCI_FC_MODULENAME_CAPITALIZED FALSE)
@@ -304,8 +304,8 @@ elseif (EXISTS ${CMAKE_BINARY_DIR}/MODULENAME.MOD)
   set(SCI_FC_MODULENAME_CAPITALIZED TRUE)
   file(REMOVE ${CMAKE_BINARY_DIR}/MODULENAME.MOD)
 elseif (EXISTS ${CMAKE_BINARY_DIR}/MODULENAME.mod)
-  set(TX_FC_MODULE_SUFFIX mod)
-  set(TX_FC_MODULENAME_CAPITALIZED TRUE)
+  set(SCI_FC_MODULE_SUFFIX mod)
+  set(SCI_FC_MODULENAME_CAPITALIZED TRUE)
   file(REMOVE ${CMAKE_BINARY_DIR}/MODULENAME.mod)
 endif ()
 file(REMOVE ${CMAKE_BINARY_DIR}/modulesrcfile.o)
