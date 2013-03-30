@@ -168,7 +168,7 @@ else ()
 endif ()
 
 # Add in full flags
-set(CMAKE_CXX_FLAGS_FULL "${CMAKE_C_FLAGS_FULL} ${AVX_FLAG}")
+set(CMAKE_CXX_FLAGS_FULL "${CMAKE_C_FLAGS_FULL}")
 
 # Remove /MD etc for static builds on Windows
 if (WIN32 AND NOT MINGW)
