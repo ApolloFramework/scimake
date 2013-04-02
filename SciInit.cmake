@@ -40,6 +40,10 @@ SciPrintString("CONFIGURING ${CMAKE_PROJECT_NAME} with scimake in "
 #
 #####################################################################
 
+if (NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif ()
+message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}.")
 string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_UC)
 
 #####################################################################
