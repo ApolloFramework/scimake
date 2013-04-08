@@ -1,22 +1,22 @@
 # - FindSciExodusii: Module to find include directories and libraries
-#   for Edodus II. This module was implemented as there is no stock
-#   CMake module for Edodus II.
+#   for ExodusII. This module was implemented as there is no stock
+#   CMake module for ExodusII.
 #
 # This module can be included in CMake builds in find_package:
 #   find_package(SciExodusii REQUIRED)
 #
 # This module will define the following variables:
-#  HAVE_EXODUSII   = Whether have the Netcdf library
-#  Exodusii_INCLUDE_DIRS = Location of Netcdf_cmake includes
-#  Exodusii_LIBRARY_DIRS = Location of Netcdf_cmake libraries
+#  HAVE_EXODUSII   = Whether have the ExodusII library
+#  Exodusii_INCLUDE_DIRS = Location of ExodusII includes
+#  Exodusii_LIBRARY_DIRS = Location of ExodusII libraries
 #  Exodusii_LIBRARIES    = Required libraries
-#  Exodusii_STLIBS       = Location of Netcdf_cmake static library
+#  Exodusii_STLIBS       = Location of ExodusII static library
 
 ######################################################################
 #
-# SciFindNetcdf_cmake: find includes and libraries for Netcdf_cmake.
+# SciFindExodusii: find includes and libraries for ExodusII.
 #
-# $Id: FindSciNetcdf_cmake.cmake 58 2012-09-15 13:43:53Z jrobcary $
+# $Id: FindSciExodusii.cmake 58 2012-09-15 13:43:53Z deluca $
 #
 # Copyright 2010-2012 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.
