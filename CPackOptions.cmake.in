@@ -7,6 +7,11 @@
 # Needed to install in a subdir.  See
 # http://cmake.3232098.n2.nabble.com/CMake-Cpack-and-NSIS-woes-td3778664.html
 #
+# Copyright 2010-2013 Tech-X Corporation.
+# Arbitrary redistribution allowed provided this copyright remains.
+#
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
+#
 ######################################################################
 
 # This is supposed to be displayed during unpacking

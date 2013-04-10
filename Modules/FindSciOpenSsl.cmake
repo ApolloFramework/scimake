@@ -19,9 +19,11 @@
 # Distributed under the OSI-approved BSD License(the "License");
 # see accompanying file Copyright.txt for details.
 #
-# This software is distributed WITHOUT ANY WARRANTY; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the License for more information.
+# Copyright 2010-2013 Tech-X Corporation.
+# Arbitrary redistribution allowed provided this copyright remains.
+#
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
+#
 #=============================================================================
 #(To distribute this file outside of scimake, substitute the full
 #  License text for the above reference.)

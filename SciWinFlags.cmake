@@ -1,7 +1,10 @@
+######################################################################
 #
 # Include for common Windows flags and settings.
 #
 # $Id$
+#
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
 

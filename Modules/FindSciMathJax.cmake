@@ -12,6 +12,19 @@
 #  MathJax_DIR        = If not a url, the directory containing MathJax.js
 #
 
+######################################################################
+#
+# FindSciMathJax
+#
+# $Id$
+#
+# Copyright 2010-2013 Tech-X Corporation.
+# Arbitrary redistribution allowed provided this copyright remains.
+#
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
+#
+######################################################################
+
 # if MATHJAXJS is defined, use that
 if (MATHJAXJS)
   message(STATUS "MATHJAXJS = ${MATHJAXJS}.  Will use that.")

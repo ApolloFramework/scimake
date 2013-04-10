@@ -13,6 +13,8 @@
 # Copyright 2013 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.
 #
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
+#
 ######################################################################
 
 

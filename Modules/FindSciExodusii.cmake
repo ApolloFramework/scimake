@@ -18,8 +18,10 @@
 #
 # $Id: FindSciExodusii.cmake 58 2012-09-15 13:43:53Z deluca $
 #
-# Copyright 2010-2012 Tech-X Corporation.
+# Copyright 2010-2013 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.
+#
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
 

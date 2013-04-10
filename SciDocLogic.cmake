@@ -18,6 +18,8 @@
 # Reading that document should be done if trying to understand this
 # logic
 #
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
+#
 #####################################################################
 
 # develdocs

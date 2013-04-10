@@ -4,6 +4,11 @@
 #
 # $Id$
 #
+# Copyright 2010-2013 Tech-X Corporation.
+# Arbitrary redistribution allowed provided this copyright remains.
+#
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
+#
 ######################################################################
 
 # - FindSciPCRE: Module to find include directories and

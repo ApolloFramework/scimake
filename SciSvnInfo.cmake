@@ -1,7 +1,11 @@
+######################################################################
+#
 # $Id$
 #
 # For getting the svn revision of a directory
-
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
+#
+######################################################################
 if (0)
 macro(Subversion_GET_VERSION dir var1 var2)
   message(WARNING "Subversion_GET_VERSION is deprecated.  Use SciGetSvnInfo.")

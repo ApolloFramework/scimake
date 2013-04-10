@@ -4,6 +4,8 @@
 #
 # $Id$
 #
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
+#
 #####################################################################
 
 # It would be nice to find the Qt libraries directly in VisIt, but
