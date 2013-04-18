@@ -82,9 +82,14 @@ if (WIN32 AND NOT CYGWIN)
       )
     if (CMAKE_CONFIGURATION_TYPES OR CMAKE_BUILD_TYPE )
       set(OpenSsl_LIBRARIES
-        optimized ${SSL_EAY_RELEASE} debug ${SSL_EAY_DEBUG}
-        optimized ${LIB_EAY_RELEASE} debug ${LIB_EAY_DEBUG}
+        ${SSL_EAY_RELEASE}
+ 	${LIB_EAY_RELEASE}
         CACHE STRING "Variable used to set libaries at link time."
+        )
+      set(OpenSsl_LIBRARIES_DEBUG
+	${LIB_EAY_DEBUG}
+	${SSL_EAY_DEBUG}
+        CACHE STRING "Variable used to set debug libaries at link time."
         )
     else ()
       set(OpenSsl_LIBRARIES ${SSL_EAY_RELEASE} ${LIB_EAY_RELEASE}
