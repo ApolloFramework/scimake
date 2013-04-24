@@ -68,28 +68,51 @@ if (WIN32 AND NOT CYGWIN)
     # We are using the libraries located in the VC subdir instead of the parent directory eventhough :
     # libeay32MD.lib is identical to ../libeay32.lib, and
     # ssleay32MD.lib is identical to ../ssleay32.lib
+
     find_library(LIB_EAY_DEBUG NAMES libeay32MTd libeay32
+      PATHS ${OPENSSL_ROOT_DIR}/lib/VC/static
+      )
+    find_library(LIB_EAY_MD_DEBUG NAMES libeay32MDd libeay32
       PATHS ${OPENSSL_ROOT_DIR}/lib/VC/static
       )
     find_library(LIB_EAY_RELEASE NAMES libeay32MT libeay32
       PATHS ${OPENSSL_ROOT_DIR}/lib/VC/static
       )
+    find_library(LIB_EAY_MD_RELEASE NAMES libeay32MD libeay32
+      PATHS ${OPENSSL_ROOT_DIR}/lib/VC/static
+      )
     find_library(SSL_EAY_DEBUG NAMES ssleay32MTd ssleay32 ssl
       PATHS ${OPENSSL_ROOT_DIR}/lib/VC/static
       )
+    find_library(SSL_EAY_MD_DEBUG NAMES ssleay32MDd ssleay32 ssl
+      PATHS ${OPENSSL_ROOT_DIR}/lib/VC/static
+      )
     find_library(SSL_EAY_RELEASE NAMES ssleay32MT ssleay32 ssl
+      PATHS ${OPENSSL_ROOT_DIR}/lib/VC/static
+      )
+    find_library(SSL_EAY_MD_RELEASE NAMES ssleay32MD ssleay32 ssl
       PATHS ${OPENSSL_ROOT_DIR}/lib/VC/static
       )
     if (CMAKE_CONFIGURATION_TYPES OR CMAKE_BUILD_TYPE )
       set(OpenSsl_LIBRARIES
         ${SSL_EAY_RELEASE}
  	${LIB_EAY_RELEASE}
-        CACHE STRING "Variable used to set libaries at link time."
+        CACHE STRING "Variable used to set MT libaries at link time."
+        )
+      set(OpenSsl_MD_LIBRARIES
+        ${SSL_EAY_MD_RELEASE}
+ 	${LIB_EAY_MD_RELEASE}
+        CACHE STRING "Variable used to set MD libaries at link time."
         )
       set(OpenSsl_LIBRARIES_DEBUG
 	${LIB_EAY_DEBUG}
 	${SSL_EAY_DEBUG}
-        CACHE STRING "Variable used to set debug libaries at link time."
+        CACHE STRING "Variable used to set MT debug libaries at link time."
+        )
+      set(OpenSsl_MD_LIBRARIES_DEBUG
+	${LIB_EAY_MD_DEBUG}
+	${SSL_EAY_MD_DEBUG}
+        CACHE STRING "Variable used to set MD debug libaries at link time."
         )
     else ()
       set(OpenSsl_LIBRARIES ${SSL_EAY_RELEASE} ${LIB_EAY_RELEASE}
@@ -145,6 +168,7 @@ set(OpenSsl_INCLUDE_DIRS "${OpenSsl_INCLUDE_DIR}"
 # Finish up with some print outs.
 message("--   OpenSsl_INCLUDE_DIRS=${OpenSsl_INCLUDE_DIRS}")
 message("--   OpenSsl_LIBRARIES=${OpenSsl_LIBRARIES}")
+message("--   OpenSsl_MD_LIBRARIES=${OpenSsl_MD_LIBRARIES}")
 message("--------- FindSciOpenSsl done with OpenSSL -----------")
 message("")
 
