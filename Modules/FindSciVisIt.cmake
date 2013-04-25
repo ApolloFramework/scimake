@@ -134,7 +134,7 @@ endif ()
 # Should not set the below, as then how will we ever find visit_trunk?
 # set(VisIt_INST_SUBDIR visit)
 SciFindPackage(PACKAGE VisIt
-  INSTALL_DIRS visit-cc4py visit-sersh visit
+  INSTALL_DIRS visit_trunk-sersh visit-cc4py visit-sersh visit
   HEADERS vtkQtRenderWindow.h
   LIBRARIES ${VisIt_LIBRARY_NAMES_SEARCHED}
   INCLUDE_SUBDIRS "${VisIt_INC_SUBDIR}"
