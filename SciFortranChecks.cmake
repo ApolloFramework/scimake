@@ -48,8 +48,9 @@ elseif ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL Intel)
   if (WIN32)
 # add openMP library, another possibility is libiomp5mt on Windows (Pletzer)
     set(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES} libiomp5md)
-    set(CMAKE_EXE_LINKER_FLAGS
-      "${CMAKE_EXE_LINKER_FLAGS} -NODEFAULTLIB:MSVCRT")
+    # This was causing undefined references on windows (Pletzer)
+    #set(CMAKE_EXE_LINKER_FLAGS
+    #  "${CMAKE_EXE_LINKER_FLAGS} -NODEFAULTLIB:MSVCRT")
   else ()
 # unix
     set(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES} iomp5)
