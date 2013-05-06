@@ -28,8 +28,15 @@
 
 # convenience variable for ITT's install dir, should be fixed to use
 # Program Files env var but it is problematic in cygwin
-if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
   set(_Idl_PROGRAM_FILES_DIR "C:/Program Files")
+  set(_Idl_NAME "IDL")
+  set(_Idl_OS "")
+  set(_Idl_KNOWN_COMPANIES "Exelis" "ITT")
+  set(_Idl_EXECUTABLE_EXT ".exe")
+  set(Idl_PATH_SEP ";")
+elseif ("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
+  set(_Idl_PROGRAM_FILES_DIR "/cygdrive/c/Program Files")
   set(_Idl_NAME "IDL")
   set(_Idl_OS "")
   set(_Idl_KNOWN_COMPANIES "Exelis" "ITT")
