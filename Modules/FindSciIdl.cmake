@@ -120,7 +120,7 @@ if (IDL_FOUND)
     string(STRIP "${_Idl_VERSION}" Idl_VERSION)
   endif ()
 
-  if (WIN32)
+  if (WIN32 OR CYGWIN)
     set(Idl_EXECUTABLE "${Idl_ROOT}/bin/bin.${Idl_BIN_EXT}/idl${_Idl_EXECUTABLE_EXT}")
   else ()
     set(Idl_EXECUTABLE "${Idl_ROOT}/bin/idl${_Idl_EXECUTABLE_EXT}")
