@@ -37,6 +37,11 @@
 # Below is a layered list, top to bottom, left to right.
 # ToDo: define the SEARCHHDRS
 #
+# Data exchange
+# TKVRML
+set(OceXdeIges_SEARCHLIBS TKXDEIGES)
+set(OceXdeStep_SEARCHLIBS TKXDESTEP)
+set(OceXde_SEARCHLIBS TKXCAF TKXCAFSchema TKXmlXCAF TKBinXCAF)
 # Mesh contains triangulation
 set(OceMesh_SEARCHLIBS TKXMesh TKMesh)
 set(OceMesh_SEARCHHDRS XBRepMesh.hxx) # contains triangulation
@@ -55,6 +60,14 @@ set(OceTools_SEARCHLIBS TKMath TKAdvTools)
 set(OceKernel_SEARCHLIBS TKernel)
 
 # Enforce dependencies
+if (OceXdeIges_FIND)
+  set(OceIges_FIND TRUE)
+  set(OceXde_FIND TRUE)
+endif ()
+if (OceXdeStep_FIND)
+  set(OceStep_FIND TRUE)
+  set(OceXde_FIND TRUE)
+endif ()
 if (OceMesh_FIND)
   set(OceBrep_FIND TRUE)
 endif ()
@@ -80,7 +93,7 @@ endif ()
 
 # Set the libraries
 set(Oce_SEARCHLIBS)
-foreach (pkg Mesh Iges AdvAlgo Step IoBase Stl Algo ModelData Tools Kernel)
+foreach (pkg XdeIges XdeStep Xde Mesh Iges AdvAlgo Step IoBase Stl Algo ModelData Tools Kernel)
   message(STATUS "Oce${pkg}_FIND = ${Oce${pkg}_FIND}.")
   if (Oce${pkg}_FIND)
     set(Oce_SEARCHLIBS ${Oce_SEARCHLIBS} ${Oce${pkg}_SEARCHLIBS})
@@ -89,7 +102,6 @@ endforeach ()
 message(STATUS "Oce_SEARCHLIBS = ${Oce_SEARCHLIBS}.")
 
 # Worry about data exchange later
-#  TKVRML TKXCAF TKXCAFSchema TKXmlXCAF TKBinXCAF TKXDEIGES TKXDESTEP
 
 # To Do: Set variables for each group individually
 
