@@ -41,7 +41,7 @@
 # TKVRML
 set(OceXdeIges_SEARCHLIBS TKXDEIGES)
 set(OceXdeStep_SEARCHLIBS TKXDESTEP)
-set(OceXde_SEARCHLIBS TKXCAF TKXCAFSchema TKXmlXCAF TKBinXCAF)
+set(OceXde_SEARCHLIBS TKXCAF TKXCAFSchema TKXmlXCAF TKBinXCAF TKCAF TKTObj TKLCAF)
 # Mesh contains triangulation
 set(OceMesh_SEARCHLIBS TKXMesh TKMesh)
 set(OceMesh_SEARCHHDRS XBRepMesh.hxx) # contains triangulation
