@@ -47,12 +47,12 @@ else (WIN32)
   #foreach(year 2011 2012 2013)
     set(Mkl_ROOT_DIR "/usr/local/intel/mkl/lib/intel64")
       SciFindPackage(PACKAGE "Mkl"
-                    LIBRARIES "libmkl_intel_lp64.a;libmkl_intel_thread.a;libmkl_core.a"
+                    LIBRARIES "libmkl_gf_lp64.a;libmkl_gnu_thread.a;libmkl_core.a"
                     )
-    set(Iomp5_ROOT_DIR "/usr/local/intel/lib/intel64")
-      SciFindPackage(PACKAGE "Iomp5"
-                    LIBRARIES "iomp5"
-                    )
+    #set(Iomp5_ROOT_DIR "/usr/local/intel/lib/intel64")
+    #  SciFindPackage(PACKAGE "Iomp5"
+    #                LIBRARIES "iomp5"
+    #                )
     if (MKL_FOUND)
       message(STATUS "Mkl found.")
       set(HAVE_MKL 1 CACHE BOOL "Whether have Mkl")
