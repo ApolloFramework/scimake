@@ -1,19 +1,19 @@
-# - FindSciEigen3: Module to find include directories for Eigen3.
+# - FindSciCusp: Module to find include directories for cusp.
 #
 # Module usage:
-#   find_package(SciEigen3 ...)
+#   find_package(SciCusp ...)
 #
 # Variables used by this module, which can be set before calling find_package
 # to influence default behavior
 # Eigen3_ROOT_DIR          Specifies the root dir of the eigen3 installation
 #
 # This module will define the following variables:
-#  HAVE_EIGEN3,EIGEN3_FOUND = Whether libraries and includes are found
-#  Eigen3_INCLUDE_DIRS       = Location of Gsl includes
+#  HAVE_CUSP,CUSP_FOUND = Whether libraries and includes are found
+#  Cusp_INCLUDE_DIRS       = Location of cusp includes
 
 ######################################################################
 #
-# FindEigen3: find includes for Eigen3
+# FindSciCusp: find includes for cusp
 #
 # $Id$
 #
