@@ -105,10 +105,23 @@ message(STATUS "Oce_SEARCHLIBS = ${Oce_SEARCHLIBS}.")
 
 # To Do: Set variables for each group individually
 
+# Set library subdirs
+if (WIN32)
+  # if (WIN64)
+  if (${CMAKE_SIZEOF_VOID_P} MATCHES 8)
+    set(libsubdirs Win64/lib)
+  else ()
+    set(libsubdirs Win32/lib)
+  endif ()
+else ()
+  set(libsubdirs lib)
+endif ()
+
 # Only sersh build exists
 SciFindPackage(PACKAGE "Oce"
   INSTALL_DIRS oce-sersh
   HEADERS "TopoDS_Builder.hxx"
   LIBRARIES "${Oce_SEARCHLIBS}"
+  LIBRARY_SUBDIRS "${libsubdirs}"
 )
 
