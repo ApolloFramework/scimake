@@ -125,3 +125,13 @@ SciFindPackage(PACKAGE "Oce"
   LIBRARY_SUBDIRS "${libsubdirs}"
 )
 
+if (OCE_FOUND)
+  # message(STATUS "Found Oce.")
+  set(HAVE_OCE 1 CACHE BOOL "Whether have Oce library")
+else ()
+  message(STATUS "Did not find Oce.  Use -DOCE_ROOT_DIR to specify the installation directory.")
+  if (Oce_FIND_REQUIRED)
+    message(FATAL_ERROR "Failed.")
+  endif ()
+endif ()
+
