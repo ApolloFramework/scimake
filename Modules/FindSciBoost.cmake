@@ -3,9 +3,10 @@
 #   SUPRA_SEARCH_PATH, so that the system path was not checked before
 #   the user specified path, and included the stock FindBoost. This
 #   changed after quite a few modifications, as it would still look at
-#   system path if the libraries weren't found in teh user specified
+#   system path if the libraries weren't found in the user specified
 #   path.
-#   Will be modified soon to include the stock FindBoost
+#
+#   Should be modified to include the stock FindBoost?
 #
 # This module can be included in CMake builds using find_package:
 #   find_package(SciBoost REQUIRED signals filesystem system ...)
@@ -54,11 +55,19 @@ else ()
   endif ()
 endif ()
 
+include(FindPackageHandleStandardArgs)
 # Set names and dirs for finding boost
+if (DEBUG_CMAKE)
+  message(STATUS "SciBoost_FIND_COMPONENTS = ${SciBoost_FIND_COMPONENTS}.")
+  message(STATUS "SciBoost_FIND_REQUIRED = ${SciBoost_FIND_REQUIRED}.")
+endif ()
 set(SciBoost_LIBRARY_LIST "")
 foreach (COMPONENT ${SciBoost_FIND_COMPONENTS})
   set(SciBoost_LIBRARY_LIST ${SciBoost_LIBRARY_LIST} ${BOOST_LIB_PREFIX}${COMPONENT})
 endforeach ()
+if (DEBUG_CMAKE)
+  message(STATUS "SciBoost_LIBRARY_LIST = ${SciBoost_LIBRARY_LIST}.")
+endif ()
 
 SciFindPackage(PACKAGE "Boost"
   INSTALL_DIRS ${instdirs}
