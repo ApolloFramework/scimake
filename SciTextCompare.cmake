@@ -13,7 +13,10 @@
 ######################################################################
 
 # See whether program runs.
-execute_process(COMMAND ${TEST_PROG} ${TEST_ARGS} RESULT_VARIABLE EXEC_ERROR)
+message(STATUS "TEST_ARGS = ${TEST_ARGS}.")
+string(REPLACE "\"" "" ARGS_LIST "${TEST_ARGS}")
+string(REPLACE " " ";" ARGS_LIST "${ARGS_LIST}")
+execute_process(COMMAND ${TEST_PROG} ${ARGS_LIST} RESULT_VARIABLE EXEC_ERROR)
 if(EXEC_ERROR)
   message(FATAL_ERROR "Execution failure.")
 endif()
