@@ -226,6 +226,10 @@ include(${SCIMAKE_DIR}/SciOmpSseAvx.cmake)
 #
 ######################################################################
 
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL Darwin)
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -mmacosx-version-min=10.4")
+endif ()
+
 # Print results
 message(STATUS "")
 message(STATUS "Link flags:")
