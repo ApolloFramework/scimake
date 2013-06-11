@@ -226,6 +226,10 @@ include(${SCIMAKE_DIR}/SciOmpSseAvx.cmake)
 #
 ######################################################################
 
+# This works around the bug discussed in
+# http://www.personal.psu.edu/stm134/Software.html
+# where one can download DynamicCastTest.zip
+# This is known to be a problem with Snow Leopard and Mountain Lion
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL Darwin)
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -mmacosx-version-min=10.4")
 endif ()
