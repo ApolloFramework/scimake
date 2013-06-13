@@ -68,23 +68,23 @@ endif ()
 SciPrintVar(CXX_COMP_LIB_SUBDIR)
 
 # Look for includes
+include(CheckCXXSourceCompiles)
 include(CheckIncludeFileCXX)
-check_include_file_cxx(iostream HAVE_STD_STREAMS)
 check_include_file_cxx(sstream HAVE_SSTREAM)
+check_include_file_cxx(iostream HAVE_IOSTREAM)
 
 # Find array include and namespace
-check_include_file_cxx(array HAVE_STD_ARRAY)
+check_include_file_cxx(array HAVE_ARRAY)
 set(ARRAY_INC_FILE)
-if (HAVE_STD_ARRAY)
+if (HAVE_ARRAY)
   set(ARRAY_INC_FILE array)
 else ()
-  check_include_file_cxx(tr1/array HAVE_STD_TR1_ARRAY)
-  if (HAVE_STD_TR1_ARRAY)
+  check_include_file_cxx(tr1/array HAVE_TR1_ARRAY)
+  if (HAVE_TR1_ARRAY)
     set(ARRAY_INC_FILE tr1/array)
   endif ()
 endif ()
-include(CheckCXXSourceCompiles)
-set(HAVE_ARRAY FALSE)
+set(HAVE_ALL_ARRAY FALSE)
 if (ARRAY_INC_FILE)
   message(STATUS "ARRAY_INC_FILE = ${ARRAY_INC_FILE}.")
   check_cxx_source_compiles(
@@ -92,23 +92,23 @@ if (ARRAY_INC_FILE)
     #include <${ARRAY_INC_FILE}>
     int main(int argc, char** argv) {std::array<float, 2> a; return 0;}
     "
-    ARRAY_IS_IN_STD
+    ARRAY_NAMESPACE_IS_STD
   )
-  if (ARRAY_IS_IN_STD)
+  if (ARRAY_NAMESPACE_IS_STD)
     message(STATUS "array is in namespace std.")
-    set(HAVE_ARRAY TRUE)
+    set(HAVE_ALL_ARRAY TRUE)
   else ()
     check_cxx_source_compiles(
       "
       #include <${ARRAY_INC_FILE}>
       int main(int argc, char** argv) {std::tr1::array<float, 2> a; return 0;}
       "
-      ARRAY_IS_IN_STD_TR1
+      ARRAY_NAMESPACE_IS_STD_TR1
     )
 # The below is not compiling.  Will commit and look on :w
-    if (ARRAY_IS_IN_STD_TR1)
+    if (ARRAY_NAMESPACE_IS_STD_TR1)
       message(STATUS "array is in namespace std::tr1.")
-      set(HAVE_ARRAY TRUE)
+      set(HAVE_ALL_ARRAY TRUE)
     else ()
       message(STATUS "namespace for array unknown.")
     endif ()
