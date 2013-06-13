@@ -14,16 +14,16 @@
 #ifndef SCI_ARRAY
 #define SCI_ARRAY
 
-#ifdef HAVE_STD_ARRAY
+#ifdef HAVE_ARRAY
   #include <array>
-#elif defined(HAVE_STD_TR1_ARRAY)
+#elif defined(HAVE_TR1_ARRAY)
   #include <tr1/array>
 #else
   #error array not found
 #endif
-#ifdef ARRAY_IS_IN_STD
+#ifdef ARRAY_NAMESPACE_IS_STD
   #define sci_array std::array
-#elif defined(ARRAY_IS_IN_STD_TR1)
+#elif defined(ARRAY_NAMESPACE_IS_STD_TR1)
   #define sci_array std::tr1::array
 #else
   #error array namespace not known
