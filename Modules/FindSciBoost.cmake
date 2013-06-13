@@ -75,6 +75,11 @@ SciFindPackage(PACKAGE "Boost"
   LIBRARIES "${SciBoost_LIBRARY_LIST}"
 )
 unset(SciBoost_LIBRARY_LIST CACHE)
+if (Boost_FOUND_SOME_DLL)
+  message(STATUS "Correcting Boost DLL definition")
+  set(Boost_DEFINITIONS -DBOOST_ALL_DYN_LINK)
+  message(STATUS "Boost_DEFINITIONS = ${Boost_DEFINITIONS}.")
+endif ()
 
 if (BOOST_FOUND AND NOT Boost_INCLUDE_DIRS)
   set(BOOST_FOUND FALSE)
