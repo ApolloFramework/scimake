@@ -42,7 +42,7 @@ else ()
   endif ()
 endif ()
 
-if (USE_SHARED_HDF5 AND WIN32)
+if (WIN32 AND (USE_SHARED_HDF5 OR BUILD_SHARED_LIBS))
   set(desiredlibs hdf5dll)
 else ()
   set(desiredlibs hdf5_hl hdf5)
