@@ -59,6 +59,12 @@ set(OceModelData_SEARCHLIBS TKBrep TKModelDataBase TKG3d TKG2d TKGeomBase)
 set(OceTools_SEARCHLIBS TKMath TKAdvTools)
 set(OceKernel_SEARCHLIBS TKernel)
 
+message(STATUS "Looking for components, ${SciOce_FIND_COMPONENTS}.")
+
+foreach (comp ${SciOce_FIND_COMPONENTS})
+  set(Oce${comp}_FIND TRUE)
+endforeach ()
+
 # Enforce dependencies
 if (OceXdeIges_FIND)
   set(OceIges_FIND TRUE)
@@ -94,7 +100,9 @@ endif ()
 # Set the libraries
 set(Oce_SEARCHLIBS)
 foreach (pkg XdeIges XdeStep Xde Mesh Iges AdvAlgo Step IoBase Stl Algo ModelData Tools Kernel)
-  message(STATUS "Oce${pkg}_FIND = ${Oce${pkg}_FIND}.")
+  if (DEBUG_CMAKE)
+    message(STATUS "Oce${pkg}_FIND = ${Oce${pkg}_FIND}.")
+  endif ()
   if (Oce${pkg}_FIND)
     set(Oce_SEARCHLIBS ${Oce_SEARCHLIBS} ${Oce${pkg}_SEARCHLIBS})
   endif ()
