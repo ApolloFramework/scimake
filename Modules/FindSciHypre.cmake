@@ -16,7 +16,7 @@
 #
 # SciFindHypre: find includes and libraries for Hypre.
 #
-# $Id: FindSciHypre.cmake 259 2013-04-10 19:10:45Z rood $
+# $Id$
 #
 # Copyright 2010-2013 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.

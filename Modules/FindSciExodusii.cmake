@@ -16,7 +16,7 @@
 #
 # SciFindExodusii: find includes and libraries for ExodusII.
 #
-# $Id: FindSciExodusii.cmake 58 2012-09-15 13:43:53Z deluca $
+# $Id$
 #
 # Copyright 2010-2013 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.
