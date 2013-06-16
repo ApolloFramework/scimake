@@ -39,6 +39,7 @@
 #
 # Data exchange
 # TKVRML
+
 set(OceXdeIges_SEARCHLIBS TKXDEIGES)
 set(OceXdeStep_SEARCHLIBS TKXDESTEP)
 set(OceXde_SEARCHLIBS TKXCAF TKXCAFSchema TKXmlXCAF TKBinXCAF TKCAF TKTObj TKLCAF)
@@ -49,21 +50,24 @@ set(OceIges_SEARCHLIBS TKIGES)
 set(OceIges_SEARCHHDRS IGESFile_Read.hxx)
 # IGES dependends on AdvAlgo
 set(OceAdvAlgo_SEARCHLIBS TKFillet TKBool TKPrim TKBO)
-set(OceStep_SEARCHLIBS TKSTEP TKSTEP209 TKSTEPAttr TKSTEPBase)
+
 set(OceStep_SEARCHHDRS STEPControl_Reader.hxx)
 # STEP and IGES depend on this, but not STL
 set(OceIoBase_SEARCHLIBS TKXSBase)
 set(OceStl_SEARCHLIBS TKSTL)
-set(OceAlgo_SEARCHLIBS TKShHealing TKTopAlgo TKModelDataAlgo TKGeomAlgo)
-set(OceModelData_SEARCHLIBS TKBrep TKModelDataBase TKG3d TKG2d TKGeomBase)
+set(OceAlgo_SEARCHLIBS TKShHealing TKTopAlgo TKGeomAlgo)
+set(OceModelData_SEARCHLIBS TKBrep TKG3d TKG2d TKGeomBase)
 set(OceTools_SEARCHLIBS TKMath TKAdvTools)
 set(OceKernel_SEARCHLIBS TKernel)
 
-message(STATUS "Looking for components, ${SciOce_FIND_COMPONENTS}.")
+# All the components
+set(SciOce_ALL_COMPONENTS XdeIges XdeStep Xde Mesh Iges AdvAlgo Step IoBase Stl Algo ModelData Tools Kernel)
 
 foreach (comp ${SciOce_FIND_COMPONENTS})
   set(Oce${comp}_FIND TRUE)
 endforeach ()
+
+message(STATUS "Looking for components, ${SciOce_FIND_COMPONENTS}.")
 
 # Enforce dependencies
 if (OceXdeIges_FIND)
@@ -99,14 +103,17 @@ endif ()
 
 # Set the libraries
 set(Oce_SEARCHLIBS)
+set(Oce_comps)
 foreach (pkg XdeIges XdeStep Xde Mesh Iges AdvAlgo Step IoBase Stl Algo ModelData Tools Kernel)
   if (DEBUG_CMAKE)
     message(STATUS "Oce${pkg}_FIND = ${Oce${pkg}_FIND}.")
   endif ()
   if (Oce${pkg}_FIND)
+    set(Oce_comps ${Oce_comps} ${pkg})
     set(Oce_SEARCHLIBS ${Oce_SEARCHLIBS} ${Oce${pkg}_SEARCHLIBS})
   endif ()
 endforeach ()
+message(STATUS "After dependencies, looking for components, ${Oce_comps}.")
 message(STATUS "Oce_SEARCHLIBS = ${Oce_SEARCHLIBS}.")
 
 # Worry about data exchange later
@@ -126,16 +133,49 @@ else ()
 endif ()
 
 # Only sersh build exists
-SciFindPackage(PACKAGE "Oce"
-  INSTALL_DIRS oce-sersh
-  HEADERS "TopoDS_Builder.hxx"
-  LIBRARIES "${Oce_SEARCHLIBS}"
-  LIBRARY_SUBDIRS "${libsubdirs}"
-)
+
+# All the components
+set(SEARCH_RESULTS EXECUTABLES FILES INCLUDE_DIRS MODULE_DIRS LIBFLAGS LIBRARY_DIRS LIBRARY_NAMES LIBRARIES STLIBS)
+if (WIN32)
+  set(SEARCH_RESULTS ${SEARCH_RESULTS} DLLS)
+endif ()
+foreach (res ${SEARCH_RESULTS})
+  set(Oce_${res})
+endforeach ()
+set(OCE_FOUND TRUE)
+foreach (comp ${SciOce_ALL_COMPONENTS})
+  if (Oce${comp}_FIND)
+    SciFindPackage(PACKAGE Oce${comp}
+      INSTALL_DIRS oce-sersh
+      HEADERS "${Oce${comp}_SEARCHHDRS}"
+      LIBRARIES "${Oce${comp}_SEARCHLIBS}"
+      LIBRARY_SUBDIRS "${libsubdirs}"
+      FIND_QUIETLY
+    )
+    foreach (res ${SEARCH_RESULTS})
+      set(Oce_${res} ${Oce_${res}} ${Oce${comp}_${res}})
+      set(Oce${comp}_${res}
+        ${Oce${comp}_${res}}
+        CACHE STRING "List of all ${res} for ${Oce_${res}}"
+      )
+      endforeach ()
+    string(TOUPPER Oce${comp} pkguc)
+    if (NOT ${pkguc}_FOUND)
+      message(WARNING "${pkguc}_FOUND = ${${pkguc}_FOUND}.")
+      set(OCE_FOUND FALSE)
+    endif ()
+  endif ()
+endforeach ()
+foreach (res ${SEARCH_RESULTS})
+  if (Oce_${res})
+    list(REMOVE_DUPLICATES Oce_${res})
+  endif ()
+endforeach ()
 
 if (OCE_FOUND)
   # message(STATUS "Found Oce.")
   set(HAVE_OCE 1 CACHE BOOL "Whether have Oce library")
+  SciPrintCMakeResults(Oce)
 else ()
   message(STATUS "Did not find Oce.  Use -DOCE_ROOT_DIR to specify the installation directory.")
   if (Oce_FIND_REQUIRED)

@@ -242,6 +242,7 @@ ENDFUNCTION()
 # SciFindPackage
 #
 # Args:
+# NOPRINT: Do not print the results
 # PACKAGE: the prefix for the defined variables
 # INSTALL_DIRS: the names for the installation subdirectory.  Defaults
 #   to lower cased scipkgname
@@ -273,7 +274,7 @@ ENDFUNCTION()
 include(CMakeParseArguments)
 macro(SciFindPackage)
   CMAKE_PARSE_ARGUMENTS(TFP
-    ""
+    "FIND_QUIETLY"
     "PACKAGE;INSTALL_DIR"
     "INSTALL_DIRS;EXECUTABLES;HEADERS;LIBRARIES;FILES;MODULES;EXECUTABLE_SUBDIRS;INCLUDE_SUBDIRS;MODULE_SUBDIRS;LIBRARY_SUBDIRS;FILE_SUBDIRS;ALLOW_LIBRARY_DUPLICATES"
     ${ARGN}
@@ -281,8 +282,12 @@ macro(SciFindPackage)
 
 # This message is purposefully NOT a STATUS message
 # To provide more readable output
-  message("")
-  message("--------- SciFindPackage looking for ${TFP_PACKAGE} ---------")
+  if (NOT DEBUG_CMAKE AND TFP_FIND_QUIETLY)
+    message(STATUS "Looking for ${TFP_PACKAGE}.")
+  else ()
+    message("")
+    message("--------- SciFindPackage looking for ${TFP_PACKAGE} ---------")
+  endif ()
 
   if (DEBUG_CMAKE)
     message(STATUS "Outputting debug information.")
@@ -343,11 +348,13 @@ macro(SciFindPackage)
     SciGetRealDir(${${scipkgreg}_ROOT_DIR} scipath)
   elseif (${scipkgreg}_DIR)
 # JRC 20120617: Remove this July 31, 2012.
+    message(STATUS "${scipkgreg}_DIR = ${${scipkgreg}_DIR}.")
     message(WARNING "Use of ${scipkgreg}_DIR define is deprecated.  Please use ${scipkgreg}_ROOT_DIR")
     SciGetRealDir(${${scipkgreg}_DIR} scipath)
   elseif (${scipkguc}_DIR)
 # The deprecated variable name is commonly ${scipkguc}_DIR, so check for that too
 # MD 20120619: Remove this July 31, 2012.
+    message(STATUS "${scipkguc}_DIR = ${${scipkguc}_DIR}.")
     message(WARNING "Use of ${scipkguc}_DIR define is deprecated.  Please use ${scipkgreg}_ROOT_DIR")
     SciGetRealDir(${${scipkguc}_DIR} scipath)
   elseif (DEBUG_CMAKE)
@@ -497,6 +504,7 @@ macro(SciFindPackage)
       ${${scipkgreg}_EXECUTABLES}
       CACHE STRING "List of all executables for ${scipkgreg}"
     )
+
   endif ()
 
 #######################################################################
@@ -1044,7 +1052,7 @@ macro(SciFindPackage)
        ${scipkgreg}_FOUND_SOME_EXECUTABLE OR ${scipkgreg}_FOUND_SOME_DLL OR
        ${scipkgreg}_FOUND_SOME_FILE)
     set(${scipkguc}_FOUND TRUE)
-    if (DEBUG_CMAKE OR NOT ${scipkgreg}_FIND_QUIETLY)
+    if (DEBUG_CMAKE OR NOT TFP_FIND_QUIETLY)
       message(STATUS "Found ${scipkgreg}.")
       SciPrintCMakeResults(${scipkgreg})
     endif ()
@@ -1060,8 +1068,10 @@ macro(SciFindPackage)
     endif ()
   endif ()
 
-  message(STATUS "${scipkguc}_FOUND = ${${scipkguc}_FOUND}.")
-  message("--------- SciFindPackage done with ${TFP_PACKAGE} -----------")
+  if (DEBUG_CMAKE OR NOT TFP_FIND_QUIETLY)
+    message(STATUS "${scipkguc}_FOUND = ${${scipkguc}_FOUND}.")
+    message("--------- SciFindPackage done with ${TFP_PACKAGE} -----------")
+  endif ()
 
 endmacro(SciFindPackage)
 
