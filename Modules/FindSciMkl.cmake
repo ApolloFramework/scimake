@@ -30,7 +30,7 @@ if (WIN32)
     #set(Mkl_ROOT_DIR "C:/Program Files (x86)/Intel/Composer XE ${year}/mkl/lib/intel64")
     set(Mkl_ROOT_DIR "C:/Program Files (x86)/Intel/Composer XE/mkl/lib/intel64")
       SciFindPackage(PACKAGE "Mkl"
-                    LIBRARIES "mkl_rt"
+                    LIBRARIES "mkl_intel_lp64;mkl_intel_thread;mkl_core"
                     )
     #set(Iomp5_ROOT_DIR "C:/Program Files (x86)/Intel/Composer XE ${year}/compiler/lib/intel64")
     set(Iomp5_ROOT_DIR "C:/Program Files (x86)/Intel/Composer XE/compiler/lib/intel64")
