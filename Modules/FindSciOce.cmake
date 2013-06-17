@@ -50,7 +50,7 @@ set(OceIges_SEARCHLIBS TKIGES)
 set(OceIges_SEARCHHDRS IGESFile_Read.hxx)
 # IGES dependends on AdvAlgo
 set(OceAdvAlgo_SEARCHLIBS TKFillet TKBool TKPrim TKBO)
-
+set(OceStep_SEARCHLIBS TKSTEP TKSTEP209 TKSTEPAttr TKSTEPBase)
 set(OceStep_SEARCHHDRS STEPControl_Reader.hxx)
 # STEP and IGES depend on this, but not STL
 set(OceIoBase_SEARCHLIBS TKXSBase)
