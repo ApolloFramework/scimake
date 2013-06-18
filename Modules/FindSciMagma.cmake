@@ -39,7 +39,6 @@ find_library(Magma_LIBRARY
 
 find_library(MagmaBlas_LIBRARY
   NAMES "${MAGMA_LIB_PREFIX}magmablas${MAGMA_LIB_SUFFIX}"
-  PATHS ${_Magma_SEARCH_DIRS}
   HINTS ${MAGMA_ROOT}
   PATH_SUFFIXES lib
   DOC "MAGMA BLAS library location"
