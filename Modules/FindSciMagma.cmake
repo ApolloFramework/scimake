@@ -20,6 +20,7 @@
 
 if (WIN32)
   set(MAGMA_LIB_PREFIX "lib")
+  set(MAGMA_LIB_SUFFIX ".lib")
 endif ()
 
 find_path(Magma_INCLUDE_DIR
@@ -30,14 +31,14 @@ find_path(Magma_INCLUDE_DIR
 )
 
 find_library(Magma_LIBRARY
-  NAMES ${MAGMA_LIB_PREFIX}magma
+  NAMES "${MAGMA_LIB_PREFIX}magma${MAGMA_LIB_SUFFIX}"
   HINTS ${MAGMA_ROOT}
   PATH_SUFFIXES lib
   DOC "MAGMA library location"
 )
 
 find_library(MagmaBlas_LIBRARY
-  NAMES ${MAGMA_LIB_PREFIX}magmablas
+  NAMES "${MAGMA_LIB_PREFIX}magmablas${MAGMA_LIB_SUFFIX}"
   PATHS ${_Magma_SEARCH_DIRS}
   HINTS ${MAGMA_ROOT}
   PATH_SUFFIXES lib
