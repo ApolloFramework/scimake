@@ -42,7 +42,9 @@
 
 set(OceXdeIges_SEARCHLIBS TKXDEIGES)
 set(OceXdeStep_SEARCHLIBS TKXDESTEP)
-set(OceXde_SEARCHLIBS TKXCAF TKXCAFSchema TKXmlXCAF TKBinXCAF TKCAF TKTObj TKLCAF)
+# The libs below were required by TKXDEIGES
+set(OceXde_SEARCHLIBS TKCDF TKV3d TKService TKHLR TKOffset TKPLCAF PTKernel TKPShape TKShapeSchema TKPCAF TKStdLSchema TKStdSchema TKXmlXCAF TKXmlXCAF TKXmlL TKXml TKBinL TKBinXCAF TKBin)
+set(OceXde_SEARCHLIBS ${OceXde_SEARCHLIBS} TKXCAF TKXCAFSchema TKXmlXCAF TKBinXCAF TKCAF TKTObj TKLCAF)
 # Mesh contains triangulation
 set(OceMesh_SEARCHLIBS TKXMesh TKMesh)
 set(OceMesh_SEARCHHDRS XBRepMesh.hxx) # contains triangulation
