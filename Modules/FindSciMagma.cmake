@@ -22,7 +22,7 @@ if (WIN32)
   set(MAGMA_LIB_PREFIX "lib")
   set(MAGMA_LIB_SUFFIX ".lib")
 else ()
-  set(MAGMA_LIB_PREFIX "")
+  set(MAGMA_LIB_PREFIX "lib")
   set(MAGMA_LIB_SUFFIX ".a")
 endif ()
 
