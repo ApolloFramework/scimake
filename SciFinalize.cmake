@@ -100,21 +100,31 @@ install(PROGRAMS ${CONFIG_SCRIPTS} DESTINATION ${sharedir}
               ${SCI_WORLD_PROGRAM_PERMS}
 )
 
+# Generate autotools files for inclusion
+# Important for transitioning between autotools and scimake.
+# Used for fciowrappers, ntcc_transport, netlib_lite, fmcfm, facets, etc.
+if (EXISTS ${CMAKE_SOURCE_DIR}/configure.ac)
+  message(STATUS "make dist will generating autotools files for inclusion in distribution.")
+  add_custom_target(cleanconf
+    COMMAND config/cleanconf.sh
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  )
+  add_dependencies(dist cleanconf)
+endif ()
+
 ######################################################################
 #
-# Packaging
+# Package source.  Package is responsible for binary packaging.
 #
 ######################################################################
 
 # CPack version numbers for release tarball name.
-set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH}-r${PROJECT_REV})
-
-if (NOT DEFINED CPACK_PACKAGE_DESCRIPTION_SUMMARY)
-  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${CMAKE_PROJECT_NAME}")
+if (NOT CPACK_PACKAGE_VERSION_PATCH)
+  set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
+  set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
+  set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH}-r${PROJECT_REV})
 endif ()
-set(CPACK_PACKAGE_VENDOR "Tech-X Corporation")
+
 if (NOT DEFINED CPACK_SOURCE_PACKAGE_FILE_NAME)
   set(CPACK_SOURCE_PACKAGE_FILE_NAME
     "${CMAKE_PROJECT_NAME}-${PROJECT_VERSION}-r${PROJECT_REV}"
@@ -124,25 +134,10 @@ endif ()
 set(CPACK_SOURCE_GENERATOR TGZ)
 set(CPACK_SOURCE_IGNORE_FILES
   "/CVS/;/.svn/;.swp$;.#;/#;/build/;/serial/;/ser/;/parallel/;/par/;~;/preconfig.out;/autom4te.cache/;/.config")
-set(CPACK_GENERATOR TGZ)
 include(CPack)
 
 # add make dist target
 add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
-
-# Generate autotools files for inclusion
-# Important for transitioning between autotools and scimake.
-# Used for fciowrappers, ntcc_transport, netlib_lite, fmcfm, facets, etc.
-# Gets a clean distribution for autotools distribution.
-
-if (EXISTS ${CMAKE_SOURCE_DIR}/configure.ac)
-  message(STATUS "make dist will generating autotools files for inclusion in distribution.")
-  add_custom_target(cleanconf
-    COMMAND config/cleanconf.sh
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  )
-  add_dependencies(dist cleanconf)
-endif ()
 
 ######################################################################
 #
