@@ -58,7 +58,7 @@ set(OceStep_SEARCHHDRS STEPControl_Reader.hxx)
 set(OceIoBase_SEARCHLIBS TKXSBase)
 set(OceStl_SEARCHLIBS TKSTL)
 set(OceAlgo_SEARCHLIBS TKShHealing TKTopAlgo TKGeomAlgo)
-set(OceModelData_SEARCHLIBS TKBrep TKG3d TKG2d TKGeomBase)
+set(OceModelData_SEARCHLIBS TKBRep TKG3d TKG2d TKGeomBase)
 set(OceTools_SEARCHLIBS TKMath TKAdvTools)
 set(OceKernel_SEARCHLIBS TKernel)
 
