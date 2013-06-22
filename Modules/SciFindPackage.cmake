@@ -320,9 +320,9 @@ macro(SciFindPackage)
   endif ()
   if (NOT ENABLE_${scipkguc})
     message(STATUS "Disabling ${scipkgreg}.")
-    set(${scipkguc}_FOUND FALSE)
+    set(${scipkguc}_FOUND TRUE)
     if (DEBUG_CMAKE)
-      message(STATUS "${scipkguc}_FOUND set to FALSE.")
+      message(STATUS "${scipkguc}_FOUND set to TRUE.")
     endif ()
     return()
   endif ()
@@ -478,6 +478,7 @@ macro(SciFindPackage)
 # And I didn't want that
 # So instead, use NO option, and start the string with WARNING
         message("WARNING - Unable to locate executable ${sciexec}")
+        set(${scipkguc}_FOUND FALSE)
       else ()
         set(${scipkgreg}_FOUND_SOME_EXECUTABLE TRUE)
 # Add to list of all executables for this package
@@ -584,6 +585,7 @@ macro(SciFindPackage)
 # And I didn't want that
 # So instead, use NO option, and start the string with WARNING
         message("WARNING - Unable to locate file ${scifile}")
+        set(${scipkguc}_FOUND FALSE)
       else ()
         set(${scipkgreg}_FOUND_SOME_FILE TRUE)
 # Add to list of all files for this package
@@ -707,6 +709,7 @@ macro(SciFindPackage)
 # And I didn't want that
 # So instead, use NO option, and start the string with WARNING
         message("WARNING - Unable to locate file ${scimodule}")
+        set(${scipkguc}_FOUND FALSE)
       else ()
         set(${scipkgreg}_FOUND_SOME_MODULE TRUE)
 # Add to list of all files for this package
@@ -813,6 +816,7 @@ macro(SciFindPackage)
         )
       else ()
         message("WARNING - Unable to find header: ${scihdr}")
+        set(${scipkguc}_FOUND FALSE)
       endif ()
 
     endforeach (scihdr ${TFP_HEADERS})
@@ -928,6 +932,7 @@ macro(SciFindPackage)
       else ()
 # Yes, this uses the string WARNING instead of the macro argument WARNING
         message("WARNING - Library ${scilib} not found.")
+        set(${scipkguc}_FOUND FALSE)
       endif ()
 # Add both to the cache
       # set(${scilibvar}
@@ -1041,31 +1046,28 @@ macro(SciFindPackage)
 
 ####################################################################
 #
-# Determine if this package should be marked as FOUND or not
-# At the moment, we mark it as found if ANYTHING was found
+# For the package to be marked as found, all requested objects must
+# have been found, as coded above.
 # Per http://www.cmake.org/Wiki/scimake:How_To_Find_Installed_Software,
 # The convention is to capitalize the _FOUND variable.
 #
 ####################################################################
 
+if (FALSE)
   if (${scipkgreg}_FOUND_SOME_LIBRARY OR ${scipkgreg}_FOUND_SOME_HEADER OR
        ${scipkgreg}_FOUND_SOME_EXECUTABLE OR ${scipkgreg}_FOUND_SOME_DLL OR
        ${scipkgreg}_FOUND_SOME_FILE)
     set(${scipkguc}_FOUND TRUE)
-    if (DEBUG_CMAKE OR NOT TFP_FIND_QUIETLY)
-      message(STATUS "Found ${scipkgreg}.")
-      SciPrintCMakeResults(${scipkgreg})
-    endif ()
-  else ()
-    set(${scipkguc}_FOUND FALSE)
-    if (DEBUG_CMAKE)
-      message(STATUS "Failed to find package ${scipkgreg}")
-      SciPrintCMakeResults(${scipkgreg})
-    endif ()
+  endif ()
+endif ()
+
+  if (DEBUG_CMAKE OR NOT TFP_FIND_QUIETLY)
+    SciPrintCMakeResults(${scipkgreg})
+  endif ()
+
 # If this was marked as a required package, fail
-    if (${scipkgreg}_FIND_REQUIRED)
-      message(FATAL_ERROR "Unable to find required package ${scipkgreg} - failing")
-    endif ()
+  if (${scipkgreg}_FIND_REQUIRED AND NOT ${scipkguc}_FOUND)
+    message(FATAL_ERROR "Unable to find required package ${scipkgreg} - failing")
   endif ()
 
   if (DEBUG_CMAKE OR NOT TFP_FIND_QUIETLY)
