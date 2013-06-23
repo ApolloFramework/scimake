@@ -32,6 +32,7 @@ SciFindPackage(PACKAGE "magma"
   HEADERS "magma.h"
   INCLUDE_SUBDIRS "include"
   LIBRARY_SUBDIRS "lib"
+  ALLOW_LIBRARY_DUPLICATES TRUE
 )
 
 if (MAGMA_FOUND)
