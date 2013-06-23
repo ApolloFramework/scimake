@@ -979,9 +979,8 @@ macro(SciFindPackage)
 # On windows, we want to look for the dlls
 # XXX_DLLS - CACHED
 #   List of all found dlls including full path to each
-# XXX_yyy_DLLS
+# XXX_yyy_dll
 #   Path to individual yyy library from XXX package
-# DOES NOT EXIST YET - TODO
 #
 #################################################################
 
@@ -1012,7 +1011,7 @@ macro(SciFindPackage)
           message(STATUS "Looking for DLL for ${foundlib} in ${dir}.")
         endif ()
         if (EXISTS ${dir}/${librootname}.dll)
-          set(${scidllvar} ${dlldir1}/${librootname}.dll)
+          set(${scidllvar} ${dir}/${librootname}.dll)
           break ()
         endif ()
       endforeach ()
