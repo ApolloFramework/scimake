@@ -261,16 +261,6 @@ ENDFUNCTION()
 #(which is the default format used by scimake)
 #
 
-######################################################################
-#
-# Jon Rood added the optional ALLOW_LIBRARY_DUPLICATES parameter 8/24/2012
-# for use in a part of building GPULib with the Atlas and MAGMA packages
-# that have circular library dependencies
-# THIS COMMENT CAN GO AWAY WHEN SUFFICIENT TIME HAS PASSED AND IT HASN'T
-# BROKEN ANY OTHER PROJECTS
-#
-######################################################################
-
 include(CMakeParseArguments)
 macro(SciFindPackage)
   CMAKE_PARSE_ARGUMENTS(TFP
@@ -955,7 +945,10 @@ macro(SciFindPackage)
     if (TFP_LIBRARIES AND NOT ${sciliblistlen})
       message("WARNING - None of the libraries, ${TFP_LIBRARIES}, found.  Define ${scipkgreg}_ROOT_DIR to find them.")
     elseif (${sciliblistlen})
-      list(REMOVE_DUPLICATES ${scipkgreg}_LIBRARIES)
+      # Allowing duplicate libraries on the link line is necessary when using the magma library - Jon Rood
+      if(NOT TFP_ALLOW_LIBRARY_DUPLICATES)
+        list(REMOVE_DUPLICATES ${scipkgreg}_LIBRARIES)
+      endif ()
       list(REMOVE_DUPLICATES ${scipkgreg}_LIBRARY_DIRS)
 # The first dir is the library dir
       list(GET "${scipkgreg}_LIBRARY_DIRS" 0 ${scipkgreg}_LIBRARY_DIR)
