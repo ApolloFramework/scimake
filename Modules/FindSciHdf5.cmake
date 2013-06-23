@@ -42,18 +42,42 @@ else ()
   endif ()
 endif ()
 
-if (WIN32 AND (USE_SHARED_HDF5 OR BUILD_SHARED_LIBS) AND (NOT HDF5_LIBNAMES_STANDARD))
-  set(desiredlibs hdf5dll)
+if (WIN32)
+# hdf5 keeps changing the name of its libraries on Windows, so at first we
+# do not look for the libraries.  Once we find the installation, we then
+# add the libs
+  SciFindPackage(PACKAGE "Hdf5"
+    INSTALL_DIRS ${instdirs}
+    HEADERS hdf5.h
+    INCLUDE_SUBDIRS include include/hdf5/include # Last for VisIt installation
+    FIND_QUIETLY
+  )
+# Get the libraries
+  message(STATUS "Hdf5_ROOT_DIR = ${Hdf5_ROOT_DIR}.")
+  # file(GLOB hlibs RELATIVE ${Hdf5_ROOT_DIR}/lib "hdf5*")
+  file(GLOB hlibs ${Hdf5_ROOT_DIR}/lib/hdf5*)
+  if (DEBUG_CMAKE)
+    message(STATUS "hlibs = ${hlibs}.")
+  endif ()
+  set(desiredlibs)
+  foreach (lb ${hlibs})
+    get_filename_component(ln ${lb} NAME_WE)
+    set(desiredlibs ${desiredlibs} ${ln})
+  endforeach ()
 else ()
   set(desiredlibs hdf5_hl hdf5)
   if (CMAKE_Fortran_COMPILER_WORKS)
     set(desiredlibs hdf5_fortran hdf5_f90cstub ${desiredlibs})
-    set(desiredmods hdf5)
-  else ()
-    set(desiredmods)
   endif ()
 endif ()
+if (DEBUG_CMAKE)
+  message(STATUS "Looking for the HDF5 libraries, ${desiredlibs}.")
+endif ()
 
+set(desiredmods)
+if (CMAKE_Fortran_COMPILER_WORKS)
+  set(desiredmods hdf5)
+endif ()
 SciFindPackage(PACKAGE "Hdf5"
   INSTALL_DIRS ${instdirs}
   EXECUTABLES h5diff

@@ -981,7 +981,7 @@ macro(SciFindPackage)
 #   List of all found dlls including full path to each
 # XXX_yyy_DLLS
 #   Path to individual yyy library from XXX package
-#  DOES NOT EXIST YET - TODO
+# DOES NOT EXIST YET - TODO
 #
 #################################################################
 
@@ -996,48 +996,40 @@ macro(SciFindPackage)
 
 # Look for a dll for each found library
     foreach (foundlib ${${scipkgreg}_LIBRARIES})
-      # get_filename_component(librootname ${foundlib} NAME_WE)
 # NAME_WE removes from first '.'.  We need from last.
       get_filename_component(librootname ${foundlib} NAME)
       string(REGEX REPLACE "\\.[^\\.]*$" "" librootname "${librootname}")
+# Get variable to hold the dll location
+      string(REGEX REPLACE "[./-]" "_" scidllvar ${librootname})
+      set(scidllvar ${scipkgreg}_${scidllvar}_dll)
+      set(${scidllvar})
 # This assumes that dll is in "./lib/../bin"
       get_filename_component(libdir ${foundlib}/.. REALPATH)
       get_filename_component(dlldir1 "${libdir}/../bin" REALPATH)
       get_filename_component(dlldir2 "${libdir}/.." REALPATH)
-      if (DEBUG_CMAKE)
-        message(STATUS "Looking for DLL counterpart to ${foundlib} in ${dlldir1}/${librootname}.dll")
-      endif ()
-      if (EXISTS ${dlldir1}/${librootname}.dll)
+      foreach (dir ${dlldir1} ${dlldir2} ${libdir})
         if (DEBUG_CMAKE)
-          message(STATUS "Found DLL ${dlldir1}/${librootname}.dll")
+          message(STATUS "Looking for DLL for ${foundlib} in ${dir}.")
         endif ()
-        set(${scipkgreg}_DLLS ${${scipkgreg}_DLLS} ${dlldir1}/${librootname}.dll)
+        if (EXISTS ${dir}/${librootname}.dll)
+          set(${scidllvar} ${dlldir1}/${librootname}.dll)
+          break ()
+        endif ()
+      endforeach ()
+      if (${scidllvar})
+        if (DEBUG_CMAKE)
+          message(STATUS "Found DLL ${${scidllvar}}")
+          message(STATUS "${scidllvar} = ${${scidllvar}}.")
+        endif ()
+        set(${scipkgreg}_DLLS ${${scipkgreg}_DLLS} ${${scidllvar}})
         set(${scipkgreg}_FOUND_SOME_DLL TRUE)
+        set(${scidllvar}
+          ${${scidllvar}}
+          CACHE PATH "Path to ${librootname}.dll"
+        )
       else ()
         if (DEBUG_CMAKE)
-          message(STATUS "Second chance: looking for DLL in ${dlldir2}/${librootname}.dll")
-        endif ()
-        if (EXISTS ${dlldir2}/${librootname}.dll)
-          if (DEBUG_CMAKE)
-            message(STATUS "Found DLL ${dlldir2}/${librootname}.dll")
-          endif ()
-          set(${scipkgreg}_DLLS ${${scipkgreg}_DLLS} ${dlldir2}/${librootname}.dll)
-          set(${scipkgreg}_FOUND_SOME_DLL TRUE)
-        else ()
-          if (DEBUG_CMAKE)
-            message(STATUS "Third chance: looking for DLL in ${libdir}/${librootname}.dll")
-          endif ()
-          if (EXISTS ${libdir}/${librootname}.dll)
-            if (DEBUG_CMAKE)
-              message(STATUS "Found DLL ${libdir}/${librootname}.dll")
-            endif ()
-            set(${scipkgreg}_DLLS ${${scipkgreg}_DLLS} ${libdir}/${librootname}.dll)
-            set(${scipkgreg}_FOUND_SOME_DLL TRUE)
-          else ()
-            if (DEBUG_CMAKE)
-              message(STATUS "${librootname} has no accompanying dll.")
-            endif ()
-          endif ()
+          message(STATUS "${librootname}.dll not found.")
         endif ()
       endif ()
     endforeach ()

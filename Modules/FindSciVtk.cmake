@@ -25,27 +25,17 @@
 
 set(Vtk_LIBRARY_LIST
   vtkCommon
-  vtkCommonPythonD
   vtkDICOMParser
   vtkFiltering
-  vtkFilteringPythonD
   vtkGenericFiltering
-  vtkGenericFilteringPythonD
   vtkGraphics
-  vtkGraphicsPythonD
   vtkHybrid
-  vtkHybridPythonD
   vtkIO
-  vtkIOPythonD
   vtkImaging
-  vtkImagingPythonD
-  vtkPythonCore
+  # vtkPythonCore
   vtkRendering
-  vtkRenderingPythonD
   vtkVolumeRendering
-  vtkVolumeRenderingPythonD
   vtkWidgets
-  vtkWidgetsPythonD
   vtkalglib
   vtkexpat
   vtkfreetype
