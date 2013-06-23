@@ -53,7 +53,10 @@ if (WIN32)
     FIND_QUIETLY
   )
 # Get the libraries
-  message(STATUS "Hdf5_ROOT_DIR = ${Hdf5_ROOT_DIR}.")
+  get_filename_component(Hdf5_ROOT_DIR ${Hdf5_hdf5_h_INCLUDE_DIR}/.. REALPATH)
+  if (DEBUG_CMAKE)
+    message(STATUS "Hdf5_ROOT_DIR = ${Hdf5_ROOT_DIR}.")
+  endif ()
   # file(GLOB hlibs RELATIVE ${Hdf5_ROOT_DIR}/lib "hdf5*")
   file(GLOB hlibs ${Hdf5_ROOT_DIR}/lib/hdf5*)
   if (DEBUG_CMAKE)
