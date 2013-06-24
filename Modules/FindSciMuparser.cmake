@@ -23,27 +23,21 @@
 #
 ######################################################################
 
-
 SciFindPackage(PACKAGE "Muparser"
               INSTALL_DIR "muparser"
-              EXECUTABLES ""
               HEADERS "muParser.h"
               LIBRARIES "muparser"
-              MODULES "muparser"
+			  INCLUDE_SUBDIRS "include"
+              LIBRARY_SUBDIRS "lib"
               )
 
-
 if (MUPARSER_FOUND)
-  # message(STATUS "Found Muparser")
+  message(STATUS "Found Muparser")
   set(HAVE_MUPARSER 1 CACHE BOOL "Whether have the MUPARSER library")
-
-
 else ()
    message(STATUS "Did not find Muparser.  Use -DMUPARSER_DIR to specify the installation directory.")
-
    if (SciMuparser_FIND_REQUIRED)
        message(FATAL_ERROR "Failing.")
    endif ()
-
 endif ()
 
