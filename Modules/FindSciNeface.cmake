@@ -27,7 +27,7 @@
 #
 # FindNeface: find includes and libraries for neface
 #
-# $Id: FindSciNeface.cmake 265 2013-04-24 00:20:20Z techxdave $
+# $Id$
 #
 # Copyright 2010-2013 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.
