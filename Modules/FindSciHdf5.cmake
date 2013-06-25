@@ -57,7 +57,6 @@ if (WIN32)
   if (DEBUG_CMAKE)
     message(STATUS "Hdf5_ROOT_DIR = ${Hdf5_ROOT_DIR}.")
   endif ()
-  # file(GLOB hlibs RELATIVE ${Hdf5_ROOT_DIR}/lib "hdf5*")
   file(GLOB hlibs ${Hdf5_ROOT_DIR}/lib/hdf5*)
   if (DEBUG_CMAKE)
     message(STATUS "hlibs = ${hlibs}.")
@@ -67,8 +66,15 @@ if (WIN32)
     get_filename_component(ln ${lb} NAME_WE)
     set(desiredlibs ${desiredlibs} ${ln})
   endforeach ()
+  file(GLOB hexecs ${Hdf5_ROOT_DIR}/bin/h5diff*.exe)
+  set(desiredexecs)
+  foreach (ex ${hexecs})
+    get_filename_component(en ${ex} NAME_WE)
+    set(desiredexecs ${desiredexecs} ${en})
+  endforeach ()
 else ()
   set(desiredlibs hdf5_hl hdf5)
+  set(desiredexecs h5diff)
   if (CMAKE_Fortran_COMPILER_WORKS)
     set(desiredlibs hdf5_fortran hdf5_f90cstub ${desiredlibs})
   endif ()
@@ -83,7 +89,7 @@ if (CMAKE_Fortran_COMPILER_WORKS)
 endif ()
 SciFindPackage(PACKAGE "Hdf5"
   INSTALL_DIRS ${instdirs}
-  EXECUTABLES h5diff
+  EXECUTABLES ${desiredexecs}
   HEADERS hdf5.h
   LIBRARIES ${desiredlibs}
   MODULES ${desiredmods}
