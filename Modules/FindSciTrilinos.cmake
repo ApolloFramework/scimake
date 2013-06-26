@@ -99,10 +99,14 @@ if (USE_TRILINOS_CONFIG_CMAKE)
 
 else () # Use SciFindPackage
 
+# June 26, 2013 (alexanda), Removed zoltan from libraries list.
+# This module should be refactored to be able to specify which 
+# components are needed for the find from a CMakeLists.txt file.
+# FindSciBoost.cmake and FindSciOce.cmake have examples.
   SciFindPackage(PACKAGE "Trilinos"
     INSTALL_DIR ${trilinosdir}
     HEADERS "az_aztec.h"
-    LIBRARIES "nox;noxepetra;intrepid;ml;komplex;ifpack;amesos;galeri;aztecoo;epetraext;triutils;shards;zoltan;epetra;teuchos"
+    LIBRARIES "nox;noxepetra;intrepid;ml;komplex;ifpack;amesos;galeri;aztecoo;epetraext;triutils;shards;epetra;teuchos"
   )
 # Above sets TRILINOS_FOUND to TRUE?
 
