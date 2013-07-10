@@ -97,6 +97,15 @@ SciFindPackage(PACKAGE "Hdf5"
   MODULE_SUBDIRS include/fortran include lib
 )
 
+# The executables are not always found, so we will hdf5 to found
+# if includes and libraries found.
+if (NOT HDF5_FOUND)
+  if (Hdf5_hdf5_h AND Hdf5_hdf5_LIBRARY AND Hdf5_hdf5_hl_LIBRARY)
+    set(HDF5_FOUND TRUE)
+    message(STATUS "Setting HDF5_FOUND to TRUE because header and libraries found.")
+  endif ()
+endif ()
+
 if (HDF5_FOUND)
   # message(STATUS "Found Hdf5")
   set(HAVE_HDF5 1 CACHE BOOL "Whether have the HDF5 library")
@@ -104,9 +113,9 @@ if (HDF5_FOUND)
     "Whether using the old 1.6.3 H5Sselect_hyperslab interface")
   if (WIN32 AND Hdf5_DLLS)
     set(Hdf5_DEFINITIONS ${Hdf5_DEFINITIONS} -DH5_BUILT_AS_DYNAMIC_LIB)
+    message(STATUS "Adding to Hdf5_DEFINITIONS that H5 build dynamic.")
+    SciPrintVar(Hdf5_DEFINITIONS)
   endif ()
-  SciPrintVar(Hdf5_DEFINITIONS)
-  message("")
 else ()
   message(STATUS "Did not find Hdf5.  Use -DHdf5_ROOT_DIR to specify the installation directory.")
   if (SciHdf5_FIND_REQUIRED)
