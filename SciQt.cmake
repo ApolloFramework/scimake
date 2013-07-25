@@ -13,7 +13,7 @@
 # So we find them here, and then we replace with the VisIt versions
 # if they are found.
 set(QT_REQUIRED_LIBRARIES
-  QtCore QtGui QtOpenGL QtXml QtXmlPatterns QtNetwork QtWebKit
+  QtCore QtGui QtOpenGL QtXml QtXmlPatterns QtNetwork QtWebKit Qt3Support 
 )
 set(QT_OPTIONAL_LIBRARIES
   QtDBus
