@@ -14,7 +14,7 @@
 #
 # FindAcisVizExchange: find includes and libraries for ACIS 3D Interop Libray
 #
-# $Id: FindSciAcisVizExchange.cmake 311 2013-06-21 03:13:50Z veitzer $
+# $Id$
 #
 # Copyright 2010-2013 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.
