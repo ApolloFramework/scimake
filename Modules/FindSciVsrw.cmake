@@ -29,17 +29,34 @@
 set(instdirs vsrw)
 
 set(desiredlibs vsrw)
-set(desiredheaders VsApi.h VsLog.h VsRectilinearMesh.h VsUnstructuredMesh.h
-                   VsAttribute.h VsMDMesh.h VsRegistry.h VsUtils.h
-                   VsDataset.h VsMDVariable.h VsRegistryObject.h VsVariable.h
-                   VsFile.h VsMesh.h VsSchema.h VsVariableWithMesh.h
-                   VsFilter.h VsObject.h VsStructuredMesh.h
-                   VsGroup.h VsReader.h VsUniformMesh.h)
+set(desiredheaders 
+    VsApi.h
+    VsAttribute.h
+    VsDataset.h
+    VsFile.h
+    VsFilter.h
+    VsGroup.h
+    VsLog.h
+    VsMDMesh.h
+    VsMDVariable.h
+    VsMesh.h
+    VsObject.h
+    VsReader.h
+    VsRectilinearMesh.h
+    VsRegistry.h
+    VsRegistryObject.h
+    VsSchema.h
+    VsStaggeredField.h
+    VsStructuredMesh.h
+    VsUniformMesh.h
+    VsUnstructuredMesh.h
+    VsUtils.h
+    VsVariable.h
+    VsVariableWithMesh.h)
 SciFindPackage(PACKAGE "Vsrw"
   INSTALL_DIR ${instdirs}
   HEADERS ${desiredheaders}
   LIBRARIES ${desiredlibs}
-  MODULES "vsrw"
 )
 
 if (VSRW_FOUND)
