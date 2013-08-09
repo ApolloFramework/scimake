@@ -36,49 +36,26 @@
 #
 ######################################################################
 
-if (ENABLE_PARALLEL)
-  if (BUILD_WITH_SHARED_RUNTIME)
-    set(instdirs neface-parsh)
-  else ()
-    set(instdirs neface-par neface-ben)
-  endif ()
+if (USE_NEFACE_SERMD)
+  set(instdirs neface-sermd)
 else ()
-  if (USE_NEFACE_SERMD)
-    set(instdirs neface-sermd)
-  elseif (USE_CC4PY_LIBS)
-    set(instdirs neface-cc4py neface-sersh)
-  elseif (USE_SHARED_LIBS OR BUILD_SHARED_LIBS OR ENABLE_SHARED OR BUILD_WITH_SHARED_RUNTIME OR USE_SHARED_HDF5)
-    set(instdirs neface-sersh)
-  else ()
-    set(instdirs neface)
-  endif ()
+  set(instdirs "neface")
 endif ()
 
-#if (NOT_HAVE_STD_ABS_DOUBLE)
-#  set(nefacefindlibs neface txstd)
-#else ()
-#  set(nefacefindlibs neface)
-#endif ()
+if (APPLE)
+  set(desiredLibraries "libnefaceStatic.a" "libneface.dylib")
+elseif (WIN32)
+  set(desiredLibraries "nefaceStatic.lib" "neface.dll")
+else (APPLE)
+  set(desiredLibraries "libnefaceStatic.a" "libneface.so")
+endif (APPLE) 
 
-set(desiredHeaders NfCuboidElementIterator.h NfPointListType.hpp
-                   NfCuboidElementIteratorType.hpp NfPolynomial.h NfCuboid.h
-                   NfPolynomialType.hpp NfCuboidNodeIterator.h NfSimplex.h
-                   NfCuboidNodeIteratorType.hpp NfSimplexType.hpp NfCuboidType.hpp
-                   NfSimplexVTKViz.h NfCuboidVTKViz.h NfSimplexVTKVizType.hpp
-                   NfCuboidVTKVizType.hpp NfSolve.h NfCuboidWhitney.h
-                   NfStructuredField.h NfCuboidWhitneyType.hpp
-                   NfStructuredFieldType.hpp NfFunction.h NfStructuredGrid.h
-                   NfJacobianMatrix.h NfStructuredGridType.hpp NfMetricTensor.h
-                   NfTensor.h NfNestedBoxIterator.h NfTensorType.hpp
-                   NfNestedBoxIteratorType.hpp NfUnstructuredGrid.h NfPForm.h
-                   NfUnstructuredGridType.hpp NfPFormIterator.h NfVector.h
-                   NfPFormIteratorType.hpp NfVectorType.hpp NfPFormType.hpp
-                   NfWhitney.h NfPointList.h NfWhitneyType.hpp)
+set(desiredHeaders neface.h)
 
 SciFindPackage(PACKAGE "Neface"
   INSTALL_DIRS ${instdirs}
   HEADERS ${desiredHeaders}
-  LIBRARIES "libneface.so"
+  LIBRARIES ${desiredLibraries}
   LIBRARY_SUBDIRS lib
 )
 
