@@ -51,14 +51,14 @@ else (WIN32)
     set(Mkl_ROOT_DIR "/usr/local/intel/mkl")
     set(Mkl_INCLUDE_DIRS "${Mkl_ROOT_DIR}/include")
       SciFindPackage(PACKAGE "Mkl"
-                    LIBRARIES "libmkl_gf_lp64.a;libmkl_gnu_thread.a;libmkl_core.a"
-                    INCLUDE_SUBDIRS "include"
-                    LIBRARY_SUBDIRS "lib/intel64"
-                    )
-    #set(Iomp5_ROOT_DIR "/usr/local/intel/lib/intel64")
-    #  SciFindPackage(PACKAGE "Iomp5"
-    #                LIBRARIES "iomp5"
-    #                )
+                     LIBRARIES "libmkl_intel_lp64.a;libmkl_intel_thread.a;libmkl_core.a"
+                     INCLUDE_SUBDIRS "include"
+                     LIBRARY_SUBDIRS "lib/intel64"
+                     )
+    set(Iomp5_ROOT_DIR "/usr/local/intel/lib/intel64")
+    SciFindPackage(PACKAGE "Iomp5"
+                   LIBRARIES "iomp5"
+                   )
     if (MKL_FOUND)
       message(STATUS "Mkl found.")
       set(HAVE_MKL 1 CACHE BOOL "Whether have Mkl")
