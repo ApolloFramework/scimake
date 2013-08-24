@@ -26,6 +26,7 @@
 SciFindPackage(
   PACKAGE "Png"
   INSTALL_DIRS zlib
+  HEADERS png.h
   LIBRARIES "png"
 )
 
