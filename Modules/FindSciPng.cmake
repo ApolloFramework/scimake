@@ -25,16 +25,15 @@
 
 SciFindPackage(
   PACKAGE "Png"
-  INSTALL_DIRS zlib
+  INSTALL_DIRS libpng-sersh
   HEADERS png.h
   LIBRARIES "png"
 )
 
 if (PNG_FOUND)
-  # message(STATUS "Found Png(compression library)")
-  set(HAVE_PNG 1 CACHE BOOL "Whether have the z(compression) library")
+  set(HAVE_PNG 1 CACHE BOOL "Whether have the Png (compression) library")
 else ()
-  message(STATUS "Did not find Png(compression).")
+  message(STATUS "Did not find Png (compression) library.")
   if (SciPng_FIND_REQUIRED)
     message(FATAL_ERROR "Failed.")
   endif ()
