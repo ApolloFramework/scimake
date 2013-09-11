@@ -57,7 +57,7 @@ else (WIN32)
                      )
     set(Iomp5_ROOT_DIR "/usr/local/intel/lib/intel64")
     SciFindPackage(PACKAGE "Iomp5"
-                   LIBRARIES "iomp5"
+                   LIBRARIES "libiomp5.a"
                    )
     if (MKL_FOUND)
       message(STATUS "Mkl found.")
