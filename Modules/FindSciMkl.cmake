@@ -47,28 +47,39 @@ if (WIN32)
     endif ()
   #endforeach()
 else (WIN32)
-  #foreach(year 2011 2012 2013)
-    set(Mkl_ROOT_DIR "/usr/local/intel/mkl")
+    if (NOT Mkl_ROOT_DIR) 
+      set(Mkl_ROOT_DIR "/usr/local/intel/mkl")
+    endif ()
+    if (NOT Iomp5_ROOT_DIR) 
+      set (Iomp5_ROOT_DIR "${Mkl_ROOT_DIR}/../lib/intel64")
+    endif ()
     set(Mkl_INCLUDE_DIRS "${Mkl_ROOT_DIR}/include")
-      SciFindPackage(PACKAGE "Mkl"
-                     LIBRARIES "libmkl_intel_lp64.a;libmkl_intel_thread.a;libmkl_core.a"
-                     INCLUDE_SUBDIRS "include"
-                     LIBRARY_SUBDIRS "lib/intel64"
-                     )
-    set(Iomp5_ROOT_DIR "/usr/local/intel/lib/intel64")
+      if (NOT LINK_WITH_MKL_SHARED)
+        SciFindPackage(PACKAGE "Mkl"
+                       LIBRARIES "libmkl_intel_lp64.a;libmkl_intel_thread.a;libmkl_core.a"
+                       INCLUDE_SUBDIRS "include"
+                       LIBRARY_SUBDIRS "lib/intel64"
+                       )
+      else () 
+         # On iter one needs to link against the shared MKL libraries 
+         SciFindPackage(PACKAGE "Mkl"
+                       LIBRARIES "mkl_intel_lp64;mkl_intel_thread;mkl_core"
+                       INCLUDE_SUBDIRS "include"
+                       LIBRARY_SUBDIRS "lib/intel64"
+                       )
+ 
+      endif ()
     SciFindPackage(PACKAGE "Iomp5"
                    LIBRARIES "iomp5"
                    )
     if (MKL_FOUND)
       message(STATUS "Mkl found.")
       set(HAVE_MKL 1 CACHE BOOL "Whether have Mkl")
-      #break()
     endif ()
-  #endforeach()
 endif (WIN32)
 
 if (NOT MKL_FOUND)
-  message(STATUS "Did not find Mkl.  Use -DMkl_ROOT_DIR to specify the installation directory.")
+  message(STATUS "Did not find Mkl.  Use -DMkl_ROOT_DIR and, if using OpenMP, Iomp5_ROOT_DIR to specify the installation directory.")
   if (SciMkl_FIND_REQUIRED)
     message(FATAL_ERROR "Finding MKL failed.")
   endif ()
