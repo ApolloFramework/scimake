@@ -520,7 +520,8 @@ macro(SciFindPackage)
       set(scifilesubdirs ${TFP_FILE_SUBDIRS})
     else ()
 # Here we use the default search directory "bin"
-      # set(scifilesubdirs .)
+# JRC: Why?  That would be for executables.  Here we would use share.
+      set(scifilesubdirs share)
     endif ()
 
     if (DEBUG_CMAKE)
@@ -1038,14 +1039,6 @@ macro(SciFindPackage)
 # The convention is to capitalize the _FOUND variable.
 #
 ####################################################################
-
-if (FALSE)
-  if (${scipkgreg}_FOUND_SOME_LIBRARY OR ${scipkgreg}_FOUND_SOME_HEADER OR
-       ${scipkgreg}_FOUND_SOME_EXECUTABLE OR ${scipkgreg}_FOUND_SOME_DLL OR
-       ${scipkgreg}_FOUND_SOME_FILE)
-    set(${scipkguc}_FOUND TRUE)
-  endif ()
-endif ()
 
   if (DEBUG_CMAKE OR NOT TFP_FIND_QUIETLY)
     SciPrintCMakeResults(${scipkgreg})
