@@ -39,18 +39,20 @@
 if (USE_NEFACE_SERMD)
   set(instdirs neface-sermd)
 else ()
-  set(instdirs "neface")
+  set(instdirs neface)
 endif ()
 
 if (APPLE)
   set(desiredLibraries "libnefaceStatic.a" "libneface.dylib")
 elseif (WIN32)
-  set(desiredLibraries "nefaceStatic.lib" "neface.dll")
-else (APPLE)
+  set(desiredLibraries "nefaceStatic.lib" "neface.lib")
+else ()
   set(desiredLibraries "libnefaceStatic.a" "libneface.so")
-endif (APPLE) 
+endif () 
 
 set(desiredHeaders neface.h)
+
+message(STATUS "SciFindPackage called with: INSTALL_DIRS ${instdirs} LIBRARIES ${desiredLibraries}")
 
 SciFindPackage(PACKAGE "Neface"
   INSTALL_DIRS ${instdirs}
