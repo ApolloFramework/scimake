@@ -17,31 +17,34 @@ message(STATUS "Analyzing vector capabilities:")
 
 # Determine the processor and sse capabilities
 if (EXISTS /proc/cpuinfo)
-  message(STATUS "Working on LINUX")
-  file(READ /proc/cpuinfo cpuinfo)
-  execute_process(COMMAND cat /proc/cpuinfo
-      COMMAND grep "model name"
-      COMMAND head -1
-      OUTPUT_VARIABLE SCIC_CPU
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
-# For Blue Gene
-  if (SCIC_CPU)
-    string(REGEX REPLACE "^.*: " "" SCIC_CPU ${SCIC_CPU})
-    execute_process(COMMAND cat /proc/cpuinfo
-        COMMAND grep "flags"
-        COMMAND head -1
-        OUTPUT_VARIABLE CPU_CAPABILITIES
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
+  message(STATUS "Working on LINUX.")
+  if (DISABLE_CPUCHECK) # For BGP
+    message(STATUS "CPU check disabled.")
   else ()
     execute_process(COMMAND cat /proc/cpuinfo
-        COMMAND grep "^cpu"
+        COMMAND grep "model name"
         COMMAND head -1
         OUTPUT_VARIABLE SCIC_CPU
         OUTPUT_STRIP_TRAILING_WHITESPACE)
+  # For Blue Gene
     if (SCIC_CPU)
       string(REGEX REPLACE "^.*: " "" SCIC_CPU ${SCIC_CPU})
-      string(REGEX REPLACE "^.*, *" "" CPU_CAPABILITIES ${SCIC_CPU})
-      string(REGEX REPLACE ",.*$" "" SCIC_CPU ${SCIC_CPU})
+      execute_process(COMMAND cat /proc/cpuinfo
+          COMMAND grep "flags"
+          COMMAND head -1
+          OUTPUT_VARIABLE CPU_CAPABILITIES
+          OUTPUT_STRIP_TRAILING_WHITESPACE)
+    else ()
+      execute_process(COMMAND cat /proc/cpuinfo
+          COMMAND grep "^cpu"
+          COMMAND head -1
+          OUTPUT_VARIABLE SCIC_CPU
+          OUTPUT_STRIP_TRAILING_WHITESPACE)
+      if (SCIC_CPU)
+        string(REGEX REPLACE "^.*: " "" SCIC_CPU ${SCIC_CPU})
+        string(REGEX REPLACE "^.*, *" "" CPU_CAPABILITIES ${SCIC_CPU})
+        string(REGEX REPLACE ",.*$" "" SCIC_CPU ${SCIC_CPU})
+      endif ()
     endif ()
   endif ()
 elseif (APPLE)
