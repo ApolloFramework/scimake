@@ -24,12 +24,26 @@ if (EXISTS /proc/cpuinfo)
       COMMAND head -1
       OUTPUT_VARIABLE SCIC_CPU
       OUTPUT_STRIP_TRAILING_WHITESPACE)
-  string(REGEX REPLACE "^.*: " "" SCIC_CPU ${SCIC_CPU})
-  execute_process(COMMAND cat /proc/cpuinfo
-      COMMAND grep "flags"
-      COMMAND head -1
-      OUTPUT_VARIABLE CPU_CAPABILITIES
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
+# For Blue Gene
+  if (SCIC_CPU)
+    string(REGEX REPLACE "^.*: " "" SCIC_CPU ${SCIC_CPU})
+    execute_process(COMMAND cat /proc/cpuinfo
+        COMMAND grep "flags"
+        COMMAND head -1
+        OUTPUT_VARIABLE CPU_CAPABILITIES
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+  else ()
+    execute_process(COMMAND cat /proc/cpuinfo
+        COMMAND grep "^cpu"
+        COMMAND head -1
+        OUTPUT_VARIABLE SCIC_CPU
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    if (SCIC_CPU)
+      string(REGEX REPLACE "^.*: " "" SCIC_CPU ${SCIC_CPU})
+      string(REGEX REPLACE "^.*, *" "" CPU_CAPABILITIES ${SCIC_CPU})
+      string(REGEX REPLACE ",.*$" "" SCIC_CPU ${SCIC_CPU})
+    endif ()
+  endif ()
 elseif (APPLE)
   execute_process(COMMAND sysctl -a machdep.cpu.brand_string
       OUTPUT_VARIABLE SCIC_CPU
