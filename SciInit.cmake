@@ -73,7 +73,7 @@ endif ()
 message(STATUS "[SciInit.cmake] CMAKE_SYSTEM_NAME is ${CMAKE_SYSTEM_NAME}")
 if ("${CMAKE_SYSTEM_NAME}" MATCHES "Darwin")
   set(MACX TRUE CACHE BOOL "True if compiled on Mac OS X")
-  message(STATUS "[SciInit.cmake] Compiling on MAC")
+  message(STATUS "[SciInit.cmake] Compiling on MAC, CMAKE_SYSTEM = ${CMAKE_SYSTEM}.")
 elseif ("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
   set(LINUX TRUE CACHE BOOL "True if compiled on Linux")
   message(STATUS "[SciInit.cmake] Compiling on LINUX")
@@ -231,7 +231,15 @@ include(${SCIMAKE_DIR}/SciOmpSseAvx.cmake)
 # where one can download DynamicCastTest.zip
 # This is known to be a problem with Snow Leopard and Mountain Lion
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL Darwin)
-  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -mmacosx-version-min=10.5")
+# Get major version
+  string(REPLACE "Darwin-" "" SCI_SYSTEM_VERSION "${CMAKE_SYSTEM}")
+  message(STATUS "SCI_SYSTEM_VERSION = ${SCI_SYSTEM_VERSION}.")
+  string(REGEX REPLACE "\\..*$" "" SCI_SYSTEM_MAJVER "${SCI_SYSTEM_VERSION}")
+  if ("${SCI_SYSTEM_MAJVER}" LESS 13.0.0)  # Before Mavericks
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -mmacosx-version-min=10.5")
+  else ()
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -mmacosx-version-min=10.7")
+  endif ()
 endif ()
 
 # Print results
