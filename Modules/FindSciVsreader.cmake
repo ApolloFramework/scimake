@@ -28,7 +28,8 @@
 # only serial
 set(instdirs vsreader)
 
-set(desiredlibs vsreader)
+set(desiredlibs
+    vsreader_static)
 set(desiredheaders 
     VsApi.h
     VsAttribute.h
