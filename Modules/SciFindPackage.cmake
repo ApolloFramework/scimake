@@ -91,7 +91,7 @@
 # origlibs: the original libraries
 # statlibsvar: the variable holding the static libs when found
 #
-FUNCTION(SciGetStaticLibs origlibs statlibsvar)
+function(SciGetStaticLibs origlibs statlibsvar)
   # set(origlibs ${${origlibsvar}})
   set(statlibs)
   if (DEBUG_CMAKE)
@@ -198,7 +198,7 @@ FUNCTION(SciGetStaticLibs origlibs statlibsvar)
     message(STATUS "[SciFindPackage]: static libs = ${statlibs}.")
   endif ()
   set(${statlibsvar} ${statlibs} PARENT_SCOPE)
-ENDFUNCTION()
+endfunction()
 
 # SciGetRealDir
 #
@@ -211,7 +211,8 @@ ENDFUNCTION()
 #  canddir: the variable holding the directory candidate
 #  realdirvar: the variable holding the directory after following any shortcuts
 #
-FUNCTION(SciGetRealDir canddir realdirvar)
+function(SciGetRealDir canddir realdirvar)
+
   # MESSAGE("realdirvar = ${realdirvar}.")
   set(${realdirvar})
   if (canddir)
@@ -236,7 +237,44 @@ FUNCTION(SciGetRealDir canddir realdirvar)
     endif ()
   endif ()
   set(${realdirvar} ${rd} PARENT_SCOPE)
-ENDFUNCTION()
+endfunction()
+
+# SciGetInstDirs
+#
+# Given a package name, set the possible installation subdirs
+#
+# Args:
+#  pkgnamelc: the variable holding the package name in lower case
+#  instdirsvar: the variable holding possible installation directories
+#
+function(SciGetInstDirs pkgname instdirsvar)
+  if (ENABLE_PARALLEL)
+    if (USE_SHARED_LIBS)
+      set(instdirs ${pkgnamelc}-parsh)
+    else ()
+      set(instdirs ${pkgnamelc}-par ${pkgnamelc}-ben)
+    endif ()
+  else ()
+    if (USE_CC4PY_LIBS)
+      set(instdirs ${pkgnamelc}-cc4py ${pkgnamelc}-sersh)
+      if (WIN32)
+        set(instdirs ${instdirs} ${pkgnamelc}-sermd)
+      else ()
+        set(instdirs ${instdirs} ${pkgnamelc})
+      endif ()
+    elseif (USE_SHARED_LIBS)
+      set(instdirs ${pkgnamelc}-sersh)
+      if (WIN32)
+        set(instdirs ${instdirs} ${pkgnamelc}-sermd)
+      else ()
+        set(instdirs ${instdirs} ${pkgnamelc})
+      endif ()
+    else ()
+      set(instdirs ${pkgnamelc})
+    endif ()
+  endif ()
+  set(${instdirsvar} ${instdirs} PARENT_SCOPE)
+endfunction()
 
 #
 # SciFindPackage
@@ -321,7 +359,7 @@ macro(SciFindPackage)
   string(TOLOWER ${scipkgreg} scipkglc)
   set(scipkginst ${TFP_INSTALL_DIR} ${TFP_INSTALL_DIRS})
   if (NOT scipkginst)
-    set(scipkginst ${scipkginst} ${scipkglc})
+    SciGetInstDirs(${scipkglc} scipkginst)
   endif ()
   if (DEBUG_CMAKE)
     message(STATUS "scipkginst = ${scipkginst}.")

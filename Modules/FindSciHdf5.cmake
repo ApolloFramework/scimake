@@ -24,39 +24,12 @@
 #
 ######################################################################
 
-# This could be put into SciFindPackage
-if (ENABLE_PARALLEL)
-  if (USE_SHARED_LIBS OR USE_SHARED_HDF5)
-    set(instdirs hdf5-parsh)
-  else ()
-    set(instdirs hdf5-par hdf5-ben)
-  endif ()
-else ()
-  if (USE_CC4PY_LIBS OR USE_CC4PY_HDF5)
-    set(instdirs hdf5-cc4py hdf5-sersh)
-    if (WIN32)
-      set(instdirs ${instdirs} hdf5-sermd)
-    else ()
-      set(instdirs ${instdirs} hdf5)
-    endif ()
-  elseif (USE_SHARED_LIBS OR USE_SHARED_HDF5)
-    set(instdirs hdf5-sersh)
-    if (WIN32)
-      set(instdirs ${instdirs} hdf5-sermd)
-    else ()
-      set(instdirs ${instdirs} hdf5)
-    endif ()
-  else ()
-    set(instdirs hdf5)
-  endif ()
-endif ()
-
 if (WIN32)
 # hdf5 keeps changing the name of its libraries on Windows, so at first we
 # do not look for the libraries.  Once we find the installation, we then
 # add the libs
   SciFindPackage(PACKAGE "Hdf5"
-    INSTALL_DIRS ${instdirs}
+    # INSTALL_DIRS ${instdirs} # Now done by SciFindPackage
     HEADERS hdf5.h
     INCLUDE_SUBDIRS include include/hdf5/include # Last for VisIt installation
     FIND_QUIETLY
@@ -97,7 +70,7 @@ if (CMAKE_Fortran_COMPILER_WORKS)
   set(desiredmods hdf5)
 endif ()
 SciFindPackage(PACKAGE "Hdf5"
-  INSTALL_DIRS ${instdirs}
+  # INSTALL_DIRS ${instdirs} # Now done by SciFindPackage
   EXECUTABLES ${desiredexecs}
   HEADERS hdf5.h
   LIBRARIES ${desiredlibs}

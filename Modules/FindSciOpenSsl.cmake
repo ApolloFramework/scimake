@@ -24,26 +24,9 @@
 #
 ######################################################################
 
-if (USE_CC4PY_LIBS)
-  set(instdirs openssl-cc4py openssl-sersh)
-  if (WIN32)
-    set(instdirs ${instdirs} openssl-sermd)
-  else ()
-# No need for static here, as openssl builds those in sersh.
-  # set(instdirs ${instdirs} openssl)
-  endif ()
-elseif (USE_SHARED_LIBS)
-  set(instdirs openssl-sersh)
-  if (WIN32)
-    set(instdirs ${instdirs} openssl-sermd)
-  else ()
-# No need for static here, as openssl builds those in sersh.
-  # set(instdirs ${instdirs} openssl)
-  endif ()
-else ()
 # OpenSSL builds its static libs inside sersh
-  set(instdirs openssl openssl-sersh)
-endif ()
+SciGetInstDirs(openssl instdirs)
+set(instdirs openssl openssl-sersh)
 
 SciFindPackage(PACKAGE "OpenSsl"
   INSTALL_DIRS ${instdirs}
