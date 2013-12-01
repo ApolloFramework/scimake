@@ -165,7 +165,7 @@ endif ()
 # Remove /MD etc for static builds on Windows, Add /bigobj.
 if (WIN32 AND NOT MINGW)
   foreach(flag_var CMAKE_C_FLAGS_FULL CMAKE_C_FLAGS_RELEASE CMAKE_C_FLAGS_RELWITHDEBINFO CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_DEBUG)
-    if (NOT (ENABLE_SHARED OR BUILD_WITH_CC4PY_RUNTIME OR BUILD_WITH_SHARED_RUNTIME OR BUILD_SHARED_LIBS))
+    if (NOT (BUILD_SHARED_LIBS OR BUILD_WITH_SHARED_RUNTIME))
       string(REPLACE "/MDd" "" ${flag_var} "${${flag_var}}")
       string(REPLACE "/MD" "" ${flag_var} "${${flag_var}}")
     endif ()

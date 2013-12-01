@@ -26,10 +26,16 @@
 
 if (USE_CC4PY_LIBS)
   set(instdirs openssl-cc4py openssl-sersh)
-elseif (WIN32 AND BUILD_WITH_SHARED_RUNTIME)
-  set(instdirs openssl-sermd)
-elseif (USE_SHARED_LIBS OR BUILD_SHARED_LIBS OR ENABLE_SHARED OR BUILD_WITH_SHARED_RUNTIME)
-  set(instdirs openssl-sersh openssl)
+  if (WIN32)
+    set(instdirs ${instdirs} openssl-sermd)
+  endif ()
+  set(instdirs ${instdirs} openssl)
+elseif (USE_SHARED_LIBS)
+  set(instdirs openssl-sersh)
+  if (WIN32)
+    set(instdirs ${instdirs} openssl-sermd)
+  endif ()
+  set(instdirs ${instdirs} openssl)
 else ()
   set(instdirs openssl)
 endif ()
@@ -50,7 +56,7 @@ if (WIN32 AND NOT OPENSSL_FOUND)
       INSTALL_DIRS ${instdirs}
       EXECUTABLES openssl
       HEADERS ssl.h
-      LIBRARIES openssl crypto
+      LIBRARIES ssl crypto
       INCLUDE_SUBDIRS include include/openssl
     )
   endif ()

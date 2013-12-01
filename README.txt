@@ -14,3 +14,38 @@ To commit changes:
 
   svn switch --relocate svn://svn.code.sf.net/p/scimake/code/trunk https://SOURCEFORGE_USERNAME@svn.code.sf.net/p/scimake/code/trunk
 
+
+SHARED FLAGS
+
+We are currently (20131201) using the following Booleans:
+USE_CC4PY_LIBS
+USE_SHARED_LIBS
+BUILD_SHARED_LIBS
+ENABLE_SHARED
+BUILD_WITH_SHARED_RUNTIME
+BUILD_WITH_CC4PY_RUNTIME
+along with package specific booleans.
+The above are overlapping and it is not clear what they mean. To regularize:
+
+0) Keep USE_CC4PY_LIBS and USE_SHARED_LIBS.  These define what one
+   links with.
+
+1) Remove ENABLE_SHARED.  This is a holdover from autotools.  The
+   corresponding CMake variable is BUILD_SHARED_LIBS:
+   http://www.cmake.org/pipermail/cmake/2003-December/004586.html
+
+2) Remove BUILD_WITH_CC4PY_RUNTIME.  This means no more than
+   BUILD_WITH_SHARED_RUNTIME, which means to add the /MD flags on Windows.
+
+So now only the following variables should be used:
+USE_CC4PY_LIBS: Look for installations in order: cc4py, sersh,
+  sermd (on Windows), ser
+USE_SHARED_LIBS: Look for installations in order: sersh, sermd (on Windows),
+  ser
+Otherwise: just look for static libs
+BUILD_SHARED_LIBS: CMake var meaning default libs to produce are shared. If
+  USE_SHARED_LIBS is not defined, it is set to true.
+BUILD_WITH_SHARED_RUNTIME: Add /MD to compiler flags on Windows
+
+These are now embodied in FindSciOpenSsl.cmake
+

@@ -222,6 +222,22 @@ include(${SCIMAKE_DIR}/SciOmpSseAvx.cmake)
 
 ######################################################################
 #
+# New conventions.  See README.txt
+#
+######################################################################
+
+if (ENABLE_SHARED)
+  message(WARNING "ENABLE_SHARED is deprecated.  Use BUILD_SHARED_LIBS.")
+  if (NOT DEFINE BUILD_SHARED_LIBS)
+    set(BUILD_SHARED_LIBS TRUE)
+  endif ()
+endif ()
+if (BUILD_SHARED_LIBS AND NOT DEFINED USE_SHARED_LIBS)
+  set(USE_SHARED_LIBS TRUE)
+endif ()
+
+######################################################################
+#
 # Other link flags
 #
 ######################################################################
