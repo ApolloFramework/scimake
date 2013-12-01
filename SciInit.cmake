@@ -228,7 +228,7 @@ include(${SCIMAKE_DIR}/SciOmpSseAvx.cmake)
 
 if (ENABLE_SHARED)
   message(WARNING "ENABLE_SHARED is deprecated.  Use BUILD_SHARED_LIBS.")
-  if (NOT DEFINE BUILD_SHARED_LIBS)
+  if (NOT DEFINED BUILD_SHARED_LIBS)
     set(BUILD_SHARED_LIBS TRUE)
   endif ()
 endif ()
