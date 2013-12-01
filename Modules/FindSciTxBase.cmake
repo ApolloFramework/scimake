@@ -36,32 +36,6 @@
 #
 ######################################################################
 
-if (ENABLE_PARALLEL)
-  if (USE_SHARED_LIBS)
-    set(instdirs txbase-parsh)
-  else ()
-    set(instdirs txbase-par txbase-ben)
-  endif ()
-else ()
-  if (USE_CC4PY_LIBS)
-    set(instdirs txbase-cc4py txbase-sersh)
-    if (WIN32)
-      set(instdirs ${instdirs} txbase-sermd)
-    else ()
-      set(instdirs ${instdirs} txbase)
-    endif ()
-  elseif (USE_SHARED_LIBS)
-    set(instdirs txbase-sersh)
-    if (WIN32)
-      set(instdirs ${instdirs} txbase-sermd)
-    else ()
-      set(instdirs ${instdirs} txbase)
-    endif ()
-  else ()
-    set(instdirs txbase)
-  endif ()
-endif ()
-
 if (NOT_HAVE_STD_ABS_DOUBLE)
   set(txbasefindlibs txbase txstd)
 else ()
@@ -69,7 +43,7 @@ else ()
 endif ()
 
 SciFindPackage(PACKAGE "TxBase"
-  INSTALL_DIRS ${instdirs}
+  # INSTALL_DIRS ${instdirs} # Now done by SciFindPackage.cmake
   HEADERS "txbase_version.h"
   LIBRARIES "${txbasefindlibs}"
   LIBRARY_SUBDIRS lib/${CXX_COMP_LIB_SUBDIR} lib
