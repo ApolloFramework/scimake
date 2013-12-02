@@ -1,5 +1,5 @@
 # - FindSciVsreader: Module to find include directories and libraries
-#   for Vsreader, VizSchema read-write library. This module was 
+#   for Vsreader, VizSchema read-write library. This module was
 #   implemented as there is no stock CMake module for Vsreader.
 #
 # This module can be included in CMake builds in find_package:
@@ -26,11 +26,12 @@
 ######################################################################
 
 # only serial
-set(instdirs vsreader)
+# set(instdirs vsreader)
 
 set(desiredlibs
     vsreader_static)
-set(desiredheaders 
+
+set(desiredheaders
     VsApi.h
     VsAttribute.h
     VsDataset.h
@@ -54,8 +55,9 @@ set(desiredheaders
     VsUtils.h
     VsVariable.h
     VsVariableWithMesh.h)
+
 SciFindPackage(PACKAGE "Vsreader"
-  INSTALL_DIR ${instdirs}
+  # INSTALL_DIR ${instdirs} # Now done by SciFindPackage
   HEADERS ${desiredheaders}
   LIBRARIES ${desiredlibs}
 )
