@@ -36,11 +36,11 @@ endif()
                 LIBRARIES ${clapack_libs}
                 )
 
-if (CLAPACKCMAKE_FOUND)
+if (CLAPACKSCIMAKE_FOUND)
   message(STATUS "CLapackscimake found.")
   set(HAVE_CLAPACKCMAKE 1 CACHE BOOL "Whether have CLapackscimake")
 else ()
-  message(STATUS "Did not find CLapackscimake.  Use -DCLAPACKCMAKE_DIR to specify the installation directory.")
+  message(STATUS "Did not find CLapackscimake.  Use -DCLapackscimake_ROOT_DIR to specify the installation directory.")
   if (SciCLapackscimake_FIND_REQUIRED)
     message(FATAL_ERROR "Failed")
   endif ()

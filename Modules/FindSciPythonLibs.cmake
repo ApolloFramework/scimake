@@ -60,7 +60,9 @@ if (ENABLE_PYTHON)
     set(PYTHONLIBS_FOUND TRUE)
 # Search for python on unix using path
   elseif (NOT WIN32)
-    find_program(PYTHON python)
+    find_program(PYTHON python
+      HINTS "${Python_ROOT_DIR}"
+      PATH_SUFFIXES bin)
     if (DEBUG_CMAKE)
       message(STATUS "PYTHON = ${PYTHON}.")
     endif ()
@@ -105,6 +107,8 @@ if (ENABLE_PYTHON)
           message(STATUS "Looking for library, ${Python_LIB}.")
         endif ()
         find_library(Python_LIBRARIES ${Python_LIB}
+          HINTS "${Python_ROOT_DIR}"
+          PATH_SUFFIXES bin lib libs
           PATHS ${Python_TOPLIBDIR}/config ${Python_TOPLIBDIR}/libs
           NO_DEFAULT_PATH)
       endif ()
@@ -117,10 +121,11 @@ if (ENABLE_PYTHON)
         string(REGEX REPLACE "^lib" "" Python_LIBRARY_NAMES ${Python_LIBRARY_NAMES})
       endif ()
     endif ()
-  endif ()
+  endif (Python_INCLUDE_DIRS AND Python_LIBRARIES)
 
 # Python not found so find python using cmake's module
   if (NOT PYTHONLIBS_FOUND)
+    set(PythonLibs_DIR "${Python_ROOT_DIR}")
     find_package(PythonLibs)
 
     if (PYTHONLIBS_FOUND)
@@ -160,6 +165,8 @@ if (ENABLE_PYTHON)
 # Look for executable
     if (NOT PYTHON)
       find_program(PYTHON python
+        HINTS "${Python_ROOT_DIR}"
+        PATH_SUFFIXES bin
         PATHS ${Python_PYLIBDIR}/bin ${Python_PYLIBDIR}
       )
     endif ()
