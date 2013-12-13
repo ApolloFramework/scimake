@@ -477,76 +477,8 @@ macro(SciFindPackage)
     message(STATUS "scipkginst = ${scipkginst}.")
   endif ()
 
-if (TRUE) # Reverse this if a bug
+# Find the set of possible root installation dirs
   SciGetRootPath(${scipkgreg} "${scipkginst}" scipath)
-else ()
-# Find the possible directories and put them into path
-# Order: command-line define, environment variable, supra-search-path subdirs,
-# supra-search-path dirs
-  if (DEBUG_CMAKE)
-    message(STATUS "${scipkgreg}_ROOT_DIR = ${${scipkgreg}_ROOT_DIR}.")
-    message("[SciFindPackage] SUPRA_SEARCH_PATH = ${SUPRA_SEARCH_PATH}")
-  endif ()
-  set(scipath)
-# Command-line define overrides all.
-  if (${scipkgreg}_ROOT_DIR)
-    SciGetRealDir(${${scipkgreg}_ROOT_DIR} scipath)
-  elseif (${scipkgreg}_DIR)
-# JRC 20120617: Remove this July 31, 2012.
-    message(STATUS "${scipkgreg}_DIR = ${${scipkgreg}_DIR}.")
-    message(WARNING "Use of ${scipkgreg}_DIR define is deprecated.  Please use ${scipkgreg}_ROOT_DIR")
-    SciGetRealDir(${${scipkgreg}_DIR} scipath)
-  elseif (${scipkguc}_DIR)
-# The deprecated variable name is commonly ${scipkguc}_DIR, so check for that too
-# MD 20120619: Remove this July 31, 2012.
-    message(STATUS "${scipkguc}_DIR = ${${scipkguc}_DIR}.")
-    message(WARNING "Use of ${scipkguc}_DIR define is deprecated.  Please use ${scipkgreg}_ROOT_DIR")
-    SciGetRealDir(${${scipkguc}_DIR} scipath)
-  elseif (DEBUG_CMAKE)
-    message(STATUS "Neither ${scipkgreg}_ROOT_DIR, ${scipkgreg}_DIR, nor ${scipkguc}_DIR defined.")
-  endif ()
-  if (NOT DEFINED ${scipath})
-    if ($ENV{${scipkgreg}_ROOT_DIR})
-      SciGetRealDir($ENV{${scipkgreg}_ROOT_DIR} scipath)
-    elseif ($ENV{${scipkgreg}_DIR})
-# JRC 20120617: Remove this July 31, 2012.
-      message(WARNING "Use of ${scipkgreg}_DIR environment variable is deprecated.  Please use ${scipkgreg}_ROOT_DIR")
-      SciGetRealDir($ENV{${scipkgreg}_DIR} scipath)
-    elseif ($ENV{${scipkguc}_DIR})
-# MD 20120619: Remove this July 31, 2012.
-      message(WARNING "Use of ${scipkguc}_DIR environment variable is deprecated.  Please use ${scipkgreg}_ROOT_DIR")
-      SciGetRealDir($ENV{${scipkguc}_DIR} scipath)
-    endif ()
-  endif ()
-# Next try environment variable
-# Supra-search-path dirs
-  foreach (instdir ${scipkginst})
-    foreach (spdir ${SUPRA_SEARCH_PATH})
-      set(idir ${spdir}/${instdir})
-      if (EXISTS ${idir})
-        SciGetRealDir(${idir} scidir)
-        set(scipath ${scipath} ${scidir})
-      endif ()
-    endforeach (spdir ${SUPRA_SEARCH_PATH})
-  endforeach ()
-# Supra-search-path dirs
-  foreach (spdir ${SUPRA_SEARCH_PATH})
-    set(idir ${spdir})
-    if (EXISTS ${idir})
-      SciGetRealDir(${idir} scidir)
-      set(scipath ${scipath} ${scidir})
-    endif ()
-  endforeach (spdir ${SUPRA_SEARCH_PATH})
-# Any found?
-  list(LENGTH scipath scipathlen)
-  if (DEBUG_CMAKE)
-    if (NOT scipathlen)
-      message(FATAL_ERROR "scipath is empty.")
-    else ()
-      message(STATUS "scipath = ${scipath}")
-    endif ()
-  endif ()
-endif ()
   if (DEBUG_CMAKE)
     message(STATUS "scipath = ${scipath}")
   endif ()
