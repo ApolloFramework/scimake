@@ -348,7 +348,9 @@ function(SciGetRootPath pkgname instsubdirs rootpathvar)
       endif ()
     endif ()
   endif ()
-  message(STATUS "After looking for ${pkgname}_ROOT_DIR in the environment, rootpath = ${rootpath}.")
+  if (DEBUG_CMAKE)
+    message(STATUS "After looking for ${pkgname}_ROOT_DIR in the environment, rootpath = ${rootpath}.")
+  endif ()
 
 # Supra-search-path dirs
   foreach (instdir ${instsubdirs})
@@ -373,15 +375,123 @@ function(SciGetRootPath pkgname instsubdirs rootpathvar)
 # Any found?
   list(LENGTH rootpath rootpathlen)
   if (DEBUG_CMAKE)
-    if (NOT rootpathlen)
-      message(FATAL_ERROR "rootpath is empty.")
-    else ()
+    if (rootpathlen)
+      list(REMOVE_DUPLICATES rootpath)
       message(STATUS "rootpath = ${rootpath}")
+    else ()
+      message(FATAL_ERROR "rootpath is empty.")
     endif ()
   endif ()
 
 # Return value
   set(${rootpathvar} ${rootpath} PARENT_SCOPE)
+endfunction()
+
+# SciFindPkgFiles
+#
+# Find the files of a type for a package.
+#
+# Args:
+#  pkgname: the variable holding the package name with regular capitalization
+#  pkgfiles: the files to search for
+#  rootpath: contains possible installation root directories
+#  filesubdirs: possible file subdirs
+#  singularsfx: singular version of the file type
+#  pluralsfx: plural version of the file type
+#  allfoundvar: whether all files were found
+#
+function(SciFindPkgFiles pkgname pkgfiles
+  rootpath filesubdirs
+  singularsfx pluralsfx allfoundvar)
+
+  if (DEBUG_CMAKE)
+    message(STATUS "Looking for files of type, ${singularsfx} under ${rootpath} with filesubdirs = ${filesubdirs}.")
+  endif ()
+
+# Set the package path
+
+# Loop over list of executables and try to find each one
+  set(abspkgfiles)
+  set(pkgdirs)
+  set(allfound TRUE)
+  foreach (pkgfile ${pkgfiles})
+
+# Create the variable that's specific to this executable
+    string(REGEX REPLACE "[./-]" "_" pkgfilevar ${pkgfile})
+    set(pkgfilevar ${pkgname}_${pkgfilevar})
+    if (DEBUG_CMAKE)
+      message(STATUS "Searching for pkgfile = ${pkgfile}.")
+    endif ()
+
+# First look in specified path
+    set(basesrchargs ${pkgfilevar} ${pkgfile}
+    )
+    set(fullsrchargs "${basesrchargs}"
+      PATHS "${rootpath}"
+      PATH_SUFFIXES "${filesubdirs}"
+      NO_DEFAULT_PATH
+    )
+    if (DEBUG_CMAKE)
+      message(STATUS "fullsrchargs = ${fullsrchargs}.")
+    endif ()
+    find_program(${fullsrchargs}
+      DOC "Path to the ${pkgfile} ${singularsfx}"
+    )
+    if (DEBUG_CMAKE)
+      message(STATUS "From first search: ${pkgfilevar} = ${${pkgfilevar}}.")
+    endif ()
+
+# If not found, try again with default paths
+    if (NOT ${pkgfilevar})
+      if (DEBUG_CMAKE)
+        message(STATUS "Failed to find ${pkgfile} in search path, trying default paths.")
+      endif ()
+      find_program(${basesrchargs}
+        DOC "Path to the ${pkgfile} ${singularsfx}"
+      )
+      if (DEBUG_CMAKE)
+        message(STATUS "From second search: ${pkgfilevar} = ${${pkgfilevar}}.")
+      endif ()
+    endif ()
+
+    if (${pkgfilevar})
+# Add to list of all files of this type for this package
+      set(abspkgfiles ${abspkgfiles} ${${pkgfilevar}})
+      get_filename_component(pkgfiledir ${${pkgfilevar}}/.. REALPATH)
+      set(pkgdirs ${pkgdirs} ${pkgfiledir})
+    else ()
+# The WARNING option will actually give a scimake stack trace.
+# Not wanted, so use NO option, and start the string with WARNING
+      message("WARNING - Unable to locate file, ${pkgfile}.")
+      set(allfound FALSE)
+    endif ()
+  endforeach ()
+
+# Clean up the lists of files and directories
+  list(LENGTH abspkgfiles numpkgfiles)
+  if (${numpkgfiles})
+    list(REMOVE_DUPLICATES abspkgfiles)
+    list(REMOVE_DUPLICATES pkgdirs)
+  endif ()
+
+# Print results if in debug mode
+  if (DEBUG_CMAKE)
+    message(STATUS "Setting:")
+    message(STATUS "  ${pkgname}_${pluralsfx} = ${abspkgfiles}.")
+    message(STATUS "  ${pkgname}_${singularsfx}_DIRS = ${pkgdirs}.")
+  endif ()
+
+# Set the return vars
+  set(${pkgname}_${pluralsfx} ${abspkgfiles}
+    CACHE STRING "List of all files of type, ${singularsfx}, for ${pkgname}"
+  )
+  set(${pkgname}_${singularsfx}_DIRS ${pkgdirs}
+    CACHE STRING "List of all directories for files of type, ${singularsfx}, for ${pkgname}"
+  )
+  set(${pkgname}_${pluralsfx} ${abspkgfiles} PARENT_SCOPE)
+  set(${pkgname}_${singularsfx}_DIRS ${pkgdirs} PARENT_SCOPE)
+  set(${allfoundvar} ${allfound} PARENT_SCOPE)
+
 endfunction()
 
 #
@@ -410,7 +520,7 @@ endfunction()
 include(CMakeParseArguments)
 macro(SciFindPackage)
   CMAKE_PARSE_ARGUMENTS(TFP
-    "FIND_QUIETLY"
+    "FIND_QUIETLY;USE_CONFIG_FILE"
     "PACKAGE;INSTALL_DIR"
     "INSTALL_DIRS;EXECUTABLES;HEADERS;LIBRARIES;FILES;MODULES;EXECUTABLE_SUBDIRS;INCLUDE_SUBDIRS;MODULE_SUBDIRS;LIBRARY_SUBDIRS;FILE_SUBDIRS;ALLOW_LIBRARY_DUPLICATES"
     ${ARGN}
@@ -429,17 +539,19 @@ macro(SciFindPackage)
   if (DEBUG_CMAKE)
     message(STATUS "Outputting debug information.")
     message(STATUS "SciFindPackage called with arguments:
-    PACKAGE = ${TFP_PACKAGE}
-    INSTALL_DIR = ${TFP_INSTALL_DIR}
-    INSTALL_DIRS = ${TFP_INSTALL_DIRS}
-    EXECUTABLES = ${TFP_EXECUTABLES}
-    HEADERS = ${TFP_HEADERS}
-    LIBRARIES = ${TFP_LIBRARIES}
-    MODULES = ${TFP_MODULES}
-    EXECUTABLE_SUBDIRS = ${TFP_EXECUTABLE_SUBDIRS}
-    INCLUDE_SUBDIRS = ${TFP_INCLUDE_SUBDIRS}
-    LIBRARY_SUBDIRS = ${TFP_LIBRARY_SUBDIRS}
-    ALLOW_LIBRARY_DUPLICATES = ${TFP_ALLOW_LIBRARY_DUPLICATES}")
+      PACKAGE = ${TFP_PACKAGE}
+      INSTALL_DIR = ${TFP_INSTALL_DIR}
+      INSTALL_DIRS = ${TFP_INSTALL_DIRS}
+      EXECUTABLES = ${TFP_EXECUTABLES}
+      HEADERS = ${TFP_HEADERS}
+      LIBRARIES = ${TFP_LIBRARIES}
+      MODULES = ${TFP_MODULES}
+      EXECUTABLE_SUBDIRS = ${TFP_EXECUTABLE_SUBDIRS}
+      INCLUDE_SUBDIRS = ${TFP_INCLUDE_SUBDIRS}
+      LIBRARY_SUBDIRS = ${TFP_LIBRARY_SUBDIRS}
+      ALLOW_LIBRARY_DUPLICATES = ${TFP_ALLOW_LIBRARY_DUPLICATES}
+      USE_CONFIG_FILE = ${TFP_USE_CONFIG_FILE}"
+    )
   endif ()
 
   if(${TFP_PACKAGE}_FOUND)
@@ -492,106 +604,72 @@ macro(SciFindPackage)
 
 #######################################################################
 #
+# Look for cmake configuration files
+# Variables defined:
+#   Xxx_CONFIG_FILE: path to the PkgConfig.cmake
+#   Xxx_CONFIG_VERSION_FILE: path to the PkgConfigVersion.cmake
+#
+#######################################################################
+
+  message(STATUS "TFP_USE_CONFIG_FILE = ${TFP_USE_CONFIG_FILE}.")
+  if (TFP_USE_CONFIG_FILE)
+
+# Get the config file
+    set(sciconfigcm "${scipkgreg}Config.cmake")
+    set(sciconfigcmvar "${scipkgreg}_CONFIG_CMAKE")
+    message(STATUS "Looking for ${sciconfigcm}.")
+    find_file(${sciconfigcmvar}
+        "${sciconfigcm}"
+        PATHS ${scipath}
+        PATH_SUFFIXES lib lib/cmake lib/cmake/${scipkgreg}
+        NO_DEFAULT_PATH
+        DOC "Path to the ${sciconfigcm}."
+    )
+
+# If not found, look in system directories
+    if (NOT ${scipkgreg}_CONFIG_CMAKE)
+      find_file(${scipkgreg}_CONFIG_CMAKE ${scipkgreg}Config.cmake)
+    endif ()
+
+# If found, source
+    if (${scipkgreg}_CONFIG_CMAKE)
+      get_filename_component(${scipkgreg}_CONFIG_DIR ${${scipkgreg}_CONFIG_CMAKE}/.. REALPATH)
+      if (EXISTS ${${scipkgreg}_CONFIG_DIR}/${scipkgreg}ConfigVersion.cmake)
+        set(${scipkgreg}_CONFIG_VERSION_CMAKE ${${scipkgreg}_CONFIG_DIR}/${scipkgreg}ConfigVersion.cmake)
+      endif ()
+      include(${${scipkgreg}_CONFIG_CMAKE})
+    endif ()
+
+  endif ()
+
+#######################################################################
+#
 # Look for EXECUTABLES
 # Variables defined:
-#   XXX_YYY - CACHED
-#     Where to find the YYY tool that comes with XXX.
-#   XXX_EXECUTABLES - CACHED
-#     List of all executables found for package XXX.
+#   Xxx_yyy - CACHED
+#     Where to find the yyy tool that comes with Xxx.
+#   Xxx_EXECUTABLES - CACHED
+#     List of all executables found for package Xxx.
 #
 #######################################################################
 
 # Create the search paths
-  string(LENGTH "${TFP_EXECUTABLES}" sciexecslen)
+  list(LENGTH TFP_EXECUTABLES sciexecslen)
   if (${sciexecslen})
-    string(LENGTH "${TFP_EXECUTABLE_SUBDIRS}" scilen)
+
+# Create lists for search
+    list(LENGTH TFP_EXECUTABLE_SUBDIRS scilen)
     if (${scilen})
       set(sciexecsubdirs ${TFP_EXECUTABLE_SUBDIRS})
     else ()
-# Here we use the default search directory "bin"
+# Default search subdirectory is bin
       set(sciexecsubdirs bin)
     endif ()
 
-    if (DEBUG_CMAKE)
-      message(STATUS "Looking for executables under ${scipath} with subdirs, ${sciexecsubdirs}")
-    endif ()
-
-# Clear the list of executable dirs
-# As we loop over the executables, we will add every new directory to the list
-# And afterwards, we'll remove duplicates
-    set(${scipkgreg}_EXECUTABLES)
-    set(${scipkgreg}_FOUND_SOME_EXECUTABLE FALSE)
-
-# Loop over list of executables and try to find each one
-    foreach (sciexec ${TFP_EXECUTABLES})
-
-# Create the variable that's specific to this executable
-      string(REGEX REPLACE "[./-]" "_" sciexecvar ${sciexec})
-      set(sciexecvar ${scipkgreg}_${sciexecvar})
-      if (DEBUG_CMAKE)
-        message(STATUS "Calling FIND_PROGRAM with sciexec = ${sciexec}")
-        message(STATUS "Calling FIND_PROGRAM with paths = ${scipath}")
-        message(STATUS "Calling FIND_PROGRAM with path_suffixes ${sciexecsubdirs}")
-      endif ()
-
-# First look in specified path
-      find_program(${sciexecvar}
-        "${sciexec}"
-        PATHS ${scipath}
-        PATH_SUFFIXES "${sciexecsubdirs}"
-        NO_DEFAULT_PATH
-        DOC "Path to the ${sciexec} executable"
-      )
-
-# If not found, try again with default paths
-      if (NOT ${sciexecvar})
-        if (DEBUG_CMAKE)
-          message(STATUS "Failed to find ${sciexec} in search path, trying default paths.")
-        endif ()
-
-        find_program(${sciexecvar}
-          ${sciexec}
-          PATHS ${scipath}
-          PATH_SUFFIXES "${sciexecsubdirs}"
-          DOC "Path to the ${sciexec} executable"
-        )
-      endif ()
-
-      if (DEBUG_CMAKE)
-        message(STATUS "${sciexecvar} is ${${sciexecvar}}")
-      endif ()
-
-      if (${${sciexecvar}} MATCHES NOTFOUND)
-# The WARNING option will actually give a scimake stack trace
-# And I didn't want that
-# So instead, use NO option, and start the string with WARNING
-        message("WARNING - Unable to locate executable ${sciexec}")
-        set(${scipkguc}_FOUND FALSE)
-      else ()
-        set(${scipkgreg}_FOUND_SOME_EXECUTABLE TRUE)
-# Add to list of all executables for this package
-        set(${scipkgreg}_EXECUTABLES
-          ${${scipkgreg}_EXECUTABLES}
-          ${${sciexecvar}}
-        )
-      endif ()
-    endforeach (sciexec ${TFP_EXECUTABLES})
-
-# Clean up the list of all executable directories
-    if (${scipkgreg}_FOUND_SOME_EXECUTABLE)
-      list(REMOVE_DUPLICATES "${scipkgreg}_EXECUTABLES")
-    endif ()
-
-# Print results if in debug mode
-    if (DEBUG_CMAKE)
-      message(STATUS "List of all executables for ${scipkgreg}:")
-      message(STATUS "${scipkgreg}_EXECUTABLES = ${${scipkgreg}_EXECUTABLES}")
-    endif ()
-
-# Cache the completed list
-    set(${scipkgreg}_EXECUTABLES
-      ${${scipkgreg}_EXECUTABLES}
-      CACHE STRING "List of all executables for ${scipkgreg}"
+# Find the files
+    SciFindPkgFiles(${scipkgreg} "${TFP_EXECUTABLES}"
+      "${scipath}" "${sciexecsubdirs}"
+      EXECUTABLE EXECUTABLES ${scipkgreg}_EXECUTABLES_FOUND
     )
 
   endif ()
