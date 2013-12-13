@@ -423,6 +423,7 @@ macro(SciFindPackage)
   else ()
     message("")
     message("--------- SciFindPackage looking for ${TFP_PACKAGE} ---------")
+    message("${TFP_PACKAGE}_ROOT_DIR=${${TFP_PACKAGE}_ROOT_DIR}")
   endif ()
 
   if (DEBUG_CMAKE)
@@ -440,6 +441,12 @@ macro(SciFindPackage)
     LIBRARY_SUBDIRS = ${TFP_LIBRARY_SUBDIRS}
     ALLOW_LIBRARY_DUPLICATES = ${TFP_ALLOW_LIBRARY_DUPLICATES}")
   endif ()
+
+  if(${TFP_PACKAGE}_FOUND)
+    if(DEBUG_CMAKE)
+      message(STATUS "Already found this package, skipping...")
+    endif()
+  endif()
 
 # Construct various names(upper/lower case) for package
   string(REGEX REPLACE "[./-]" "_" scipkgreg ${TFP_PACKAGE})
@@ -1042,9 +1049,9 @@ macro(SciFindPackage)
       list(REMOVE_DUPLICATES ${scipkgreg}_LIBRARY_DIRS)
 # The first dir is the library dir
       list(GET "${scipkgreg}_LIBRARY_DIRS" 0 ${scipkgreg}_LIBRARY_DIR)
-      if (NOT DEFINED ${scipkgreg}_DIR)
-        get_filename_component(${scipkgreg}_DIR ${${scipkgreg}_LIBRARY_DIR}/.. REALPATH)
-      endif ()
+#      if (NOT DEFINED ${scipkgreg}_DIR)
+#        get_filename_component(${scipkgreg}_DIR ${${scipkgreg}_LIBRARY_DIR}/.. REALPATH)
+#      endif ()
       if (DEBUG_CMAKE)
         message(STATUS "${scipkgreg}_DIR = ${${scipkgreg}_DIR}")
         message(STATUS "${scipkgreg}_LIBRARIES = ${${scipkgreg}_LIBRARIES}")
