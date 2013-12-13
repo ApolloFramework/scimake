@@ -280,6 +280,105 @@ function(SciGetInstSubdirs pkgnamelc instdirsvar)
   set(${instdirsvar} ${instdirs} PARENT_SCOPE)
 endfunction()
 
+# SciGetRootPath
+#
+# Construct a path, collection of directories, that one is to search
+# to find the root dir.
+#
+# Args:
+#  pkgname: the variable holding the package name with regular capitalization
+#  rootpathvar: on output, holds possible installation directories
+#
+function(SciGetRootPath pkgname rootpathvar)
+
+# Get the installation subdirs
+  string(TOLOWER ${pkgname} pkgnamelc)
+  SciGetInstSubdirs(${pkgnamelc} instsubdirs)
+  string(TOUPPER ${pkgname} pkgnameuc)
+
+# Find the possible directories and put them into path
+# Order: command-line define, environment variable, supra-search-path subdirs,
+# supra-search-path dirs
+  if (DEBUG_CMAKE)
+    message(STATUS "${pkgname}_ROOT_DIR = ${${pkgname}_ROOT_DIR}.")
+    message("[SciFindPackage] SUPRA_SEARCH_PATH = ${SUPRA_SEARCH_PATH}")
+  endif ()
+  set(rootpath)
+
+# Command-line define overrides all.
+  if (${pkgname}_ROOT_DIR)
+    SciGetRealDir(${${pkgname}_ROOT_DIR} rootpath)
+  else ()
+    if (${pkgname}_DIR)
+# JRC 20120617: Remove this July 31, 2012.
+      message(STATUS "${pkgname}_DIR = ${${pkgname}_DIR}.")
+      message(FATAL_ERROR "Use of ${pkgname}_DIR define is removed.  Please use ${pkgname}_ROOT_DIR")
+      # SciGetRealDir(${${pkgname}_DIR} rootpath)
+    endif ()
+# The deprecated variable name is commonly ${scipkguc}_DIR
+# MD 20120619: Remove this July 31, 2012.
+    if (${pkgnameuc}_DIR)
+      message(STATUS "${pkgnameuc}_DIR = ${${pkgnameuc}_DIR}.")
+      message(FATAL_ERROR "Use of ${pkgnameuc}_DIR define is removed.  Please use ${pkgname}_ROOT_DIR")
+      # SciGetRealDir(${${pkgnameuc}_DIR} rootpath)
+    endif ()
+  endif ()
+  if (DEBUG_CMAKE)
+    message(STATUS "${pkgname}_ROOT_DIR ${${pkgname}_ROOT_DIR}.")
+  endif ()
+
+# Next try environment variable.  Should this be appended regardless?
+  if (NOT DEFINED ${rootpath})
+    if ($ENV{${pkgname}_ROOT_DIR})
+      SciGetRealDir($ENV{${pkgname}_ROOT_DIR} rootpath)
+    else ()
+      if ($ENV{${pkgname}_DIR})
+# JRC 20120617: Remove this July 31, 2012.
+        message(FATAL_ERROR "Use of ${pkgname}_DIR environment variable is removed .  Please use ${pkgname}_ROOT_DIR")
+        # SciGetRealDir($ENV{${pkgname}_DIR} rootpath)
+      endif ()
+      if ($ENV{${pkgnameuc}_DIR})
+# MD 20120619: Remove this July 31, 2012.
+        message(WARNING "Use of ${pkgnameuc}_DIR environment variable is removed.  Please use ${pkgname}_ROOT_DIR")
+        # SciGetRealDir($ENV{${pkgnameuc}_DIR} rootpath)
+      endif ()
+    endif ()
+  endif ()
+
+# Supra-search-path dirs
+  foreach (instdir ${instsubdirs})
+    foreach (spdir ${SUPRA_SEARCH_PATH})
+      set(idir ${spdir}/${instdir})
+      if (EXISTS ${idir})
+        SciGetRealDir(${idir} scidir)
+        set(rootpath ${rootpath} ${scidir})
+      endif ()
+    endforeach (spdir ${SUPRA_SEARCH_PATH})
+  endforeach ()
+
+# Supra-search-path dirs
+  foreach (spdir ${SUPRA_SEARCH_PATH})
+    set(idir ${spdir})
+    if (EXISTS ${idir})
+      SciGetRealDir(${idir} scidir)
+      set(rootpath ${rootpath} ${scidir})
+    endif ()
+  endforeach (spdir ${SUPRA_SEARCH_PATH})
+
+# Any found?
+  list(LENGTH rootpath rootpathlen)
+  if (DEBUG_CMAKE)
+    if (NOT rootpathlen)
+      message(FATAL_ERROR "rootpath is empty.")
+    else ()
+      message(STATUS "rootpath = ${rootpath}")
+    endif ()
+  endif ()
+
+# Return value
+  set(${rootpathvar} ${rootpath} PARENT_SCOPE)
+endfunction()
+
 #
 # SciFindPackage
 #
@@ -373,6 +472,7 @@ macro(SciFindPackage)
     message(STATUS "scipkginst = ${scipkginst}.")
   endif ()
 
+if (TRUE)
 # Find the possible directories and put them into path
 # Order: command-line define, environment variable, supra-search-path subdirs,
 # supra-search-path dirs
@@ -439,6 +539,9 @@ macro(SciFindPackage)
       message(STATUS "scipath = ${scipath}")
     endif ()
   endif ()
+else ()
+  SciGetRootPath(${scipkgreg} scipath)
+endif ()
 
 #######################################################################
 #
