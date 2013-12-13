@@ -25,7 +25,7 @@
 ######################################################################
 
 # OpenSSL builds its static libs inside sersh
-SciGetInstDirs(openssl instdirs)
+SciGetInstSubdirs(openssl instdirs)
 set(instdirs openssl openssl-sersh)
 
 # Libraries have different names on Windows.  Use static MD or MT libs.

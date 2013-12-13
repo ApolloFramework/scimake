@@ -239,7 +239,7 @@ function(SciGetRealDir canddir realdirvar)
   set(${realdirvar} ${rd} PARENT_SCOPE)
 endfunction()
 
-# SciGetInstDirs
+# SciGetInstSubdirs
 #
 # Given a package name, set the possible installation subdirs
 #
@@ -247,8 +247,8 @@ endfunction()
 #  pkgnamelc: the variable holding the package name in lower case
 #  instdirsvar: the variable holding possible installation directories
 #
-function(SciGetInstDirs pkgnamelc instdirsvar)
-  # message(STATUS "SciGetInstDirs called with pkgname = ${pkgname} and instdirsvar = ${instdirsvar}.")
+function(SciGetInstSubdirs pkgnamelc instdirsvar)
+  # message(STATUS "SciGetInstSubdirs called with pkgname = ${pkgname} and instdirsvar = ${instdirsvar}.")
   if (ENABLE_PARALLEL)
     if (USE_SHARED_LIBS)
       set(instdirs ${pkgnamelc}-parsh)
@@ -276,7 +276,7 @@ function(SciGetInstDirs pkgnamelc instdirsvar)
       set(instdirs ${pkgnamelc})
     endif ()
   endif ()
-  # message(STATUS "SciGetInstDirs finds instdirs = ${instdirs}.")
+  # message(STATUS "SciGetInstSubdirs finds instdirs = ${instdirs}.")
   set(${instdirsvar} ${instdirs} PARENT_SCOPE)
 endfunction()
 
@@ -362,10 +362,10 @@ macro(SciFindPackage)
   set(${scipkguc}_FOUND TRUE)
   string(TOLOWER ${scipkgreg} scipkglc)
   set(scipkginst ${TFP_INSTALL_DIR} ${TFP_INSTALL_DIRS})
-  # message(STATUS "Calling SciGetInstDirs with scipkglc = ${scipkglc}.")
+  # message(STATUS "Calling SciGetInstSubdirs with scipkglc = ${scipkglc}.")
   if (NOT scipkginst)
-    # message(STATUS "Calling SciGetInstDirs with ${scipkglc}.")
-    SciGetInstDirs(${scipkglc} scipkginst)
+    # message(STATUS "Calling SciGetInstSubdirs with ${scipkglc}.")
+    SciGetInstSubdirs(${scipkglc} scipkginst)
   else ()
     # message(STATUS "scipkglc is defined.")
   endif ()
