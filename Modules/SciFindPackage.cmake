@@ -287,13 +287,17 @@ endfunction()
 #
 # Args:
 #  pkgname: the variable holding the package name with regular capitalization
+#  instsubdirs: possible installation subdirs
 #  rootpathvar: on output, holds possible installation directories
 #
-function(SciGetRootPath pkgname rootpathvar)
+function(SciGetRootPath pkgname instsubdirs rootpathvar)
 
 # Get the installation subdirs
-  string(TOLOWER ${pkgname} pkgnamelc)
-  SciGetInstSubdirs(${pkgnamelc} instsubdirs)
+  # string(TOLOWER ${pkgname} pkgnamelc)
+  # SciGetInstSubdirs(${pkgnamelc} instsubdirs)
+  if (DEBUG_CMAKE)
+    message(STATUS "SciGetRootPath: instsubdirs = ${instsubdirs}.")
+  endif ()
   string(TOUPPER ${pkgname} pkgnameuc)
 
 # Find the possible directories and put them into path
@@ -324,7 +328,7 @@ function(SciGetRootPath pkgname rootpathvar)
     endif ()
   endif ()
   if (DEBUG_CMAKE)
-    message(STATUS "${pkgname}_ROOT_DIR ${${pkgname}_ROOT_DIR}.")
+    message(STATUS "${pkgname}_ROOT_DIR = ${${pkgname}_ROOT_DIR}.")
   endif ()
 
 # Next try environment variable.  Should this be appended regardless?
@@ -344,6 +348,7 @@ function(SciGetRootPath pkgname rootpathvar)
       endif ()
     endif ()
   endif ()
+  message(STATUS "After looking for ${pkgname}_ROOT_DIR in the environment, rootpath = ${rootpath}.")
 
 # Supra-search-path dirs
   foreach (instdir ${instsubdirs})
@@ -472,7 +477,9 @@ macro(SciFindPackage)
     message(STATUS "scipkginst = ${scipkginst}.")
   endif ()
 
-if (TRUE)
+if (TRUE) # Reverse this if a bug
+  SciGetRootPath(${scipkgreg} "${scipkginst}" scipath)
+else ()
 # Find the possible directories and put them into path
 # Order: command-line define, environment variable, supra-search-path subdirs,
 # supra-search-path dirs
@@ -539,9 +546,10 @@ if (TRUE)
       message(STATUS "scipath = ${scipath}")
     endif ()
   endif ()
-else ()
-  SciGetRootPath(${scipkgreg} scipath)
 endif ()
+  if (DEBUG_CMAKE)
+    message(STATUS "scipath = ${scipath}")
+  endif ()
 
 #######################################################################
 #
