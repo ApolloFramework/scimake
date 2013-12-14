@@ -413,8 +413,20 @@ function(SciFindPkgFiles pkgname pkgfiles
   set(allfound TRUE)
   foreach (pkgfile ${pkgfiles})
 
+# Get real name
+    if (${singularsfx} STREQUAL MODULE)
+      if (NOT SCI_FC_MODULE_SUFFIX)
+        message(FATAL_ERROR "SCI_FC_MODULE_SUFFIX not set.  Fortran compiler defined?")
+      endif ()
+      set(realpkgfile ${pkgfile}.${SCI_FC_MODULE_SUFFIX})
+    elseif (${singularsfx} STREQUAL DLL)
+      set(realpkgfile ${pkgfile}.dll)
+    else ()
+      set(realpkgfile ${pkgfile})
+    endif ()
+
 # Create the variable that's specific to this executable
-    string(REGEX REPLACE "[./-]" "_" pkgfilevar ${pkgfile})
+    string(REGEX REPLACE "[./-]" "_" pkgfilevar ${realpkgfile})
     set(pkgfilevar ${pkgname}_${pkgfilevar})
     if (${singularsfx} STREQUAL LIBRARY)
       set(pkgfilevar ${pkgfilevar}_LIBRARY)
@@ -424,7 +436,7 @@ function(SciFindPkgFiles pkgname pkgfiles
     endif ()
 
 # First look in specified path
-    set(basesrchargs ${pkgfilevar} ${pkgfile})
+    set(basesrchargs ${pkgfilevar} ${realpkgfile})
     set(pkgfiledir)
     set(fullsrchargs "${basesrchargs}"
       PATHS "${rootpath}"
@@ -436,21 +448,21 @@ function(SciFindPkgFiles pkgname pkgfiles
     endif ()
     if (${singularsfx} STREQUAL PROGRAM)
       find_program(${fullsrchargs}
-        DOC " The ${pkgfile} ${singularsfx} file"
+        DOC " The ${realpkgfile} ${singularsfx} file"
       )
     elseif (${singularsfx} STREQUAL INCLUDE)
       find_path(${fullsrchargs}
-        DOC " Directory containing the ${pkgfile} ${singularsfx}"
+        DOC " Directory containing the ${realpkgfile} ${singularsfx}"
       )
       set(pkgfiledir ${${pkgfilevar}})
-      set(${pkgfilevar} ${pkgfiledir}/${pkgfile})
+      set(${pkgfilevar} ${pkgfiledir}/${realpkgfile})
     elseif (${singularsfx} STREQUAL LIBRARY)
       find_library(${fullsrchargs}
-        DOC " The ${pkgfile} ${singularsfx} file"
+        DOC " The ${realpkgfile} ${singularsfx} file"
       )
     else ()
       find_file(${fullsrchargs}
-        DOC " The ${pkgfile} ${singularsfx} file"
+        DOC " The ${realpkgfile} ${singularsfx} file"
       )
     endif ()
     if (DEBUG_CMAKE)
@@ -460,25 +472,25 @@ function(SciFindPkgFiles pkgname pkgfiles
 # If not found, try again with default paths
     if (NOT ${pkgfilevar})
       if (DEBUG_CMAKE)
-        message(STATUS "Failed to find ${pkgfile} in search path, trying default paths.")
+        message(STATUS "Failed to find ${realpkgfile} in search path, trying default paths.")
       endif ()
       if (${singularsfx} STREQUAL PROGRAM)
         find_program(${basesrchargs}
-          DOC " The ${pkgfile} ${singularsfx} file"
+          DOC " The ${realpkgfile} ${singularsfx} file"
         )
       elseif (${singularsfx} STREQUAL INCLUDE)
         find_path(${basesrchargs}
-          DOC " Directory containing the ${pkgfile} ${singularsfx}"
+          DOC " Directory containing the ${realpkgfile} ${singularsfx}"
         )
         set(pkgfiledir ${${pkgfilevar}})
-        set(${pkgfilevar} ${pkgfiledir}/${pkgfile})
+        set(${pkgfilevar} ${pkgfiledir}/${realpkgfile})
       elseif (${singularsfx} STREQUAL LIBRARY)
         find_library(${basesrchargs}
-          DOC " The ${pkgfile} ${singularsfx} file"
+          DOC " The ${realpkgfile} ${singularsfx} file"
         )
       else ()
         find_file(${basesrchargs}
-          DOC " The ${pkgfile} ${singularsfx} file"
+          DOC " The ${realpkgfile} ${singularsfx} file"
         )
       endif ()
       if (DEBUG_CMAKE)
@@ -501,7 +513,7 @@ function(SciFindPkgFiles pkgname pkgfiles
     else ()
 # The WARNING option will actually give a scimake stack trace.
 # Not wanted, so use NO option, and start the string with WARNING
-      message("WARNING - Unable to locate file, ${pkgfile}.")
+      message("WARNING - Unable to locate file, ${realpkgfile}.")
       set(allfound FALSE)
     endif ()
   endforeach ()
@@ -744,14 +756,16 @@ macro(SciFindPackage)
       set(scitypeplural LIBRARIES)
     elseif (${scitype} STREQUAL INCLUDE)
       set(scitypeplural HEADERS)
-    elseif (${scitype} STREQUAL DLL)
-      set(scitypeplural LIBRARIES)
     else ()
       set(scitypeplural ${scitype}S)
     endif ()
 
 # Get length of list
-    set(srchfilesvar TFP_${scitypeplural})
+    if (${scitype} STREQUAL DLL)
+      set(srchfilesvar TFP_LIBRARIES)
+    else ()
+      set(srchfilesvar TFP_${scitypeplural})
+    endif ()
     list(LENGTH ${srchfilesvar} sciexecslen)
     if (${sciexecslen})
 
@@ -775,7 +789,7 @@ macro(SciFindPackage)
           message(WARNING "Default subdir not known for ${scitype}.")
         endif ()
       endif ()
-      message(STATUS "Looking for ${${srchfilesvar}} in ${scifilesubdirs}.")
+      message(STATUS "Looking for ${scitypeplural}, ${${srchfilesvar}}, in ${scifilesubdirs}.")
 
 # Find the files
       SciFindPkgFiles(${scipkgreg} "${${srchfilesvar}}"
@@ -785,6 +799,7 @@ macro(SciFindPackage)
       )
 # Okay not to find dlls
       if (${scitype} STREQUAL DLL)
+      else ()
         if (NOT ${scipkgreg}_${scitypeplural}_FOUND)
           message(WARNING "${scipkgreg}_${scitypeplural}_FOUND = ${${scipkgreg}_${scitypeplural}_FOUND}.")
           set(${scipkguc}_FOUND FALSE)
