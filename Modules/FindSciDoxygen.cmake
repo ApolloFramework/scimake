@@ -35,9 +35,17 @@ if (NOT DOXYGEN_FOUND)
   endif ()
 endif ()
 
+# Maintain backward compatibility
+if (NOT DOXYGEN_PROGRAM)
+  set(DOXYGEN_PROGRAM DOXYGEN_EXECUTABLE)
+elseif (NOT DOXYGEN_EXECUTABLE)
+  set(DOXYGEN_EXECUTABLE DOXYGEN_PROGRAM)
+endif ()
+
 if (DOXYGEN_FOUND)
   message(STATUS "DOXYGEN_PROGRAM found.")
   message(STATUS "DOXYGEN_PROGRAM = ${DOXYGEN_PROGRAM}")
+  message(STATUS "DOXYGEN_EXECUTABLE = ${DOXYGEN_EXECUTABLE}")
 else ()
   message(STATUS "DOXYGEN_PROGRAM not found. API documentation cannot be built.")
   set(ENABLE_DEVELDOCS FALSE)
