@@ -492,6 +492,11 @@ function(SciFindPkgFiles pkgname pkgfiles
       if (NOT pkgfiledir)
         get_filename_component(pkgfiledir ${${pkgfilevar}}/.. REALPATH)
       endif ()
+      if (${singularsfx} STREQUAL INCLUDE)
+        set(${pkgfilevar}_INCLUDE_DIR ${pkgfiledir}
+          CACHE STRING " Directory containing ${pkgfiledir}"
+        )
+      endif ()
       set(pkgdirs ${pkgdirs} ${pkgfiledir})
     else ()
 # The WARNING option will actually give a scimake stack trace.
