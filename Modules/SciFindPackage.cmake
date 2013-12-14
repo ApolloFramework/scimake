@@ -733,13 +733,19 @@ macro(SciFindPackage)
 #######################################################################
 
 # Create the search paths
-  foreach (scitype PROGRAM INCLUDE MODULE LIBRARY FILE)
+  set(scitypes PROGRAM INCLUDE MODULE LIBRARY FILE)
+  if (WIN32)
+    set(scitypes ${scitypes} DLL)
+  endif ()
+  foreach (scitype ${scitypes})
 
 # Get plural
     if (${scitype} STREQUAL LIBRARY)
       set(scitypeplural LIBRARIES)
     elseif (${scitype} STREQUAL INCLUDE)
       set(scitypeplural HEADERS)
+    elseif (${scitype} STREQUAL DLL)
+      set(scitypeplural LIBRARIES)
     else ()
       set(scitypeplural ${scitype}S)
     endif ()
@@ -763,6 +769,8 @@ macro(SciFindPackage)
           set(scifilesubdirs include)
         elseif (${scitype} STREQUAL LIBRARY)
           set(scifilesubdirs lib)
+        elseif (${scitype} STREQUAL DLL)
+          set(scifilesubdirs bin lib .)
         else ()
           message(WARNING "Default subdir not known for ${scitype}.")
         endif ()
@@ -775,9 +783,12 @@ macro(SciFindPackage)
         ${scitype} ${scitypeplural} ${scipkgreg}_${scitypeplural}_FOUND
         ${TFP_ALLOW_LIBRARY_DUPLICATES}
       )
-      if (NOT ${scipkgreg}_${scitypeplural}_FOUND)
-        message(WARNING "${scipkgreg}_${scitypeplural}_FOUND = ${${scipkgreg}_${scitypeplural}_FOUND}.")
-        set(${scipkguc}_FOUND FALSE)
+# Okay not to find dlls
+      if (${scitype} STREQUAL DLL)
+        if (NOT ${scipkgreg}_${scitypeplural}_FOUND)
+          message(WARNING "${scipkgreg}_${scitypeplural}_FOUND = ${${scipkgreg}_${scitypeplural}_FOUND}.")
+          set(${scipkguc}_FOUND FALSE)
+        endif ()
       endif ()
     endif ()
 
@@ -788,6 +799,7 @@ macro(SciFindPackage)
     SciGetStaticLibs("${${scipkgreg}_LIBRARIES}" ${scipkgreg}_STLIBS)
   endif ()
 
+if (FALSE)
 #################################################################
 #
 # On windows, we want to look for the dlls
@@ -847,7 +859,9 @@ macro(SciFindPackage)
       endif ()
     endforeach ()
   endif ()
-  if (${scipkgreg}_FOUND_SOME_DLL)
+endif ()
+
+  if (${scipkgreg}_DLLS)
     set(${scipkgreg}_DEFINITIONS -D${scipkguc}_DLL)
   endif ()
 
