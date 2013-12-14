@@ -536,14 +536,14 @@ function(SciFindPkgFiles pkgname pkgfiles
 
 # Set the return vars
   set(${pkgname}_${pluralsfx} ${abspkgfiles}
-    CACHE STRING "List of all files of type, ${singularsfx}, for ${pkgname}"
+    CACHE STRING " List of all files of type, ${singularsfx}, for ${pkgname}"
   )
   set(${pkgname}_${singularsfx}_DIRS ${pkgdirs}
-    CACHE STRING "List of all directories for files of type, ${singularsfx}, for ${pkgname}"
+    CACHE STRING " List of all directories for files of type, ${singularsfx}, for ${pkgname}"
   )
   if (${singularsfx} STREQUAL LIBRARY)
     set(${pkgname}_${singularsfx}_NAMES ${pkgfilenames}
-      CACHE STRING "List of all file names for files of type, ${singularsfx}, for ${pkgname}"
+      CACHE STRING " List of all file names for files of type, ${singularsfx}, for ${pkgname}"
     )
     set(${pkgname}_${singularsfx}_NAMES ${pkgfilenames} PARENT_SCOPE)
   endif ()
