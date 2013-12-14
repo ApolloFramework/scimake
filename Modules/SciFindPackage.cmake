@@ -2,11 +2,11 @@
 #
 # Variables that change the behavior of this script
 #
-# Some variables use scipkguc, and some use scipkgreg.  See
-# http://www.cmake.org/pipermail/cmake/2004-July/005283.html.
-#   "scipkgreg" is the regularized package name
-#     (package name with all "." and "-" replaced with "_")
-#   "scipkguc" is the UPPERCASE regularized package name
+#  Some variables use scipkguc, and some use scipkgreg.  See
+#  http://www.cmake.org/pipermail/cmake/2004-July/005283.html.
+#    "scipkgreg" is the regularized package name
+#      (package name with all "." and "-" replaced with "_")
+#    "scipkguc" is the UPPERCASE regularized package name
 #
 #  DEBUG_CMAKE - if true, outputs verbose debugging information
 #  (default false)
@@ -38,19 +38,15 @@
 #    ${scipkgreg}_yyy - full name & path to executable "yyy"
 #      Only defined for specifically requested executables.
 #
-#  FILES:
-#    ${scipkgreg}_FILES - list of found files, including a full path to each
-#    ${scipkgreg}_yyy - full name and path to file "yyy"
+#  HEADERS:
+#    ${scipkgreg}_INCLUDE_DIRS - a list of all include directories found
+#    ${scipkgreg}_yyy - full path to individual header yyy
+#      Only defined for specifically requested headers
 #
 #  MODULES:
 #    ${scipkgreg}_MODULE_DIRS - a list of all module directories found
 #    ${scipkgreg}_yyy_MOD - full path to individual module yyy.{mod,MOD}
 #      Only defined for specifically requested modules
-#
-#  HEADERS:
-#    ${scipkgreg}_INCLUDE_DIRS - a list of all include directories found
-#    ${scipkgreg}_yyy - full path to individual header yyy
-#      Only defined for specifically requested headers
 #
 #  LIBRARIES:
 #    ${scipkgreg}_{library_name}_LIBRARY - full path to the individual
@@ -61,6 +57,10 @@
 #      Only defined for libraries existing in ${scipkgreg}_LIBRARIES
 #    ${scipkgreg}_DLLS - windows only, list of all found dlls
 #      Only defined for libraries existing in ${scipkgreg}_LIBRARIES
+#
+#  FILES:
+#    ${scipkgreg}_FILES - list of found files, including a full path to each
+#    ${scipkgreg}_yyy - full name and path to file "yyy"
 #
 #######################################################################
 
@@ -339,7 +339,7 @@ function(SciGetRootPath pkgname instsubdirs rootpathvar)
       endif ()
       if ($ENV{${pkgnameuc}_DIR})
 # MD 20120619: Remove this July 31, 2012.
-        message(WARNING "Use of ${pkgnameuc}_DIR environment variable is removed.  Please use ${pkgname}_ROOT_DIR")
+        message(FATAL_ERROR"Use of ${pkgnameuc}_DIR environment variable is removed.  Please use ${pkgname}_ROOT_DIR")
         # SciGetRealDir($ENV{${pkgnameuc}_DIR} rootpath)
       endif ()
     endif ()
@@ -579,8 +579,8 @@ endfunction()
 include(CMakeParseArguments)
 macro(SciFindPackage)
   CMAKE_PARSE_ARGUMENTS(TFP
-    "FIND_QUIETLY;USE_CONFIG_FILE"
-    "PACKAGE;INSTALL_DIR"
+    "FIND_QUIETLY;ALLOW_LIBRARY_DUPLICATES;FIND_CONFIG_FILE;CONFIG_FILE_ONLY;USE_CONFIG_FILE"
+    "PACKAGE;INSTALL_DIR;CONFIG_FILE_NAME"
     "INSTALL_DIRS;PROGRAMS;HEADERS;LIBRARIES;FILES;MODULES;PROGRAM_SUBDIRS;INCLUDE_SUBDIRS;MODULE_SUBDIRS;LIBRARY_SUBDIRS;FILE_SUBDIRS;ALLOW_LIBRARY_DUPLICATES"
     ${ARGN}
   )
@@ -598,19 +598,23 @@ macro(SciFindPackage)
     message(STATUS "Outputting debug information.")
     message(STATUS "${TFP_PACKAGE}_ROOT_DIR=${${TFP_PACKAGE}_ROOT_DIR}")
     message(STATUS "SciFindPackage called with arguments:
-      PACKAGE         = ${TFP_PACKAGE}
-      INSTALL_DIR     = ${TFP_INSTALL_DIR}
-      INSTALL_DIRS    = ${TFP_INSTALL_DIRS}
-      PROGRAMS        = ${TFP_PROGRAMS}
-      HEADERS         = ${TFP_HEADERS}
-      LIBRARIES       = ${TFP_LIBRARIES}
-      MODULES         = ${TFP_MODULES}
-      PROGRAM_SUBDIRS = ${TFP_PROGRAM_SUBDIRS}
-      INCLUDE_SUBDIRS = ${TFP_INCLUDE_SUBDIRS}
-      LIBRARY_SUBDIRS = ${TFP_LIBRARY_SUBDIRS}
-      FILE_SUBDIRS    = ${TFP_FILE_SUBDIRS}
+      PACKAGE          = ${TFP_PACKAGE}
+      CONFIG_FILE_NAME = ${TFP_CONFIG_FILE_NAME}
+      INSTALL_DIR      = ${TFP_INSTALL_DIR}
+      INSTALL_DIRS     = ${TFP_INSTALL_DIRS}
+      PROGRAMS         = ${TFP_PROGRAMS}
+      HEADERS          = ${TFP_HEADERS}
+      LIBRARIES        = ${TFP_LIBRARIES}
+      MODULES          = ${TFP_MODULES}
+      PROGRAM_SUBDIRS  = ${TFP_PROGRAM_SUBDIRS}
+      INCLUDE_SUBDIRS  = ${TFP_INCLUDE_SUBDIRS}
+      LIBRARY_SUBDIRS  = ${TFP_LIBRARY_SUBDIRS}
+      FILE_SUBDIRS     = ${TFP_FILE_SUBDIRS}
+      FIND_QUIETLY     = ${TFP_FIND_QUIETLY}
       ALLOW_LIBRARY_DUPLICATES = ${TFP_ALLOW_LIBRARY_DUPLICATES}
-      USE_CONFIG_FILE = ${TFP_USE_CONFIG_FILE}"
+      FIND_CONFIG_FILE = ${TFP_USE_CONFIG_FILE}
+      CONFIG_FILE_ONLY = ${TFP_CONFIG_FILE_ONLY}
+      USE_CONFIG_FILE  = ${TFP_USE_CONFIG_FILE}"
     )
   endif ()
 
@@ -667,13 +671,18 @@ macro(SciFindPackage)
 #
 #######################################################################
 
-  if (TFP_USE_CONFIG_FILE)
+  if (TFP_FIND_CONFIG_FILE OR TFP_USE_CONFIG_FILE OR TFP_CONFIG_FILE_ONLY)
 
 # Get the config file
     set(sciconfigcmvar "${scipkgreg}_CONFIG_CMAKE")
+    if (CONFIG_FILE_NAMES)
+      set(confnames ${CONFIG_FILE_NAMES})
+    else ()
+      set(confnames ${scipkgreg}Config.cmake ${scipkglc}-config.cmake)
+    endif ()
     message(STATUS "Looking for ${scipkgreg}Config.cmake, ${scipkglc}-config.cmake.")
     find_file(${sciconfigcmvar}
-      NAMES ${scipkgreg}Config.cmake ${scipkglc}-config.cmake
+      NAMES ${confnames}
       PATHS ${scipath}
       PATH_SUFFIXES lib/cmake/${scipkgreg} share/cmake/${scipkglc}
       NO_DEFAULT_PATH
@@ -683,7 +692,7 @@ macro(SciFindPackage)
 # If not found, look in system directories
     if (NOT ${scipkgreg}_CONFIG_CMAKE)
       find_file(${scipkgreg}_CONFIG_CMAKE
-        NAMES ${scipkgreg}Config.cmake ${scipkglc}-config.cmake
+        NAMES ${confnames}
       )
     endif ()
 
@@ -695,6 +704,11 @@ macro(SciFindPackage)
         PATHS ${${scipkgreg}_CONFIG_DIR}
       )
       include(${${scipkgreg}_CONFIG_CMAKE})
+    endif ()
+    if (CONFIG_FILE_ONLY)
+      SciPrintVar(${scipkgreg}_CONFIG_CMAKE)
+      SciPrintVar(${scipkgreg}_CONFIG_VERSION_CMAKE)
+      return()
     endif ()
 
   endif ()
