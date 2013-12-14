@@ -6,7 +6,7 @@
 #
 # This module will define the following variables:
 #  DOXYGEN_FOUND         = Whether Doxygen was found
-#  DOXYGEN_EXECUTABLE    = Path to doxygen executable
+#  DOXYGEN_PROGRAM    = Path to doxygen executable
 
 ######################################################################
 #
@@ -28,18 +28,18 @@ find_package(Doxygen)
 if (NOT DOXYGEN_FOUND)
   message(STATUS "Doxygen not found by default CMake module, falling back to SciFindPackage module.")
   SciFindPackage(PACKAGE Doxygen
-    EXECUTABLES "doxygen"
+    PROGRAMS "doxygen"
   )
   if (DOXYGEN_FOUND)
-    set(DOXYGEN_EXECUTABLE "${Doxygen_doxygen}")
+    set(DOXYGEN_PROGRAM "${Doxygen_doxygen}")
   endif ()
 endif ()
 
 if (DOXYGEN_FOUND)
-  message(STATUS "DOXYGEN_EXECUTABLE found.")
-  message(STATUS "DOXYGEN_EXECUTABLE = ${DOXYGEN_EXECUTABLE}")
+  message(STATUS "DOXYGEN_PROGRAM found.")
+  message(STATUS "DOXYGEN_PROGRAM = ${DOXYGEN_PROGRAM}")
 else ()
-  message(STATUS "DOXYGEN_EXECUTABLE not found. API documentation cannot be built.")
+  message(STATUS "DOXYGEN_PROGRAM not found. API documentation cannot be built.")
   set(ENABLE_DEVELDOCS FALSE)
 endif ()
 

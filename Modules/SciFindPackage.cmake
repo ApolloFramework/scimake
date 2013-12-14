@@ -428,8 +428,8 @@ function(SciFindPkgFiles pkgname pkgfiles
     endif ()
 
 # First look in specified path
-    set(basesrchargs ${pkgfilevar} ${pkgfile}
-    )
+    set(basesrchargs ${pkgfilevar} ${pkgfile})
+    set(pkgfiledir)
     set(fullsrchargs "${basesrchargs}"
       PATHS "${rootpath}"
       PATH_SUFFIXES "${filesubdirs}"
@@ -440,15 +440,21 @@ function(SciFindPkgFiles pkgname pkgfiles
     endif ()
     if (${singularsfx} STREQUAL PROGRAM)
       find_program(${fullsrchargs}
-        DOC "Path to the ${pkgfile} ${singularsfx}"
+        DOC " The ${pkgfile} ${singularsfx} file"
       )
+    elseif (${singularsfx} STREQUAL INCLUDE)
+      find_path(${fullsrchargs}
+        DOC " Directory containing the ${pkgfile} ${singularsfx}"
+      )
+      set(pkgfiledir ${${pkgfilevar}})
+      set(${pkgfilevar} ${pkgfiledir}/${pkgfile})
     elseif (${singularsfx} STREQUAL LIBRARY)
       find_library(${fullsrchargs}
-        DOC "Path to the ${pkgfile} ${singularsfx}"
+        DOC " The ${pkgfile} ${singularsfx} file"
       )
     else ()
       find_file(${fullsrchargs}
-        DOC "Path to the ${pkgfile} ${singularsfx}"
+        DOC " The ${pkgfile} ${singularsfx} file"
       )
     endif ()
     if (DEBUG_CMAKE)
@@ -462,15 +468,21 @@ function(SciFindPkgFiles pkgname pkgfiles
       endif ()
       if (${singularsfx} STREQUAL PROGRAM)
         find_program(${basesrchargs}
-          DOC "Path to the ${pkgfile} ${singularsfx}"
+          DOC " The ${pkgfile} ${singularsfx} file"
         )
+      elseif (${singularsfx} STREQUAL INCLUDE)
+        find_path(${basesrchargs}
+          DOC " Directory containing the ${pkgfile} ${singularsfx}"
+        )
+        set(pkgfiledir ${${pkgfilevar}})
+        set(${pkgfilevar} ${pkgfiledir}/${pkgfile})
       elseif (${singularsfx} STREQUAL LIBRARY)
         find_library(${basesrchargs}
-          DOC "Path to the ${pkgfile} ${singularsfx}"
+          DOC " The ${pkgfile} ${singularsfx} file"
         )
       else ()
         find_file(${basesrchargs}
-          DOC "Path to the ${pkgfile} ${singularsfx}"
+          DOC " The ${pkgfile} ${singularsfx} file"
         )
       endif ()
       if (DEBUG_CMAKE)
@@ -481,7 +493,9 @@ function(SciFindPkgFiles pkgname pkgfiles
     if (${pkgfilevar})
 # Add to list of all files of this type for this package
       set(abspkgfiles ${abspkgfiles} ${${pkgfilevar}})
-      get_filename_component(pkgfiledir ${${pkgfilevar}}/.. REALPATH)
+      if (NOT pkgfiledir)
+        get_filename_component(pkgfiledir ${${pkgfilevar}}/.. REALPATH)
+      endif ()
       set(pkgdirs ${pkgdirs} ${pkgfiledir})
     else ()
 # The WARNING option will actually give a scimake stack trace.
@@ -500,10 +514,22 @@ function(SciFindPkgFiles pkgname pkgfiles
     list(REMOVE_DUPLICATES pkgdirs)
   endif ()
 
+# For libraries, get names
+  if (${singularsfx} STREQUAL LIBRARY)
+    set(pkgfilenames)
+    foreach (pkgfile ${abspkgfiles})
+      get_filename_component(pkgfilename ${pkgfile} NAME_WE)
+      set(pkgfilenames ${pkgfilenames} ${pkgfilename})
+    endforeach ()
+  endif ()
+
 # Print results if in debug mode
   if (DEBUG_CMAKE)
     message(STATUS "Setting:")
     message(STATUS "  ${pkgname}_${pluralsfx} = ${abspkgfiles}.")
+    if (${singularsfx} STREQUAL LIBRARY)
+      message(STATUS "  ${pkgname}_${singularsfx}_NAMES = ${pkgfilenames}.")
+    endif ()
     message(STATUS "  ${pkgname}_${singularsfx}_DIRS = ${pkgdirs}.")
   endif ()
 
@@ -514,6 +540,12 @@ function(SciFindPkgFiles pkgname pkgfiles
   set(${pkgname}_${singularsfx}_DIRS ${pkgdirs}
     CACHE STRING "List of all directories for files of type, ${singularsfx}, for ${pkgname}"
   )
+  if (${singularsfx} STREQUAL LIBRARY)
+    set(${pkgname}_${singularsfx}_NAMES ${pkgfilenames}
+      CACHE STRING "List of all file names for files of type, ${singularsfx}, for ${pkgname}"
+    )
+    set(${pkgname}_${singularsfx}_NAMES ${pkgfilenames} PARENT_SCOPE)
+  endif ()
   set(${pkgname}_${pluralsfx} ${abspkgfiles} PARENT_SCOPE)
   set(${pkgname}_${singularsfx}_DIRS ${pkgdirs} PARENT_SCOPE)
   set(${allfoundvar} ${allfound} PARENT_SCOPE)

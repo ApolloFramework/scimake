@@ -37,7 +37,7 @@ endif ()
 
 SciFindPackage(PACKAGE "OpenSsl"
   INSTALL_DIRS ${instdirs}
-  EXECUTABLES openssl
+  PROGRAMS openssl
   HEADERS openssl/ssl.h
   LIBRARIES ${ssl_libs}
   # INCLUDE_SUBDIRS include
@@ -58,7 +58,7 @@ if (WIN32 AND NOT OPENSSL_FOUND)
   if (OpenSsl_ROOT_DIR)
     SciFindPackage(PACKAGE "OpenSsl"
       INSTALL_DIRS ${instdirs}
-      EXECUTABLES openssl
+      PROGRAMS openssl
       HEADERS openssl/ssl.h
       LIBRARIES ${ssl_libs}
       # INCLUDE_SUBDIRS include

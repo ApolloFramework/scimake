@@ -45,7 +45,7 @@ function(SciGetDepsFromInstall cmname founddir atname)
   endif ()
 
 # Look for a cmake name in the file
-  foreach (sfx DIR EXECUTABLES FILES INCLUDE_DIRS MODULE_DIRS LIBFLAGS LIBRARY_DIRS LIBRARY_NAMES LIBRARIES STLIBS)
+  foreach (sfx DIR PROGRAMS FILES INCLUDE_DIRS MODULE_DIRS LIBFLAGS LIBRARY_DIRS LIBRARY_NAMES LIBRARIES STLIBS)
     file(STRINGS ${configfile} ${cmname}_${sfx} REGEX ${cmname}_${sfx})
     # message("${cmname}_${sfx} = ${${cmname}_${sfx}}")
     string(REGEX REPLACE "^.*= *" "" ${cmname}_${sfx} "${${cmname}_${sfx}}")

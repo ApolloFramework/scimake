@@ -20,7 +20,7 @@
 # MPI_MODULE_DIRS:  the directories containing the Fortran module files
 #                   and the Fortran include files
 # MPI_LIBRARY_DIRS: the directories containing the MPI libraries
-# MPI_EXECUTABLES:  mpiexec
+# MPI_PROGRAMS:  mpiexec
 
 ######################################################################
 #
@@ -97,7 +97,7 @@ if (WIN32 AND "$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "AMD64" AND
       message(STATUS "WARNING: CMAKE_CXX_COMPILER is set to ${CMAKE_CXX_COMPILER}.  When setting CMAKE_Fortran_COMPILER to C:/MinGW/bin/mingw32-gfortran.exe for parallel Fortran builds with mixed C++ on 64 bit Windows, set CMAKE_CXX_COMPILER to C:/MinGW/bin/mingw32-g++ and follow the instructions on https://ice.txcorp.com/trac/bilder/wiki/InstallMinGW exactly to ensure the MPI libraries distributed with HPC get linked correctly.")
     endif ()
   endif ()
-  set(MPI_EXECUTABLES C:/winsame/contrib-mingw/microsoft-hpc-mingw/Bin/mpiexec.exe)
+  set(MPI_PROGRAMS C:/winsame/contrib-mingw/microsoft-hpc-mingw/Bin/mpiexec.exe)
   set(MPI_INCLUDE_DIRS C:/winsame/contrib-mingw/microsoft-hpc-mingw/include)
   set(MPI_MODULE_DIRS C:/winsame/contrib-mingw/microsoft-hpc-mingw/include)
   set(MPI_LIBRARIES C:/winsame/contrib-mingw/microsoft-hpc-mingw/Lib/amd64/msmpifec.lib;
@@ -198,7 +198,7 @@ if (MPI_FOUND)
   set(MPI_MODULE_DIRS ${MPI_Fortran_INCLUDE_PATH})
 
 # Get the executables
-  set(MPI_EXECUTABLES ${MPIEXEC})
+  set(MPI_PROGRAMS ${MPIEXEC})
 
 # MPI link for flags
 # The string strip line is needed because cmake

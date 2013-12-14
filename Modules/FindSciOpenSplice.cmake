@@ -8,7 +8,7 @@
 #
 # This module will define the following variables:
 #  HAVE_OPENSPLICE             = Whether have the Cfitsio library
-#  OpenSplice_EXECUTABLES      = Location of OpenSplice's idlpp executable
+#  OpenSplice_PROGRAMS      = Location of OpenSplice's idlpp executable
 #  OpenSplice_INCLUDE_DIRS     = Location of OpenSplice include dir
 #  OpenSplice_LIBRARY_DIRS     = Location of OpenSplice libraries
 #  OpenSplice_LIBRARIES        = List of all the necessary libraries
@@ -35,7 +35,7 @@ set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 
 SciFindPackage(PACKAGE "OpenSplice"
               INSTALL_DIR "opensplice"
-              EXECUTABLES "idlpp"
+              PROGRAMS "idlpp"
               HEADERS "dcps"
               LIBRARIES "ddsdatabase;dcpsgapi;dcpssacpp;dcpssac;ddsos;ddsutil;ddsserialization;ddskernel;ddsuser;ddsosnet;ddsconf;ddsconfparser"
               )

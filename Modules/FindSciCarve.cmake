@@ -41,7 +41,7 @@ SciFindPackage(
   HEADERS carve.hpp
   INCLUDE_SUBDIRS include/carve include
   LIBRARIES ${Carve_LIBRARY_LIST}
-  EXECUTABLES convert intersect slice triangulate view
+  PROGRAMS convert intersect slice triangulate view
 )
 
 if (CARVE_FOUND)

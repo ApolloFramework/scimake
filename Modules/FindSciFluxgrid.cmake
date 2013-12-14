@@ -28,8 +28,7 @@
 # Find shared libs
 SciFindPackage(PACKAGE "Fluxgrid"
   INSTALL_DIR "fluxgrid"
-  EXECUTABLES "fluxgrid"
-  EXECUTABLE_SUBDIRS "bin"
+  PROGRAMS "fluxgrid"
 )
 
 
