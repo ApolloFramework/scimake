@@ -1,50 +1,34 @@
 ######################################################################
 #
-# SciFindPackage: find includes and libraries of a package
+# Variables that change the behavior of this script
 #
-# $Id$
-#
-# Copyright 2010-2013 Tech-X Corporation.
-# Arbitrary redistribution allowed provided this copyright remains.
-#
-# See LICENSE file (EclipseLicense.txt) for conditions of use.
-#
-######################################################################
-#
-# Variables which can be used to change the behavior of this script
-#
-# Where "scipkgreg" is the regularized package name
-# (package name with all "." and "-" replaced with "_")
-# Where "scipkguc" is the UPPERCASE regularized package name
+# Some variables use scipkguc, and some use scipkgreg.  See
+# http://www.cmake.org/pipermail/cmake/2004-July/005283.html.
+#   "scipkgreg" is the regularized package name
+#     (package name with all "." and "-" replaced with "_")
+#   "scipkguc" is the UPPERCASE regularized package name
 #
 #  DEBUG_CMAKE - if true, outputs verbose debugging information
 #  (default false)
 #
-#  ENABLE_${scipkguc} - if false, will not search for package
-#  (default true)
+#  ENABLE_${scipkguc} (default = true) - if false, will not search for package
 #  DISABLE_${scipkguc} - if true, sets ENABLE_${scipkguc} to false
 #
 #  ${scipkgreg}_FIND_QUIETLY - if true, will succeed silently
 #  (default - not defined, which is treated as false)
 #
-#  ${scipkgreg}_FIND_REQUIRED - if true, will issue a fatal error if
-#    package not found
-#  (default - not defined, which is treated as false)
+#  ${scipkgreg}_FIND_REQUIRED (default = false) - if true, will issue a
+#    fatal error if #    package not found
 #
 #  ${scipkgreg}_ROOT_DIR - search directory hints
-#  ${scipkguc}_DIR, ${scipkgreg}_DIR: Deprecated search directory hints
-#    (to be retired in July 2012)
 #
 #  SUPRA_SEARCH_PATH - used to specify various top-level search directories
 #
 ######################################################################
 #
-#  Variables which will be defined by this script
-#  In the event that a variable has no valid value, it will be set to
-#   "${varname}-NOTFOUND"
-#
-#  NOTE: Some variables use scipkguc, and some use scipkgreg.
-#    Caveat emptor.
+#  Variables defined by this script
+#    (In the event that a variable has no valid value, it is set to
+#    "${varname}-NOTFOUND")
 #
 #    ${scipkguc}_FOUND - true if package found
 #
@@ -73,12 +57,24 @@
 #      $library_name library. Only defined for specifically requested libraries.
 #    ${scipkgreg}_LIBRARIES - list of found libraries, including full path to
 #      each.  Only defined for specifically requested libraries.
-#   ${scipkgreg}_STLIBS - list of all found static libraries.
+#    ${scipkgreg}_STLIBS - list of all found static libraries.
 #      Only defined for libraries existing in ${scipkgreg}_LIBRARIES
-#   ${scipkgreg}_DLLS - windows only, list of all found dlls
+#    ${scipkgreg}_DLLS - windows only, list of all found dlls
 #      Only defined for libraries existing in ${scipkgreg}_LIBRARIES
 #
 #######################################################################
+
+######################################################################
+#
+# SciFindPackage: find includes and libraries of a package
+#
+# $Id$
+#
+# Copyright 2010-2013 Tech-X Corporation.
+# Arbitrary redistribution allowed provided this copyright remains.
+#
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
+#
 
 # SciGetStaticLibs
 #
@@ -700,12 +696,15 @@ macro(SciFindPackage)
 
 #######################################################################
 #
-# Look for TYPES = PROGRAMS, FILES, MODULES
+# Look for TYPES = PROGRAM, INCLUDE, MODULE, LIBRARY, FILE
 # Variables defined:
-#   For PROGRAMS, FILES, MODULES
+#   For PROGRAM, INCLUDE, MODULE, FILE
 #     Xxx_yyy - CACHED
 #       Where to find the yyy file that comes with Xxx.
-#   Xxx_${TYPE} - CACHED
+#   For LIBRARY
+#     Xxx_yyy_LIBRARY - CACHED
+#       Where to find the yyy file that comes with Xxx.
+#   Xxx_${TYPE_PLURAL} - CACHED
 #     List of all files of that type found for package Xxx.
 #
 #######################################################################
@@ -723,11 +722,7 @@ macro(SciFindPackage)
     endif ()
 
 # Get length of list
-    # if (${scitype} STREQUAL INCLUDE)
-      # set(srchfilesvar TFP_HEADERS)
-    # else ()
-      set(srchfilesvar TFP_${scitypeplural})
-    # endif ()
+    set(srchfilesvar TFP_${scitypeplural})
     list(LENGTH ${srchfilesvar} sciexecslen)
     if (${sciexecslen})
 
@@ -757,148 +752,13 @@ macro(SciFindPackage)
         ${scitype} ${scitypeplural} ${scipkgreg}_${scitypeplural}_FOUND
         ${TFP_ALLOW_LIBRARY_DUPLICATES}
       )
+      if (NOT ${scipkgreg}_${scitypeplural}_FOUND)
+        message(WARNING "${scipkgreg}_${scitypeplural}_FOUND = ${${scipkgreg}_${scitypeplural}_FOUND}.")
+        set(${scipkguc}_FOUND FALSE)
+      endif ()
     endif ()
 
   endforeach ()
-
-if (FALSE)
-###########################################################################
-#
-# Look for LIBRARIES
-# Finding none is fatal, but finding a subset is okay as allows us
-# to look for a maximum set, as needed for Trilinos.
-# XXX_LIBRARIES - NOT CACHED
-#   The libraries to link against to use XXX. These should include full paths.
-# XXX_YY_LIBRARY -
-#   Name of YY library that is part of the XXX system.
-#
-###########################################################################
-
-# Build list of search directories
-  string(LENGTH TFP_LIBRARIES scilibslen)
-  if (${scilibslen})
-# Add in user-supplied subdirs
-    string(LENGTH "${TFP_LIBRARY_SUBDIRS}" scilen)
-    if (${scilen})
-      set(scilibsubdirs ${TFP_LIBRARY_SUBDIRS})
-    else ()
-# Default subdirectory
-      set(scilibsubdirs lib)
-    endif ()
-
-# Does anyone use this?  Should either move to argument list
-# or remove entirely.  TODO - marc
-# If LIBRARY_DIRS specified, add that to the front of the path
-    if (${scipkgreg}_LIBRARY_DIRS)
-      set(scilibsubdirs . ${scilibsubdirs})
-      set(scipath ${${scipkgreg}_LIBRARY_DIRS} ${scipath})
-    endif ()
-
-    if (DEBUG_CMAKE)
-      message(STATUS "Looking for libraries under ${scipath} with subdirs, ${scilibsubdirs}")
-    endif ()
-
-# Clear variables
-    set(${scipkgreg}_LIBRARIES)
-    set(${scipkgreg}_LIBRARY_DIRS)
-    set(${scipkgreg}_LIBRARY_NAMES)
-    set(${scipkgreg}_FOUND_SOME_LIBRARY FALSE)
-
-# Look for each requested library
-    foreach (scilib ${TFP_LIBRARIES})
-# Build variable name of the form XXX_yyy_LIBRARY
-      string(REGEX REPLACE "[./-]" "_" scilibvar ${scilib})
-      set(scilibdirvar ${scipkgreg}_${scilibvar}_LIBRARY_DIR)
-      unset(${scilibdirvar})
-      set(scilibvar ${scipkgreg}_${scilibvar}_LIBRARY)
-      unset(${scilibvar})
-
-# First look in defined paths
-      find_library(${scilibvar}
-        ${scilib}
-        PATHS ${scipath}
-        PATH_SUFFIXES ${scilibsubdirs}
-        NO_DEFAULT_PATH
-      )
-      if (DEBUG_CMAKE)
-        message(STATUS "After initial search, ${scilibvar} = ${${scilibvar}}.")
-      endif ()
-
-# If not found, try again in default paths
-      if (NOT ${scilibvar})
-        find_library(${scilibvar}
-          ${scilib}
-          PATHS ${scipath}
-          PATH_SUFFIXES ${scilibsubdirs}
-        )
-        if (DEBUG_CMAKE)
-          message(STATUS "After second search, ${scilibvar} = ${${scilibvar}}.")
-        endif ()
-      endif ()
-
-# Add to list of all libraries(if found)
-      if (${scilibvar})
-        if (DEBUG_CMAKE)
-          message(STATUS "Found library ${scilib}: ${scilibvar} = ${${scilibvar}}")
-        endif ()
-        set(${scipkgreg}_FOUND_SOME_LIBRARY TRUE)
-        set(${scipkgreg}_LIBRARIES
-            ${${scipkgreg}_LIBRARIES}
-            ${${scilibvar}}
-        )
-        get_filename_component(${scilibdirvar} ${${scilibvar}}/.. REALPATH)
-        if (DEBUG_CMAKE)
-          message(STATUS "${scilibdirvar} = ${${scilibdirvar}}")
-        endif ()
-        list(APPEND ${scipkgreg}_LIBRARY_DIRS ${${scilibdirvar}})
-# NAME_WE removes from first '.'.  We need from last.
-        get_filename_component(libname ${${scilibvar}} NAME)
-        string(REGEX REPLACE "\\.[^\\.]*$" "" libname "${libname}")
-        string(REGEX REPLACE "^lib" "" libname ${libname})
-        list(APPEND ${scipkgreg}_LIBRARY_NAMES ${libname})
-      else ()
-# Yes, this uses the string WARNING instead of the macro argument WARNING
-        message("WARNING - Library ${scilib} not found.")
-        set(${scipkguc}_FOUND FALSE)
-      endif ()
-# Add both to the cache
-      # set(${scilibvar}
-        # ${${scilibvar}}
-        # CACHE FILEPATH "Location of ${scilib}"
-      # )
-      set(${scilibdirvar}
-        ${${scilibdirvar}}
-        CACHE PATH "Directory of ${scilib}"
-      )
-    endforeach (scilib ${TFP_LIBRARIES})
-    if (DEBUG_CMAKE)
-      message(STATUS "${scipkgreg}_LIBRARY_DIRS = ${${scipkgreg}_LIBRARY_DIRS}")
-    endif ()
-
-# Clean up and commit variables to cache
-    list(LENGTH ${scipkgreg}_LIBRARIES sciliblistlen)
-    if (TFP_LIBRARIES AND NOT ${sciliblistlen})
-      message("WARNING - None of the libraries, ${TFP_LIBRARIES}, found.  Define ${scipkgreg}_ROOT_DIR to find them.")
-    elseif (${sciliblistlen})
-      # Allowing duplicate libraries on the link line is necessary when using the magma library - Jon Rood
-      if(NOT TFP_ALLOW_LIBRARY_DUPLICATES)
-        list(REMOVE_DUPLICATES ${scipkgreg}_LIBRARIES)
-      endif ()
-      list(REMOVE_DUPLICATES ${scipkgreg}_LIBRARY_DIRS)
-# The first dir is the library dir
-      list(GET "${scipkgreg}_LIBRARY_DIRS" 0 ${scipkgreg}_LIBRARY_DIR)
-#      if (NOT DEFINED ${scipkgreg}_DIR)
-#        get_filename_component(${scipkgreg}_DIR ${${scipkgreg}_LIBRARY_DIR}/.. REALPATH)
-#      endif ()
-      if (DEBUG_CMAKE)
-        message(STATUS "${scipkgreg}_DIR = ${${scipkgreg}_DIR}")
-        message(STATUS "${scipkgreg}_LIBRARIES = ${${scipkgreg}_LIBRARIES}")
-        message(STATUS "${scipkgreg}_LIBRARY_DIRS = ${${scipkgreg}_LIBRARY_DIRS}")
-      endif ()
-    endif ()
-
-  endif ()
-endif ()
 
 # Find static libraries
   if (${scipkgreg}_LIBRARIES)
