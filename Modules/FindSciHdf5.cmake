@@ -33,6 +33,7 @@ if (WIN32)
     HEADERS hdf5.h
     INCLUDE_SUBDIRS include include/hdf5/include # Last for VisIt installation
     FIND_QUIETLY
+    USE_CONFIG_FILE
   )
 # Get the libraries
   get_filename_component(Hdf5_ROOT_DIR ${Hdf5_hdf5_h_INCLUDE_DIR}/.. REALPATH)
@@ -70,13 +71,13 @@ if (CMAKE_Fortran_COMPILER_WORKS)
   set(desiredmods hdf5)
 endif ()
 SciFindPackage(PACKAGE "Hdf5"
-  # INSTALL_DIRS ${instdirs} # Now done by SciFindPackage
-  EXECUTABLES ${desiredexecs}
+  PROGRAMS ${desiredexecs}
   HEADERS hdf5.h
   LIBRARIES ${desiredlibs}
   MODULES ${desiredmods}
   INCLUDE_SUBDIRS include include/hdf5/include # Last for VisIt installation
   MODULE_SUBDIRS include/fortran include lib
+  USE_CONFIG_FILE
 )
 
 # The executables are not always found, so we will hdf5 to found
@@ -89,7 +90,7 @@ if (NOT HDF5_FOUND)
 endif ()
 
 if (HDF5_FOUND)
-  # message(STATUS "Found Hdf5")
+# Backward compatibility
   set(HAVE_HDF5 1 CACHE BOOL "Whether have the HDF5 library")
   set(OLD_H5S_SELECT_HYPERSLAB_IFC 0 CACHE BOOL
     "Whether using the old 1.6.3 H5Sselect_hyperslab interface")
