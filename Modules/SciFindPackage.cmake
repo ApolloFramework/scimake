@@ -814,68 +814,6 @@ macro(SciFindPackage)
     SciGetStaticLibs("${${scipkgreg}_LIBRARIES}" ${scipkgreg}_STLIBS)
   endif ()
 
-if (FALSE)
-#################################################################
-#
-# On windows, we want to look for the dlls
-# XXX_DLLS - CACHED
-#   List of all found dlls including full path to each
-# XXX_yyy_dll
-#   Path to individual yyy library from XXX package
-#
-#################################################################
-
-  if (WIN32)
-    if (DEBUG_CMAKE)
-      message(STATUS "Looking for the DLL counterparts to all found libraries.")
-    endif ()
-
-# Clear variables
-    set(${scipkgreg}_DLLS)
-    set(${scipkgreg}_FOUND_SOME_DLL FALSE)
-
-# Look for a dll for each found library
-    foreach (foundlib ${${scipkgreg}_LIBRARIES})
-# NAME_WE removes from first '.'.  We need from last.
-      get_filename_component(librootname ${foundlib} NAME)
-      string(REGEX REPLACE "\\.[^\\.]*$" "" librootname "${librootname}")
-# Get variable to hold the dll location
-      string(REGEX REPLACE "[./-]" "_" scidllvar ${librootname})
-      set(scidllvar ${scipkgreg}_${scidllvar}_dll)
-      set(${scidllvar})
-# This assumes that dll is in "./lib/../bin"
-      get_filename_component(libdir ${foundlib}/.. REALPATH)
-      get_filename_component(dlldir1 "${libdir}/../bin" REALPATH)
-      get_filename_component(dlldir2 "${libdir}/.." REALPATH)
-      foreach (dir ${dlldir1} ${dlldir2} ${libdir})
-        if (DEBUG_CMAKE)
-          message(STATUS "Looking for DLL for ${foundlib} in ${dir}.")
-        endif ()
-        if (EXISTS ${dir}/${librootname}.dll)
-          set(${scidllvar} ${dir}/${librootname}.dll)
-          break ()
-        endif ()
-      endforeach ()
-      if (${scidllvar})
-        if (DEBUG_CMAKE)
-          message(STATUS "Found DLL ${${scidllvar}}")
-          message(STATUS "${scidllvar} = ${${scidllvar}}.")
-        endif ()
-        set(${scipkgreg}_DLLS ${${scipkgreg}_DLLS} ${${scidllvar}})
-        set(${scipkgreg}_FOUND_SOME_DLL TRUE)
-        set(${scidllvar}
-          ${${scidllvar}}
-          CACHE PATH "Path to ${librootname}.dll"
-        )
-      else ()
-        if (DEBUG_CMAKE)
-          message(STATUS "${librootname}.dll not found.")
-        endif ()
-      endif ()
-    endforeach ()
-  endif ()
-endif ()
-
   if (${scipkgreg}_DLLS)
     set(${scipkgreg}_DEFINITIONS -D${scipkguc}_DLL)
   endif ()
