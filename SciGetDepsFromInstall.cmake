@@ -107,7 +107,7 @@ function(SciGetDepsFromInstall cmname founddir atname)
   endif ()
 
 # Get all vars to parent scope
-  foreach (varpart DIR EXECUTABLES FILES INCLUDE_DIRS MODULE_DIRS LIBFLAGS LIBRARY_DIRS LIBRARY_NAMES LIBRARIES STLIBS)
+  foreach (varpart DIR PROGRAMS FILES INCLUDE_DIRS MODULE_DIRS LIBFLAGS LIBRARY_DIRS LIBRARY_NAMES LIBRARIES STLIBS)
     set(${cmname}_${varpart} "${${cmname}_${varpart}}" PARENT_SCOPE)
   endforeach ()
   SciPrintCMakeResults(${cmname})
