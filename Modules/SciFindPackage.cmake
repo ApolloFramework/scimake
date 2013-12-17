@@ -454,8 +454,10 @@ function(SciFindPkgFiles pkgname pkgfiles
       find_path(${fullsrchargs}
         DOC " Directory containing the ${realpkgfile} ${singularsfx}"
       )
-      set(pkgfiledir ${${pkgfilevar}})
-      set(${pkgfilevar} ${pkgfiledir}/${realpkgfile})
+      if (NOT (${${pkgfilevar}} STREQUAL ${pkgfilevar}-NOTFOUND))
+        set(pkgfiledir ${${pkgfilevar}})
+        set(${pkgfilevar} ${pkgfiledir}/${realpkgfile})
+      endif ()
     elseif (${singularsfx} STREQUAL LIBRARY)
       find_library(${fullsrchargs}
         DOC " The ${realpkgfile} ${singularsfx} file"
@@ -482,8 +484,10 @@ function(SciFindPkgFiles pkgname pkgfiles
         find_path(${basesrchargs}
           DOC " Directory containing the ${realpkgfile} ${singularsfx}"
         )
-        set(pkgfiledir ${${pkgfilevar}})
-        set(${pkgfilevar} ${pkgfiledir}/${realpkgfile})
+        if (NOT (${${pkgfilevar}} STREQUAL ${pkgfilevar}-NOTFOUND))
+          set(pkgfiledir ${${pkgfilevar}})
+          set(${pkgfilevar} ${pkgfiledir}/${realpkgfile})
+        endif ()
       elseif (${singularsfx} STREQUAL LIBRARY)
         find_library(${basesrchargs}
           DOC " The ${realpkgfile} ${singularsfx} file"
