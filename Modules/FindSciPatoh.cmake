@@ -26,7 +26,7 @@
 
 SciFindPackage(PACKAGE "Patoh"
               INSTALL_DIR "patoh"
-              EXECUTABLES ""
+              PROGRAMS ""
               HEADERS "patoh.h"
               LIBRARIES "patoh"
               )

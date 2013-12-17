@@ -26,11 +26,8 @@
 SciFindPackage(PACKAGE "Thrust"
               INSTALL_DIR "thrust"
               INSTALL_DIRS "."
-#              EXECUTABLES "."
               HEADERS "device_vector.h"
-#              LIBRARIES "."
-#              MODULES "."
-              EXECUTABLE_SUBDIRS "."
+              PROGRAM_SUBDIRS "."
               INCLUDE_SUBDIRS "."
               LIBRARY_SUBDIRS "."
               )

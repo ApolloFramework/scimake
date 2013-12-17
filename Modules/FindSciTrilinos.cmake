@@ -13,7 +13,7 @@
 # In either case, the following variables get defined.
 #
 # Trilinos_DIR          : root installation directory for Trilinos
-# Trilinos_EXECUTABLES  : any Trilinos executables (empty for trilinos)
+# Trilinos_PROGRAMS     : any Trilinos executables (empty for trilinos)
 # Trilinos_FILES        : any other files (empty for trilinos)
 # Trilinos_INCLUDE_DIRS : include directories needed for compiling C/C++
 # Trilinos_MODULE_DIRS  : include directories needed for compiling fortran

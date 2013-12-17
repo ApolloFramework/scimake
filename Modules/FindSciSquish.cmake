@@ -7,7 +7,7 @@
 #
 # This module will define the following variables:
 #  HAVE_SQUISH         = Whether have the Squish library
-#  Squish_EXECUTABLES  = Location of Squish executables
+#  Squish_PROGRAMS = Location of Squish executables
 #  Squish_LIBRARY_DIRS = Location of Squish libraries
 #  Squish_LIBRARIES    = Required libraries
 
@@ -28,7 +28,7 @@ set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 SciFindPackage(PACKAGE "Squish"
               INSTALL_DIR "squish"
               FILES ".squish-3-license"
-              EXECUTABLES "squishrunner;squishserver;nchcompare"
+              PROGRAMS "squishrunner;squishserver;nchcompare"
               LIBRARIES "squishqtpre"
 )
 
