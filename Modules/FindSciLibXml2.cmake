@@ -27,9 +27,10 @@
 set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 
 SciFindPackage(PACKAGE "LibXml2"
-              INSTALL_DIR "libxml2"
-              HEADERS "include/libxml2"
-              LIBRARIES "libxml2.a"
+               INSTALL_DIR libxml2
+               INCLUDE_SUBDIRS include/libxml2
+               HEADERS libxml/tree.h
+               LIBRARIES "libxml2.a"
               )
 
 if (LIBXML2_FOUND)
