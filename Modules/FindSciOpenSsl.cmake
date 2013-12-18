@@ -25,13 +25,24 @@
 ######################################################################
 
 # OpenSSL builds its static libs inside sersh
-SciGetInstSubdirs(openssl instdirs)
-set(instdirs openssl openssl-sersh)
-
-# Libraries have different names on Windows.  Use static MD or MT libs.
 if (WIN32)
+  if (NOT OpenSsl_ROOT_DIR)
+    set(OpenSsl_ROOT_DIRS C:/OpenSSL C:/OpenSSL-Win64)
+    foreach (rd ${OpenSsl_ROOT_DIRS})
+      if (EXISTS ${rd})
+        set(OpenSsl_ROOT_DIR ${rd})
+        break ()
+      endif ()
+    endforeach ()
+  endif ()
+  if (NOT OpenSsl_ROOT_DIR)
+    message(WARNING "OpenSsl_ROOT_DIR not found.")
+  endif ()
+  set(instdirs .)
   set(ssl_libs ssleay32 libeay32)
 else ()
+  # SciGetInstSubdirs(openssl instdirs)
+  set(instdirs openssl openssl-sersh)
   set(ssl_libs ssl crypto)
 endif ()
 
@@ -40,32 +51,7 @@ SciFindPackage(PACKAGE "OpenSsl"
   PROGRAMS openssl
   HEADERS openssl/ssl.h
   LIBRARIES ${ssl_libs}
-  # INCLUDE_SUBDIRS include
-  # LIBRARY_SUBDIRS lib/VC/static lib
 )
-
-# On Windows, if failed, try again with system paths
-if (WIN32 AND NOT OPENSSL_FOUND)
-  if (EXISTS C:/OpenSSL AND NOT OpenSsl_ROOT_DIR)
-    set(OpenSsl_ROOT_DIR C:/OpenSSL)
-  else ()
-    find_program(openssl_exec openssl)
-    if (openssl_exec)
-      get_filename_component(openssl_bindir ${openssl_exec}/.. REALPATH)
-      get_filename_component(OpenSsl_ROOT_DIR ${openssl_bindir}/.. REALPATH)
-    endif ()
-  endif ()
-  if (OpenSsl_ROOT_DIR)
-    SciFindPackage(PACKAGE "OpenSsl"
-      INSTALL_DIRS ${instdirs}
-      PROGRAMS openssl
-      HEADERS openssl/ssl.h
-      LIBRARIES ${ssl_libs}
-      # INCLUDE_SUBDIRS include
-      # LIBRARY_SUBDIRS lib/VC/static lib.  This search gives dll libs
-    )
-  endif ()
-endif ()
 
 # Correct static libraries on Windows
 if (WIN32)
@@ -75,7 +61,6 @@ if (WIN32)
   foreach (lib ${srchlibs})
     get_filename_component(openssl_libdir ${lib}/.. REALPATH)
     get_filename_component(openssl_libname ${lib} NAME_WE)
-    # message(STATUS "Looking for ${openssl_libname}MD in ${openssl_libdir}/VC/static.")
     find_library(mdlib ${openssl_libname}MD PATHS ${openssl_libdir}/VC/static
       NO_DEFAULT_PATH
     )
@@ -85,7 +70,7 @@ if (WIN32)
     )
     set(OpenSsl_STLIBS ${OpenSsl_STLIBS} ${stlib})
   endforeach ()
-  message(STATUS "After correction.")
+  message(STATUS "After windows search for static libs:")
   SciPrintVar(OpenSsl_STLIBS)
   SciPrintVar(OpenSsl_MDLIBS)
 endif ()
