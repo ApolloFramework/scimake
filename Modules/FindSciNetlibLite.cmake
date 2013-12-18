@@ -31,7 +31,7 @@ endif ()
 
 SciFindPackage(PACKAGE "NetlibLite"
   INSTALL_DIRS ${instdirs}
-  MODULES lsode_mod
-  LIBRARIES lsode nlother r8slatec
+  MODULES "lsode_mod"
+  LIBRARIES "lsode;nlother;r8slatec"
 )
 
