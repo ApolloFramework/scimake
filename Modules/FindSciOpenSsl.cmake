@@ -27,7 +27,7 @@
 # OpenSSL builds its static libs inside sersh
 if (WIN32)
   if (NOT OpenSsl_ROOT_DIR)
-    set(OpenSsl_ROOT_DIRS C:/OpenSSL C:/OpenSSL-Win64)
+    set(OpenSsl_ROOT_DIRS C:/OpenSSL C:/OpenSSL-Win64 C:/OpenSSL-Win32)
     foreach (rd ${OpenSsl_ROOT_DIRS})
       if (EXISTS ${rd})
         set(OpenSsl_ROOT_DIR ${rd})
