@@ -126,12 +126,12 @@ message(STATUS "Oce_SEARCHLIBS = ${Oce_SEARCHLIBS}.")
 if (WIN32)
   # if (WIN64)
   if (${CMAKE_SIZEOF_VOID_P} MATCHES 8)
-    set(libsubdirs Win64/lib)
+    set(libsubdir Win64/)
   else ()
-    set(libsubdirs Win32/lib)
+    set(libsubdir Win32/)
   endif ()
 else ()
-  set(libsubdirs lib)
+  set(libsubdir)
 endif ()
 
 # Only sersh build exists
@@ -151,7 +151,8 @@ foreach (comp ${SciOce_ALL_COMPONENTS})
       INSTALL_DIRS oce-sersh
       HEADERS "${Oce${comp}_SEARCHHDRS}"
       LIBRARIES "${Oce${comp}_SEARCHLIBS}"
-      LIBRARY_SUBDIRS "${libsubdirs}"
+      LIBRARY_SUBDIRS "${libsubdir}lib"
+      PROGRAM_SUBDIRS "${libsubdir}bin"
       FIND_QUIETLY
     )
     foreach (res ${SEARCH_RESULTS})

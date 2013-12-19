@@ -601,6 +601,8 @@ macro(SciFindPackage)
     ${ARGN}
   )
 
+  set(TFP_DLL_SUBDIRS ${TFP_PROGRAM_SUBDIRS} bin lib .)
+
 # This message is purposefully NOT a STATUS message
 # To provide more readable output
   if (NOT DEBUG_CMAKE AND TFP_FIND_QUIETLY)
