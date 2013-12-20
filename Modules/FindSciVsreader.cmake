@@ -29,7 +29,7 @@
 # set(instdirs vsreader)
 
 set(desiredlibs
-    vsreader_static)
+    vsreader)
 
 set(desiredheaders
     VsApi.h
