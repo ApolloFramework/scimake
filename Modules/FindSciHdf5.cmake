@@ -94,8 +94,11 @@ endif ()
 set(hlnms)
 foreach (lb ${hlibs})
   get_filename_component(ln ${lb} NAME_WE)
+# Remove leading lib
+  string(REGEX REPLACE "^lib" "" ln "${ln}")
   set(hlnms ${hlnms} ${ln})
 endforeach ()
+# message(STATUS "hlnms = ${hlnms}.")
 set(desiredlibs)
 foreach (nm hdf5_tools hdf5_hl_fortran hdf5_hl_f90cstub hdf5_hl hdf5_hldll
   hdf5_fortran hdf5_f90cstub hdf5 hdf5dll

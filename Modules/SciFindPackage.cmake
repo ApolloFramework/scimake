@@ -729,7 +729,7 @@ macro(SciFindPackage)
     if (${scipkgreg}_CONFIG_CMAKE)
       get_filename_component(${scipkgreg}_CONFIG_DIR ${${scipkgreg}_CONFIG_CMAKE}/.. REALPATH)
       find_file(${scipkgreg}_CONFIG_VERSION_CMAKE
-        NAMES ${scipkgreg}ConfigVersion.cmake ${scipkgreg}-config-version.cmake
+        NAMES ${scipkgreg}ConfigVersion.cmake ${scipkgrlc}-config-version.cmake
         PATHS ${${scipkgreg}_CONFIG_DIR}
       )
       if (TFP_USE_CONFIG_FILE)
