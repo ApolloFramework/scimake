@@ -61,8 +61,12 @@ SciFindPackage(PACKAGE "Trilinos"
 )
 
 # Cleanup and conform to scimake conventions
-get_filename_component(Trilinos_INCLUDE_DIRS ${Trilinos_INCLUDE_DIRS} REALPATH)
-get_filename_component(Trilinos_LIBRARY_DIRS ${Trilinos_LIBRARY_DIRS} REALPATH)
+if (Trilinos_INCLUDE_DIRS)
+  get_filename_component(Trilinos_INCLUDE_DIRS ${Trilinos_INCLUDE_DIRS} REALPATH)
+endif ()
+if (Trilinos_LIBRARY_DIRS)
+  get_filename_component(Trilinos_LIBRARY_DIRS ${Trilinos_LIBRARY_DIRS} REALPATH)
+endif ()
 set(Trilinos_LIBRARY_NAMES ${Trilinos_LIBRARIES})
 set(Trilinos_LIBRARIES)
 foreach (trilib ${Trilinos_LIBRARY_NAMES})
@@ -85,9 +89,11 @@ if (TRILINOS_FOUND)
   option(HAVE_TRILINOS "Trilinos libraries" ON)
 
 # Remove duplicates
-  list(REVERSE Trilinos_TPL_LIBRARIES)
-  list(REMOVE_DUPLICATES Trilinos_TPL_LIBRARIES)
-  list(REVERSE Trilinos_TPL_LIBRARIES)
+  if (Trilinos_TPL_LIBRARIES)
+    list(REVERSE Trilinos_TPL_LIBRARIES)
+    list(REMOVE_DUPLICATES Trilinos_TPL_LIBRARIES)
+    list(REVERSE Trilinos_TPL_LIBRARIES)
+  endif ()
 
 # Separate the third-party libraries into blas/lapack and system libraries
   set(Trilinos_LINALG_LIBRARIES)
