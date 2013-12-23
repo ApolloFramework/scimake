@@ -633,7 +633,7 @@ macro(SciFindPackage)
       HEADERS          = ${TFP_HEADERS}
       LIBRARIES        = ${TFP_LIBRARIES}
       MODULES          = ${TFP_MODULES}
-      CONFIG_SUBDIRS  = ${TFP_CONFIG_SUBDIRS}
+      CONFIG_SUBDIRS   = ${TFP_CONFIG_SUBDIRS}
       PROGRAM_SUBDIRS  = ${TFP_PROGRAM_SUBDIRS}
       INCLUDE_SUBDIRS  = ${TFP_INCLUDE_SUBDIRS}
       LIBRARY_SUBDIRS  = ${TFP_LIBRARY_SUBDIRS}
@@ -708,7 +708,7 @@ macro(SciFindPackage)
     else ()
       set(confnames ${scipkgreg}Config.cmake ${scipkglc}-config.cmake)
     endif ()
-    set(confdirs ${TFP_CONFIG_SUBDIRS} lib/cmake/${scipkgreg} share/cmake/${scipkglc})
+    set(confdirs ${TFP_CONFIG_SUBDIRS} lib/cmake/${scipkgreg} share/cmake/${scipkglc} cmake/${scipkglc})
     message(STATUS "Looking for ${confnames} in ${confdirs}.")
     find_file(${sciconfigcmvar}
       NAMES ${confnames}
@@ -766,6 +766,8 @@ macro(SciFindPackage)
   if (NOT TFP_CONFIG_FILE_ONLY)
 # Create the search paths
     set(scitypes PROGRAM INCLUDE MODULE LIBRARY FILE)
+# Not clear what is right here
+    # if (WIN32 AND (BUILD_SHARED_LIBS))
     if (WIN32)
       set(scitypes ${scitypes} DLL)
     endif ()

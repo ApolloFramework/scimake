@@ -62,7 +62,8 @@ message(STATUS "Hdf5_ROOT_DIR = ${Hdf5_ROOT_DIR}.")
 # Version known, can look for config file
 SciFindPackage(PACKAGE "Hdf5"
   CONFIG_SUBDIRS lib/cmake/hdf5-${Hdf5_VERSION}
-  USE_CONFIG_FILE CONFIG_FILE_ONLY
+  # USE_CONFIG_FILE # Cannot always source, so decide later
+  CONFIG_FILE_ONLY
   FIND_QUIETLY
 )
 message(STATUS "Hdf5_CONFIG_CMAKE = ${Hdf5_CONFIG_CMAKE}.")
@@ -71,16 +72,23 @@ message(STATUS "Hdf5_CONFIG_CMAKE = ${Hdf5_CONFIG_CMAKE}.")
 if (NOT Hdf5_CONFIG_CMAKE)
   set(HDF5_FOUND FALSE)
   if (SciHdf5_FIND_REQUIRED)
-    message(FATAL_ERROR "Failing.")
+    message(FATAL_ERROR "Failed to find Hdf5.")
   endif ()
-  return()
+endif ()
+
+# Not all version have good files to source
+if (${Hdf5_VERSION} STREQUAL 1.8.12)
+else ()
+  include(${Hdf5_CONFIG_CMAKE})
 endif ()
 
 # Get the libraries in proper order
-if (DEBUG_CMAKE)
-  message(STATUS "Hdf5_ROOT_DIR = ${Hdf5_ROOT_DIR}.")
+if (HDF5_LIBRARIES)
+  set(hlibs ${HDF5_LIBRARIES})
+else ()
+  file(GLOB hlibs ${Hdf5_ROOT_DIR}/lib/*hdf5*)
 endif ()
-set(hlibs ${HDF5_LIBRARIES})
+# message(STATUS "hlibs = ${hlibs}.")
 set(hlnms)
 foreach (lb ${hlibs})
   get_filename_component(ln ${lb} NAME_WE)
@@ -95,9 +103,10 @@ foreach (nm hdf5_tools hdf5_hl_fortran hdf5_hl_f90cstub hdf5_hl hdf5_hldll
     set(desiredlibs ${desiredlibs} ${nm})
   endif ()
 endforeach ()
+# message(STATUS "desiredlibs = ${desiredlibs}.")
 
 # Get execs
-file(GLOB hexecs ${Hdf5_ROOT_DIR}/bin/h5diff*.exe)
+file(GLOB hexecs ${Hdf5_ROOT_DIR}/bin/h5diff*)
 set(desiredexecs)
 foreach (ex ${hexecs})
   get_filename_component(en ${ex} NAME_WE)
