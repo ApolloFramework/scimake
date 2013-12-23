@@ -428,8 +428,12 @@ function(SciFindPkgFiles pkgname pkgfiles
 # Create the variable that's specific to this executable
     string(REGEX REPLACE "[./-]" "_" pkgfilevar ${realpkgfile})
     set(pkgfilevar ${pkgname}_${pkgfilevar})
+    set(pkgfilevarfile)
     if (${singularsfx} STREQUAL LIBRARY)
       set(pkgfilevar ${pkgfilevar}_LIBRARY)
+    elseif (${singularsfx} STREQUAL INCLUDE)
+      set(pkgfilevarfile ${pkgfilevar})
+      set(pkgfilevar ${pkgfilevar}_INCLUDE_DIR)
     endif ()
     if (DEBUG_CMAKE)
       message(STATUS "Searching for pkgfile = ${pkgfile}.")
@@ -454,9 +458,9 @@ function(SciFindPkgFiles pkgname pkgfiles
       find_path(${fullsrchargs}
         DOC " Directory containing the ${realpkgfile} ${singularsfx}"
       )
-      if (NOT (${${pkgfilevar}} STREQUAL ${pkgfilevar}-NOTFOUND))
+      if (${pkgfilevar})
         set(pkgfiledir ${${pkgfilevar}})
-        set(${pkgfilevar} ${pkgfiledir}/${realpkgfile})
+        set(${pkgfilevarfile} ${pkgfiledir}/${realpkgfile})
       endif ()
     elseif (${singularsfx} STREQUAL LIBRARY)
       find_library(${fullsrchargs}
@@ -484,9 +488,9 @@ function(SciFindPkgFiles pkgname pkgfiles
         find_path(${basesrchargs}
           DOC " Directory containing the ${realpkgfile} ${singularsfx}"
         )
-        if (NOT (${${pkgfilevar}} STREQUAL ${pkgfilevar}-NOTFOUND))
+        if (${pkgfilevar})
           set(pkgfiledir ${${pkgfilevar}})
-          set(${pkgfilevar} ${pkgfiledir}/${realpkgfile})
+          set(${pkgfilevarfile} ${pkgfiledir}/${realpkgfile})
         endif ()
       elseif (${singularsfx} STREQUAL LIBRARY)
         find_library(${basesrchargs}
@@ -509,8 +513,11 @@ function(SciFindPkgFiles pkgname pkgfiles
         get_filename_component(pkgfiledir ${${pkgfilevar}}/.. REALPATH)
       endif ()
       if (${singularsfx} STREQUAL INCLUDE)
-        set(${pkgfilevar}_INCLUDE_DIR ${pkgfiledir}
+        set(${pkgfilevar} ${pkgfiledir}
           CACHE STRING " Directory containing ${pkgfiledir}"
+        )
+        set(${pkgfilevarfile} ${${pkgfilevarfile}}
+          CACHE STRING " Full path to ${realpkgfile}}"
         )
       endif ()
       set(pkgdirs ${pkgdirs} ${pkgfiledir})
@@ -594,10 +601,12 @@ endfunction()
 
 include(CMakeParseArguments)
 macro(SciFindPackage)
+# Set default values
+  set(TFP_FIND_QUIETLY)
   CMAKE_PARSE_ARGUMENTS(TFP
     "FIND_QUIETLY;ALLOW_LIBRARY_DUPLICATES;FIND_CONFIG_FILE;CONFIG_FILE_ONLY;USE_CONFIG_FILE"
     "PACKAGE;INSTALL_DIR;CONFIG_FILE_NAME"
-    "INSTALL_DIRS;PROGRAMS;HEADERS;LIBRARIES;FILES;MODULES;PROGRAM_SUBDIRS;INCLUDE_SUBDIRS;MODULE_SUBDIRS;LIBRARY_SUBDIRS;FILE_SUBDIRS;ALLOW_LIBRARY_DUPLICATES"
+    "INSTALL_DIRS;PROGRAMS;HEADERS;LIBRARIES;FILES;MODULES;CONFIG_SUBDIRS;PROGRAM_SUBDIRS;INCLUDE_SUBDIRS;MODULE_SUBDIRS;LIBRARY_SUBDIRS;FILE_SUBDIRS;ALLOW_LIBRARY_DUPLICATES"
     ${ARGN}
   )
 
@@ -624,6 +633,7 @@ macro(SciFindPackage)
       HEADERS          = ${TFP_HEADERS}
       LIBRARIES        = ${TFP_LIBRARIES}
       MODULES          = ${TFP_MODULES}
+      CONFIG_SUBDIRS  = ${TFP_CONFIG_SUBDIRS}
       PROGRAM_SUBDIRS  = ${TFP_PROGRAM_SUBDIRS}
       INCLUDE_SUBDIRS  = ${TFP_INCLUDE_SUBDIRS}
       LIBRARY_SUBDIRS  = ${TFP_LIBRARY_SUBDIRS}
@@ -698,11 +708,12 @@ macro(SciFindPackage)
     else ()
       set(confnames ${scipkgreg}Config.cmake ${scipkglc}-config.cmake)
     endif ()
-    message(STATUS "Looking for ${confnames}.")
+    set(confdirs ${TFP_CONFIG_SUBDIRS} lib/cmake/${scipkgreg} share/cmake/${scipkglc})
+    message(STATUS "Looking for ${confnames} in ${confdirs}.")
     find_file(${sciconfigcmvar}
       NAMES ${confnames}
       PATHS ${scipath}
-      PATH_SUFFIXES lib/cmake/${scipkgreg} share/cmake/${scipkglc}
+      PATH_SUFFIXES ${confdirs}
       NO_DEFAULT_PATH
       DOC "Path to the hdf5 config files."
     )
@@ -725,12 +736,14 @@ macro(SciFindPackage)
         include(${${scipkgreg}_CONFIG_CMAKE})
       endif ()
     endif ()
-    if (DEBUG_CMAKE OR (TFP_CONFIG_FILE_ONLY AND NOT TFP_FIND_QUIETLY))
+    # if (DEBUG_CMAKE)
       SciPrintVar(${scipkgreg}_CONFIG_CMAKE)
       SciPrintVar(${scipkgreg}_CONFIG_VERSION_CMAKE)
-    endif ()
-    if (CONFIG_FILE_ONLY)
-      return()
+    # endif ()
+    if (TFP_CONFIG_FILE_ONLY)
+      if (DEBUG_CMAKE OR NOT TFP_FIND_QUIETLY)
+        SciPrintCMakeResults(${scipkgreg})
+      endif ()
     endif ()
 
   endif ()
@@ -750,80 +763,83 @@ macro(SciFindPackage)
 #
 #######################################################################
 
+  if (NOT TFP_CONFIG_FILE_ONLY)
 # Create the search paths
-  set(scitypes PROGRAM INCLUDE MODULE LIBRARY FILE)
-  if (WIN32)
-    set(scitypes ${scitypes} DLL)
-  endif ()
-  foreach (scitype ${scitypes})
+    set(scitypes PROGRAM INCLUDE MODULE LIBRARY FILE)
+    if (WIN32)
+      set(scitypes ${scitypes} DLL)
+    endif ()
+    foreach (scitype ${scitypes})
 
 # Get plural
-    if (${scitype} STREQUAL LIBRARY)
-      set(scitypeplural LIBRARIES)
-    elseif (${scitype} STREQUAL INCLUDE)
-      set(scitypeplural HEADERS)
-    else ()
-      set(scitypeplural ${scitype}S)
-    endif ()
+      if (${scitype} STREQUAL LIBRARY)
+        set(scitypeplural LIBRARIES)
+      elseif (${scitype} STREQUAL INCLUDE)
+        set(scitypeplural HEADERS)
+      else ()
+        set(scitypeplural ${scitype}S)
+      endif ()
 
 # Get length of list
-    if (${scitype} STREQUAL DLL)
-      set(srchfilesvar TFP_LIBRARIES)
-    else ()
-      set(srchfilesvar TFP_${scitypeplural})
-    endif ()
-    list(LENGTH ${srchfilesvar} sciexecslen)
-    if (${sciexecslen})
+      if (${scitype} STREQUAL DLL)
+        set(srchfilesvar TFP_LIBRARIES)
+      else ()
+        set(srchfilesvar TFP_${scitypeplural})
+      endif ()
+      list(LENGTH ${srchfilesvar} sciexecslen)
+      if (${sciexecslen})
 
 # Create lists for search
-      list(LENGTH TFP_${scitype}_SUBDIRS scilen)
-      if (${scilen})
-        set(scifilesubdirs ${TFP_${scitype}_SUBDIRS})
-      else ()
-# Default search subdirectories
-        if (${scitype} STREQUAL PROGRAM)
-          set(scifilesubdirs bin)
-        elseif (${scitype} STREQUAL FILE)
-          set(scifilesubdirs share)
-        elseif (${scitype} STREQUAL INCLUDE)
-          set(scifilesubdirs include)
-        elseif (${scitype} STREQUAL LIBRARY)
-          set(scifilesubdirs lib)
-        elseif (${scitype} STREQUAL DLL)
-          set(scifilesubdirs bin lib .)
-        elseif (${scitype} STREQUAL MODULE)
-          set(scifilesubdirs include)
+        list(LENGTH TFP_${scitype}_SUBDIRS scilen)
+        if (${scilen})
+          set(scifilesubdirs ${TFP_${scitype}_SUBDIRS})
         else ()
-          message(WARNING "Default subdir not known for ${scitype}.")
+# Default search subdirectories
+          if (${scitype} STREQUAL PROGRAM)
+            set(scifilesubdirs bin)
+          elseif (${scitype} STREQUAL FILE)
+            set(scifilesubdirs share)
+          elseif (${scitype} STREQUAL INCLUDE)
+            set(scifilesubdirs include)
+          elseif (${scitype} STREQUAL LIBRARY)
+            set(scifilesubdirs lib)
+          elseif (${scitype} STREQUAL DLL)
+            set(scifilesubdirs bin lib .)
+          elseif (${scitype} STREQUAL MODULE)
+            set(scifilesubdirs include)
+          else ()
+            message(WARNING "Default subdir not known for ${scitype}.")
+          endif ()
         endif ()
-      endif ()
-      message(STATUS "Looking for ${scitypeplural}, ${${srchfilesvar}}, in ${scifilesubdirs}.")
+        message(STATUS "Looking for ${scitypeplural}, ${${srchfilesvar}}, in ${scifilesubdirs}.")
 
 # Find the files
-      SciFindPkgFiles(${scipkgreg} "${${srchfilesvar}}"
-        "${scipath}" "${scifilesubdirs}"
-        ${scitype} ${scitypeplural} ${scipkgreg}_${scitypeplural}_FOUND
-        ${TFP_ALLOW_LIBRARY_DUPLICATES}
-      )
+        SciFindPkgFiles(${scipkgreg} "${${srchfilesvar}}"
+          "${scipath}" "${scifilesubdirs}"
+          ${scitype} ${scitypeplural} ${scipkgreg}_${scitypeplural}_FOUND
+          ${TFP_ALLOW_LIBRARY_DUPLICATES}
+        )
 # Okay not to find dlls
-      if (${scitype} STREQUAL DLL)
-      else ()
-        if (NOT ${scipkgreg}_${scitypeplural}_FOUND)
-          message(WARNING "${scipkgreg}_${scitypeplural}_FOUND = ${${scipkgreg}_${scitypeplural}_FOUND}.")
-          set(${scipkguc}_FOUND FALSE)
+        if (${scitype} STREQUAL DLL)
+        else ()
+          if (NOT ${scipkgreg}_${scitypeplural}_FOUND)
+            message(WARNING "${scipkgreg}_${scitypeplural}_FOUND = ${${scipkgreg}_${scitypeplural}_FOUND}.")
+            set(${scipkguc}_FOUND FALSE)
+          endif ()
         endif ()
       endif ()
-    endif ()
 
-  endforeach ()
+    endforeach ()
 
 # Find static libraries
-  if (${scipkgreg}_LIBRARIES)
-    SciGetStaticLibs("${${scipkgreg}_LIBRARIES}" ${scipkgreg}_STLIBS)
-  endif ()
+    if (${scipkgreg}_LIBRARIES)
+      SciGetStaticLibs("${${scipkgreg}_LIBRARIES}" ${scipkgreg}_STLIBS)
+    endif ()
 
-  if (${scipkgreg}_DLLS)
-    set(${scipkgreg}_DEFINITIONS -D${scipkguc}_DLL)
+    if (${scipkgreg}_DLLS)
+      set(${scipkgreg}_DEFINITIONS -D${scipkguc}_DLL)
+    endif ()
+
   endif ()
 
 ####################################################################

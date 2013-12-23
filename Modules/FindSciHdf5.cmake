@@ -24,44 +24,86 @@
 #
 ######################################################################
 
-if (WIN32)
-# hdf5 keeps changing the name of its libraries on Windows, so at first we
-# do not look for the libraries.  Once we find the installation, we then
-# add the libs
-  SciFindPackage(PACKAGE "Hdf5"
-    # INSTALL_DIRS ${instdirs} # Now done by SciFindPackage
-    HEADERS hdf5.h
-    INCLUDE_SUBDIRS include include/hdf5/include # Last for VisIt installation
-    FIND_QUIETLY
-    USE_CONFIG_FILE
-  )
-# Get the libraries
-  get_filename_component(Hdf5_ROOT_DIR ${Hdf5_hdf5_h_INCLUDE_DIR}/.. REALPATH)
-  if (DEBUG_CMAKE)
-    message(STATUS "Hdf5_ROOT_DIR = ${Hdf5_ROOT_DIR}.")
-  endif ()
-  file(GLOB hlibs ${Hdf5_ROOT_DIR}/lib/hdf5*)
-  if (DEBUG_CMAKE)
-    message(STATUS "hlibs = ${hlibs}.")
-  endif ()
-  set(desiredlibs)
-  foreach (lb ${hlibs})
-    get_filename_component(ln ${lb} NAME_WE)
-    set(desiredlibs ${desiredlibs} ${ln})
-  endforeach ()
-  file(GLOB hexecs ${Hdf5_ROOT_DIR}/bin/h5diff*.exe)
-  set(desiredexecs)
-  foreach (ex ${hexecs})
-    get_filename_component(en ${ex} NAME_WE)
-    set(desiredexecs ${desiredexecs} ${en})
-  endforeach ()
-else ()
-  set(desiredlibs hdf5_hl hdf5)
-  set(desiredexecs h5diff)
-  if (CMAKE_Fortran_COMPILER_WORKS)
-    set(desiredlibs hdf5_fortran hdf5_f90cstub ${desiredlibs})
-  endif ()
+# The names of the hdf5 libraries can vary, so instead we find
+# the includes and look for the cmake file.  But for that, we
+# need the version.
+message("")
+message(STATUS "Initial search for Hdf5 components")
+SciFindPackage(PACKAGE "Hdf5"
+  HEADERS hdf5.h H5pubconf.h
+  INCLUDE_SUBDIRS include include/hdf5/include # Last for VisIt installation
+  FIND_QUIETLY
+)
+
+# The version is given by H5_PACKAGE_VERSION in H5pubconf.h
+if (NOT Hdf5_H5pubconf_h)
+  set(Hdf5_FOUND FALSE)
+  message(FATAL_ERROR "Hfpubconf.h not found.")
 endif ()
+if (DEBUG_CMAKE)
+  message(STATUS "Hdf5_H5pubconf_h = ${Hdf5_H5pubconf_h}.")
+  message(STATUS "Hdf5_H5pubconf_h_INCLUDE_DIR = ${Hdf5_H5pubconf_h_INCLUDE_DIR}.")
+endif ()
+file(STRINGS ${Hdf5_H5pubconf_h} line
+  REGEX "^#define *H5_PACKAGE_VERSION"
+)
+if (DEBUG_CMAKE)
+  message(STATUS "line = ${line}.")
+endif ()
+string(REGEX REPLACE "#define *H5_PACKAGE_VERSION*" "" val "${line}")
+string(REGEX REPLACE "\"" "" Hdf5_VERSION "${val}")
+string(STRIP "${Hdf5_VERSION}" Hdf5_VERSION)
+message(STATUS "Hdf5_VERSION = ${Hdf5_VERSION}.")
+
+# Fill in what we know
+get_filename_component(Hdf5_ROOT_DIR ${Hdf5_hdf5_h_INCLUDE_DIR}/.. REALPATH)
+message(STATUS "Hdf5_ROOT_DIR = ${Hdf5_ROOT_DIR}.")
+
+# Version known, can look for config file
+SciFindPackage(PACKAGE "Hdf5"
+  CONFIG_SUBDIRS lib/cmake/hdf5-${Hdf5_VERSION}
+  USE_CONFIG_FILE CONFIG_FILE_ONLY
+  FIND_QUIETLY
+)
+message(STATUS "Hdf5_CONFIG_CMAKE = ${Hdf5_CONFIG_CMAKE}.")
+
+# If found, then fix up variables
+if (NOT Hdf5_CONFIG_CMAKE)
+  set(HDF5_FOUND FALSE)
+  if (SciHdf5_FIND_REQUIRED)
+    message(FATAL_ERROR "Failing.")
+  endif ()
+  return()
+endif ()
+
+# Get the libraries in proper order
+if (DEBUG_CMAKE)
+  message(STATUS "Hdf5_ROOT_DIR = ${Hdf5_ROOT_DIR}.")
+endif ()
+set(hlibs ${HDF5_LIBRARIES})
+set(hlnms)
+foreach (lb ${hlibs})
+  get_filename_component(ln ${lb} NAME_WE)
+  set(hlnms ${hlnms} ${ln})
+endforeach ()
+set(desiredlibs)
+foreach (nm hdf5_tools hdf5_hl_fortran hdf5_hl_f90cstub hdf5_hl hdf5_hldll
+  hdf5_fortran hdf5_f90cstub hdf5 hdf5dll
+)
+  list(FIND hlnms ${nm} indx)
+  if (NOT(${indx} EQUAL -1))
+    set(desiredlibs ${desiredlibs} ${nm})
+  endif ()
+endforeach ()
+
+# Get execs
+file(GLOB hexecs ${Hdf5_ROOT_DIR}/bin/h5diff*.exe)
+set(desiredexecs)
+foreach (ex ${hexecs})
+  get_filename_component(en ${ex} NAME_WE)
+  set(desiredexecs ${desiredexecs} ${en})
+endforeach ()
+
 if (DEBUG_CMAKE)
   message(STATUS "Looking for the HDF5 libraries, ${desiredlibs}.")
 endif ()
@@ -77,7 +119,6 @@ SciFindPackage(PACKAGE "Hdf5"
   MODULES ${desiredmods}
   INCLUDE_SUBDIRS include include/hdf5/include # Last for VisIt installation
   MODULE_SUBDIRS include/fortran include lib
-  USE_CONFIG_FILE
 )
 
 # The executables are not always found, so we will hdf5 to found
