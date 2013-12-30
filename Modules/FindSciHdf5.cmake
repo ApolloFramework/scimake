@@ -80,8 +80,12 @@ endif ()
 
 # Not all version have good files to source
 if (${Hdf5_VERSION} STREQUAL 1.8.12)
+  message(STATUS "Not including ${Hdf5_CONFIG_CMAKE}.")
 else ()
   include(${Hdf5_CONFIG_CMAKE})
+  if (DEBUG_CMAKE)
+    message(STATUS "After including ${Hdf5_CONFIG_CMAKE}, HDF5_LIBRARIES = ${HDF5_LIBRARIES}.")
+  endif ()
 endif ()
 
 # Get the libraries in proper order
@@ -90,7 +94,9 @@ if (HDF5_LIBRARIES)
 else ()
   file(GLOB hlibs ${Hdf5_ROOT_DIR}/lib/*hdf5*)
 endif ()
-# message(STATUS "hlibs = ${hlibs}.")
+if (DEBUG_CMAKE)
+  message(STATUS "hlibs = ${hlibs}.")
+endif ()
 set(hlnms)
 foreach (lb ${hlibs})
   get_filename_component(ln ${lb} NAME_WE)
@@ -98,17 +104,21 @@ foreach (lb ${hlibs})
   string(REGEX REPLACE "^lib" "" ln "${ln}")
   set(hlnms ${hlnms} ${ln})
 endforeach ()
-# message(STATUS "hlnms = ${hlnms}.")
+if (DEBUG_CMAKE)
+  message(STATUS "hlnms = ${hlnms}.")
+endif ()
 set(desiredlibs)
-foreach (nm hdf5_tools hdf5_hl_fortran hdf5_hl_f90cstub hdf5_hl hdf5_hldll
-  hdf5_fortran hdf5_f90cstub hdf5 hdf5dll
+foreach (nm hdf5_tools hdf5_toolsdll hdf5_hl_fortran hdf5_hl_f90cstub
+  hdf5_fortran hdf5_f90cstub hdf5_hl hdf5_hldll hdf5 hdf5dll
 )
   list(FIND hlnms ${nm} indx)
   if (NOT(${indx} EQUAL -1))
     set(desiredlibs ${desiredlibs} ${nm})
   endif ()
 endforeach ()
-# message(STATUS "desiredlibs = ${desiredlibs}.")
+if (DEBUG_CMAKE)
+  message(STATUS "desiredlibs = ${desiredlibs}.")
+endif ()
 
 # Get execs
 file(GLOB hexecs ${Hdf5_ROOT_DIR}/bin/h5diff*)
