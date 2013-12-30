@@ -728,18 +728,22 @@ macro(SciFindPackage)
 # If found, source
     if (${scipkgreg}_CONFIG_CMAKE)
       get_filename_component(${scipkgreg}_CONFIG_DIR ${${scipkgreg}_CONFIG_CMAKE}/.. REALPATH)
+      set(confvernames ${scipkgreg}ConfigVersion.cmake ${scipkglc}-config-version.cmake)
+      if (DEBUG_CMAKE)
+        message(STATUS "Looking for ${confvernames} in ${${scipkgreg}_CONFIG_DIR}.")
+      endif ()
       find_file(${scipkgreg}_CONFIG_VERSION_CMAKE
-        NAMES ${scipkgreg}ConfigVersion.cmake ${scipkgrlc}-config-version.cmake
+        NAMES ${confvernames}
         PATHS ${${scipkgreg}_CONFIG_DIR}
       )
       if (TFP_USE_CONFIG_FILE)
         include(${${scipkgreg}_CONFIG_CMAKE})
       endif ()
     endif ()
-    # if (DEBUG_CMAKE)
+    if (DEBUG_CMAKE)
       SciPrintVar(${scipkgreg}_CONFIG_CMAKE)
       SciPrintVar(${scipkgreg}_CONFIG_VERSION_CMAKE)
-    # endif ()
+    endif ()
     if (TFP_CONFIG_FILE_ONLY)
       if (DEBUG_CMAKE OR NOT TFP_FIND_QUIETLY)
         SciPrintCMakeResults(${scipkgreg})
