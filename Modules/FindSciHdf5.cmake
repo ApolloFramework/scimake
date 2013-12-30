@@ -79,7 +79,7 @@ if (NOT Hdf5_CONFIG_CMAKE)
 endif ()
 
 # Not all version have good files to source
-if (${Hdf5_VERSION} STREQUAL 1.8.12)
+if (${Hdf5_VERSION} STREQUAL 1.8.12 OR ${Hdf5_VERSION} STREQUAL 1.8.9)
   message(STATUS "Not including ${Hdf5_CONFIG_CMAKE}.")
 else ()
   include(${Hdf5_CONFIG_CMAKE})
