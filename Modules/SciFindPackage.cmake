@@ -543,6 +543,7 @@ function(SciFindPkgFiles pkgname pkgfiles
     set(pkgfilenames)
     foreach (pkgfile ${abspkgfiles})
       get_filename_component(pkgfilename ${pkgfile} NAME_WE)
+      string(REGEX REPLACE "^lib" "" pkgfilename "${pkgfilename}")
       set(pkgfilenames ${pkgfilenames} ${pkgfilename})
     endforeach ()
   endif ()
