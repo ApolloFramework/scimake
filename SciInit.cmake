@@ -364,3 +364,18 @@ if (APPLE)
   # set (CMAKE_INSTALL_NAME_DIR @rpath)
 endif ()
 
+######################################################################
+#
+# Testing macros
+#
+######################################################################
+
+MACRO(add_unit_test)
+  set(oneValArgs NAME COMMAND)
+  set(multiValArgs SOURCES LIBS ARGS)
+  cmake_parse_arguments(TEST "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
+  add_executable(${TEST_COMMAND} ${TEST_SOURCES})
+  target_link_libraries(${TEST_COMMAND} ${TEST_LIBS})    # Possibly need a boost lib here
+  add_test(NAME ${TEST_NAME} COMMAND ${TEST_COMMAND} ${TEST_ARGS})
+ENDMACRO()
+
