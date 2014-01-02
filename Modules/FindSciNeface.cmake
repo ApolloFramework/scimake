@@ -42,24 +42,14 @@ else ()
   set(instdirs neface-sersh)
 endif ()
 
-if (APPLE)
-  set(desiredLibraries "libneface.dylib")
-elseif (WIN32)
-  set(desiredLibraries "neface.lib")
-else ()
-  set(desiredLibraries "libneface.so")
-endif () 
-
-set(desiredHeaders neface.h)
-
-message(STATUS "SciFindPackage called with: INSTALL_DIRS ${instdirs} LIBRARIES ${desiredLibraries}")
-
+set(DEBUG_CMAKE true)
 SciFindPackage(PACKAGE "Neface"
   INSTALL_DIRS ${instdirs}
-  HEADERS ${desiredHeaders}
-  LIBRARIES ${desiredLibraries}
+  HEADERS "neface.h"
+  LIBRARIES "neface;nefacecpp"
   LIBRARY_SUBDIRS lib
 )
+set(DEBUG_CMAKE false)
 
 if (NEFACE_FOUND)
   # message(STATUS "Found Neface.")
