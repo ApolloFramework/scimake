@@ -16,10 +16,24 @@
 message(STATUS "TEST_ARGS = ${TEST_ARGS}.")
 string(REPLACE "\"" "" ARGS_LIST "${TEST_ARGS}")
 string(REPLACE " " ";" ARGS_LIST "${ARGS_LIST}")
-execute_process(COMMAND ${TEST_PROG} ${ARGS_LIST} RESULT_VARIABLE EXEC_ERROR)
-if(EXEC_ERROR)
+
+# if TEST_STDOUT is non-empty, then we use it as the output file into
+# for the execute_process(), and we add it to the ${TEST_RESULTS} to
+# be compared. This allows us to have a test which generates one or
+# more files which are to be compared, while also comparing the stdout
+# of the test.
+if (TEST_STDOUT)
+  execute_process(COMMAND ${TEST_PROG} ${ARGS_LIST} 
+    RESULT_VARIABLE EXEC_ERROR OUTPUT_FILE ${TEST_STDOUT})
+  set(TEST_RESULTS ${TEST_RESULTS} ${TEST_STDOUT})
+else ()
+  execute_process(COMMAND ${TEST_PROG} ${ARGS_LIST}
+    RESULT_VARIABLE EXEC_ERROR)
+endif ()
+
+if (EXEC_ERROR)
   message(FATAL_ERROR "Execution failure.")
-endif()
+endif ()
 message(STATUS "Execution succeeded.")
 
 # Test all the output
@@ -28,8 +42,14 @@ set(diffres)
 # message(STATUS "TEST_RESULTS = ${TEST_RESULTS}.")
 string(REPLACE "\"" "" RESULTS_LIST "${TEST_RESULTS}")
 string(REPLACE " " ";" RESULTS_LIST "${RESULTS_LIST}")
-# message(STATUS "RESULTS_LIST = ${RESULTS_LIST}.")
+message(STATUS "RESULTS_LIST = ${RESULTS_LIST}.")
 foreach (res ${RESULTS_LIST})
+  if (NOT EXISTS ${res}) 
+    message(FATAL_ERROR "FILE ${res} does not exist.")
+  endif()
+  if (NOT EXISTS ${TEST_RESULTS_DIR}/${res}) 
+    message(FATAL_ERROR "FILE ${TEST_RESULTS_DIR}/${res} does not exist.")
+  endif()
   execute_process(COMMAND ${CMAKE_COMMAND} -E compare_files
     ${res} ${TEST_RESULTS_DIR}/${res}
     RESULT_VARIABLE DIFFERS)
