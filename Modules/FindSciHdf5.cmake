@@ -79,6 +79,7 @@ if (NOT Hdf5_CONFIG_CMAKE)
 endif ()
 
 # Not all version have good files to source
+if (FALSE)
 if (${Hdf5_VERSION} STREQUAL 1.8.12 OR ${Hdf5_VERSION} STREQUAL 1.8.9)
   message(STATUS "Not including ${Hdf5_CONFIG_CMAKE}.")
 else ()
@@ -86,6 +87,7 @@ else ()
   if (DEBUG_CMAKE)
     message(STATUS "After including ${Hdf5_CONFIG_CMAKE}, HDF5_LIBRARIES = ${HDF5_LIBRARIES}.")
   endif ()
+endif ()
 endif ()
 
 # Get the libraries in proper order
