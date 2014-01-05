@@ -126,8 +126,11 @@ SciPrintString("SUPRA_SEARCH_PATH = ${SUPRA_SEARCH_PATH}")
 find_program(HOSTNAME_CMD NAMES hostname)
 exec_program(${HOSTNAME_CMD} ARGS OUTPUT_VARIABLE HOSTNAME)
 SciPrintString("scimake running on ${HOSTNAME}")
+# This not always accurate
 string(REGEX REPLACE "\\..*$" "" UQHOSTNAME "${HOSTNAME}")
 SciPrintString("UQHOSTNAME = ${UQHOSTNAME}")
+string(REGEX REPLACE "${UQHOSTNAME}\\." "" DOMAINNAME "${HOSTNAME}")
+SciPrintString("DOMAINNAME = ${DOMAINNAME}")
 
 find_program(UNAME NAMES uname)
 macro(getuname name flag)
