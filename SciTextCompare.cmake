@@ -50,7 +50,7 @@ foreach (res ${RESULTS_LIST})
   if (NOT EXISTS ${TEST_RESULTS_DIR}/${res}) 
     message(FATAL_ERROR "FILE ${TEST_RESULTS_DIR}/${res} does not exist.")
   endif()
-  execute_process(COMMAND ${CMAKE_COMMAND} -E compare_files
+  execute_process(COMMAND diff --strip-trailing-cr
     ${res} ${TEST_RESULTS_DIR}/${res}
     RESULT_VARIABLE DIFFERS)
   if (DIFFERS)
