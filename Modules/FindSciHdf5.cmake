@@ -70,18 +70,10 @@ SciFindPackage(PACKAGE "Hdf5"
 )
 message(STATUS "Hdf5_CONFIG_CMAKE = ${Hdf5_CONFIG_CMAKE}.")
 
-# If found, then fix up variables
-if (NOT Hdf5_CONFIG_CMAKE)
-  set(HDF5_FOUND FALSE)
-  if (SciHdf5_FIND_REQUIRED)
-    message(FATAL_ERROR "Failed to find Hdf5.")
-  endif ()
-endif ()
-
 # Not all version have good files to source
 if (FALSE)
 if (${Hdf5_VERSION} STREQUAL 1.8.12 OR ${Hdf5_VERSION} STREQUAL 1.8.9)
-  message(STATUS "Not including ${Hdf5_CONFIG_CMAKE}.")
+  message(STATUS "Not using ${Hdf5_CONFIG_CMAKE}.")
 else ()
   include(${Hdf5_CONFIG_CMAKE})
   if (DEBUG_CMAKE)
