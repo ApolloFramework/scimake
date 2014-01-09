@@ -34,7 +34,8 @@ MACRO(SciAddUnitTest)
   string(ASCII 1 WORKAROUND_SEPARATOR)
   set(oneValArgs NAME COMMAND RESULTS_DIR STDOUT_FILE)
   set(multiValArgs RESULTS_FILES SOURCES LIBS ARGS EXEC_DIRS)
-  cmake_parse_arguments(TEST "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
+  cmake_parse_arguments(TEST "${opts}" "${oneValArgs}" "${multiValArgs}"
+      ${ARGN})
   set(TEST_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/${TEST_COMMAND}")
   add_executable(${TEST_COMMAND} ${TEST_SOURCES})
   target_link_libraries(${TEST_COMMAND} ${TEST_LIBS})
@@ -47,10 +48,11 @@ MACRO(SciAddUnitTest)
 # the strings that make up the list. We can be pretty certain the ctrl-A
 # (ASCII 001) won't be in any of the strings.
 
-  string(REPLACE ";" "${WORKAROUND_SEPARATOR}" EXEC_DIR_STRING "${TEST_EXEC_DIRS}")
+  string(REPLACE ";" "${WORKAROUND_SEPARATOR}" EXEC_DIR_STRING
+      "${TEST_EXEC_DIRS}")
 
   add_test(NAME ${TEST_NAME} COMMAND ${CMAKE_COMMAND}
-      -DTEST_PROG:FILEPATH=${TEST_EXECUTABLE} 
+      -DTEST_PROG:FILEPATH=${TEST_EXECUTABLE}
       -DTEST_ARGS:STRING=${TEST_ARGS}
       -DTEST_STDOUT_FILE:STRING=${TEST_STDOUT_FILE}
       -DTEST_RESULTS:STRING=${TEST_RESULTS_FILES}
