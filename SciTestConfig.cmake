@@ -43,8 +43,23 @@ if (CTEST_DROP_SITE)
   set(CTEST_DROP_SITE_CDASH TRUE)
 endif ()
 
-option(ENABLE_COVERAGE "Enables compiling library for coverage data (only supported on gnu c++ compilers)." OFF)
 
+# Keeping this around for later
+if (FALSE)
+option(ENABLE_MEMCHECK
+  "Enables testing to use valgrind to track memory leaks in tests." OFF)
+if(ENABLE_MEMCHECK AND NOT WIN32)
+  find_program(VALGRIND_EXE valgrind)
+  if(VALGRIND_EXE)
+    set(CTEST_MEMORYCHECK_COMMAND ${VALGRIND_EXE})
+#    set(CTEST_MEMORYCHECK_COMMAND_OPTIONS "-v --tool=memcheck --leak-check=full
+ --track-fds=yes --num-callers=50 --show-reachable=yes --track-origins=yes --mal
+loc-fill=0xff --free-fill=0xfe")
+  endif()
+endif()
+endif()
+
+option(ENABLE_COVERAGE "Enables compiling library for coverage data (only supported on gnu c++ compilers)." OFF)
 if(ENABLE_COVERAGE)
   if((APPLE AND CMAKE_COMPILER_IS_CLANGXX)  # Apple's g++ doesn't support coverage data, but clang++ does
     OR (NOT APPLE AND CMAKE_COMPILER_IS_GNUCXX))
