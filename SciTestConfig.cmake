@@ -52,9 +52,7 @@ if(ENABLE_MEMCHECK AND NOT WIN32)
   find_program(VALGRIND_EXE valgrind)
   if(VALGRIND_EXE)
     set(CTEST_MEMORYCHECK_COMMAND ${VALGRIND_EXE})
-#    set(CTEST_MEMORYCHECK_COMMAND_OPTIONS "-v --tool=memcheck --leak-check=full
- --track-fds=yes --num-callers=50 --show-reachable=yes --track-origins=yes --mal
-loc-fill=0xff --free-fill=0xfe")
+#    set(CTEST_MEMORYCHECK_COMMAND_OPTIONS "-v --tool=memcheck --leak-check=full --track-fds=yes --num-callers=50 --show-reachable=yes --track-origins=yes --mal loc-fill=0xff --free-fill=0xfe")
   endif()
 endif()
 endif()
