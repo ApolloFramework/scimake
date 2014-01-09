@@ -12,13 +12,17 @@
 #
 ######################################################################
 
+set(PATH_SEPARATOR ":")
+
 if (WIN32)
   set(PATH_SEPARATOR ";")
-else ()
-  set(PATH_SEPARATOR ":")
+  set(PATH_VAR_NAME PATH)
+elseif (LINUX)
+  set(PATH_VAR_NAME LD_LIBRARY_PATH)
+else () 
+  set(PATH_VAR_NAME DYLD_LIBRARY_PATH)
 endif ()
 
-message(STATUS "TEST_ARGS = ${TEST_ARGS}.")
 string(REPLACE "\"" "" ARGS_LIST "${TEST_ARGS}")
 string(REPLACE " " ";" ARGS_LIST "${ARGS_LIST}")
 
@@ -36,9 +40,11 @@ string(ASCII 1 WORKAROUND_SEPARATOR)
 if (TEST_EXEC_DIRS)
   string(REPLACE "${WORKAROUND_SEPARATOR}" "${PATH_SEPARATOR}"
          ENV_PATH "${TEST_EXEC_DIRS}")
-  file(TO_NATIVE_PATH "${ENV_PATH}" ENV_PATH)
-  set(ENV{PATH} "${ENV_PATH}${PATH_SEPARATOR}$ENV{PATH}")
-  message(STATUS "ENV{PATH} now set to $ENV{PATH}")
+  if (WIN32)
+    file(TO_NATIVE_PATH "${ENV_PATH}" ENV_PATH)
+  endif ()
+  set(ENV{${PATH_VAR_NAME}} "${ENV_PATH}${PATH_SEPARATOR}$ENV{${PATH_VAR_NAME}}")
+  message(STATUS "ENV{${PATH_VAR_NAME}} now set to $ENV{${PATH_VAR_NAME}}")
 endif ()
 
 # if TEST_STDOUT_FILE is non-empty, then we use it as the output file
