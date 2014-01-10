@@ -59,13 +59,16 @@ endmacro()
 #                 against expected output.
 
 macro(SciAddUnitTest)
-  string(ASCII 1 WORKAROUND_SEPARATOR)
   set(oneValArgs NAME COMMAND RESULTS_DIR STDOUT_FILE)
-  set(multiValArgs RESULTS_FILES SOURCES LIBS ARGS EXEC_DIRS)
+  set(multiValArgs RESULTS_FILES SOURCES LIBS ARGS)
   cmake_parse_arguments(TEST "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
   set(TEST_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/${TEST_COMMAND}")
-  add_executable(${TEST_COMMAND} ${TEST_SOURCES})
-  target_link_libraries(${TEST_COMMAND} ${TEST_LIBS})
+  if (TEST_SOURCES)
+    add_executable(${TEST_COMMAND} ${TEST_SOURCES})
+  endif ()
+  if (TEST_LIBS)
+    target_link_libraries(${TEST_COMMAND} ${TEST_LIBS})
+  endif ()
   add_test(NAME ${TEST_NAME} COMMAND ${CMAKE_COMMAND}
       -DTEST_PROG:FILEPATH=${TEST_EXECUTABLE} 
       -DTEST_ARGS:STRING=${TEST_ARGS}
@@ -74,9 +77,7 @@ macro(SciAddUnitTest)
       -DTEST_RESULTS_DIR:PATH=${TEST_RESULTS_DIR}
       -P ${SCIMAKE_DIR}/SciTextCompare.cmake
   )
-# convert the cmake shared libraries path into a machine specific native path
-  makeNativePath(INPATH "${SHLIB_CMAKE_PATH_VAL}" OUTPATH TESTS_LIB_PATH)
-  set_tests_properties("${TEST_COMMAND}"
+  set_tests_properties(${TEST_NAME}
     PROPERTIES ENVIRONMENT "${SHLIB_PATH_VAR}=${TESTS_LIB_PATH}"
     ATTACHED_FILES_ON_FAIL "${RESULTS_FILES}")
 endmacro()
