@@ -25,6 +25,21 @@ message(STATUS "SHLIB_PATH_VAR = ${SHLIB_PATH_VAR}.")
 
 file(TO_CMAKE_PATH "$ENV{${SHLIB_PATH_VAR}}" SHLIB_CMAKE_PATH_VAL)
 
+message(STATUS "In SciAddUnitTestMacros.cmake, SHLIB_CMAKE_PATH_VAL = ${SHLIB_CMAKE_PATH_VAL}")
+
+# make a macro for converting a cmake path into a platform specific path
+macro(makeNativePath)
+  set(oneValArgs OUTPATH)
+  set(multiValArgs INPATH)
+  cmake_parse_arguments(TO_NATIVE "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
+  file(TO_NATIVE_PATH "${TO_NATIVE_INPATH}" NATIVE_OUTPATH)
+  if(WIN32)
+    string(REPLACE ";" "\\;" ${TO_NATIVE_OUTPATH} "${NATIVE_OUTPATH}")
+  else(WIN32)
+    string(REPLACE ";" ":" ${TO_NATIVE_OUTPATH} "${NATIVE_OUTPATH}")
+  endif(WIN32)
+endmacro()
+
 # Add a unit test. If the test needs to compare its results against some
 # expected results, then RESULTS_DIR and RESULTS (or STDOUT) must be set.
 #
@@ -43,7 +58,7 @@ file(TO_CMAKE_PATH "$ENV{${SHLIB_PATH_VAR}}" SHLIB_CMAKE_PATH_VAL)
 #                 file will be added to $RESULTS so it will be compared
 #                 against expected output.
 
-MACRO(SciAddUnitTest)
+macro(SciAddUnitTest)
   string(ASCII 1 WORKAROUND_SEPARATOR)
   set(oneValArgs NAME COMMAND RESULTS_DIR STDOUT_FILE)
   set(multiValArgs RESULTS_FILES SOURCES LIBS ARGS EXEC_DIRS)
@@ -59,8 +74,10 @@ MACRO(SciAddUnitTest)
       -DTEST_RESULTS_DIR:PATH=${TEST_RESULTS_DIR}
       -P ${SCIMAKE_DIR}/SciTextCompare.cmake
   )
+# convert the cmake shared libraries path into a machine specific native path
+  make_native_path(INPATH "${SHLIB_CMAKE_PATH_VAL}" OUTPATH TESTS_LIB_PATH)
   set_tests_properties("${TEST_COMMAND}"
     PROPERTIES ENVIRONMENT "${SHLIB_PATH_VAR}=${TESTS_LIB_PATH}"
     ATTACHED_FILES_ON_FAIL "${RESULTS_FILES}")
-ENDMACRO()
+endmacro()
 
