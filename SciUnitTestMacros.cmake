@@ -75,7 +75,7 @@ macro(SciAddUnitTest)
       -P ${SCIMAKE_DIR}/SciTextCompare.cmake
   )
 # convert the cmake shared libraries path into a machine specific native path
-  make_native_path(INPATH "${SHLIB_CMAKE_PATH_VAL}" OUTPATH TESTS_LIB_PATH)
+  makeNativePath(INPATH "${SHLIB_CMAKE_PATH_VAL}" OUTPATH TESTS_LIB_PATH)
   set_tests_properties("${TEST_COMMAND}"
     PROPERTIES ENVIRONMENT "${SHLIB_PATH_VAR}=${TESTS_LIB_PATH}"
     ATTACHED_FILES_ON_FAIL "${RESULTS_FILES}")
