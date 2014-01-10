@@ -60,7 +60,7 @@ endmacro()
 
 macro(SciAddUnitTest)
   set(oneValArgs NAME COMMAND RESULTS_DIR STDOUT_FILE)
-  set(multiValArgs RESULTS_FILES SOURCES LIBS ARGS)
+  set(multiValArgs RESULTS_FILES SOURCES LIBS ARGS PROPERTIES)
   cmake_parse_arguments(TEST "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
   set(TEST_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/${TEST_COMMAND}")
   if (TEST_SOURCES)
@@ -79,6 +79,7 @@ macro(SciAddUnitTest)
   )
   set_tests_properties(${TEST_NAME}
     PROPERTIES ENVIRONMENT "${SHLIB_PATH_VAR}=${TESTS_LIB_PATH}"
+               ${TEST_PROPERTIES}
     ATTACHED_FILES_ON_FAIL "${RESULTS_FILES}")
 endmacro()
 
