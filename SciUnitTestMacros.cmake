@@ -78,10 +78,18 @@ macro(SciAddUnitTest)
       -DTEST_RESULTS_DIR:PATH=${TEST_RESULTS_DIR}
       -P ${SCIMAKE_DIR}/SciTextCompare.cmake
   )
+
+# $ATTACHED_FILES is a list of files to attache and if non-empty, it
+# overrides the default, which is ${TEST_RESULTS_FILES}.
+  if (ATTACHED_FILES)
+    set(FILES_TO_ATTACH ${ATTACHED_FILES})
+  else ()
+    set(FILES_TO_ATTACH ${TEST_RESULTS_FILES})
+  endif ()
   set_tests_properties(${TEST_NAME}
     PROPERTIES ENVIRONMENT
             "${SHLIB_PATH_VAR}=${TESTS_LIB_PATH}" ${TEST_PROPERTIES}
-    ATTACHED_FILES_ON_FAIL "${RESULTS_FILES} ${ATTACHED_FILES}"
+    ATTACHED_FILES_ON_FAIL "${FILES_TO_ATTACH}"
   )
 endmacro()
 
