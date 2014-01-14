@@ -40,7 +40,7 @@ set(Geant4_LIBRARY_LIST
 
 SciFindPackage(
   PACKAGE "Geant4"
-  HEADERS "G4RunManager.h"
+  HEADERS "globals.hh"
   INCLUDE_SUBDIRS include/Geant4
   LIBRARIES ${Geant4_LIBRARY_LIST}
 )
