@@ -27,7 +27,7 @@
 if (WIN32)
   set(VisIt_DIFF_LIBS enginelib_ser guilib viewerlib)
 else ()
-  set(VisIt_DIFF_LIBS engine_ser gui viewer avtpythonfilters_ser)
+  set(VisIt_DIFF_LIBS engine_ser gui viewer )
 endif ()
 
 # Libraries that are only required to support the volume plot
