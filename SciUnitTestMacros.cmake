@@ -27,17 +27,24 @@ file(TO_CMAKE_PATH "$ENV{${SHLIB_PATH_VAR}}" SHLIB_CMAKE_PATH_VAL)
 
 message(STATUS "In SciAddUnitTestMacros.cmake, SHLIB_CMAKE_PATH_VAL = ${SHLIB_CMAKE_PATH_VAL}")
 
+# Add current binary dir to shared lib path var. This is needed when doing
+# shared builds in order for executables to run.
+macro(SciAddCurrentBinaryDir)
+  set(SHLIB_CMAKE_PATH_VAL ${CMAKE_CURRENT_BINARY_DIR} ${SHLIB_CMAKE_PATH_VAL})
+  set(SHLIB_CMAKE_PATH_VAL "${SHLIB_CMAKE_PATH_VAL}" PARENT_SCOPE)
+endmacro()
+
 # make a macro for converting a cmake path into a platform specific path
 macro(makeNativePath)
   set(oneValArgs OUTPATH)
   set(multiValArgs INPATH)
   cmake_parse_arguments(TO_NATIVE "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
   file(TO_NATIVE_PATH "${TO_NATIVE_INPATH}" NATIVE_OUTPATH)
-  if(WIN32)
+  if (WIN32)
     string(REPLACE ";" "\\;" ${TO_NATIVE_OUTPATH} "${NATIVE_OUTPATH}")
-  else(WIN32)
+  else()
     string(REPLACE ";" ":" ${TO_NATIVE_OUTPATH} "${NATIVE_OUTPATH}")
-  endif(WIN32)
+  endif()
 endmacro()
 
 # Add a unit test. If the test needs to compare its results against some
