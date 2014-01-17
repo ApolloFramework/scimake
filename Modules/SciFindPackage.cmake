@@ -787,14 +787,24 @@ macro(SciFindPackage)
         set(scitypeplural ${scitype}S)
       endif ()
 
-# Get length of list
+# Get list containing files to search for
       if (${scitype} STREQUAL DLL)
         set(srchfilesvar TFP_LIBRARIES)
       else ()
         set(srchfilesvar TFP_${scitypeplural})
       endif ()
-      list(LENGTH ${srchfilesvar} sciexecslen)
-      if (${sciexecslen})
+
+# Look for optional keyword
+      list(FIND ${srchfilesvar} OPTIONAL optind)
+      set(srchoptional FALSE)
+      if ((${scitype} STREQUAL DLL) OR (NOT ${optind} EQUAL -1))
+        list(REMOVE_AT ${srchfilesvar} ${optind})
+        set(srchoptional TRUE)
+      endif ()
+
+# If list not empty, search for files
+      list(LENGTH ${srchfilesvar} scisrchlen)
+      if (${scisrchlen})
 
 # Create lists for search
         list(LENGTH TFP_${scitype}_SUBDIRS scilen)
@@ -818,7 +828,7 @@ macro(SciFindPackage)
             message(WARNING "Default subdir not known for ${scitype}.")
           endif ()
         endif ()
-        message(STATUS "Looking for ${scitypeplural}, ${${srchfilesvar}}, in ${scifilesubdirs}.")
+        message(STATUS "Looking for ${scitypeplural}, ${${srchfilesvar}}, in ${scifilesubdirs} with OPTIONAL = ${srchoptional}.")
 
 # Find the files
         SciFindPkgFiles(${scipkgreg} "${${srchfilesvar}}"
@@ -827,10 +837,9 @@ macro(SciFindPackage)
           ${TFP_ALLOW_LIBRARY_DUPLICATES}
         )
 # Okay not to find dlls
-        if (${scitype} STREQUAL DLL)
-        else ()
-          if (NOT ${scipkgreg}_${scitypeplural}_FOUND)
-            message(WARNING "${scipkgreg}_${scitypeplural}_FOUND = ${${scipkgreg}_${scitypeplural}_FOUND}.")
+        if (NOT ${scipkgreg}_${scitypeplural}_FOUND)
+          message(WARNING "${scipkgreg}_${scitypeplural}_FOUND = ${${scipkgreg}_${scitypeplural}_FOUND}.")
+          if (NOT ${srchoptional})
             set(${scipkguc}_FOUND FALSE)
           endif ()
         endif ()
