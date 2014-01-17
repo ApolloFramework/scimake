@@ -11,27 +11,13 @@
 #
 ######################################################################
 
-message("--------- Setting up testing ---------")
-
-# Set test environment
-if (WIN32)
-  set(SHLIB_PATH_VAR PATH)
-elseif (APPLE)
-  set(SHLIB_PATH_VAR DYLD_LIBRARY_PATH)
-elseif (LINUX)
-  set(SHLIB_PATH_VAR LD_LIBRARY_PATH)
-endif ()
-message(STATUS "SHLIB_PATH_VAR = ${SHLIB_PATH_VAR}.")
-
-file(TO_CMAKE_PATH "$ENV{${SHLIB_PATH_VAR}}" SHLIB_CMAKE_PATH_VAL)
-
-message(STATUS "In SciAddUnitTestMacros.cmake, SHLIB_CMAKE_PATH_VAL = ${SHLIB_CMAKE_PATH_VAL}")
-
 # Add current binary dir to shared lib path var. This is needed when doing
 # shared builds in order for executables to run.
 macro(SciAddCurrentBinaryDir)
   set(SHLIB_CMAKE_PATH_VAL ${CMAKE_CURRENT_BINARY_DIR} ${SHLIB_CMAKE_PATH_VAL})
   set(SHLIB_CMAKE_PATH_VAL "${SHLIB_CMAKE_PATH_VAL}" PARENT_SCOPE)
+  # make a system native path var containing all of the shared libraries directories
+  makeNativePath(INPATH "${SHLIB_CMAKE_PATH_VAL}" OUTPATH SCIMAKE_SHLIB_NATIVE_PATH_VAL)
 endmacro()
 
 # make a macro for converting a cmake path into a platform specific path
@@ -46,6 +32,23 @@ macro(makeNativePath)
     string(REPLACE ";" ":" ${TO_NATIVE_OUTPATH} "${NATIVE_OUTPATH}")
   endif()
 endmacro()
+
+message("--------- Setting up testing ---------")
+
+# Set test environment
+if (WIN32)
+  set(SHLIB_PATH_VAR PATH)
+elseif (APPLE)
+  set(SHLIB_PATH_VAR DYLD_LIBRARY_PATH)
+elseif (LINUX)
+  set(SHLIB_PATH_VAR LD_LIBRARY_PATH)
+endif ()
+message(STATUS "SHLIB_PATH_VAR = ${SHLIB_PATH_VAR}.")
+
+file(TO_CMAKE_PATH "$ENV{${SHLIB_PATH_VAR}}" SHLIB_CMAKE_PATH_VAL)
+makeNativePath(INPATH "${SHLIB_CMAKE_PATH_VAL}" OUTPATH SCIMAKE_SHLIB_NATIVE_PATH_VAL)
+
+message(STATUS "In SciAddUnitTestMacros.cmake, SHLIB_CMAKE_PATH_VAL = ${SHLIB_CMAKE_PATH_VAL}")
 
 # Add a unit test. If the test needs to compare its results against some
 # expected results, then RESULTS_DIR and RESULTS (or STDOUT) must be set.
@@ -95,7 +98,7 @@ macro(SciAddUnitTest)
   endif ()
   set_tests_properties(${TEST_NAME}
     PROPERTIES ENVIRONMENT
-            "${SHLIB_PATH_VAR}=${TESTS_LIB_PATH}" ${TEST_PROPERTIES}
+            "${SHLIB_PATH_VAR}=${SCIMAKE_SHLIB_NATIVE_PATH_VAL}" ${TEST_PROPERTIES}
     ATTACHED_FILES_ON_FAIL "${FILES_TO_ATTACH}"
   )
 endmacro()
