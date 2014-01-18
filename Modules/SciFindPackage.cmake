@@ -794,14 +794,19 @@ macro(SciFindPackage)
         set(srchfilesvar TFP_${scitypeplural})
       endif ()
 
-# Look for optional keyword
-      list(FIND ${srchfilesvar} OPTIONAL optind)
+# Set whether optional search
       set(srchoptional FALSE)
-      if ((${scitype} STREQUAL DLL) OR (NOT ${optind} EQUAL -1))
-        if (${srchfilesvar})
-          list(REMOVE_AT ${srchfilesvar} ${optind})
-        endif ()
+      if (${scitype} STREQUAL DLL)
+# DLL search always optional
         set(srchoptional TRUE)
+      elseif (${srchfilesvar})
+# Matters only if there is something to search for
+        list(FIND ${srchfilesvar} OPTIONAL optind)
+        if (NOT ${optind} EQUAL -1)
+# If find OPTIONAL, then remove that from list and set optional true
+          list(REMOVE_AT ${srchfilesvar} ${optind})
+          set(srchoptional TRUE)
+        endif ()
       endif ()
 
 # If list not empty, search for files
