@@ -37,9 +37,13 @@ else ()
   set(txbasefindlibs txbase)
 endif ()
 
-# txbase can require shared runtime.  Otherwise SciFindPackage is enough
+# SERMD is as static as possible consistent with shared libraries
 if (USE_TXBASE_SERMD)
-  set(instdirargs INSTALL_DIRS txbase-sermd txbase)
+  if (WIN32)
+    set(instdirargs INSTALL_DIRS txbase-sermd)
+  else ()
+    set(instdirargs INSTALL_DIRS txbase)
+  endif ()
 endif ()
 SciFindPackage(PACKAGE "TxBase"
   ${instdirargs}
