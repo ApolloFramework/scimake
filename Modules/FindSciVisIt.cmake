@@ -60,6 +60,7 @@ set(VisIt_LIBRARY_NAMES_SEARCHED
   avtmir_ser
   avtpipeline_ser
   avtplotter_ser
+  avtpythonfilters_ser
   avtqtviswindow
   avtquery_ser
   avtshapelets
