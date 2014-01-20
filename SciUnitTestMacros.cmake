@@ -11,13 +11,25 @@
 #
 ######################################################################
 
+# Add the specified directory to the shared libraries path
+macro(SciAddSharedLibsDir)
+  # parse the path argument
+  set(multiValArgs ADDPATH)
+  cmake_parse_arguments(SHLIB_DIRS "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
+  # if a directory was specified add it to the path in the parent scope
+  if (SHLIB_DIRS_ADDPATH)
+    set(SHLIB_CMAKE_PATH_VAL ${SHLIB_DIRS_ADDPATH} ${SHLIB_CMAKE_PATH_VAL})
+    set(SHLIB_CMAKE_PATH_VAL "${SHLIB_CMAKE_PATH_VAL}" PARENT_SCOPE)
+
+    # make a system native path var containing all of the shared libraries directories
+    makeNativePath(INPATH "${SHLIB_CMAKE_PATH_VAL}" OUTPATH SCIMAKE_SHLIB_NATIVE_PATH_VAL)
+  endif (SHLIB_DIRS_ADDPATH)
+endmacro()
+
 # Add current binary dir to shared lib path var. This is needed when doing
 # shared builds in order for executables to run.
 macro(SciAddCurrentBinaryDir)
-  set(SHLIB_CMAKE_PATH_VAL ${CMAKE_CURRENT_BINARY_DIR} ${SHLIB_CMAKE_PATH_VAL})
-  set(SHLIB_CMAKE_PATH_VAL "${SHLIB_CMAKE_PATH_VAL}" PARENT_SCOPE)
-  # make a system native path var containing all of the shared libraries directories
-  makeNativePath(INPATH "${SHLIB_CMAKE_PATH_VAL}" OUTPATH SCIMAKE_SHLIB_NATIVE_PATH_VAL)
+  SciAddSharedLibsDir(ADDPATH "${CMAKE_CURRENT_BINARY_DIR}")
 endmacro()
 
 # make a macro for converting a cmake path into a platform specific path
