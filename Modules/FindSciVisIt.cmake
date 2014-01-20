@@ -60,6 +60,7 @@ set(VisIt_LIBRARY_NAMES_SEARCHED
   avtmir_ser
   avtpipeline_ser
   avtplotter_ser
+  avtpythonfilters_ser
   avtqtviswindow
   avtquery_ser
   avtshapelets
@@ -139,7 +140,7 @@ endif ()
 SciFindPackage(PACKAGE VisIt
   INSTALL_DIRS ${VisIt_INSTALL_DIRS}
   HEADERS vtkQtRenderWindow.h
-  LIBRARIES ${VisIt_LIBRARY_NAMES_SEARCHED}
+  LIBRARIES ${VisIt_LIBRARY_NAMES_SEARCHED} OPTIONAL
   INCLUDE_SUBDIRS "${VisIt_INC_SUBDIR}"
   LIBRARY_SUBDIRS "${VisIt_LIB_SUBDIR}"
 )

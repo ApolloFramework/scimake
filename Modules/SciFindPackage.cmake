@@ -787,14 +787,31 @@ macro(SciFindPackage)
         set(scitypeplural ${scitype}S)
       endif ()
 
-# Get length of list
+# Get list containing files to search for
       if (${scitype} STREQUAL DLL)
         set(srchfilesvar TFP_LIBRARIES)
       else ()
         set(srchfilesvar TFP_${scitypeplural})
       endif ()
-      list(LENGTH ${srchfilesvar} sciexecslen)
-      if (${sciexecslen})
+
+# Set whether optional search
+      set(srchoptional FALSE)
+      if (${scitype} STREQUAL DLL)
+# DLL search always optional
+        set(srchoptional TRUE)
+      elseif (${srchfilesvar})
+# Matters only if there is something to search for
+        list(FIND ${srchfilesvar} OPTIONAL optind)
+        if (NOT ${optind} EQUAL -1)
+# If find OPTIONAL, then remove that from list and set optional true
+          list(REMOVE_AT ${srchfilesvar} ${optind})
+          set(srchoptional TRUE)
+        endif ()
+      endif ()
+
+# If list not empty, search for files
+      list(LENGTH ${srchfilesvar} scisrchlen)
+      if (${scisrchlen})
 
 # Create lists for search
         list(LENGTH TFP_${scitype}_SUBDIRS scilen)
@@ -818,7 +835,7 @@ macro(SciFindPackage)
             message(WARNING "Default subdir not known for ${scitype}.")
           endif ()
         endif ()
-        message(STATUS "Looking for ${scitypeplural}, ${${srchfilesvar}}, in ${scifilesubdirs}.")
+        message(STATUS "Looking for ${scitypeplural}, ${${srchfilesvar}}, in ${scifilesubdirs} with OPTIONAL = ${srchoptional}.")
 
 # Find the files
         SciFindPkgFiles(${scipkgreg} "${${srchfilesvar}}"
@@ -827,10 +844,9 @@ macro(SciFindPackage)
           ${TFP_ALLOW_LIBRARY_DUPLICATES}
         )
 # Okay not to find dlls
-        if (${scitype} STREQUAL DLL)
-        else ()
-          if (NOT ${scipkgreg}_${scitypeplural}_FOUND)
-            message(WARNING "${scipkgreg}_${scitypeplural}_FOUND = ${${scipkgreg}_${scitypeplural}_FOUND}.")
+        if (NOT ${scipkgreg}_${scitypeplural}_FOUND)
+          message(WARNING "${scipkgreg}_${scitypeplural}_FOUND = ${${scipkgreg}_${scitypeplural}_FOUND}.")
+          if (NOT ${srchoptional})
             set(${scipkguc}_FOUND FALSE)
           endif ()
         endif ()

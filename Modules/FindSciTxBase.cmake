@@ -17,11 +17,6 @@
 #
 # TxBase_ROOT_DIR          Specifies the root dir of the TxBase installation
 #
-# BUILD_WITH_CC4PY_RUNTIME Specifies to look for installation dirs,
-#                          txbase-cc4py or txbase-sersh
-# ENABLE_SHARED OR BUILD_WITH_SHARED_RUNTIME OR BUILD_SHARED_LIBS
-#                          operative if BUILD_WITH_CC4PY_RUNTIME not set
-#                          Specify to look for installation dir, txbase-sersh.
 
 ######################################################################
 #
@@ -42,8 +37,16 @@ else ()
   set(txbasefindlibs txbase)
 endif ()
 
+# SERMD is as static as possible consistent with shared libraries
+if (USE_TXBASE_SERMD)
+  if (WIN32)
+    set(instdirargs INSTALL_DIRS txbase-sermd)
+  else ()
+    set(instdirargs INSTALL_DIRS txbase)
+  endif ()
+endif ()
 SciFindPackage(PACKAGE "TxBase"
-  # INSTALL_DIRS ${instdirs} # Now done by SciFindPackage.cmake
+  ${instdirargs}
   HEADERS "txbase_version.h"
   LIBRARIES "${txbasefindlibs}"
   LIBRARY_SUBDIRS lib/${CXX_COMP_LIB_SUBDIR} lib
