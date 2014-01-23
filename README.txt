@@ -47,5 +47,8 @@ BUILD_SHARED_LIBS: CMake var meaning default libs to produce are shared. If
   USE_SHARED_LIBS is not defined, it is set to true.
 BUILD_WITH_SHARED_RUNTIME: Add /MD to compiler flags on Windows
 
-These are now embodied in FindSciOpenSsl.cmake
-
+The logic is implemented in the SciGetInstSubdirs function in
+SciFindPackage.cmake.  The USE_CC4PY_LIBS variable and other booleans
+must be set on the cmake command line, with
+e.g. -DUSE_CC4PY_LIBS:BOOL=TRUE.  When using Bilder this flag should
+be set via a bilder script.
