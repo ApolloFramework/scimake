@@ -145,10 +145,13 @@ foreach (res ${SEARCH_RESULTS})
   set(Oce_${res})
 endforeach ()
 set(OCE_FOUND TRUE)
+# Set the installation search directory for oce woth no component
+# suffix
+SciGetInstSubdirs(oce instDirs)
 foreach (comp ${SciOce_ALL_COMPONENTS})
   if (Oce${comp}_FIND)
     SciFindPackage(PACKAGE Oce${comp}
-      INSTALL_DIRS oce-sersh
+      INSTALL_DIRS "${instDirs}"
       HEADERS "${Oce${comp}_SEARCHHDRS}"
       LIBRARIES "${Oce${comp}_SEARCHLIBS}"
       LIBRARY_SUBDIRS "${libsubdir}lib"
