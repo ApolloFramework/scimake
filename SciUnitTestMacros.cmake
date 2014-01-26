@@ -43,9 +43,9 @@ macro(makeNativePath)
   file(TO_NATIVE_PATH "${TO_NATIVE_INPATH}" NATIVE_OUTPATH)
   if (WIN32)
     string(REPLACE ";" "\\;" ${TO_NATIVE_OUTPATH} "${NATIVE_OUTPATH}")
-  else()
+  else ()
     string(REPLACE ";" ":" ${TO_NATIVE_OUTPATH} "${NATIVE_OUTPATH}")
-  endif()
+  endif ()
 endmacro()
 
 message("--------- Setting up testing ---------")
@@ -96,7 +96,7 @@ macro(SciAddUnitTest)
     target_link_libraries(${TEST_COMMAND} ${TEST_LIBS})
   endif ()
   add_test(NAME ${TEST_NAME} COMMAND ${CMAKE_COMMAND}
-      -DTEST_PROG:FILEPATH=${TEST_EXECUTABLE} 
+      -DTEST_PROG:FILEPATH=${TEST_EXECUTABLE}
       -DTEST_ARGS:STRING=${TEST_ARGS}
       -DTEST_STDOUT_FILE:STRING=${TEST_STDOUT_FILE}
       -DTEST_RESULTS:STRING=${TEST_RESULTS_FILES}

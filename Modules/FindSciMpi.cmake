@@ -111,7 +111,7 @@ if (WIN32 AND "$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "AMD64" AND
   message(STATUS "Enabling MPI")
   SciPrintCMakeResults("MPI")
   SciPrintVar(MPI_LINK_FLAGS)
-endif()
+endif ()
 
 # Pass down the required variable.  This has file name capitalization.
 if (SEARCH_FOR_MPI)

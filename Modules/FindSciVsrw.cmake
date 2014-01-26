@@ -1,5 +1,5 @@
 # - FindSciVsrw: Module to find include directories and libraries
-#   for Vsrw, VizSchema read-write library. This module was 
+#   for Vsrw, VizSchema read-write library. This module was
 #   implemented as there is no stock CMake module for Vsrw.
 #
 # This module can be included in CMake builds in find_package:
@@ -29,7 +29,7 @@
 set(instdirs vsrw)
 
 set(desiredlibs vsrw)
-set(desiredheaders 
+set(desiredheaders
     VsApi.h
     VsAttribute.h
     VsDataset.h

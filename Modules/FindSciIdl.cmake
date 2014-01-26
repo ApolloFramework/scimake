@@ -67,10 +67,10 @@ if (NOT DEFINED Idl_FIND_VERSION)
   set(_Idl_KNOWN_VERSIONS "82" "81" "80" "71" "706")
 # IDL 8.0 is in a different location than other versions on Windows (extra IDL directory in path)
   foreach (_Idl_COMPANY ${_Idl_KNOWN_COMPANIES})
-    list(APPEND 
+    list(APPEND
          _Idl_SEARCH_DIRS
          "${_Idl_PROGRAM_FILES_DIR}/${_Idl_COMPANY}/${_Idl_NAME}/${_Idl_NAME}80")
-    list(APPEND 
+    list(APPEND
          _Idl_SEARCH_DIRS
          "${_Idl_PROGRAM_FILES_DIR}/${_Idl_COMPANY}/${_Idl_NAME}/${_Idl_NAME}81")
     foreach (_Idl_KNOWN_VERSION ${_Idl_KNOWN_VERSIONS})
@@ -117,7 +117,7 @@ if (IDL_FOUND)
   # find the version
   get_filename_component(Idl_ROOT "${Idl_INCLUDE_DIR}/../.." ABSOLUTE)
   set(_Idl_VERSION_FILENAME "${Idl_ROOT}/version.txt")
-  
+
   if (EXISTS "${_Idl_VERSION_FILENAME}")
     file(READ "${_Idl_VERSION_FILENAME}" _Idl_VERSION)
     string(STRIP "${_Idl_VERSION}" Idl_VERSION)

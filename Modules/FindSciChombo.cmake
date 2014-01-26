@@ -59,16 +59,16 @@ if (ENABLE_PARALLEL)
    if (CH_SPACEDIM MATCHES "2")
      message(STATUS "Looking for parallel 2D Chombo")
      SciFindPackage(PACKAGE "Chombo"
-  	INSTALL_DIR "chombo-par2d${DEBUG_NAME}"
-	LIBRARIES chombo
+          INSTALL_DIR "chombo-par2d${DEBUG_NAME}"
+        LIBRARIES chombo
         HEADERS "Box.H;CH_assert.H;CH_HDF5.H" )
    endif ()
 
    if (CH_SPACEDIM MATCHES "3")
      message(STATUS "Looking for parallel 3D Chombo")
      SciFindPackage(PACKAGE "Chombo"
-  	INSTALL_DIR "chombo-par3d"
-	LIBRARIES chombo
+          INSTALL_DIR "chombo-par3d"
+        LIBRARIES chombo
         HEADERS "Box.H;CH_assert.H;CH_HDF5.H" )
    endif ()
 
@@ -77,16 +77,16 @@ else ()
    if (CH_SPACEDIM MATCHES "2")
      message(STATUS "Looking for serial 2D Chombo")
      SciFindPackage(PACKAGE "Chombo"
-  	INSTALL_DIR "chombo-ser2d${DEBUG_NAME}"
-	LIBRARIES chombo
+          INSTALL_DIR "chombo-ser2d${DEBUG_NAME}"
+        LIBRARIES chombo
         HEADERS "Box.H;CH_assert.H;CH_HDF5.H" )
    endif ()
 
    if (CH_SPACEDIM MATCHES "3")
      message(STATUS "Looking for serial 3D Chombo")
      SciFindPackage(PACKAGE "Chombo"
-  	INSTALL_DIR "chombo-ser3d"
-	LIBRARIES chombo
+          INSTALL_DIR "chombo-ser3d"
+        LIBRARIES chombo
         HEADERS "Box.H;CH_assert.H;CH_HDF5.H" )
    endif ()
 

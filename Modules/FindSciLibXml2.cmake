@@ -1,6 +1,6 @@
 # - FindSciLibXml2n: Module to find include directories and libraries
 #   for LibXml2. This module was implemented as there is no stock
-#   CMake module for LibXml2. 
+#   CMake module for LibXml2.
 #
 # This module can be included in CMake builds in find_package:
 #   find_package(SciLibXml2 REQUIRED)

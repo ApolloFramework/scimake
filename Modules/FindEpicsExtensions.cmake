@@ -14,7 +14,7 @@
 
 ######################################################################
 #
-# FindEpicsExtensions: find includes and libraries for Epics Extensions 
+# FindEpicsExtensions: find includes and libraries for Epics Extensions
 #
 # $Id$
 #
@@ -36,11 +36,11 @@ else ()
 endif ()
 
 SciFindPackage(
-	PACKAGE EpicsExtensions
-	INSTALL_DIR "${epicsdir}/extensions"
-	HEADERS "awe.h;gsl/gsl_poly.h"
-	LIBRARIES
+        PACKAGE EpicsExtensions
+        INSTALL_DIR "${epicsdir}/extensions"
+        HEADERS "awe.h;gsl/gsl_poly.h"
+        LIBRARIES
   "mdbcommon;matlib;fftpack;${sddslib};rpnlib;mdbmth;namelist;mdblib;meschach;gsl${pgapacklib}"
-	INCLUDE_SUBDIRS "src/SDDS/include;src/SDDS/gsl"
-	LIBRARY_SUBDIRS "lib/linux-x86_64;lib/linux-x86"
+        INCLUDE_SUBDIRS "src/SDDS/include;src/SDDS/gsl"
+        LIBRARY_SUBDIRS "lib/linux-x86_64;lib/linux-x86"
 )

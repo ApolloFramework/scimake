@@ -38,15 +38,15 @@ else (WIN32)
   set(HYPRE_LIB_SUFFIX "a")
 endif (WIN32)
 
-if(NOT DEFINED Hypre_SEARCH)
+if (NOT DEFINED Hypre_SEARCH)
   set(Hypre_SEARCH "hypre")
-endif()
-if(NOT DEFINED Hypre_SEARCH_HEADERS)
+endif ()
+if (NOT DEFINED Hypre_SEARCH_HEADERS)
   set(Hypre_SEARCH_HEADERS "HYPRE.h")
-endif()
-if(NOT DEFINED Hypre_SEARCH_LIBS)
+endif ()
+if (NOT DEFINED Hypre_SEARCH_LIBS)
   set(Hypre_SEARCH_LIBS "${HYPRE_LIB_PREFIX}HYPRE.${HYPRE_LIB_SUFFIX}")
-endif()
+endif ()
 
 SciFindPackage(PACKAGE "Hypre"
               INSTALL_DIR ${Hypre_SEARCH}

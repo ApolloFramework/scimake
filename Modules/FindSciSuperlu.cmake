@@ -15,8 +15,8 @@
 #   of GPL code
 #   The default is to grab superlu or superlu_dist based on whether
 #   ENABLE_PARALLEL is set.  To choose another, use SUPERLU_FIND_VERSION
-#   which will search for 
-#      superlu${SUPERLU_FIND_VERSION} or 
+#   which will search for
+#      superlu${SUPERLU_FIND_VERSION} or
 #      superlu_dist${SUPERLU_FIND_VERSION}
 #
 # This module can be included in CMake builds in find_package:
@@ -56,39 +56,39 @@ else (WIN32)
 endif (WIN32)
 
 if (DEFINED SUPERLU_FIND_VERSION)
-  if(ENABLE_PARALLEL) 
+  if (ENABLE_PARALLEL)
     set(Superlu_SEARCH "superlu_dist${SUPERLU_FIND_VERSION}")
-  else()
+  else ()
     set(Superlu_SEARCH "superlu${SUPERLU_FIND_VERSION}")
-  endif()
-else()
-  if(ENABLE_PARALLEL) 
+  endif ()
+else ()
+  if (ENABLE_PARALLEL)
     set(Superlu_SEARCH "superlu_dist-par")
-  else()
+  else ()
     set(Superlu_SEARCH "superlu")
-  endif()
-endif()
+  endif ()
+endif ()
 
 ###
 ##  Define what to search for
 #
-if(ENABLE_PARALLEL) 
+if (ENABLE_PARALLEL)
   set(Superlu_MESSAGE_SEARCH "superlu_dist")
-  if(NOT DEFINED Superlu_SEARCH_HEADERS)
+  if (NOT DEFINED Superlu_SEARCH_HEADERS)
     set(Superlu_SEARCH_HEADERS "superlu_defs.h;superlu_zdefs.h")
-  endif()
-  if(NOT DEFINED Superlu_SEARCH_LIBS)
+  endif ()
+  if (NOT DEFINED Superlu_SEARCH_LIBS)
     set(Superlu_SEARCH_LIBS "${SUPERLU_LIB_PREFIX}superlu_dist.${SUPERLU_LIB_SUFFIX}")
-  endif()
-else()
+  endif ()
+else ()
   set(Superlu_MESSAGE_SEARCH "superlu")
-  if(NOT DEFINED Superlu_SEARCH_HEADERS)
+  if (NOT DEFINED Superlu_SEARCH_HEADERS)
     set(Superlu_SEARCH_HEADERS "slu_util.h;slu_cdefs.h")
-  endif()
-  if(NOT DEFINED Superlu_SEARCH_LIBS)
+  endif ()
+  if (NOT DEFINED Superlu_SEARCH_LIBS)
     set(Superlu_SEARCH_LIBS "${SUPERLU_LIB_PREFIX}superlu.${SUPERLU_LIB_SUFFIX}")
-  endif()
-endif()
+  endif ()
+endif ()
 
 SciFindPackage(PACKAGE "Superlu"
               INSTALL_DIR ${Superlu_SEARCH}

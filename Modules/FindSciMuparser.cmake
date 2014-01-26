@@ -27,7 +27,7 @@ SciFindPackage(PACKAGE "Muparser"
               INSTALL_DIR "muparser"
               HEADERS "muParser.h"
               LIBRARIES "muparser"
-			  INCLUDE_SUBDIRS "include"
+                          INCLUDE_SUBDIRS "include"
               LIBRARY_SUBDIRS "lib"
               )
 

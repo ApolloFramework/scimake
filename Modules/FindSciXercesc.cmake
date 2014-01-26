@@ -1,5 +1,5 @@
 # - FindSciXercesc: Module to find include directories and libraries
-#   for Xercesc. 
+#   for Xercesc.
 #
 # This module can be included in CMake builds in find_package:
 #   find_package(SciXercesc REQUIRED)

@@ -215,13 +215,13 @@ set(CMAKE_CXX_FLAGS_FULL "${CMAKE_C_FLAGS_FULL}")
 
 # Remove /MD etc for static builds on Windows
 if (WIN32 AND NOT MINGW AND NOT BUILD_WITH_SHARED_RUNTIME)
-  foreach(flag_var CMAKE_CXX_FLAGS_FULL CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_DEBUG)
+  foreach (flag_var CMAKE_CXX_FLAGS_FULL CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_DEBUG)
     if (NOT (BUILD_SHARED_LIBS OR BUILD_WITH_SHARED_RUNTIME))
       string(REPLACE "/MDd" "" ${flag_var} "${${flag_var}}")
       string(REPLACE "/MD" "" ${flag_var} "${${flag_var}}")
     endif ()
     set(${flag_var} "${${flag_var}} /bigobj")
-  endforeach(flag_var)
+  endforeach (flag_var)
 endif ()
 
 # Check flags

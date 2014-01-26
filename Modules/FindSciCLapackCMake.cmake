@@ -24,11 +24,11 @@
 ######################################################################
 
 set(clapack_libs "lapack;blas;")
-if(BUILD_WITH_SHARED_RUNTIME)
+if (BUILD_WITH_SHARED_RUNTIME)
   set(clapack_libs "${clapack_libs}libf2c")
-else()
+else ()
   set(clapack_libs "${clapack_libs}f2c")
-endif()
+endif ()
 
   SciFindPackage(PACKAGE "CLapackscimake"
                 INSTALL_DIR "clapack_cmake"

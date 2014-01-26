@@ -22,7 +22,7 @@ string(REPLACE " " ";" ARGS_LIST "${ARGS_LIST}")
 # of the test.
 
 if (TEST_STDOUT_FILE)
-  execute_process(COMMAND ${TEST_PROG} ${ARGS_LIST} 
+  execute_process(COMMAND ${TEST_PROG} ${ARGS_LIST}
     RESULT_VARIABLE EXEC_ERROR
     OUTPUT_FILE ${TEST_STDOUT_FILE})
   set(TEST_RESULTS ${TEST_RESULTS} ${TEST_STDOUT_FILE})
@@ -47,12 +47,12 @@ if (TEST_RESULTS)
   message(STATUS "RESULTS_LIST = ${RESULTS_LIST}.")
 
   foreach (res ${RESULTS_LIST})
-    if (NOT EXISTS ${res}) 
+    if (NOT EXISTS ${res})
       message(FATAL_ERROR "FILE ${res} does not exist.")
-    endif()
-    if (NOT EXISTS ${TEST_RESULTS_DIR}/${res}) 
+    endif ()
+    if (NOT EXISTS ${TEST_RESULTS_DIR}/${res})
       message(FATAL_ERROR "FILE ${TEST_RESULTS_DIR}/${res} does not exist.")
-    endif()
+    endif ()
     execute_process(COMMAND diff --strip-trailing-cr
       ${res} ${TEST_RESULTS_DIR}/${res}
       RESULT_VARIABLE DIFFERS)
@@ -60,7 +60,7 @@ if (TEST_RESULTS)
       set(diffres "${res}")
     else ()
       message(STATUS "Comparison of ${res} succeeded.")
-    endif()
+    endif ()
   endforeach ()
   if (diffres)
     message(FATAL_ERROR "Comparison failure: ${diffres} differ.")

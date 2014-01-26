@@ -28,7 +28,7 @@
 SciFindPackage(PACKAGE "Cusp"
               INSTALL_DIR "cusp"
               HEADERS "version.h"
-		  INCLUDE_SUBDIRS include include/cusp
+                  INCLUDE_SUBDIRS include include/cusp
               )
 
 if (CUSP_FOUND)

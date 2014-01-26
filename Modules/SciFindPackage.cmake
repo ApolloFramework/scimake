@@ -647,11 +647,11 @@ macro(SciFindPackage)
     )
   endif ()
 
-  if(${TFP_PACKAGE}_FOUND)
-    if(DEBUG_CMAKE)
+  if (${TFP_PACKAGE}_FOUND)
+    if (DEBUG_CMAKE)
       message(STATUS "Already found this package, skipping...")
-    endif()
-  endif()
+    endif ()
+  endif ()
 
 # Construct various names(upper/lower case) for package
   string(REGEX REPLACE "[./-]" "_" scipkgreg ${TFP_PACKAGE})

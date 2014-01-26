@@ -58,9 +58,9 @@ set(Petsc_LIBRARY_LIST
 if (DEFINED PETSC_FIND_VERSION)
   message(STATUS "--- scimake/Modules/FindSciPetsc, petsc find version logic used ---")
   set(Petsc_SEARCH "petsc-${PETSC_FIND_VERSION}")
-else()
+else ()
   set(Petsc_SEARCH "petsc")
-endif()
+endif ()
 
 # Check the petsc search path
 message(STATUS "Petsc_SEARCH = ${Petsc_SEARCH}")
@@ -213,14 +213,14 @@ foreach (i ${Petsc_All_LIBRARY_NAMES})
     endif ()
   endif ()
 
-# Pull out the dl library 
+# Pull out the dl library
   if (NOT libfound)
     if (${i} STREQUAL "dl")
       message(STATUS "${i} is a DL library.")
       set(Petsc_DL_LIBRARY_NAMES ${Petsc_DL_LIBRARY_NAMES} ${i})
       set(libfound TRUE)
-    endif()
-  endif()
+    endif ()
+  endif ()
 
 # Pull out MPI libraries
   if (NOT libfound)

@@ -39,7 +39,7 @@ set(QT_INCLUDE_DIRS ${QT_INCLUDES}) # Regularize the variable the FindQt4 sets
 
 # Add in optional libaries to QT_LIBARIES, if they are found
 foreach (qtoptlib ${QT_OPTIONAL_LIBRARIES})
- STRING(TOUPPER ${qtoptlib} _uppercaseoptlib )
+ string(TOUPPER ${qtoptlib} _uppercaseoptlib )
  if (QT_${_uppercaseoptlib}_FOUND)
    set(QT_LIBRARIES ${QT_LIBRARIES} ${QT_${_uppercaseoptlib}_LIBRARY})
  endif ()

@@ -47,7 +47,7 @@ SciFindPackage(
 
 if (GEANT4_FOUND)
   message(STATUS "Found Geant4")
-else()
+else ()
   message(STATUS "Did not find Geant4.  Use -DGEANT4_DIR to specify the installation directory.")
-endif()
+endif ()
 

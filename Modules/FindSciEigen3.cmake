@@ -28,9 +28,9 @@
 find_path(Eigen3_SYS_DIR
     signature_of_eigen3_matrix_library
     PATHS "/usr/local/include/eigen3")
-if(NOT(${Eigen3_SYS_DIR} MATCHES Eigen3_SYS_DIR-NOTFOUND))
+if (NOT(${Eigen3_SYS_DIR} MATCHES Eigen3_SYS_DIR-NOTFOUND))
   set(Eigen3_ROOT_DIR ${Eigen3_ROOT_DIR} ${Eigen3_SYS_DIR})
-endif()
+endif ()
 
 SciFindPackage(PACKAGE "Eigen3"
               INSTALL_DIR "eigen3"

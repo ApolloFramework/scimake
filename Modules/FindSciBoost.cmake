@@ -103,7 +103,7 @@ if ("${BOOST_LIB_PREFIX}" STREQUAL "libboost_")
   foreach (COMPONENT ${SciBoost_FIND_COMPONENTS})
     set(Boost_boost_${COMPONENT}_LIBRARY ${Boost_${BOOST_LIB_PREFIX}${COMPONENT}_LIBRARY})
   endforeach ()
-endif("${BOOST_LIB_PREFIX}" STREQUAL "libboost_")
+endif ()
 
 
 

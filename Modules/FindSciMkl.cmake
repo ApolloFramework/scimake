@@ -47,10 +47,10 @@ if (WIN32)
     endif ()
   #endforeach()
 else (WIN32)
-    if (NOT Mkl_ROOT_DIR) 
+    if (NOT Mkl_ROOT_DIR)
       set(Mkl_ROOT_DIR "/usr/local/intel/mkl")
     endif ()
-    if (NOT Iomp5_ROOT_DIR) 
+    if (NOT Iomp5_ROOT_DIR)
       set (Iomp5_ROOT_DIR "${Mkl_ROOT_DIR}/../lib/intel64")
     endif ()
     set(Mkl_INCLUDE_DIRS "${Mkl_ROOT_DIR}/include")
@@ -60,14 +60,14 @@ else (WIN32)
                        INCLUDE_SUBDIRS "include"
                        LIBRARY_SUBDIRS "lib/intel64"
                        )
-      else () 
-         # On iter one needs to link against the shared MKL libraries 
+      else ()
+         # On iter one needs to link against the shared MKL libraries
          SciFindPackage(PACKAGE "Mkl"
                        LIBRARIES "mkl_intel_lp64;mkl_intel_thread;mkl_core"
                        INCLUDE_SUBDIRS "include"
                        LIBRARY_SUBDIRS "lib/intel64"
                        )
- 
+
       endif ()
     SciFindPackage(PACKAGE "Iomp5"
                    LIBRARIES "iomp5"
