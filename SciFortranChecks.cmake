@@ -16,9 +16,6 @@
 include(${SCIMAKE_DIR}/SciFortranFindVersion.cmake)
 
 # Set the lib subdir from the Compiler ID and version
-if (DEBUG_CMAKE)
-  SciPrintString("CMAKE_Fortran_COMPILER_ID = ${CMAKE_Fortran_COMPILER_ID}.")
-endif ()
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL Cray)
   string(REGEX REPLACE "\\.[0-9]+-.*$" "" Fortran_MAJOR_VERSION ${Fortran_VERSION})
   set(Fortran_COMP_LIB_SUBDIR cray${Fortran_MAJOR_VERSION})
@@ -85,11 +82,14 @@ if (SCI_FC_PROMOTE_REAL_TO_DOUBLE)
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${FC_DOUBLE_FLAGS}")
 endif ()
 set (CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${FC_MOD_FLAGS}")
-SciPrintString("Fortran_COMP_LIB_SUBDIR = ${Fortran_COMP_LIB_SUBDIR}")
+SciPrintString("  Fortran_COMP_LIB_SUBDIR = ${Fortran_COMP_LIB_SUBDIR}")
 
-SciPrintString("RESULTS FOR cmake detected fortran implicit libraries:")
-SciPrintVar(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES)
-SciPrintVar(CMAKE_Fortran_IMPLICIT_LINK_DIRECTORIES)
+if (DEBUG_CMAKE)
+  SciPrintString("")
+  SciPrintString("  RESULTS FOR cmake detected fortran implicit libraries before cleaning:")
+  SciPrintVar(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES)
+  SciPrintVar(CMAKE_Fortran_IMPLICIT_LINK_DIRECTORIES)
+endif()
 
 
 # Remove mpi and system libs
@@ -240,7 +240,8 @@ endif ()
 if (Fortran_IMPLICIT_LIBFLAGS)
   string(STRIP ${Fortran_IMPLICIT_LIBFLAGS} Fortran_IMPLICIT_LIBFLAGS)
 endif ()
-SciPrintString("RESULTS FOR fortran implicit libraries after removing duplicates and wrapper libraries:")
+SciPrintString("")
+SciPrintString("  RESULTS FOR fortran implicit libraries:")
 SciPrintVar(Fortran_IMPLICIT_LIBRARIES)
 SciPrintVar(Fortran_IMPLICIT_LIBRARY_NAMES)
 SciPrintVar(Fortran_IMPLICIT_LIBRARY_DIRS)
@@ -318,3 +319,25 @@ SciPrintVar(CMAKE_Fortran_FLAGS_RELWITHDEBINFO)
 SciPrintVar(CMAKE_Fortran_FLAGS_DEBUG)
 SciPrintVar(CMAKE_Fortran_FLAGS)
 
+#  This checks for the FortranC interface including the mangling
+#  http://www.cmake.org/cmake/help/git-master/module/FortranCInterface.html
+option(CHECK_FortranC_INTERFACE "Determine whether to determine interoperability" OFF)
+
+if(CHECK_FortranC_INTERFACE)
+  set(HAVE_F90_INTERFACE FALSE)
+  if(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
+    include(FortranCInterface)
+    FortranCInterface_VERIFY(CXX)
+    if(FortranCInterface_VERIFIED_CXX)
+      set(HAVE_F90_INTERFACE TRUE)
+      FortranCInterface_HEADER(${CMAKE_CURRENT_BINARY_DIR}/FCMangle.h 
+        MACRO_NAMESPACE "FC_")
+    endif()
+  else()
+    message(STATUS "${CMAKE_Fortran_COMPILER} does not appear to support F90")
+  endif()
+  SciPrintVar(FortranCInterface_GLOBAL_SYMBOLS)
+  SciPrintVar(FortranCInterface_MODULE_SYMBOLS)
+endif()
+
+SciPrintString("")

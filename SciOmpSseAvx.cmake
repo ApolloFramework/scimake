@@ -12,8 +12,9 @@
 #
 ######################################################################
 
+SciPrintString(" Optimization checking ")
 message("")
-message(STATUS "Analyzing vector capabilities:")
+message(STATUS "--------- Analyzing vector capabilities ---------")
 
 # Determine the processor and sse capabilities
 if (EXISTS /proc/cpuinfo)
@@ -203,6 +204,7 @@ if (AVX_RUNS)
 endif ()
 
 # Print results
+SciPrintString(" After analyzing vector capabilities:")
 message(STATUS "After analyzing vector capabilities:")
 foreach (cmp C CXX)
   foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
@@ -210,4 +212,5 @@ foreach (cmp C CXX)
   endforeach ()
   SciPrintVar(CMAKE_${cmp}_FLAGS)
 endforeach ()
+SciPrintString("")
 

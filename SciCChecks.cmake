@@ -15,6 +15,9 @@
 set(C_COMPILER ${CMAKE_C_COMPILER})
 set(C_COMPILER_ID ${CMAKE_C_COMPILER_ID})
 message(STATUS "C_COMPILER_ID = ${C_COMPILER_ID}.")
+SciPrintVar(C_COMPILER)
+SciPrintVar(C_COMPILER_ID)
+
 
 # Check whether time and sys/time can both be included
 include(CheckCSourceCompiles)

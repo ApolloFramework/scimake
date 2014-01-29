@@ -11,6 +11,7 @@
 #
 ######################################################################
 
+SciPrintString("")
 SciPrintString("CMAKE_Fortran_COMPILER_ID = '${CMAKE_Fortran_COMPILER_ID}'.")
 if ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL Cray)
   exec_program(${CMAKE_Fortran_COMPILER}
@@ -186,5 +187,5 @@ else ()
 endif ()
 
 set(Fortran_VERSION ${fc_version_tmp})
-SciPrintString("Fortran_VERSION = '${Fortran_VERSION}'")
+SciPrintString("  Fortran_VERSION = '${Fortran_VERSION}'")
 
