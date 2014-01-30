@@ -36,9 +36,15 @@
 #
 ######################################################################
 
+if (USE_NEFACE_SERMD)
+  set(instdirs neface-sermd)
+else ()
+  set(instdirs neface-sersh)
+endif ()
+
 set(DEBUG_CMAKE true)
 SciFindPackage(PACKAGE "Neface"
-  # INSTALL_DIRS ${instdirs}
+  INSTALL_DIRS ${instdirs}
   HEADERS "neface.h"
   LIBRARIES "neface;nefacecpp"
   LIBRARY_SUBDIRS lib
