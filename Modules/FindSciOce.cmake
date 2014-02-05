@@ -147,7 +147,12 @@ endforeach ()
 set(OCE_FOUND TRUE)
 # Set the installation search directory for oce woth no component
 # suffix
-SciGetInstSubdirs(oce instDirs)
+if(NOT USE_OCE_SHARED)
+  SciGetInstSubdirs(oce instDirs)
+else()
+  set(instDirs oce-sersh)
+endif()
+
 foreach (comp ${SciOce_ALL_COMPONENTS})
   if (Oce${comp}_FIND)
     SciFindPackage(PACKAGE Oce${comp}
