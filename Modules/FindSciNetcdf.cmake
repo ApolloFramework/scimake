@@ -25,10 +25,14 @@
 #
 ######################################################################
 
+if (NETCDF_BUILDS)
+  set(instdirs ${NETCDF_BUILDS})
+else ()
 if (ENABLE_PARALLEL)
   set(instdirs netcdf-par)
 else ()
   set(instdirs netcdf)
+endif ()
 endif ()
 
 set(desiredlibs netcdf)

@@ -45,10 +45,14 @@
 #
 ######################################################################
 
-if (ENABLE_PARALLEL)
-  set(trilinosdir trilinos-parcommio)
+if (TRILINOS_BUILD)
+ set(trilinosdir ${TRILINOS_BUILD})
 else ()
-  set(trilinosdir trilinos-sercommio)
+if (ENABLE_PARALLEL)
+ set(trilinosdir trilinos-parcomm)
+else ()
+ set(trilinosdir trilinos-sercomm)
+endif ()
 endif ()
 
 # First get the config file
