@@ -241,6 +241,29 @@ endif ()
 
 ######################################################################
 #
+# Need to add library paths from compiler for rpath
+#
+######################################################################
+
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL Linux)
+  message("")
+  message("--------- Checking for rpath ---------")
+  if ("${CMAKE_C_COMPILER_ID}" STREQUAL GNU)
+    execute_process(COMMAND ${CMAKE_C_COMPILER} -print-file-name=libstdc++.so
+      OUTPUT_VARIABLE libcxx)
+    message("libcxx is ${libcxx}")
+    if (${libcxx} MATCHES "^/")
+      get_filename_component(CXX_LIBDIR ${libcxx}/.. REALPATH)
+      message(STATUS "libstdc++ is in ${CXX_LIBDIR}.")
+# Add to build rpath
+      set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,${CXX_LIBDIR}")
+      set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,${CXX_LIBDIR}")
+    endif ()
+  endif ()
+endif ()
+
+######################################################################
+#
 # Other link flags
 #
 ######################################################################
@@ -264,32 +287,13 @@ endif ()
 # Print results
 message(STATUS "")
 message(STATUS "Link flags:")
-foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
-  SciPrintVar(CMAKE_SHARED_LINKER_FLAGS_${bld})
+foreach (type EXE SHARED)
+  foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
+    SciPrintVar(CMAKE_${type}_LINKER_FLAGS_${bld})
+  endforeach ()
+  SciPrintVar(CMAKE_${type}_LINKER_FLAGS)
+  message(STATUS "")
 endforeach ()
-SciPrintVar(CMAKE_SHARED_LINKER_FLAGS)
-
-######################################################################
-#
-# Need to add library paths from compiler for rpath
-#
-######################################################################
-
-if ("${CMAKE_SYSTEM_NAME}" STREQUAL Linux)
-  message("")
-  message("--------- Checking for rpath ---------")
-  if ("${CMAKE_C_COMPILER_ID}" STREQUAL GNU)
-    execute_process(COMMAND ${CMAKE_C_COMPILER} -print-file-name=libstdc++.so
-      OUTPUT_VARIABLE libcxx)
-    message("libcxx is ${libcxx}")
-    if (${libcxx} MATCHES "^/")
-      get_filename_component(CXX_LIBDIR ${libcxx}/.. REALPATH)
-      message(STATUS "libstdc++ is in ${CXX_LIBDIR}.")
-# Add to build rpath
-      set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,${CXX_LIBDIR}")
-    endif ()
-  endif ()
-endif ()
 
 ######################################################################
 #
