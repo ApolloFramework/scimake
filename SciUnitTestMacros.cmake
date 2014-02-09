@@ -48,6 +48,7 @@ macro(makeNativePath)
   endif ()
 endmacro()
 
+message("")
 message("--------- Setting up testing ---------")
 
 # Set test environment

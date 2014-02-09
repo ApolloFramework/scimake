@@ -33,8 +33,8 @@ include(${SCIMAKE_DIR}/SciGetDepsFromInstall.cmake)
 
 set(CONFIG_SUMMARY ${PROJECT_BINARY_DIR}/config.summary)
 file(REMOVE ${CONFIG_SUMMARY})
-SciPrintString("CONFIGURING ${CMAKE_PROJECT_NAME} with scimake in "
- "${PROJECT_BINARY_DIR}.")
+SciPrintString(
+  "CONFIGURING ${CMAKE_PROJECT_NAME} with scimake in ${PROJECT_BINARY_DIR}.")
 
 #####################################################################
 #
