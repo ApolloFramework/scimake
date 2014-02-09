@@ -29,7 +29,7 @@ SciFindPackage(
   LIBRARIES freetype
 )
 
-if (FreeType_FOUND)
+if (FREETYPE_FOUND)
   # message(STATUS "Found FreeType")
   set(HAVE_FREETYPE 1 CACHE BOOL "Whether have FreeType")
 else ()
