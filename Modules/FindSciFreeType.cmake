@@ -26,6 +26,7 @@
 SciFindPackage(
   PACKAGE   FreeType
   HEADERS   ft2build.h
+  INCLUDE_SUBDIRS include include/freetype2
   LIBRARIES freetype
 )
 
