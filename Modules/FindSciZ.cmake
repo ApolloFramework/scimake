@@ -26,15 +26,16 @@
 SciFindPackage(
   PACKAGE "Z"
   INSTALL_DIRS zlib
-  LIBRARIES z zlib1
+  LIBRARIES z zlib zlib1 OPTIONAL
 )
 
 if (WIN32)
 # Find the dlls
   get_filename_component(Z_ROOT_DIR ${Z_LIBRARY_DIRS}/.. REALPATH)
   SciPrintVar(Z_ROOT_DIR)
-  find_file(Z_DLLS
-    NAMES zlib1 zlib z
+# This is cached, so need a new variable name
+  find_file(temp_z_dlls
+    NAMES z zlib zlib1
     PATHS ${Z_ROOT_DIR}
     PATH_SUFFIXES bin
     NO_DEFAULT_PATH
