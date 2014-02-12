@@ -26,8 +26,21 @@
 SciFindPackage(
   PACKAGE "Z"
   INSTALL_DIRS zlib
-  LIBRARIES "z"
+  LIBRARIES z zlib1
 )
+
+if (WIN32)
+# Find the dlls
+  get_filename_component(Z_ROOT_DIR ${Z_LIBRARY_DIRS}/.. REALPATH)
+  SciPrintVar(Z_ROOT_DIR)
+  find_file(Z_DLLS
+    NAMES zlib1 zlib z
+    PATHS ${Z_ROOT_DIR}
+    PATH_SUFFIXES bin
+    NO_DEFAULT_PATH
+  )
+  SciPrintVar(Z_DLLS)
+endif ()
 
 if (Z_FOUND)
   # message(STATUS "Found Z(compression library)")
@@ -38,3 +51,4 @@ else ()
     message(FATAL_ERROR "Failed.")
   endif ()
 endif ()
+
