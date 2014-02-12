@@ -70,19 +70,20 @@ message(STATUS "In SciAddUnitTestMacros.cmake, SHLIB_CMAKE_PATH_VAL = ${SHLIB_CM
 # expected results, then RESULTS_DIR and RESULTS (or STDOUT) must be set.
 #
 # Args
-#   NAME        = the name of this test (which may or may not be the same
-#                 as the executable)
-#   COMMAND     = test executable (typically same as NAME, but need not be)
-#   SOURCES     = 1+ source files to be compiled
-#   LIBS        = libraries needed to link test
-#   ARGS        = arguments to test
-#   RESULTS     = Files to be compared against golden results. If this
-#                 var is empty, no comparisons will be done (but see
-#                 STDOUT below)
-#   RESULTS_DIR = directory which contains expected results
-#   STDOUT_FILE = Name of file into which stdout should be captured. This
-#                 file will be added to $RESULTS so it will be compared
-#                 against expected output.
+#
+#   NAME          = the name of this test (which may or may not be the same
+#                   as the executable)
+#   COMMAND       = test executable (typically same as NAME, but need not be)
+#   SOURCES       = 1+ source files to be compiled
+#   LIBS          = libraries needed to link test
+#   ARGS          = arguments to test
+#   RESULTS_FILES = Files to be compared against golden results. If this
+#                   var is empty, no comparisons will be done (but see
+#                   STDOUT_FILE below)
+#   RESULTS_DIR   = directory which contains expected results
+#   STDOUT_FILE   = Name of file into which stdout should be captured. This
+#                   file will be added to $RESULTS so it will be compared
+#                   against expected output.
 
 macro(SciAddUnitTest)
   set(oneValArgs NAME COMMAND RESULTS_DIR STDOUT_FILE)
