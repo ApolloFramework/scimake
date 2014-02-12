@@ -17,21 +17,39 @@
 #
 ######################################################################
 
+if (NOT DEFINED INSTALL_CONFIG_HEADERS)
+  set(INSTALL_CONFIG_HEADERS TRUE)
+endif ()
+
 foreach (configfile config configrev)
   if (EXISTS ${CMAKE_SOURCE_DIR}/${configfile}-cmake.h.in)
     configure_file(${CMAKE_SOURCE_DIR}/${configfile}-cmake.h.in ${configfile}.h)
-    install(FILES ${CMAKE_BINARY_DIR}/${configfile}.h DESTINATION include
-      PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
-                  GROUP_READ ${SCI_GROUP_WRITE} GROUP_EXECUTE
-                  ${SCI_WORLD_PROGRAM_PERMS}
-      RENAME ${CMAKE_PROJECT_NAME}_${configfile}.h
-    )
+    if (INSTALL_CONFIG_HEADERS)
+      install(FILES ${CMAKE_BINARY_DIR}/${configfile}.h DESTINATION include
+        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+                    GROUP_READ ${SCI_GROUP_WRITE} GROUP_EXECUTE
+                    ${SCI_WORLD_PROGRAM_PERMS}
+        RENAME ${CMAKE_PROJECT_NAME}_${configfile}.h
+      )
+    endif ()
     if (CMAKE_Fortran_COMPILER_WORKS)
       execute_process(
         COMMAND sed -f ${SCIMAKE_DIR}/rmcomms.sed
         INPUT_FILE ${CMAKE_BINARY_DIR}/${configfile}.h
         OUTPUT_FILE ${CMAKE_BINARY_DIR}/${configfile}.f
       )
+      if (INSTALL_CONFIG_HEADERS)
+        install(FILES ${CMAKE_BINARY_DIR}/${configfile}.f DESTINATION include
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+                      GROUP_READ ${SCI_GROUP_WRITE} GROUP_EXECUTE
+                      ${SCI_WORLD_PROGRAM_PERMS}
+          RENAME ${CMAKE_PROJECT_NAME}_${configfile}.f
+        )
+      endif ()
+    endif ()
+  elseif (EXISTS ${CMAKE_SOURCE_DIR}/${configfile}-cmake.f.in)
+    configure_file(${CMAKE_SOURCE_DIR}/${configfile}-cmake.f.in ${configfile}.f)
+    if (INSTALL_CONFIG_HEADERS)
       install(FILES ${CMAKE_BINARY_DIR}/${configfile}.f DESTINATION include
         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
                     GROUP_READ ${SCI_GROUP_WRITE} GROUP_EXECUTE
@@ -39,14 +57,6 @@ foreach (configfile config configrev)
         RENAME ${CMAKE_PROJECT_NAME}_${configfile}.f
       )
     endif ()
-  elseif (EXISTS ${CMAKE_SOURCE_DIR}/${configfile}-cmake.f.in)
-    configure_file(${CMAKE_SOURCE_DIR}/${configfile}-cmake.f.in ${configfile}.f)
-    install(FILES ${CMAKE_BINARY_DIR}/${configfile}.f DESTINATION include
-      PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
-                  GROUP_READ ${SCI_GROUP_WRITE} GROUP_EXECUTE
-                  ${SCI_WORLD_PROGRAM_PERMS}
-      RENAME ${CMAKE_PROJECT_NAME}_${configfile}.f
-    )
   endif ()
 endforeach ()
 if (EXISTS ${CMAKE_BINARY_DIR}/config.h)
