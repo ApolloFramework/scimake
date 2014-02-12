@@ -56,7 +56,11 @@ string(STRIP "${Hdf5_VERSION}" Hdf5_VERSION)
 message(STATUS "Hdf5_VERSION = ${Hdf5_VERSION}.")
 
 # Fill in what we know
-get_filename_component(Hdf5_ROOT_DIR ${Hdf5_hdf5_h_INCLUDE_DIR}/.. REALPATH)
+if (${Hdf5_hdf5_h_INCLUDE_DIR} MATCHES "include/hdf5/include$")
+  get_filename_component(Hdf5_ROOT_DIR ${Hdf5_hdf5_h_INCLUDE_DIR}/../../.. REALPATH)
+else ()
+  get_filename_component(Hdf5_ROOT_DIR ${Hdf5_hdf5_h_INCLUDE_DIR}/.. REALPATH)
+endif ()
 message(STATUS "Hdf5_ROOT_DIR = ${Hdf5_ROOT_DIR}.")
 
 # Version known, can look for config file
