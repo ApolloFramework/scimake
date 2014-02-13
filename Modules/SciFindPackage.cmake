@@ -244,7 +244,12 @@ endfunction()
 #  instdirsvar: the variable holding possible installation directories
 #
 function(SciGetInstSubdirs pkgnamelc instdirsvar)
-  # message(STATUS "SciGetInstSubdirs called with pkgname = ${pkgname} and instdirsvar = ${instdirsvar}.")
+  if (DEBUG_CMAKE)
+    message(STATUS "SciGetInstSubdirs called with pkgname = ${pkgname} and instdirsvar = ${instdirsvar}.")
+    message(STATUS "${pkgname}_ROOT_DIR = ${${pkgname}_ROOT_DIR}.")
+    message(STATUS "USE_CC4PY_LIBS = ${USE_CC4PY_LIBS}.")
+    message(STATUS "USE_SHARED_LIBS = ${USE_SHARED_LIBS}.")
+  endif ()
   if (ENABLE_PARALLEL)
     if (USE_SHARED_LIBS)
       set(instdirs ${pkgnamelc}-parsh)
@@ -325,6 +330,8 @@ function(SciGetRootPath pkgname instsubdirs rootpathvar)
   endif ()
   if (DEBUG_CMAKE)
     message(STATUS "${pkgname}_ROOT_DIR = ${${pkgname}_ROOT_DIR}.")
+    message(STATUS "USE_CC4PY_LIBS = ${USE_CC4PY_LIBS}.")
+    message(STATUS "USE_SHARED_LIBS = ${USE_SHARED_LIBS}.")
   endif ()
 
 # Next try environment variable.  Should this be appended regardless?

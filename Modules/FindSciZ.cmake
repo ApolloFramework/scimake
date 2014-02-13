@@ -23,25 +23,13 @@
 #
 ######################################################################
 
+# Need to find paths with standard algorithm
+SciGetInstSubdirs(zlib zinstdirs)
 SciFindPackage(
   PACKAGE "Z"
-  INSTALL_DIRS zlib
+  INSTALL_DIRS ${zinstdirs}
   LIBRARIES z zlib zlib1 OPTIONAL
 )
-
-if (WIN32)
-# Find the dlls
-  get_filename_component(Z_ROOT_DIR ${Z_LIBRARY_DIRS}/.. REALPATH)
-  SciPrintVar(Z_ROOT_DIR)
-# This is cached, so need a new variable name
-  find_file(temp_z_dlls
-    NAMES z zlib zlib1
-    PATHS ${Z_ROOT_DIR}
-    PATH_SUFFIXES bin
-    NO_DEFAULT_PATH
-  )
-  SciPrintVar(Z_DLLS)
-endif ()
 
 if (Z_FOUND)
   # message(STATUS "Found Z(compression library)")
