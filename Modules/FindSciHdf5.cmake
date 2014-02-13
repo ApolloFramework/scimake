@@ -105,15 +105,20 @@ endforeach ()
 if (DEBUG_CMAKE)
   message(STATUS "hlnms = ${hlnms}.")
 endif ()
-set(desiredlibs)
-foreach (nm hdf5_tools hdf5_toolsdll hdf5_hl_fortran hdf5_hl_f90cstub
-  hdf5_fortran hdf5_f90cstub hdf5_hl hdf5_hldll hdf5 hdf5dll
-)
-  list(FIND hlnms ${nm} indx)
-  if (NOT(${indx} EQUAL -1))
-    set(desiredlibs ${desiredlibs} ${nm})
-  endif ()
-endforeach ()
+if (Hdf5_NEEDED_LIBS)
+  set(desiredlibs ${Hdf5_NEEDED_LIBS})
+else()
+  set(desiredlibs)
+  foreach (nm hdf5_tools hdf5_toolsdll hdf5_hl_fortran hdf5_hl_f90cstub
+    hdf5_fortran hdf5_f90cstub hdf5_hl hdf5_hldll hdf5 hdf5dll
+  )
+    list(FIND hlnms ${nm} indx)
+    if (NOT(${indx} EQUAL -1))
+      set(desiredlibs ${desiredlibs} ${nm})
+    endif ()
+  endforeach ()
+  set(desiredlibs ${desiredlibs} OPTIONAL)
+endif ()
 if (DEBUG_CMAKE)
   message(STATUS "desiredlibs = ${desiredlibs}.")
 endif ()
@@ -143,6 +148,7 @@ SciFindPackage(PACKAGE "Hdf5"
   MODULE_SUBDIRS include/fortran include lib
 )
 
+if (FALSE)
 # The executables are not always found, so we will hdf5 to found
 # if includes and libraries found.
 if (NOT HDF5_FOUND)
@@ -150,6 +156,7 @@ if (NOT HDF5_FOUND)
     set(HDF5_FOUND TRUE)
     message(STATUS "Setting HDF5_FOUND to TRUE because header and libraries found.")
   endif ()
+endif ()
 endif ()
 
 if (HDF5_FOUND)
