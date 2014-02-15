@@ -38,6 +38,14 @@ include(${QT_USE_FILE})
 # Regularize the variable the FindQt4 sets
 set(QT_INCLUDE_DIRS ${QT_INCLUDES})
 set(QT_LIBRARY_DIRS ${QT_LIBRARY_DIR})
+if (EXISTS ${QT_BINARY_DIR}/qmake)
+  set(QT_QMAKE_EXECUTABLE ${QT_BINARY_DIR}/qmake)
+endif ()
+set(QT_PROGRAMS
+  ${QT_QMAKE_EXECUTABLE}
+  ${QT_MOC_EXECUTABLE}
+  ${QT_UIC_EXECUTABLE}
+)
 
 # Add in optional libaries to QT_LIBARIES, if they are found
 foreach (qtoptlib ${QT_OPTIONAL_LIBRARIES})
@@ -98,6 +106,9 @@ endif ()
 
 # Print results
 SciPrintCMakeResults(QT)
+SciPrintVar(QT_QMAKE_EXECUTABLE)
+SciPrintVar(QT_MOC_EXECUTABLE)
+SciPrintVar(QT_UIC_EXECUTABLE)
 
 message("--------- FindSciQt4 done with Qt4 -----------")
 message("")
