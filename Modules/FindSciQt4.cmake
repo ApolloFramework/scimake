@@ -35,7 +35,9 @@ if (DEBUG_CMAKE)
   message(STATUS "QT_USE_FILE = ${QT_USE_FILE}")
 endif ()
 include(${QT_USE_FILE})
-set(QT_INCLUDE_DIRS ${QT_INCLUDES}) # Regularize the variable the FindQt4 sets
+# Regularize the variable the FindQt4 sets
+set(QT_INCLUDE_DIRS ${QT_INCLUDES})
+set(QT_LIBRARY_DIRS ${QT_LIBRARY_DIR})
 
 # Add in optional libaries to QT_LIBARIES, if they are found
 foreach (qtoptlib ${QT_OPTIONAL_LIBRARIES})
@@ -45,13 +47,7 @@ foreach (qtoptlib ${QT_OPTIONAL_LIBRARIES})
  endif ()
 endforeach ()
 
-message(STATUS "QT_INCLUDE_DIR = ${QT_INCLUDE_DIR}")
-message(STATUS "QT_INCLUDE_DIRS = ${QT_INCLUDE_DIRS}")
-message(STATUS "QT_LIBRARY_DIR = ${QT_LIBRARY_DIR}")
-message(STATUS "QT_EXECUTABLE_DIRS = ${QT_EXECUTABLE_DIRS}")
-message(STATUS "QT_LIBRARIES = ${QT_LIBRARIES}")
 get_filename_component(QT_DIR ${QT_LIBRARY_DIR}/.. REALPATH)
-message(STATUS "QT_DIR = ${QT_DIR}")
 
 # The QT_LIBRARIES variable can come back from scimake's FindQt4
 # with a list of libary paths mixed in with the words
@@ -86,6 +82,7 @@ else ()
 endif ()
 message(STATUS "QT_LIBS = ${QT_LIBS}")
 
+# Find dlls
 if (WIN32)
   set(QT_DLLS)
   foreach (qtlib ${QT_LIBS})
@@ -98,6 +95,9 @@ if (WIN32)
   endforeach ()
   message(STATUS "QT_DLLS = ${QT_DLLS}")
 endif ()
+
+# Print results
+SciPrintCMakeResults(QT)
 
 message("--------- FindSciQt4 done with Qt4 -----------")
 message("")
