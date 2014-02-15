@@ -88,7 +88,6 @@ else ()
     endif ()
   endforeach ()
 endif ()
-message(STATUS "QT_LIBS = ${QT_LIBS}")
 
 # Find dlls
 if (WIN32)
@@ -101,11 +100,11 @@ if (WIN32)
       message(STATUS "${qtname} has no dll.")
     endif ()
   endforeach ()
-  message(STATUS "QT_DLLS = ${QT_DLLS}")
 endif ()
 
 # Print results
 SciPrintCMakeResults(QT)
+SciPrintVar(QT_LIBS)
 SciPrintVar(QT_QMAKE_EXECUTABLE)
 SciPrintVar(QT_MOC_EXECUTABLE)
 SciPrintVar(QT_UIC_EXECUTABLE)
