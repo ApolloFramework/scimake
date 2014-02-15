@@ -186,23 +186,11 @@ endif ()
 message(STATUS "VisIt_ARCH_DIR = ${VisIt_ARCH_DIR}")
 message(STATUS "VisIt_ARCH_SUBDIR = ${VisIt_ARCH_SUBDIR}.")
 message(STATUS "VisIt_VERSION = ${VisIt_VERSION}.")
-message(STATUS "VisIt_VERSION = ${VisIt_VERSION}.")
 
 # Find the remaining directories
 if (VISIT_FOUND)
 
   message(STATUS "Found VisIt")
-  get_filename_component(VisIt_LIB_DIR "${VisIt_avtdatabase_ser_LIBRARY_DIR}"
-    REALPATH)
-  if (WIN32)
-    message(STATUS "Looking for VisIt_BIN_DIR in ${VisIt_ROOT_DIR}")
-    get_filename_component(VisIt_BIN_DIR "${VisIt_ROOT_DIR}" REALPATH)
-  else ()
-    message(STATUS "Looking for VisIt_BIN_DIR in ${VisIt_ROOT_DIR}/bin")
-    get_filename_component(VisIt_BIN_DIR "${VisIt_ROOT_DIR}/bin" REALPATH)
-  endif ()
-  message(STATUS "VisIt_LIB_DIR is ${VisIt_LIB_DIR}")
-  message(STATUS "VisIt_BIN_DIR is ${VisIt_BIN_DIR}")
   get_filename_component(VisIt_INCLUDE_DIR "${VisIt_vtkQtRenderWindow_h_INCLUDE_DIR}/.." REALPATH)
   set(VisIt_INCLUDE_DIRS
     ${VisIt_INCLUDE_DIR}/
