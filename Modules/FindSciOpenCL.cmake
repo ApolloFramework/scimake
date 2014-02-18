@@ -20,7 +20,10 @@
 
 find_package(CUDA)
 if (CUDA_FOUND)
-  set(OpenCL_ROOT_DIR ${CUDA_TOOLKIT_ROOT_DIR})
+  if (OpenCL_ROOT_DIR)
+  else ()
+    set(OpenCL_ROOT_DIR "${CUDA_TOOLKIT_ROOT_DIR}")
+  endif()
 endif ()
 
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
@@ -30,7 +33,7 @@ else ()
 endif ()
 
 SciFindPackage(PACKAGE "OpenCL"
-    INSTALL_DIR "${OpenCL_ROOT_DIR}"
+    INSTALL_DIRS "${OpenCL_ROOT_DIR}"
     HEADERS "${OpenCL_HEADERS}"
     LIBRARIES "OpenCL"
     INCLUDE_SUBDIRS "include"
@@ -45,10 +48,9 @@ if (OpenCL_FOUND)
   message(STATUS "Found OpenCL")
   set(HAVE_OpenCL 1 CACHE BOOL "Whether have OpenCL")
 else ()
-  message(STATUS "Did not find OpenCL.  Use -DOpenCL_DIR to specify the installation directory.")
+  message(STATUS "Did not find OpenCL.  Use -DOpenCL_ROOT_DIR to specify the installation directory.")
   if (SciOpenCL_FIND_REQUIRED)
     message(FATAL_ERROR "Failed.")
   endif ()
 endif ()
-
 
