@@ -25,8 +25,15 @@
 
 message(STATUS "Search for Python executable")
 # Find in the path
-find_program(Python_EXE NAMES python2.7 python2.6 python)
+if (WIN32)
+  set(pynames python)
+else ()
+  set(pynames python2.7 python2.6)
+endif ()
+find_program(Python_EXE NAMES ${pynames})
 if (Python_EXE)
+
+# Root directory, naes
   set(PYTHON_FOUND TRUE)
   get_filename_component(Python_EXE ${Python_EXE} REALPATH)
   get_filename_component(Python_NAME ${Python_EXE} NAME)
@@ -43,26 +50,61 @@ if (Python_EXE)
   SciPrintVar(Python_EXE)
   SciPrintVar(Python_NAME)
   SciPrintVar(Python_NAME_WE)
+
+# Include directory
   execute_process(COMMAND ${Python_EXE} -c "import distutils.sysconfig; idir = distutils.sysconfig.get_python_inc(1); print idir,"
     OUTPUT_VARIABLE Python_INCLUDE_DIRS
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
+  if (WIN32)
+    file(TO_CMAKE_PATH "${Python_INCLUDE_DIRS}" Python_INCLUDE_DIRS)
+  endif ()
   SciPrintVar(Python_INCLUDE_DIRS)
-  find_library(Python_LIBRARY ${Python_NAME}
+
+# Version
+  execute_process(COMMAND ${Python_EXE} -c "import sys;print sys.version[0]"
+    OUTPUT_VARIABLE Python_MAJOR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  execute_process(COMMAND ${Python_EXE} -c "import sys;print sys.version[2]"
+    OUTPUT_VARIABLE Python_MINOR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  if (WIN32)
+    set(Python_MAJMIN "${Python_MAJOR}${Python_MINOR}")
+  else ()
+    set(Python_MAJMIN "${Python_MAJOR}.${Python_MINOR}")
+  endif ()
+  SciPrintVar(Python_MAJMIN)
+  set(Python_LIBRARY_NAME python${Python_MAJMIN})
+  SciPrintVar(Python_LIBRARY_NAME)
+
+# Library
+  find_library(Python_LIBRARY ${Python_LIBRARY_NAME}
     PATHS ${Python_ROOT_DIR}
     PATH_SUFFIXES lib Libs
   )
   if (Python_LIBRARY)
     get_filename_component(Python_LIBRARY ${Python_LIBRARY} REALPATH)
+    SciPrintVar(Python_LIBRARY)
+    find_program(Python_DLLS ${Python_LIBRARY_NAME}.dll)
+    SciPrintVar(Python_DLLS)
+  else ()
+    set(PYTHON_FOUND FALSE)
   endif ()
-  SciPrintVar(Python_LIBRARY)
-  get_filename_component(Python_LIBRARY_DIR ${Python_LIBRARY}/.. REALPATH)
-  SciPrintVar(Python_LIBRARY_DIR)
-  if (EXISTS ${Python_LIBRARY_DIR}/lib/${Python_NAME_WE})
-    set(Python_MODULES_SUBDIR lib/${Python_NAME_WE})
-    set(Python_MODULES_DIR ${Python_LIBRARY_DIR}/lib/${Python_NAME_WE})
-    SciPrintVar(Python_MODULES_SUBDIR)
+
+# Modules
+  find_file(Python_PICKLE pickle.py
+    PATHS ${Python_ROOT_DIR}
+    PATH_SUFFIXES lib lib/${Python_NAME_WE}
+  )
+  if(Python_PICKLE)
+    get_filename_component(Python_MODULES_DIR ${Python_PICKLE}/.. REALPATH)
     SciPrintVar(Python_MODULES_DIR)
+    string(REPLACE "${Python_ROOT_DIR}/" "" Python_MODULES_SUBDIR "${Python_MODULES_DIR}")
+    SciPrintVar(Python_MODULES_SUBDIR)
+  else ()
+    set(PYTHON_FOUND FALSE)
   endif ()
 else ()
   set(PYTHON_FOUND FALSE)
