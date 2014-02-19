@@ -25,10 +25,12 @@
 
 message(STATUS "Search for Python executable")
 # Find in the path
-find_program(Python_EXE python)
+find_program(Python_EXE NAMES python2.7 python2.6 python)
 if (Python_EXE)
+  set(PYTHON_FOUND TRUE)
   get_filename_component(Python_EXE ${Python_EXE} REALPATH)
   get_filename_component(Python_NAME ${Python_EXE} NAME)
+  string(REGEX REPLACE ".exe$" "" Python_NAME_WE "${Python_NAME}")
   get_filename_component(Python_BINDIR ${Python_EXE}/.. REALPATH)
   # SciPrintVar(Python_BINDIR)
   get_filename_component(Python_BINDIR_NAME ${Python_BINDIR} NAME)
@@ -38,16 +40,33 @@ if (Python_EXE)
   else ()
     get_filename_component(Python_ROOT_DIR ${Python_EXE}/.. REALPATH)
   endif ()
+  SciPrintVar(Python_EXE)
+  SciPrintVar(Python_NAME)
+  SciPrintVar(Python_NAME_WE)
+  execute_process(COMMAND ${Python_EXE} -c "import distutils.sysconfig; idir = distutils.sysconfig.get_python_inc(1); print idir,"
+    OUTPUT_VARIABLE Python_INCLUDE_DIRS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  SciPrintVar(Python_INCLUDE_DIRS)
+  find_library(Python_LIBRARY ${Python_NAME}
+    PATHS ${Python_ROOT_DIR}
+    PATH_SUFFIXES lib Libs
+  )
+  if (Python_LIBRARY)
+    get_filename_component(Python_LIBRARY ${Python_LIBRARY} REALPATH)
+  endif ()
+  SciPrintVar(Python_LIBRARY)
+  get_filename_component(Python_LIBRARY_DIR ${Python_LIBRARY}/.. REALPATH)
+  SciPrintVar(Python_LIBRARY_DIR)
+  if (EXISTS ${Python_LIBRARY_DIR}/lib/${Python_NAME_WE})
+    set(Python_MODULES_SUBDIR lib/${Python_NAME_WE})
+    set(Python_MODULES_DIR ${Python_LIBRARY_DIR}/lib/${Python_NAME_WE})
+    SciPrintVar(Python_MODULES_SUBDIR)
+    SciPrintVar(Python_MODULES_DIR)
+  endif ()
+else ()
+  set(PYTHON_FOUND FALSE)
 endif ()
-SciPrintVar(Python_EXE)
-SciPrintVar(Python_NAME)
-SciFindPackage(
-  PACKAGE Python
-  HEADERS Python.h
-  INCLUDE_SUBDIRS include/python2.7 include/python2.6 include
-  LIBRARIES python27 python2.7 python26 python2.6 python OPTIONAL
-  LIBRARY_SUBDIRS lib Libs
-)
 
 if (PYTHON_FOUND)
   message(STATUS "[FindSciPython.cmake] - Found Python")
