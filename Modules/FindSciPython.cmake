@@ -7,7 +7,6 @@
 # This module will define the following variables:
 #  HAVE_PYTHON, PYTHON_FOUND = Whether libraries and includes are found
 #  Python_INCLUDE_DIRS      = Location of Python includes
-#  Python_LIBRARY_DIRS      = Location of Python libraries
 #  Python_LIBRARIES         = Required libraries
 
 ##################################################################
@@ -87,8 +86,14 @@ if (Python_EXE)
   if (Python_LIBRARY)
     get_filename_component(Python_LIBRARY ${Python_LIBRARY} REALPATH)
     SciPrintVar(Python_LIBRARY)
-    find_program(Python_DLLS ${Python_LIBRARY_NAME}.dll)
-    SciPrintVar(Python_DLLS)
+    set(Python_LIBRARIES ${Python_LIBRARY})
+    SciPrintVar(Python_LIBRARIES)
+    get_filename_component(Python_LIBRARY_DIRS ${Python_LIBRARY}/.. REALPATH)
+    SciPrintVar(Python_LIBRARY_DIRS)
+    if (WIN32)
+      find_program(Python_DLLS ${Python_LIBRARY_NAME}.dll)
+      SciPrintVar(Python_DLLS)
+    endif ()
   else ()
     set(PYTHON_FOUND FALSE)
   endif ()
