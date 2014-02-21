@@ -81,10 +81,10 @@ endif ()
 if (Boost_DLLS)
   message(STATUS "Correcting Boost DLL definition")
   set(Boost_DEFINITIONS -DBOOST_ALL_DYN_LINK)
-  message(STATUS "Boost_DEFINITIONS = ${Boost_DEFINITIONS}.")
 endif ()
 
-set(Boost_DEFINITIONS -DBOOST_ALL_NO_LIB)  # Disable auto-linking
+set(Boost_DEFINITIONS ${Boost_DEFINITIONS} -DBOOST_ALL_NO_LIB)  # Disable auto-linking
+message(STATUS "Boost_DEFINITIONS = ${Boost_DEFINITIONS}.")
 
 if (BOOST_FOUND AND NOT Boost_INCLUDE_DIRS)
   set(BOOST_FOUND FALSE)
