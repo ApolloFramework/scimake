@@ -84,6 +84,8 @@ if (Boost_DLLS)
   message(STATUS "Boost_DEFINITIONS = ${Boost_DEFINITIONS}.")
 endif ()
 
+set(Boost_DEFINITIONS -DBOOST_ALL_NO_LIB)  # Disable auto-linking
+
 if (BOOST_FOUND AND NOT Boost_INCLUDE_DIRS)
   set(BOOST_FOUND FALSE)
   message(STATUS "Reversing Boost found as Boost_INCLUDE_DIRS is empty.")
