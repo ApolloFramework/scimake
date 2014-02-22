@@ -83,7 +83,10 @@ if (ENABLE_PYTHON)
       if (DEBUG_CMAKE)
         message(STATUS "Python_MAJMIN = ${Python_MAJMIN}.")
       endif ()
-      set(Python_LIB python${Python_MAJMIN} CACHE STRING "Python library name + major.minor")
+      set(Python_LIB python${Python_MAJMIN} CACHE STRING "Python library name")
+# Synonyms
+      set(Python_LIBRARY_NAME ${Python_LIB})
+      set(Python_LIBRARY_NAMES ${Python_LIB})
 # Should check here that version >2.5.
 # Find includes
       if (NOT Python_INCLUDE_DIRS)
@@ -190,6 +193,7 @@ if (ENABLE_PYTHON)
   message(STATUS "Related variables:")
   SciPrintVar(Python_LIB)
   SciPrintVar(Python_LIBS)
+  SciPrintVar(Python_LIBRARY_NAME)
 
 endif ()
 
