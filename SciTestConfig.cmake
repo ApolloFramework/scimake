@@ -66,6 +66,7 @@ if (ENABLE_COVERAGE)
       set(CMAKE_C_FLAGS "-g -O0 -Wall -Wextra -fprofile-arcs -ftest-coverage")
       set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -g -O0 -Wall -Wextra -fprofile-arcs -ftest-coverage")
       set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -g -O0 -Wall -Wextra -fprofile-arcs -ftest-coverage")
+      set(CTEST_CUSTOM_COVERAGE_EXCLUDE ${CTEST_CUSTOM_COVERAGE_EXCLUDE} "moc_*.cxx")
   endif ()
 endif ()
 
