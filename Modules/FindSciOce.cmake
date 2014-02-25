@@ -150,7 +150,7 @@ set(OCE_FOUND TRUE)
 if(NOT USE_OCE_SHARED)
   SciGetInstSubdirs(oce instDirs)
 else()
-  set(instDirs oce-sersh)
+  set(instDirs oce-sersh oce-cc4py)
 endif()
 
 foreach (comp ${SciOce_ALL_COMPONENTS})
