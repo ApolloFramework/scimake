@@ -82,6 +82,7 @@ if (Python_EXE)
   find_library(Python_LIBRARY ${Python_LIBRARY_NAME}
     PATHS ${Python_ROOT_DIR}
     PATH_SUFFIXES lib Libs
+    NO_DEFAULT_PATH
   )
   if (Python_LIBRARY)
     get_filename_component(Python_LIBRARY ${Python_LIBRARY} REALPATH)
