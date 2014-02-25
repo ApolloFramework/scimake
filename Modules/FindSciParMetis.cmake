@@ -27,10 +27,17 @@
 ######################################################################
 set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 
+# ParMetis version > 4 requires gklib (distributed with package)
+if (FIND_ParMetis_GKLIB)
+  set(ParMetis_SEARCH_LIBS "parmetis;metis;GKlib")
+else ()
+  set(ParMetis_SEARCH_LIBS "parmetis;metis")
+endif ()
+ 
 SciFindPackage(PACKAGE "ParMetis"
               INSTALL_DIR "parmetis-par"
               HEADERS "parmetis.h"
-              LIBRARIES "parmetis;metis"
+              LIBRARIES "${ParMetis_SEARCH_LIBS}"
               )
 
 if (PARMETIS_FOUND)
