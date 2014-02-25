@@ -99,14 +99,15 @@ if (Python_EXE)
   endif ()
 
 # Modules
-  find_file(Python_PICKLE pickle.py
+  find_file(Python_SITE site.py
     PATHS ${Python_ROOT_DIR}
     PATH_SUFFIXES lib lib/${Python_NAME_WE}
+    NO_DEFAULT_PATH
   )
-  if(Python_PICKLE)
-    get_filename_component(Python_MODULES_DIR ${Python_PICKLE}/.. REALPATH)
+  if(Python_SITE)
+    get_filename_component(Python_MODULES_DIR ${Python_SITE}/.. REALPATH)
     SciPrintVar(Python_MODULES_DIR)
-    string(REPLACE "${Python_ROOT_DIR}/" "" Python_MODULES_SUBDIR "${Python_MODULES_DIR}")
+    file(RELATIVE_PATH Python_MODULES_SUBDIR ${Python_ROOT_DIR} ${Python_MODULES_DIR})
     SciPrintVar(Python_MODULES_SUBDIR)
   else ()
     set(PYTHON_FOUND FALSE)
