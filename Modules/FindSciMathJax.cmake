@@ -9,7 +9,7 @@
 # This modules defines the following variables:
 #
 #  MathJax_MathJax_js = the full path or url to MathJax.js
-#  MathJax_DIR        = If not a url, the directory containing MathJax.js
+#  MathJax_ROOT_DIR        = If not a url, the directory containing MathJax.js
 #
 
 ######################################################################
@@ -30,7 +30,7 @@ if (MATHJAXJS)
   message(STATUS "MATHJAXJS = ${MATHJAXJS}.  Will use that.")
   set(MathJax_MathJax_js ${MATHJAXJS})
   if (NOT "${MATHJAXJS}" MATCHES "^http")
-    get_filename_component(MathJax_DIR ${MathJax_MathJax_js}/.. REALPATH)
+    get_filename_component(MathJax_ROOT_DIR ${MathJax_MathJax_js}/.. REALPATH)
   endif ()
   set(MATHJAX_FOUND TRUE)
 else ()
@@ -47,8 +47,8 @@ else ()
     SciFindPackage(PACKAGE MathJax INSTALL_DIRS MathJax FILES MathJax.js)
   endif ()
   # SciFindPackage(PACKAGE MathJax ${instdirs} FILES MathJax.js)
-  get_filename_component(MathJax_DIR ${MathJax_MathJax_js}/.. REALPATH)
+  get_filename_component(MathJax_ROOT_DIR ${MathJax_MathJax_js}/.. REALPATH)
 endif ()
-message(STATUS "  MathJax_DIR          = ${MathJax_DIR}")
+message(STATUS "  MathJax_ROOT_DIR          = ${MathJax_ROOT_DIR}")
 message(STATUS "  MathJax_MathJax_js   = ${MathJax_MathJax_js}")
 
