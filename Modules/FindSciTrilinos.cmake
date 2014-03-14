@@ -45,10 +45,14 @@
 #
 ######################################################################
 
-if (ENABLE_PARALLEL)
-  set(trilinosdir trilinos-parcomm)
+if (TRILINOS_BUILD)
+ set(trilinosdir ${TRILINOS_BUILD})
 else ()
-  set(trilinosdir trilinos-sercomm)
+if (ENABLE_PARALLEL)
+ set(trilinosdir trilinos-parcomm)
+else ()
+ set(trilinosdir trilinos-sercomm)
+endif ()
 endif ()
 
 # First get the config file
@@ -105,9 +109,7 @@ if (TRILINOS_FOUND)
     if (${libname} MATCHES "blas$" OR ${libname} MATCHES "lapack$" OR
         ${libname} MATCHES "acml$" OR ${libname} MATCHES "mkl$" OR
         ${libname} MATCHES "f2c$" OR ${libname} MATCHES "atlas$" OR
-        ${libname} MATCHES "sci_pgi$" OR
-        ${libname} MATCHES "sci_gnu$" OR ${libname} MATCHES "sci_gnu_mp$" OR
-        ${libname} MATCHES "sci_intel$"
+        ${libname} MATCHES "sci_pgi$" OR ${libname} MATCHES "sci_gnu$"
     )
       set(Trilinos_LINALG_LIBRARIES ${Trilinos_LINALG_LIBRARIES} ${lib})
     elseif (${libname} MATCHES "superlu$" OR ${libname} MATCHES "superlu_dist$")
