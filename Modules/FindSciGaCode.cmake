@@ -44,7 +44,7 @@ if (GACODE_FOUND)
   set(HAVE_GaCode 1 CACHE BOOL "Whether have the gacode library")
   include(${SCIMAKE_DIR}/SciGetDepsFromInstall.cmake)
 # Get fciowrappers libraries
-  SciGetDepsFromInstall(Fciowrappers ${GaCode_DIR} FCIOWRAPPERS)
+#  SciGetDepsFromInstall(Fciowrappers ${GaCode_DIR} FCIOWRAPPERS)
 # Get hdf5 libraries
 #  SciGetDepsFromInstall(Hdf5 ${FcIoWrappers_DIR} HDF5)
 # Get netcdf libraries

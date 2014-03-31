@@ -17,7 +17,7 @@ include(${SCIMAKE_DIR}/SciSeparateLibs.cmake)
 # SciGetDepsFromInstall
 #
 # Args:
-#  name:     cmake name of the dependency to find variables of
+#  cmname:     cmake name of the dependency to find variables of
 #  founddir: directory of the found installation, under which one finds
 #              config.summary
 #  atname:   autotools name of the dependency to find variables of
