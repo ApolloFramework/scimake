@@ -45,6 +45,6 @@ if (PLASMASTATE_FOUND)
 # Find gacodes
   include(${SCIMAKE_DIR}/SciGetDepsFromInstall.cmake)
 # Get dependencies
-  SciGetDepsFromInstall(NetlibLite ${PLASMASTATE_DIR} NETLIB_LITE)
+  #SciGetDepsFromInstall(NetlibLite ${PLASMASTATE_DIR} NETLIB_LITE)
 endif ()
 
