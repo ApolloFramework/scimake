@@ -89,7 +89,7 @@ if (DEBUG_CMAKE)
   SciPrintString("  RESULTS FOR cmake detected fortran implicit libraries before cleaning:")
   SciPrintVar(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES)
   SciPrintVar(CMAKE_Fortran_IMPLICIT_LINK_DIRECTORIES)
-endif()
+endif ()
 
 
 # Remove mpi and system libs
@@ -323,21 +323,21 @@ SciPrintVar(CMAKE_Fortran_FLAGS)
 #  http://www.cmake.org/cmake/help/git-master/module/FortranCInterface.html
 option(CHECK_FortranC_INTERFACE "Determine whether to determine interoperability" OFF)
 
-if(CHECK_FortranC_INTERFACE)
+if (CHECK_FortranC_INTERFACE)
   set(HAVE_F90_INTERFACE FALSE)
-  if(CMAKE_Fortran_COMPILER_SUPPORTS_F90)
+  if (CMAKE_Fortran_COMPILER_SUPPORTS_F90)
     include(FortranCInterface)
     FortranCInterface_VERIFY(CXX)
-    if(FortranCInterface_VERIFIED_CXX)
+    if (FortranCInterface_VERIFIED_CXX)
       set(HAVE_F90_INTERFACE TRUE)
-      FortranCInterface_HEADER(${CMAKE_CURRENT_BINARY_DIR}/FCMangle.h 
+      FortranCInterface_HEADER(${CMAKE_CURRENT_BINARY_DIR}/FCMangle.h
         MACRO_NAMESPACE "FC_")
-    endif()
-  else()
+    endif ()
+  else ()
     message(STATUS "${CMAKE_Fortran_COMPILER} does not appear to support F90")
-  endif()
+  endif ()
   SciPrintVar(FortranCInterface_GLOBAL_SYMBOLS)
   SciPrintVar(FortranCInterface_MODULE_SYMBOLS)
-endif()
+endif ()
 
 SciPrintString("")

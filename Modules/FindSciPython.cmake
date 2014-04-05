@@ -105,7 +105,7 @@ if (Python_EXE)
     PATH_SUFFIXES lib lib/${Python_NAME_WE}
     NO_DEFAULT_PATH
   )
-  if(Python_SITE)
+  if (Python_SITE)
     get_filename_component(Python_MODULES_DIR ${Python_SITE}/.. REALPATH)
     SciPrintVar(Python_MODULES_DIR)
     file(RELATIVE_PATH Python_MODULES_SUBDIR ${Python_ROOT_DIR} ${Python_MODULES_DIR})

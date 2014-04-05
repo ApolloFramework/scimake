@@ -23,7 +23,7 @@ if (CUDA_FOUND)
   if (OpenCL_ROOT_DIR)
   else ()
     set(OpenCL_ROOT_DIR "${CUDA_TOOLKIT_ROOT_DIR}")
-  endif()
+  endif ()
 endif ()
 
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")

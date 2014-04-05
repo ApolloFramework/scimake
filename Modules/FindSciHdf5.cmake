@@ -107,7 +107,7 @@ if (DEBUG_CMAKE)
 endif ()
 if (Hdf5_NEEDED_LIBS)
   set(desiredlibs ${Hdf5_NEEDED_LIBS})
-else()
+else ()
   set(desiredlibs)
   foreach (nm hdf5_tools hdf5_toolsdll hdf5_hl_fortran hdf5_hl_f90cstub
     hdf5_fortran hdf5_f90cstub hdf5_hl hdf5_hldll hdf5 hdf5dll

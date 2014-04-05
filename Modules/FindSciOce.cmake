@@ -147,11 +147,11 @@ endforeach ()
 set(OCE_FOUND TRUE)
 # Set the installation search directory for oce woth no component
 # suffix
-if(NOT USE_OCE_SHARED)
+if (NOT USE_OCE_SHARED)
   SciGetInstSubdirs(oce instDirs)
-else()
+else ()
   set(instDirs oce-sersh oce-cc4py)
-endif()
+endif ()
 
 foreach (comp ${SciOce_ALL_COMPONENTS})
   if (Oce${comp}_FIND)

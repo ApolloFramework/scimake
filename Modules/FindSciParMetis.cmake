@@ -33,7 +33,7 @@ if (FIND_ParMetis_GKLIB)
 else ()
   set(ParMetis_SEARCH_LIBS "parmetis;metis")
 endif ()
- 
+
 SciFindPackage(PACKAGE "ParMetis"
               INSTALL_DIR "parmetis-par"
               HEADERS "parmetis.h"
