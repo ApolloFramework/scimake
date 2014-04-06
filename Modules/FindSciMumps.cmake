@@ -16,7 +16,7 @@
 #
 # SciFindMumps: find includes and libraries for Mumps.
 #
-# $Id: FindSciMumps.cmake 484 2014-01-26 16:39:04Z jrobcary $
+# $Id$
 #
 # Copyright 2010-2013 Tech-X Corporation.
 # Arbitrary redistribution allowed provided this copyright remains.
