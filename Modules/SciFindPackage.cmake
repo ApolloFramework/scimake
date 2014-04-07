@@ -744,7 +744,7 @@ macro(SciFindPackage)
         NAMES ${confvernames}
         PATHS ${${scipkgreg}_CONFIG_DIR}
       )
-      if (TFP_USE_CONFIG_FILE)
+      if (TFP_USE_CONFIG_FILE AND ${scipkgreg}_CONFIG_CMAKE})
         include(${${scipkgreg}_CONFIG_CMAKE})
       endif ()
     endif ()
