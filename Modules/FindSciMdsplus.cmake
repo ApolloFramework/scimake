@@ -26,7 +26,7 @@
 SciFindPackage(PACKAGE "Mdsplus"
               INSTALL_DIR "mdsplus"
               HEADERS "mdsdescrip.h" "mdslib.h" 
-              LIBRARIES "Mdsdcl" "MdsIpShr" "MdsShr" "MdsIpSSH" "MdsIpTCP" "TreeShr" "MdsIpUDT" "MdsIpHTTP"
+              LIBRARIES "MdsLib"
               INCLUDE_SUBDIRS "include"
               LIBRARY_SUBDIRS "lib"
               )
