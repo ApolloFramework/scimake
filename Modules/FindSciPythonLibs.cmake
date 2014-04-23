@@ -39,6 +39,9 @@
 #
 ######################################################################
 
+# Messaged added April 23, 2014.  Remove file on Sep. 31, 2014.
+message(WARNING "This package file deprecated. Please switch to FindSciPython.cmake.")
+
 option(ENABLE_PYTHON "Whether to enable Python" ON)
 
 if (ENABLE_PYTHON)
