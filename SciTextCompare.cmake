@@ -29,11 +29,12 @@ if (TEST_STDOUT_FILE)
 else ()
   execute_process(COMMAND ${TEST_PROG} ${ARGS_LIST}
     RESULT_VARIABLE EXEC_ERROR)
-    message(STATUS "EXEC_ERROR      = ${EXEC_ERROR}")
-    message(STATUS "RESULT_VARIABLE = ${RESULT_VARIABLE}")
 endif ()
 
+
 if (EXEC_ERROR)
+  message(STATUS "EXEC_ERROR      = ${EXEC_ERROR}")
+  message(STATUS "RESULT_VARIABLE = ${RESULT_VARIABLE}")
   message(FATAL_ERROR "Execution failure.")
 endif ()
 message(STATUS "Execution succeeded.")
