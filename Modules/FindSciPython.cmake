@@ -82,7 +82,7 @@ if (Python_EXE)
   find_library(Python_LIBRARY
     NAMES ${Python_LIBRARY_NAMES}
     PATHS ${Python_ROOT_DIR}
-    PATH_SUFFIXES lib Libs
+    PATH_SUFFIXES lib Libs lib/python${Python_MAJMIN}/config
     NO_DEFAULT_PATH
   )
   SciPrintVar(Python_LIBRARY)
