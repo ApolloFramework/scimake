@@ -32,26 +32,22 @@ elseif ("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin" AND "${CMAKE_SYSTEM_VERSION}" S
 else ()
   set(pynames python2.7 python2.6)
 endif ()
-find_program(Python_EXE NAMES ${pynames})
+find_program(Python_EXE NAMES ${pynames} PATHS ${Python_ROOT_DIR})
 if (Python_EXE)
 
 # Root directory, naes
   set(PYTHON_FOUND TRUE)
   get_filename_component(Python_EXE ${Python_EXE} REALPATH)
   get_filename_component(Python_NAME ${Python_EXE} NAME)
-  string(REGEX REPLACE ".exe$" "" Python_NAME_WE "${Python_NAME}")
+  get_filename_component(Python_NAME_WE ${Python_EXE} NAME_WE)
+  #string(REGEX REPLACE ".exe$" "" Python_NAME_WE "${Python_NAME}")
   get_filename_component(Python_BINDIR ${Python_EXE}/.. REALPATH)
-  # SciPrintVar(Python_BINDIR)
   get_filename_component(Python_BINDIR_NAME ${Python_BINDIR} NAME)
-  # SciPrintVar(Python_BINDIR_NAME)
   if ("${Python_BINDIR_NAME}" STREQUAL bin)
     get_filename_component(Python_ROOT_DIR ${Python_EXE}/../.. REALPATH)
   else ()
     get_filename_component(Python_ROOT_DIR ${Python_EXE}/.. REALPATH)
   endif ()
-  SciPrintVar(Python_EXE)
-  SciPrintVar(Python_NAME)
-  SciPrintVar(Python_NAME_WE)
 
 # Include directory
   execute_process(COMMAND ${Python_EXE} -c "import distutils.sysconfig; idir = distutils.sysconfig.get_python_inc(1); print idir,"
@@ -61,7 +57,6 @@ if (Python_EXE)
   if (WIN32)
     file(TO_CMAKE_PATH "${Python_INCLUDE_DIRS}" Python_INCLUDE_DIRS)
   endif ()
-  SciPrintVar(Python_INCLUDE_DIRS)
 
 # Version
   execute_process(COMMAND ${Python_EXE} -c "import sys;print sys.version[0]"
@@ -72,47 +67,43 @@ if (Python_EXE)
     OUTPUT_VARIABLE Python_MINOR
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
+  execute_process(COMMAND ${Python_EXE} -c "import site;print site.__file__"
+    OUTPUT_VARIABLE Python_SITE
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  string(REGEX REPLACE ".pyc$" ".py" Python_SITE "${Python_SITE}")   # Get the non-compiled version.
   if (WIN32)
     set(Python_MAJMIN "${Python_MAJOR}${Python_MINOR}")
   else ()
     set(Python_MAJMIN "${Python_MAJOR}.${Python_MINOR}")
   endif ()
-  SciPrintVar(Python_MAJMIN)
-  set(Python_LIBRARY_NAME python${Python_MAJMIN})
-  SciPrintVar(Python_LIBRARY_NAME)
+  set(Python_LIBRARY_NAMES python${Python_MAJMIN})
 
 # Library
-  find_library(Python_LIBRARY ${Python_LIBRARY_NAME}
+  find_library(Python_LIBRARY
+    NAMES ${Python_LIBRARY_NAMES}
     PATHS ${Python_ROOT_DIR}
     PATH_SUFFIXES lib Libs
     NO_DEFAULT_PATH
   )
+  SciPrintVar(Python_LIBRARY)
+
   if (Python_LIBRARY)
     get_filename_component(Python_LIBRARY ${Python_LIBRARY} REALPATH)
-    SciPrintVar(Python_LIBRARY)
+    get_filename_component(Python_LIBRARY_NAME ${Python_LIBRARY} NAME_WE)
     set(Python_LIBRARIES ${Python_LIBRARY})
-    SciPrintVar(Python_LIBRARIES)
     get_filename_component(Python_LIBRARY_DIRS ${Python_LIBRARY}/.. REALPATH)
-    SciPrintVar(Python_LIBRARY_DIRS)
     if (WIN32)
       find_program(Python_DLLS ${Python_LIBRARY_NAME}.dll)
-      SciPrintVar(Python_DLLS)
     endif ()
   else ()
     set(PYTHON_FOUND FALSE)
   endif ()
 
 # Modules
-  find_file(Python_SITE site.py
-    PATHS ${Python_ROOT_DIR}
-    PATH_SUFFIXES lib lib/${Python_NAME_WE}
-    NO_DEFAULT_PATH
-  )
   if (Python_SITE)
     get_filename_component(Python_MODULES_DIR ${Python_SITE}/.. REALPATH)
-    SciPrintVar(Python_MODULES_DIR)
     file(RELATIVE_PATH Python_MODULES_SUBDIR ${Python_ROOT_DIR} ${Python_MODULES_DIR})
-    SciPrintVar(Python_MODULES_SUBDIR)
   else ()
     set(PYTHON_FOUND FALSE)
   endif ()
@@ -120,6 +111,13 @@ if (Python_EXE)
 else ()
   set(PYTHON_FOUND FALSE)
 endif ()
+
+foreach(var Python_ROOT_DIR Python_BINDIR Python_EXE Python_NAME Python_NAME_WE
+    Python_INCLUDE_DIRS Python_MAJMIN Python_LIBRARY Python_LIBRARY_NAME
+    Python_LIBRARIES Python_LIBRARY_DIRS Python_DLLS Python_MODULES_DIR
+    Python_MODULES_SUBDIR Python_SITE)
+  SciPrintVar(${var})
+endforeach()
 
 if (PYTHON_FOUND)
   message(STATUS "[FindSciPython.cmake] - Found Python")
