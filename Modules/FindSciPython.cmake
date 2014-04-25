@@ -54,9 +54,7 @@ if (Python_EXE)
     OUTPUT_VARIABLE Python_INCLUDE_DIRS
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
-  if (WIN32)
-    file(TO_CMAKE_PATH "${Python_INCLUDE_DIRS}" Python_INCLUDE_DIRS)
-  endif ()
+  file(TO_CMAKE_PATH "${Python_INCLUDE_DIRS}" Python_INCLUDE_DIRS)
 
 # Version
   execute_process(COMMAND ${Python_EXE} -c "import sys;print sys.version[0]"
@@ -72,6 +70,7 @@ if (Python_EXE)
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
   string(REGEX REPLACE ".pyc$" ".py" Python_SITE "${Python_SITE}")   # Get the non-compiled version.
+  file(TO_CMAKE_PATH "${Python_SITE}" Python_SITE)
   if (WIN32)
     set(Python_MAJMIN "${Python_MAJOR}${Python_MINOR}")
   else ()
