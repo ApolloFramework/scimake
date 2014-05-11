@@ -1,40 +1,60 @@
-message("Looking for Geant4.")
+# - FindSciGeant4: Module to find include directories and
+#   libraries for Geant4.
+#
+# Module usage:
+#   find_package(SciGeant4 ...)
+#
+# This module will define the following variables:
+#  HAVE_GEANT4, GEANT4_FOUND = Whether libraries and includes are found
+#  Geant4_INCLUDE_DIRS       = Location of Geant4 includes
+#  Geant4_LIBRARY_DIRS       = Location of Geant4 libraries
+#  Geant4_LIBRARIES          = Required libraries
+#  Geant4_DLLS               =
 
-set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
-
-#set(instdirs geant4-ser)
+######################################################################
+#
+# FindGeant4: find includes and libraries for hdf5
+#
+# $Id$
+#
+# Copyright 2010-2013 Tech-X Corporation and other contributors.
+# Arbitrary redistribution allowed provided this copyright remains.
+#
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
+#
+######################################################################
 
 set(Geant4_LIBRARY_LIST
-  G4interfaces
   G4FR
-  G4materials
   G4GMocren
-  G4modeling
   G4OpenGL
-  G4parmodels
   G4RayTracer
-  G4particles
   G4Tree
-  G4persistency
   G4VRML
-  G4physicslists
   G4analysis
-  G4processes
   G4clhep
-  G4readout
   G4digits_hits
-  G4run
   G4error_propagation
-  G4track
   G4event
-  G4tracking
   G4geometry
-  G4visHepRep
   G4gl2ps
-  G4visXXX
   G4global
-  G4vis_management
   G4graphics_reps
+  G4interfaces
+  G4materials
+  G4modeling
+  G4parmodels
+  G4particles
+  G4persistency
+  G4physicslists
+  G4processes
+  G4readout
+  G4run
+  G4track
+  G4tracking
+  G4visHepRep
+  G4visXXX
+  G4vis_management
   G4zlib
 )
 
