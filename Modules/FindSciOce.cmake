@@ -183,6 +183,11 @@ foreach (res ${SEARCH_RESULTS})
   endif ()
 endforeach ()
 
+find_library(Oce_PLUGINS
+  NAMES FWOSPlugin
+  PATHS ${Oce_LIBRARY_DIRS}
+  NO_DEFAULT_PATH)
+
 if (OCE_FOUND)
   # message(STATUS "Found Oce.")
   set(HAVE_OCE 1 CACHE BOOL "Whether have Oce library")
