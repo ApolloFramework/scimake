@@ -1,0 +1,46 @@
+/**
+ *
+ * @file    sci_array
+ *
+ * @brief   Define for an array type that works with C++ 11 or tr1
+ *
+ * @version $Id$
+ *
+ * Copyright &copy; 2012-2013, Tech-X Corporation
+ * See LICENSE file (EclipseLicense.txt) for conditions of use.
+ *
+ */
+
+#ifndef SCI_ARRAY
+#define SCI_ARRAY
+
+// The values needed below
+/* Define if your C++ compiler has array in the file <array> */
+#cmakedefine HAVE_ARRAY
+
+/* Define if your C++ compiler has array in the file <tr1/array> */
+#cmakedefine HAVE_TR1_ARRAY
+
+/* Define if your C++ compiler has array in the namespace std */
+#cmakedefine ARRAY_NAMESPACE_IS_STD
+
+/* Define if your C++ compiler has array in the namespace std::tr1 */
+#cmakedefine ARRAY_NAMESPACE_IS_STD_TR1
+
+#ifdef HAVE_ARRAY
+  #include <array>
+#elif defined(HAVE_TR1_ARRAY)
+  #include <tr1/array>
+#else
+  #error array not found
+#endif
+#ifdef ARRAY_NAMESPACE_IS_STD
+  #define sci_array std::array
+#elif defined(ARRAY_NAMESPACE_IS_STD_TR1)
+  #define sci_array std::tr1::array
+#else
+  #error array namespace not known
+#endif
+
+#endif // SCI_ARRAY
+
