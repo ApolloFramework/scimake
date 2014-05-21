@@ -12,5 +12,6 @@
 message(STATUS "Configuring sci_array.in.")
 string(TOUPPER ${ARRAY_PREFIX} ARRAY_PREFIX_UC)
 configure_file(sci_array.in ${CMAKE_CURRENT_BINARY_DIR}/${ARRAY_PREFIX}_array)
-install(FILES ${ARRAY_PREFIX}_array DESTINATION include)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${ARRAY_PREFIX}_array
+  DESTINATION include)
 
