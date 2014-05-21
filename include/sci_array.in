@@ -11,8 +11,8 @@
  *
  */
 
-#ifndef SCI_ARRAY
-#define SCI_ARRAY
+#ifndef @ARRAY_PREFIX@_ARRAY
+#define @ARRAY_PREFIX@_ARRAY
 
 // The values needed below
 /* Define if your C++ compiler has array in the file <array> */
@@ -42,5 +42,5 @@
   #error array namespace not known
 #endif
 
-#endif // SCI_ARRAY
+#endif // @ARRAY_PREFIX@_ARRAY
 
