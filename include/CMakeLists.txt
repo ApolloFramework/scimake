@@ -10,8 +10,14 @@
 ######################################################################
 
 message(STATUS "Configuring sci_array.in.")
-string(TOUPPER ${ARRAY_PREFIX} ARRAY_PREFIX_UC)
-configure_file(sci_array.in ${CMAKE_CURRENT_BINARY_DIR}/${ARRAY_PREFIX}_array)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${ARRAY_PREFIX}_array
-  DESTINATION include)
+string(TOUPPER ${SCI_ARRAY_PREFIX} SCI_ARRAY_PREFIX_UC)
+configure_file(sci_array.in
+  ${CMAKE_CURRENT_BINARY_DIR}/${SCI_ARRAY_PREFIX}_array)
+if (NOT DEFINED SCI_ARRAY_INSTALL)
+  set(SCI_ARRAY_INSTALL TRUE)
+endif ()
+if (SCI_ARRAY_INSTALL)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${SCI_ARRAY_PREFIX}_array
+      DESTINATION include)
+endif ()
 
