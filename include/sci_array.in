@@ -11,8 +11,8 @@
  *
  */
 
-#ifndef @ARRAY_PREFIX_UC@_ARRAY
-#define @ARRAY_PREFIX_UC@_ARRAY
+#ifndef @SCI_ARRAY_PREFIX_UC@_ARRAY
+#define @SCI_ARRAY_PREFIX_UC@_ARRAY
 
 // The values needed below
 /* Define if your C++ compiler has array in the file <array> */
@@ -42,5 +42,5 @@
   #error array namespace not known
 #endif
 
-#endif // @ARRAY_PREFIX_UC@_ARRAY
+#endif // @SCI_ARRAY_PREFIX_UC@_ARRAY
 
