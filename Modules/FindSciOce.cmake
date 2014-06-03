@@ -155,6 +155,7 @@ endif ()
 
 foreach (comp ${SciOce_ALL_COMPONENTS})
   if (Oce${comp}_FIND)
+    set(Oce${comp}_ROOT_DIR ${Oce_ROOT_DIR})
     SciFindPackage(PACKAGE Oce${comp}
       INSTALL_DIRS "${instDirs}"
       HEADERS "${Oce${comp}_SEARCHHDRS}"
