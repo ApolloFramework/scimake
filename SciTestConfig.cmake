@@ -15,8 +15,12 @@
 # enable_testing() and include(CTest) must be called before this is included.
 #
 
+# Get project names correlated, nightly timing.
 set(CTEST_PROJECT_NAME "${CMAKE_PROJECT_NAME}")
 set(CTEST_NIGHTLY_START_TIME "01:00:00 UTC")
+
+# cmake's SITE is ctests' CTEST_SITE
+# Do we need the rest if called with ctest?
 if (NOT SITE)
   if (SCIMAKE_SITE)
     set(SITE "${SCIMAKE_SITE}")
@@ -26,12 +30,17 @@ if (NOT SITE)
     set(SITE "unknown")
   endif ()
 endif ()
-if (DEFINED SCIMAKE_BUILD_NAME)
-  set(BUILDNAME ${SCIMAKE_BUILD_NAME})
-else ()
-  set(BUILDNAME "${CMAKE_SYSTEM}-${CMAKE_SYSTEM_PROCESSOR}-${CMAKE_CXX_COMPILER_ID}${CMAKE_CXX_COMPILER_VERSION}")
-  if (SCIMAKE_BUILD)
-    set(BUILDNAME "${BUILDNAME}-${SCIMAKE_BUILD}")
+
+# cmake's BUILDNAME is ctests' CTEST_BUILD_NAME
+# Do we need the rest if called with ctest
+if (NOT DEFINED BUILDNAME)
+  if (DEFINED SCIMAKE_BUILD_NAME)
+    set(BUILDNAME ${SCIMAKE_BUILD_NAME})
+  else ()
+    set(BUILDNAME "${CMAKE_SYSTEM}-${CMAKE_SYSTEM_PROCESSOR}-${CMAKE_CXX_COMPILER_ID}${CMAKE_CXX_COMPILER_VERSION}")
+    if (SCIMAKE_BUILD)
+      set(BUILDNAME "${BUILDNAME}-${SCIMAKE_BUILD}")
+    endif ()
   endif ()
 endif ()
 SciPrintString("SCIMAKE_BUILD = ${SCIMAKE_BUILD}.")
