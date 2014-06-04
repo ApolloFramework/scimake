@@ -277,7 +277,9 @@ if ("${CMAKE_SYSTEM_NAME}" STREQUAL Darwin)
   string(REPLACE "Darwin-" "" SCI_SYSTEM_VERSION "${CMAKE_SYSTEM}")
   message(STATUS "SCI_SYSTEM_VERSION = ${SCI_SYSTEM_VERSION}.")
   string(REGEX REPLACE "\\..*$" "" SCI_SYSTEM_MAJVER "${SCI_SYSTEM_VERSION}")
-  if ("${SCI_SYSTEM_MAJVER}" LESS 13.0.0)  # Before Mavericks
+  if ("${SCI_SYSTEM_MAJVER}" LESS 11)  # Before Mavericks
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -mmacosx-version-min=10.4")
+  else if ("${SCI_SYSTEM_MAJVER}" LESS 13)  # Before Mavericks
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -mmacosx-version-min=10.5")
   else ()
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -mmacosx-version-min=10.7")
