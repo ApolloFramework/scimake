@@ -279,7 +279,7 @@ if ("${CMAKE_SYSTEM_NAME}" STREQUAL Darwin)
   string(REGEX REPLACE "\\..*$" "" SCI_SYSTEM_MAJVER "${SCI_SYSTEM_VERSION}")
   if ("${SCI_SYSTEM_MAJVER}" LESS 11)   # Before Lion (Snow Leopard or before)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -mmacosx-version-min=10.4")
-  else if ("${SCI_SYSTEM_MAJVER}" LESS 13) # Before Mavericks
+  elseif ("${SCI_SYSTEM_MAJVER}" LESS 13) # Before Mavericks
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -mmacosx-version-min=10.5")
   else ()
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -mmacosx-version-min=10.7")
