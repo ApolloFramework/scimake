@@ -86,9 +86,9 @@ message(STATUS "In SciAddUnitTestMacros.cmake, SHLIB_CMAKE_PATH_VAL = ${SHLIB_CM
 #                   against expected output.
 
 macro(SciAddUnitTest)
-  set(oneValArgs NAME COMMAND RESULTS_DIR STDOUT_FILE)
+  set(oneValArgs NAME COMMAND RESULTS_DIR STDOUT_FILE ARGS)
   set(multiValArgs RESULTS_FILES SOURCES LIBS
-                           ARGS PROPERTIES ATTACHED_FILES)
+                           PROPERTIES ATTACHED_FILES)
   cmake_parse_arguments(TEST "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
   if (NOT TEST_COMMAND)
     set (TEST_COMMAND ${TEST_NAME})
