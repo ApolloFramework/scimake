@@ -62,7 +62,7 @@ if (ENABLE_PYTHON)
   if (Python_INCLUDE_DIRS AND Python_LIBRARIES)
     set(PYTHONLIBS_FOUND TRUE)
 # Search for python on unix using path
-  elseif (NOT WIN32)
+  else ()
     find_program(PYTHON python
       HINTS "${Python_ROOT_DIR}"
       PATH_SUFFIXES bin)
@@ -77,13 +77,14 @@ if (ENABLE_PYTHON)
       string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+"
         Python_VERSION "${Python_VERSION}"
       )
+      string(REGEX MATCH "^[0-9]+\\.[0-9]"
+		Python_MAJMIN "${Python_VERSION}")
+
+      if (WIN32)
+        string(REPLACE "." "" Python_MAJMIN "${Python_MAJMIN}")
+      endif ()
       if (DEBUG_CMAKE)
         message(STATUS "Python_VERSION = ${Python_VERSION}.")
-      endif ()
-      string(REGEX MATCH "^[0-9]+\\.[0-9]"
-        Python_MAJMIN "${Python_VERSION}"
-      )
-      if (DEBUG_CMAKE)
         message(STATUS "Python_MAJMIN = ${Python_MAJMIN}.")
       endif ()
       set(Python_LIB python${Python_MAJMIN} CACHE STRING "Python library name")
@@ -96,7 +97,11 @@ if (ENABLE_PYTHON)
         execute_process(COMMAND ${PYTHON} -c "import os, sys; print os.path.join(sys.prefix, 'include', 'python')"
           OUTPUT_VARIABLE Python_INCDIR)
         string(STRIP "${Python_INCDIR}" Python_INCDIR)
-        set(Python_INCLUDE_DIRS "${Python_INCDIR}${Python_MAJMIN}")
+        if (WIN32)
+          get_filename_component(Python_INCLUDE_DIRS "${Python_INCDIR}/.." REALPATH)
+        else ()
+          set(Python_INCLUDE_DIRS "${Python_INCDIR}${Python_MAJMIN}")
+        endif ()
       endif ()
       if (DEBUG_CMAKE)
         message(STATUS "Python_INCLUDE_DIRS = ${Python_INCLUDE_DIRS}.")
@@ -111,6 +116,16 @@ if (ENABLE_PYTHON)
       if (NOT Python_LIBRARIES)
         if (DEBUG_CMAKE)
           message(STATUS "Looking for library, ${Python_LIB}.")
+        endif ()
+        if (WIN32)
+          get_filename_component(Python_TOPLIBDIR "${Python_TOPLIBDIR}/.." REALPATH)
+          file(TO_CMAKE_PATH "${Python_TOPLIBDIR}" Python_TOPLIBDIR)
+        endif()
+        if (DEBUG_CMAKE) 
+          message(STATUS "find_library(Python_LIBRARIES ${Python_LIB}
+              PATHS ${Python_TOPLIBDIR}/config ${Python_TOPLIBDIR}/libs
+              NO_DEFAULT_PATH)"
+          )
         endif ()
         find_library(Python_LIBRARIES ${Python_LIB}
           HINTS "${Python_ROOT_DIR}"
@@ -185,6 +200,8 @@ if (ENABLE_PYTHON)
       string(STRIP "${Python_VERSION}" Python_VERSION)
     if (WIN32)
       string(REGEX REPLACE "\\." "" Python_VERSION_WINSTR "${Python_VERSION}")
+      
+      file(TO_CMAKE_PATH "${Python_INCLUDE_DIRS}" Python_INCLUDE_DIRS)
     endif ()
     set(HAVE_PYTHON 1 CACHE BOOL "Whether have Python")
   endif ()
