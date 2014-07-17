@@ -41,7 +41,7 @@ SciFindPackage(PACKAGE "Netcdf"
   INSTALL_DIR ${instdirs}
   HEADERS "netcdf.h"
   LIBRARIES ${desiredlibs}
-  #MODULES "netcdf"
+  MODULES "netcdf"
 )
 
 if (NETCDF_FOUND)
