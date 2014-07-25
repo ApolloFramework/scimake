@@ -34,6 +34,7 @@ endif ()
 
 SciFindPackage(PACKAGE "Eigen3"
               INSTALL_DIR "eigen3"
+              INCLUDE_SUBDIRS include/eigen3
               HEADERS "Eigen/Core"
              )
 
