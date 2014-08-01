@@ -15,6 +15,13 @@
 string(REPLACE "\"" "" ARGS_LIST "${TEST_ARGS}")
 string(REPLACE " " ";" ARGS_LIST "${ARGS_LIST}")
 
+# make sure the file differ is set
+if (TEST_DIFFER)
+  separate_arguments(TEST_DIFFER)
+else ()
+  set(TEST_DIFFER diff --strip-trailing-cr)
+endif ()
+
 # if TEST_STDOUT_FILE is non-empty, then we use it as the output file
 # into for the execute_process(), and we add it to the ${TEST_RESULTS}
 # to be compared. This allows us to have a test which generates one or
@@ -54,7 +61,7 @@ if (TEST_RESULTS)
     if (NOT EXISTS ${TEST_RESULTS_DIR}/${res})
       message(FATAL_ERROR "FILE ${TEST_RESULTS_DIR}/${res} does not exist.")
     endif ()
-    execute_process(COMMAND diff --strip-trailing-cr
+    execute_process(COMMAND ${TEST_DIFFER}
       ${res} ${TEST_RESULTS_DIR}/${res}
       RESULT_VARIABLE DIFFERS)
     if (DIFFERS)

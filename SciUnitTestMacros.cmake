@@ -86,7 +86,7 @@ message(STATUS "In SciAddUnitTestMacros.cmake, SHLIB_CMAKE_PATH_VAL = ${SHLIB_CM
 #                   against expected output.
 
 macro(SciAddUnitTest)
-  set(oneValArgs NAME COMMAND RESULTS_DIR STDOUT_FILE ARGS)
+  set(oneValArgs NAME COMMAND DIFFER RESULTS_DIR STDOUT_FILE ARGS)
   set(multiValArgs RESULTS_FILES SOURCES LIBS
                            PROPERTIES ATTACHED_FILES)
   cmake_parse_arguments(TEST "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
@@ -105,6 +105,7 @@ macro(SciAddUnitTest)
     target_link_libraries(${TEST_COMMAND} ${TEST_LIBS})
   endif ()
   add_test(NAME ${TEST_NAME} COMMAND ${CMAKE_COMMAND}
+      -DTEST_DIFFER:STRING=${TEST_DIFFER}
       -DTEST_PROG:FILEPATH=${TEST_EXECUTABLE}
       -DTEST_ARGS:STRING=${TEST_ARGS}
       -DTEST_STDOUT_FILE:STRING=${TEST_STDOUT_FILE}
