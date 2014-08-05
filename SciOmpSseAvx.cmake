@@ -16,7 +16,9 @@ SciPrintString(" Optimization checking ")
 message("")
 message(STATUS "--------- Analyzing vector capabilities ---------")
 
-# Determine the processor and sse capabilities
+######################################################################
+# Determine the processor 
+######################################################################
 if (EXISTS /proc/cpuinfo)
   message(STATUS "Working on LINUX.")
   if (DISABLE_CPUCHECK) # For BGP
@@ -64,6 +66,9 @@ endif ()
 message(STATUS "CPU = ${SCIC_CPU}.")
 message(STATUS "CPU_CAPABILITIES = ${CPU_CAPABILITIES}.")
 
+######################################################################
+# Sort into sse or avx
+######################################################################
 if (CPU_CAPABILITIES)
   separate_arguments(CPU_CAPABILITIES)
   # message(STATUS "CPU capabilities are ${CPU_CAPABILITIES}")
@@ -90,11 +95,13 @@ foreach (cap SSE AVX)
   message(STATUS "${cap} capability is ${${cap}_CAPABILITY}")
 endforeach ()
 
+######################################################################
+# Check whether compilers support SSE2 or AVX if CPU supports it
+######################################################################
 # Handy
 include(CheckCSourceCompiles)
 include(CheckCSourceRuns)
 
-# Check whether have sse2.
 message("Checking sse2 capabilities.")
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${SSE2_FLAG}")
@@ -160,25 +167,10 @@ endif ()
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS_SAV}")
 SciPrintVar(AVX_RUNS)
 
-if (USE_OPENMP)
-  if (OPENMP_FLAG)
-    set(HAVE_OPENMP TRUE)
-    foreach (cmp C CXX)
-      foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL)
-        set(CMAKE_${cmp}_FLAGS_${bld} "${CMAKE_${cmp}_FLAGS_${bld}} ${OPENMP_FLAG}")
-      endforeach ()
-    endforeach ()
-  else ()
-    find_package(OpenMP)
-    if (OPENMP_FOUND)
-      set(HAVE_OPENMP TRUE)
-    else ()
-      message(WARNING "OpenMP requested but flags not specified or determined")
-    endif ()
-  endif ()
-endif ()
-
+######################################################################
+# Now handle the flags for sse2 and avx
 # If we do runtime detection, we can add these flags more liberally
+######################################################################
 if (SSE2_COMPILES)
   set(SSE2_BUILDS FULL RELEASE RELWITHDEBINFO MINSIZEREL)
   if (ALLOW_SSE2)
@@ -195,6 +187,7 @@ if (SSE2_COMPILES)
     endforeach ()
   endforeach ()
 endif ()
+
 if (AVX_RUNS)
   set(AVX_BUILDS FULL)
   if (ALLOW_AVX)
@@ -223,3 +216,23 @@ foreach (cmp C CXX)
 endforeach ()
 SciPrintString("")
 
+######################################################################
+# OpenMP detection
+######################################################################
+if (USE_OPENMP)
+  if (OPENMP_FLAG)
+    set(HAVE_OPENMP TRUE)
+    foreach (cmp C CXX)
+      foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL)
+        set(CMAKE_${cmp}_FLAGS_${bld} "${CMAKE_${cmp}_FLAGS_${bld}} ${OPENMP_FLAG}")
+      endforeach ()
+    endforeach ()
+  else ()
+    find_package(OpenMP)
+    if (OPENMP_FOUND)
+      set(HAVE_OPENMP TRUE)
+    else ()
+      message(WARNING "OpenMP requested but flags not specified or determined")
+    endif ()
+  endif ()
+endif ()
