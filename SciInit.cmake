@@ -217,11 +217,15 @@ endif ()
 
 ######################################################################
 #
-# OpenMP, SSE, AVX
+# OpenMP, SSE, AVX,OpenCL
 #
 ######################################################################
 
 include(${SCIMAKE_DIR}/SciOmpSseAvx.cmake)
+option(ENABLE_OPENCL    "Whether to enable OpenCL" OFF)
+if (ENABLE_OPENCL)
+include(${SCIMAKE_DIR}/Modules/FindSciOpenCL.cmake)
+endif ()
 
 ######################################################################
 #
