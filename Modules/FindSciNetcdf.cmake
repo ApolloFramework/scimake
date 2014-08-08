@@ -25,16 +25,6 @@
 #
 ######################################################################
 
-if (NETCDF_BUILDS)
-  set(instdirs ${NETCDF_BUILDS})
-else ()
-if (ENABLE_PARALLEL)
-  set(instdirs netcdf-par)
-else ()
-  set(instdirs netcdf)
-endif ()
-endif ()
-
 set(desiredlibs netcdf)
 #if (CMAKE_Fortran_COMPILER_WORKS)
 #  set(desiredlibs netcdff ${desiredlibs})
@@ -44,7 +34,7 @@ set(desiredlibs netcdf)
 #endif ()
 
 SciFindPackage(PACKAGE "Netcdf"
-  INSTALL_DIR ${instdirs}
+  INSTALL_DIR ${NETCDF_BUILDS}
   HEADERS "netcdf.h"
   LIBRARIES ${desiredlibs}
   #MODULES "netcdf"
