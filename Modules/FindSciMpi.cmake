@@ -113,6 +113,43 @@ if (WIN32 AND "$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "AMD64" AND
   SciPrintVar(MPI_LINK_FLAGS)
 endif ()
 
+# Check if an MS MPI version is installed in a standard location.
+# ENV stuff from http://www.cmake.org/pipermail/cmake/2009-October/032839.html
+if (WIN32 AND
+    "$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "AMD64" OR
+    ("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86" AND "$ENV{PROCESSOR_ARCHITEW6432}" STREQUAL "AMD64"))
+
+  set(MS_HPC_Pack_2008_SDK "C:\\Program Files\\Microsoft HPC Pack 2008 SDK")
+
+  # quick checks
+  if (EXISTS "${MS_HPC_Pack_2008_SDK}/include/mpi.h" AND
+      EXISTS "${MS_HPC_Pack_2008_SDK}/lib/amd64/msmpi.lib" AND
+      EXISTS "${MS_HPC_Pack_2008_SDK}/lib/amd64/msmpifec.lib" AND
+      EXISTS "${MS_HPC_Pack_2008_SDK}/Bin/mpiexec.exe"
+      )
+
+     # All the following assignments are based on the code above in
+     # scimake r602 and that uses /winsame/contrib-mingw/microsoft-hpc-mingw.
+     # This is done for compatibility reason only.  I do not endorse them. -- CJ
+     set(MPI_Fortran      "${MS_HPC_Pack_2008_SDK}/lib/amd64/msmpi.lib")
+     set(MPI_C            "${MS_HPC_Pack_2008_SDK}/lib/amd64/msmpi.lib")
+     set(MPI_CXX          "${MS_HPC_Pack_2008_SDK}/lib/amd64/msmpi.lib")
+     set(MPI_PROGRAMS     "${MS_HPC_Pack_2008_SDK}/Bin/mpiexec.exe")
+     set(MPIEXEC          "${MS_HPC_Pack_2008_SDK}/Bin/mpiexec.exe")
+     set(MPI_INCLUDE_DIRS "${MS_HPC_Pack_2008_SDK}/include")
+     set(MPI_MODULE_DIRS  "${MS_HPC_Pack_2008_SDK}/include")
+     set(MPI_LIBRARIES    "${MS_HPC_Pack_2008_SDK}/Lib/amd64/msmpifec.lib" "${MS_HPC_Pack_2008_SDK}/lib/amd64/msmpi.lib")
+     set(MPI_STLIBS       "${MS_HPC_Pack_2008_SDK}/Lib/amd64/msmpifec.lib" "${MS_HPC_Pack_2008_SDK}/lib/amd64/msmpi.lib")
+     set(MPI_DLLS         "${MS_HPC_Pack_2008_SDK}/Lib/amd64/msmpi.dll")
+     set(MPI_LINK_FLAGS "-L\"${MS_HPC_Pack_2008_SDK}/Lib/amd64\" -lmsmpifec -lmsmpi")
+
+     message(STATUS "FindSciMpi: '${MS_HPC_Pack_2008_SDK}' is a candidate MPI")
+     set(SCIMPI_FOUND TRUE)
+     set(SEARCH_FOR_MPI FALSE)
+
+  endif()
+endif()
+
 # Pass down the required variable.  This has file name capitalization.
 if (SEARCH_FOR_MPI)
   if (SciMpi_FIND_REQUIRED)
