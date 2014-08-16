@@ -86,7 +86,7 @@ message(STATUS "In SciAddUnitTestMacros.cmake, SHLIB_CMAKE_PATH_VAL = ${SHLIB_CM
 #                   against expected output.
 
 macro(SciAddUnitTest)
-  set(oneValArgs NAME COMMAND DIFFER RESULTS_DIR STDOUT_FILE ARGS)
+  set(oneValArgs NAME COMMAND DIFFER RESULTS_DIR STDOUT_FILE ARGS NUMPROCS MPIEXEC_PROG)
   set(multiValArgs RESULTS_FILES SOURCES LIBS
                            PROPERTIES ATTACHED_FILES)
   cmake_parse_arguments(TEST "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
@@ -98,6 +98,10 @@ macro(SciAddUnitTest)
   else ()
     set(TEST_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/${TEST_COMMAND}")
   endif ()
+  # if parallel set the mpiexec argument
+  if (TEST_NUMPROCS AND ENABLE_PARALLEL AND MPIEXEC)
+    set(TEST_MPIEXEC "${MPIEXEC} -np ${TEST_NUMPROCS}")
+  endif (TEST_NUMPROCS AND ENABLE_PARALLEL AND MPIEXEC)
   if (TEST_SOURCES)
     add_executable(${TEST_COMMAND} ${TEST_SOURCES})
   endif ()
@@ -107,6 +111,7 @@ macro(SciAddUnitTest)
   add_test(NAME ${TEST_NAME} COMMAND ${CMAKE_COMMAND}
       -DTEST_DIFFER:STRING=${TEST_DIFFER}
       -DTEST_PROG:FILEPATH=${TEST_EXECUTABLE}
+      -DTEST_MPIEXEC:STRING=${TEST_MPIEXEC}
       -DTEST_ARGS:STRING=${TEST_ARGS}
       -DTEST_STDOUT_FILE:STRING=${TEST_STDOUT_FILE}
       -DTEST_RESULTS:STRING=${TEST_RESULTS_FILES}

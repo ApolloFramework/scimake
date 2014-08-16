@@ -21,6 +21,9 @@ if (TEST_DIFFER)
 else ()
   set(TEST_DIFFER diff --strip-trailing-cr)
 endif ()
+if (TEST_MPIEXEC)
+  separate_arguments(TEST_MPIEXEC)
+endif (TEST_MPIEXEC)
 
 # if TEST_STDOUT_FILE is non-empty, then we use it as the output file
 # into for the execute_process(), and we add it to the ${TEST_RESULTS}
@@ -29,12 +32,12 @@ endif ()
 # of the test.
 
 if (TEST_STDOUT_FILE)
-  execute_process(COMMAND ${TEST_PROG} ${ARGS_LIST}
+  execute_process(COMMAND ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}
     RESULT_VARIABLE EXEC_ERROR
     OUTPUT_FILE ${TEST_STDOUT_FILE})
   set(TEST_RESULTS ${TEST_RESULTS} ${TEST_STDOUT_FILE})
 else ()
-  execute_process(COMMAND ${TEST_PROG} ${ARGS_LIST}
+  execute_process(COMMAND ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}
     RESULT_VARIABLE EXEC_ERROR)
 endif ()
 
