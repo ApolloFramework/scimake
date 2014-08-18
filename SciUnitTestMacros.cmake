@@ -101,6 +101,8 @@ macro(SciAddUnitTest)
   # if parallel set the mpiexec argument
   if (TEST_NUMPROCS AND ENABLE_PARALLEL AND MPIEXEC)
     set(TEST_MPIEXEC "${MPIEXEC} -np ${TEST_NUMPROCS}")
+  else ()
+    set(TEST_MPIEXEC)
   endif (TEST_NUMPROCS AND ENABLE_PARALLEL AND MPIEXEC)
   if (TEST_SOURCES)
     add_executable(${TEST_COMMAND} ${TEST_SOURCES})
