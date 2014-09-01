@@ -104,6 +104,8 @@ endforeach ()
 # Handy
 include(CheckCSourceCompiles)
 include(CheckCSourceRuns)
+include(CheckCXXSourceCompiles)
+include(CheckCXXSourceRuns)
 
 message("Checking sse2 capabilities.")
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
@@ -174,9 +176,9 @@ SciPrintVar(AVX_RUNS)
 message("Checking avx2 capabilities.")
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
 set(AVX2_FLAG "-march=core-avx2")
-set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX2_FLAG}")
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX_FLAG} ${AVX2_FLAG}")
 message("AVX2_FLAG = ${AVX2_FLAG}.")
-check_c_source_compiles(
+check_cxx_source_compiles(
 "
 #include <immintrin.h>
 int main(int argc, char** argv) {
@@ -190,7 +192,7 @@ AVX2_COMPILES
 )
 SciPrintVar(AVX2_COMPILES)
 if (AVX2_COMPILES)
-  check_c_source_runs(
+  check_cxx_source_runs(
 "
 #include <immintrin.h>
 int main(int argc, char** argv) {
@@ -257,6 +259,7 @@ if (AVX2_RUNS)
   endif ()
   foreach (cmp C CXX)
     foreach (bld ${AVX2_BUILDS})
+      message(STATUS "Adding ${AVX2_FLAG} to CMAKE_${cmp}_FLAGS_${bld}")
       set(CMAKE_${cmp}_FLAGS_${bld} "${CMAKE_${cmp}_FLAGS_${bld}} ${AVX2_FLAG}")
     endforeach ()
   endforeach ()
