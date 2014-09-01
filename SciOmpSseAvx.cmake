@@ -17,8 +17,9 @@ message("")
 message(STATUS "--------- Analyzing vector capabilities ---------")
 
 ######################################################################
-# Determine the processor 
+# Determine the processor
 ######################################################################
+
 if (EXISTS /proc/cpuinfo)
   message(STATUS "Working on LINUX.")
   if (DISABLE_CPUCHECK) # For BGP
@@ -29,7 +30,7 @@ if (EXISTS /proc/cpuinfo)
         COMMAND head -1
         OUTPUT_VARIABLE SCIC_CPU
         OUTPUT_STRIP_TRAILING_WHITESPACE)
-  # For Blue Gene
+# For Blue Gene
     if (SCIC_CPU)
       string(REGEX REPLACE "^.*: " "" SCIC_CPU ${SCIC_CPU})
       execute_process(COMMAND cat /proc/cpuinfo
@@ -69,6 +70,7 @@ message(STATUS "CPU_CAPABILITIES = ${CPU_CAPABILITIES}.")
 ######################################################################
 # Sort into sse or avx
 ######################################################################
+
 if (CPU_CAPABILITIES)
   separate_arguments(CPU_CAPABILITIES)
   # message(STATUS "CPU capabilities are ${CPU_CAPABILITIES}")
@@ -98,6 +100,7 @@ endforeach ()
 ######################################################################
 # Check whether compilers support SSE2 or AVX if CPU supports it
 ######################################################################
+
 # Handy
 include(CheckCSourceCompiles)
 include(CheckCSourceRuns)
@@ -167,10 +170,47 @@ endif ()
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS_SAV}")
 SciPrintVar(AVX_RUNS)
 
+# Check whether have avx2.
+message("Checking avx2 capabilities.")
+set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
+set(AVX2_FLAG "-march=core-avx2")
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX2_FLAG}")
+message("AVX2_FLAG = ${AVX2_FLAG}.")
+check_c_source_compiles(
+"
+#include <immintrin.h>
+int main(int argc, char** argv) {
+  double a[4] = {1.0, 2.0, 3.0, 4.0};
+  __m128i vindex = _mm_set_epi32(0, 2, 1, 3);
+  __m256d t = _mm256_i32gather_pd(a, vindex, 8);
+  return 0;
+}
+"
+AVX2_COMPILES
+)
+SciPrintVar(AVX2_COMPILES)
+if (AVX2_COMPILES)
+  check_c_source_runs(
+"
+#include <immintrin.h>
+int main(int argc, char** argv) {
+  double a[4] = {1.0, 2.0, 3.0, 4.0};
+  __m128i vindex = _mm_set_epi32(0, 2, 1, 3);
+  __m256d t = _mm256_i32gather_pd(a, vindex, 8);
+  return 0;
+}
+"
+  AVX2_RUNS
+  )
+endif ()
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS_SAV}")
+SciPrintVar(AVX2_RUNS)
+
 ######################################################################
 # Now handle the flags for sse2 and avx
 # If we do runtime detection, we can add these flags more liberally
 ######################################################################
+
 if (SSE2_COMPILES)
   set(SSE2_BUILDS FULL RELEASE RELWITHDEBINFO MINSIZEREL)
   if (ALLOW_SSE2)
@@ -205,9 +245,25 @@ if (AVX_RUNS)
   endforeach ()
 endif ()
 
+if (AVX2_RUNS)
+  set(AVX2_BUILDS FULL)
+  if (ALLOW_AVX2)
+    set(AVX2_BUILDS ${AVX2_BUILDS} ${CMAKE_BUILD_TYPE_UC})
+  endif ()
+  list(REMOVE_DUPLICATES AVX2_BUILDS)
+  list(FIND AVX2_BUILDS ${CMAKE_BUILD_TYPE_UC} avxfound)
+  if (NOT ${avxfound} EQUAL -1)
+    set(HAVE_AVX2 TRUE)
+  endif ()
+  foreach (cmp C CXX)
+    foreach (bld ${AVX2_BUILDS})
+      set(CMAKE_${cmp}_FLAGS_${bld} "${CMAKE_${cmp}_FLAGS_${bld}} ${AVX2_FLAG}")
+    endforeach ()
+  endforeach ()
+endif ()
+
 # Print results
 SciPrintString(" After analyzing vector capabilities:")
-message(STATUS "After analyzing vector capabilities:")
 foreach (cmp C CXX)
   foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
     SciPrintVar(CMAKE_${cmp}_FLAGS_${bld})
@@ -218,6 +274,7 @@ SciPrintString("")
 
 ######################################################################
 # OpenMP detection
+
 ######################################################################
 if (USE_OPENMP)
   if (OPENMP_FLAG)
