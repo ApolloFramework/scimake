@@ -175,7 +175,6 @@ SciPrintVar(AVX_RUNS)
 # Check whether have avx2.
 message("Checking avx2 capabilities.")
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
-set(AVX2_FLAG "-march=core-avx2")
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX_FLAG} ${AVX2_FLAG}")
 message("AVX2_FLAG = ${AVX2_FLAG}.")
 check_cxx_source_compiles(
@@ -208,6 +207,39 @@ endif ()
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS_SAV}")
 SciPrintVar(AVX2_RUNS)
 
+# Check whether have avx512.
+message("Checking avx512 capabilities.")
+set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX_FLAG} ${AVX512_FLAG}")
+message("AVX512_FLAG = ${AVX512_FLAG}.")
+check_cxx_source_compiles(
+"
+#include <immintrin.h>
+int main(int argc, char** argv) {
+  double a[8] = {1., 2., 3., 4., 5., 6., 7., 8.};
+  __m512d t = _mm512_load_pd(a);
+  return 0;
+}
+"
+AVX512_COMPILES
+)
+SciPrintVar(AVX512_COMPILES)
+if (AVX512_COMPILES)
+  check_cxx_source_runs(
+"
+#include <immintrin.h>
+int main(int argc, char** argv) {
+  double a[8] = {1., 2., 3., 4., 5., 6., 7., 8.};
+  __m512d t = _mm512_load_pd(a);
+  return 0;
+}
+"
+  AVX512_RUNS
+  )
+endif ()
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS_SAV}")
+SciPrintVar(AVX512_RUNS)
+
 ######################################################################
 # Now handle the flags for sse2 and avx
 # If we do runtime detection, we can add these flags more liberally
@@ -230,40 +262,24 @@ if (SSE2_COMPILES)
   endforeach ()
 endif ()
 
-if (AVX_RUNS)
-  set(AVX_BUILDS FULL)
-  if (ALLOW_AVX)
-    set(AVX_BUILDS ${AVX_BUILDS} ${CMAKE_BUILD_TYPE_UC})
-  endif ()
-  list(REMOVE_DUPLICATES AVX_BUILDS)
-  list(FIND AVX_BUILDS ${CMAKE_BUILD_TYPE_UC} avxfound)
-  if (NOT ${avxfound} EQUAL -1)
-    set(HAVE_AVX TRUE)
-  endif ()
-  foreach (cmp C CXX)
-    foreach (bld ${AVX_BUILDS})
-      set(CMAKE_${cmp}_FLAGS_${bld} "${CMAKE_${cmp}_FLAGS_${bld}} ${AVX_FLAG}")
+foreach(INSTSET AVX AVX2 AVX512)
+  if (${INSTSET}_RUNS)
+    set(${INSTSET}_BUILDS FULL)
+    if (ALLOW_${INSTSET})
+      set(${INSTSET}_BUILDS ${${INSTSET}_BUILDS} ${CMAKE_BUILD_TYPE_UC})
+    endif ()
+    list(REMOVE_DUPLICATES ${INSTSET}_BUILDS)
+    list(FIND ${INSTSET}_BUILDS ${CMAKE_BUILD_TYPE_UC} avxfound)
+    if (NOT ${avxfound} EQUAL -1)
+      set(HAVE_${INSTSET} TRUE)
+    endif ()
+    foreach (cmp C CXX)
+      foreach (bld ${${INSTSET}_BUILDS})
+        set(CMAKE_${cmp}_FLAGS_${bld} "${CMAKE_${cmp}_FLAGS_${bld}} ${${INSTSET}_FLAG}")
+      endforeach ()
     endforeach ()
-  endforeach ()
-endif ()
-
-if (AVX2_RUNS)
-  set(AVX2_BUILDS FULL)
-  if (ALLOW_AVX2)
-    set(AVX2_BUILDS ${AVX2_BUILDS} ${CMAKE_BUILD_TYPE_UC})
   endif ()
-  list(REMOVE_DUPLICATES AVX2_BUILDS)
-  list(FIND AVX2_BUILDS ${CMAKE_BUILD_TYPE_UC} avx2found)
-  if (NOT ${avx2found} EQUAL -1)
-    set(HAVE_AVX2 TRUE)
-  endif ()
-  foreach (cmp C CXX)
-    foreach (bld ${AVX2_BUILDS})
-      message(STATUS "Adding ${AVX2_FLAG} to CMAKE_${cmp}_FLAGS_${bld}")
-      set(CMAKE_${cmp}_FLAGS_${bld} "${CMAKE_${cmp}_FLAGS_${bld}} ${AVX2_FLAG}")
-    endforeach ()
-  endforeach ()
-endif ()
+endforeach ()
 
 # Print results
 SciPrintString(" After analyzing vector capabilities:")
