@@ -129,6 +129,7 @@ if (MPI_FOUND OR SCIMPI_FOUND)
 endif ()
 
 # If know more than compiler wrappers, pull out standard values
+set(MPI_IS_OPEN_MPI FALSE)
 if (MPI_FOUND)
 
 # Fix the variables
@@ -198,7 +199,17 @@ if (MPI_FOUND)
   set(MPI_MODULE_DIRS ${MPI_Fortran_INCLUDE_PATH})
 
 # Get the executables
-  set(MPI_PROGRAMS ${MPIEXEC})
+  get_filename_component(MPI_PROGRAMS ${MPIEXEC} REALPATH)
+
+# set the root directory variable
+  get_filename_component(MPI_ROOT_DIR ${MPIEXEC}/../.. REALPATH)
+  
+# determine if openmpi
+  string(FIND "${MPI_ROOT_DIR}" "openmpi"  OPENMPI_SUBSTR_LOC)
+  if (OPENMPI_SUBSTR_LOC)
+    set(MPI_IS_OPEN_MPI TRUE)
+    message(STATUS "Found open source message passing interface (OpenMpi).")
+  endif (OPENMPI_SUBSTR_LOC)
 
 # MPI link for flags
 # The string strip line is needed because cmake
