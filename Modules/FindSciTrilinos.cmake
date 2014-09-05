@@ -102,17 +102,19 @@ if (TRILINOS_FOUND)
 # Separate the third-party libraries into blas/lapack and system libraries
   set(Trilinos_LINALG_LIBRARIES)
   set(Trilinos_MPI_LIBRARIES)
-  set(Trilinos_SYSTEM_LIBRARIES)
   set(Trilinos_SLU_LIBRARIES)
+  set(Trilinos_SYSTEM_LIBRARIES)
+  set(Trilinos_WRAPPER_LIBRARIES)
   foreach (lib ${Trilinos_TPL_LIBRARIES})
     get_filename_component(libname ${lib} NAME_WE)
     if (${libname} MATCHES "blas$" OR ${libname} MATCHES "lapack$" OR
         ${libname} MATCHES "acml$" OR ${libname} MATCHES "mkl$" OR
-        ${libname} MATCHES "f2c$" OR ${libname} MATCHES "atlas$" OR
-        ${libname} MATCHES "sci_pgi$" OR ${libname} MATCHES "sci_gnu$" OR
-        ${libname} MATCHES "sci_intel$"
-    )
+        ${libname} MATCHES "f2c$" OR ${libname} MATCHES "atlas$")
+# Cray wrappers now include these?
       set(Trilinos_LINALG_LIBRARIES ${Trilinos_LINALG_LIBRARIES} ${lib})
+    elseif (${libname} MATCHES "sci_pgi" OR ${libname} MATCHES "sci_gnu" OR
+        ${libname} MATCHES "sci_intel")
+      set(Trilinos_WRAPPER_LIBRARIES ${Trilinos_WRAPPER_LIBRARIES} ${lib})
     elseif (${libname} MATCHES "superlu$" OR ${libname} MATCHES "superlu_dist$")
       set(Trilinos_SLU_LIBRARIES ${Trilinos_SLU_LIBRARIES} ${lib})
     elseif (${libname} MATCHES "msmpi$")
@@ -178,7 +180,7 @@ if (TRILINOS_FOUND)
   endif ()
 
 # Final calculations
-  foreach (grp TPL LINALG SLU MPI SYSTEM)
+  foreach (grp TPL LINALG MPI SLU SYSTEM WRAPPER)
     SciGetStaticLibs("${Trilinos_${grp}_LIBRARIES}" Trilinos_${grp}_STLIBS)
     SciPrintVar(Trilinos_${grp}_LIBRARY_DIRS)
     SciPrintVar(Trilinos_${grp}_LIBRARY_NAMES)

@@ -84,13 +84,10 @@ endif ()
 set (CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${FC_MOD_FLAGS}")
 SciPrintString("  Fortran_COMP_LIB_SUBDIR = ${Fortran_COMP_LIB_SUBDIR}")
 
-if (DEBUG_CMAKE)
-  SciPrintString("")
-  SciPrintString("  RESULTS FOR cmake detected fortran implicit libraries before cleaning:")
-  SciPrintVar(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES)
-  SciPrintVar(CMAKE_Fortran_IMPLICIT_LINK_DIRECTORIES)
-endif ()
-
+SciPrintString("")
+SciPrintString("  RESULTS FOR cmake detected fortran implicit libraries before cleaning:")
+SciPrintVar(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES)
+SciPrintVar(CMAKE_Fortran_IMPLICIT_LINK_DIRECTORIES)
 
 # Remove mpi and system libs
 set(Fortran_IMPLICIT_LIBRARY_DIRS "")
@@ -102,7 +99,7 @@ foreach (scilib ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES})
 # Whether finished with this library
   set(libprocessed FALSE)
 
-# Ignore mpi libraries
+# Ignore mpi and io libraries
   if (${scilib} MATCHES "^mpich")
     if (DEBUG_CMAKE)
       message("${scilib} is an MPICH library.  Ignoring.")
@@ -115,11 +112,17 @@ foreach (scilib ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES})
     endif ()
     set(Fortran_IGNORED_LIBRARIES ${Fortran_IGNORED_LIBRARIES} ${scilib})
     set(libprocessed TRUE)
+  elseif (${scilib} MATCHES "^darshan-" OR ${scilib} MATCHES "^libmpi")
+    if (DEBUG_CMAKE)
+      message("${scilib} is an OpenMPI library.  Ignoring.")
+    endif ()
+    set(Fortran_IGNORED_LIBRARIES ${Fortran_IGNORED_LIBRARIES} ${scilib})
+    set(libprocessed TRUE)
   endif ()
 
 # Ignore system libraries
   if (NOT libprocessed)
-    foreach (lib pthread dl nsl util rt m c)
+    foreach (lib pthread dl nsl util rt m c z)
       if (${scilib} STREQUAL ${lib})
         if (DEBUG_CMAKE)
           message("${scilib} is a system library.  Ignoring.")
@@ -145,9 +148,9 @@ foreach (scilib ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES})
     endforeach ()
   endif ()
 
-# Ignore Hopper Cray pgi wrapper libraries
+# Pull out Hopper Cray wrapper libraries added by wrapper for any compiler
   if (NOT libprocessed)
-    foreach (lib fftw3 fftw3f AtpSigHandler scicpp_pgi sci_pgi_mp mpl sma xpmem dmapp ugni pmi alpslli alpsutil udreg zceh stdmpz Cmpz pgmp nspgc pgc)
+    foreach (lib fftw3 fftw3f rca AtpSigHandler AtpSigHCommData mpl sma xpmem dmapp ugni pmi alpslli alpsutil udreg)
       if (${scilib} STREQUAL ${lib})
         if (DEBUG_CMAKE)
           message("${scilib} is a Hopper Cray pgi wrapper library.  Ignoring.")
@@ -159,6 +162,35 @@ foreach (scilib ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES})
     endforeach ()
   endif ()
 
+# Pull out Hopper Cray pgi wrapper libraries that wrapper adds
+  if ((${C_COMPILER_ID} STREQUAL "PGI") AND NOT libprocessed)
+    foreach (lib scicpp_pgi sci_pgi_mp zceh stdmpz Cmpz pgmp nspgc pgc)
+      if (${scilib} STREQUAL ${lib})
+        if (DEBUG_CMAKE)
+          message("${scilib} is a Hopper Cray pgi wrapper library.  Ignoring.")
+        endif ()
+        set(Fortran_IGNORED_LIBRARIES ${Fortran_IGNORED_LIBRARIES} ${scilib})
+        set(libprocessed TRUE)
+        break ()
+      endif ()
+    endforeach ()
+  endif ()
+
+# Pull out Hopper Cray gnu wrapper libraries that wrapper adds
+  if ((${C_COMPILER_ID} STREQUAL "GNU") AND NOT libprocessed)
+    foreach (lib scicpp_gnu sci_gnu_mp sci_gnu)
+      if (${scilib} STREQUAL ${lib})
+        if (DEBUG_CMAKE)
+          message("${scilib} is a Hopper Cray gnu wrapper library.  Ignoring.")
+        endif ()
+        set(Fortran_IGNORED_LIBRARIES ${Fortran_IGNORED_LIBRARIES} ${scilib})
+        set(libprocessed TRUE)
+        break ()
+      endif ()
+    endforeach ()
+  endif ()
+
+if (FALSE)
 # Ignore additional Franklin pgi Cray wrapper libraries
   if (NOT libprocessed)
     foreach (lib scicpp stdc++ sci_quadcore_mp portals)
@@ -186,6 +218,7 @@ foreach (scilib ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES})
       endif ()
     endforeach ()
   endif ()
+endif ()
 
 # Ignore bgp libraries
   if (NOT libprocessed)
@@ -211,7 +244,6 @@ foreach (scilib ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES})
     set(scilibpath ${${scilibpathvar}})
     if (scilibpath)
       set(Fortran_IMPLICIT_LIBRARIES ${Fortran_IMPLICIT_LIBRARIES} ${scilibpath})
-      # get_filename_component(scilibname ${scilibpath} NAME_WE)
       set(Fortran_IMPLICIT_LIBRARY_NAMES ${Fortran_IMPLICIT_LIBRARY_NAMES} ${scilib})
       get_filename_component(scilibdir ${scilibpath}/.. REALPATH)
       set(Fortran_IMPLICIT_LIBRARY_DIRS ${Fortran_IMPLICIT_LIBRARY_DIRS} ${scilibdir})
@@ -247,9 +279,7 @@ SciPrintVar(Fortran_IMPLICIT_LIBRARY_NAMES)
 SciPrintVar(Fortran_IMPLICIT_LIBRARY_DIRS)
 SciPrintVar(Fortran_IMPLICIT_STLIBS)
 SciPrintVar(Fortran_IMPLICIT_LIBFLAGS)
-if (DEBUG_CMAKE)
-  SciPrintVar(Fortran_IGNORED_LIBRARIES)
-endif ()
+SciPrintVar(Fortran_IGNORED_LIBRARIES)
 
 # Set release flags.  Assume same for now.  If different, we will
 # put in the if, elseif coding.
