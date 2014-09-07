@@ -99,7 +99,8 @@ if (TRILINOS_FOUND)
     list(REVERSE Trilinos_TPL_LIBRARIES)
   endif ()
 
-# Separate the third-party libraries into blas/lapack and system libraries
+# Separate the third-party libraries into various groups, as only
+# some needed for linking
   set(Trilinos_LINALG_LIBRARIES)
   set(Trilinos_MPI_LIBRARIES)
   set(Trilinos_SLU_LIBRARIES)
@@ -110,11 +111,11 @@ if (TRILINOS_FOUND)
     if (${libname} MATCHES "blas$" OR ${libname} MATCHES "lapack$" OR
         ${libname} MATCHES "acml$" OR ${libname} MATCHES "mkl$" OR
         ${libname} MATCHES "f2c$" OR ${libname} MATCHES "atlas$")
-# Cray wrappers now include these?
       set(Trilinos_LINALG_LIBRARIES ${Trilinos_LINALG_LIBRARIES} ${lib})
+# Cray wrappers include these, but needed for serial build.
     elseif (${libname} MATCHES "sci_pgi" OR ${libname} MATCHES "sci_gnu" OR
         ${libname} MATCHES "sci_intel")
-      set(Trilinos_WRAPPER_LIBRARIES ${Trilinos_WRAPPER_LIBRARIES} ${lib})
+      set(Trilinos_LINALG_LIBRARIES ${Trilinos_LINALG_LIBRARIES} ${lib})
     elseif (${libname} MATCHES "superlu$" OR ${libname} MATCHES "superlu_dist$")
       set(Trilinos_SLU_LIBRARIES ${Trilinos_SLU_LIBRARIES} ${lib})
     elseif (${libname} MATCHES "msmpi$")
@@ -123,6 +124,18 @@ if (TRILINOS_FOUND)
       set(Trilinos_SYSTEM_LIBRARIES ${Trilinos_SYSTEM_LIBRARIES} ${lib})
     endif ()
   endforeach ()
+
+# Make sure mp library present on Cray
+  string(TOLOWER ${C_COMPILER_ID} cid)
+  list(FIND Trilinos_LINALG_LIBRARIES sci_${cid} idx)
+  if (idx EQUAL -1)
+    list(FIND Trilinos_LINALG_LIBRARIES sci_${cid}_mp jdx)
+    if (jdx EQUAL -1)
+      message(WARNING "Trilinos_LINALG_LIBRARIES contains sci_${cid} but not sci_${cid}_mp.  Appending.")
+      list(APPEND Trilinos_LINALG_LIBRARIES sci_${cid}_mp)
+    endif ()
+  endif ()
+
 # Find the libdirs of all groups
   foreach (grp TPL LINALG SLU MPI SYSTEM)
     set(libs ${Trilinos_${grp}_LIBRARIES})
@@ -138,7 +151,6 @@ if (TRILINOS_FOUND)
     if (Trilinos_${grp}_LIBRARY_DIRS)
       list(REMOVE_DUPLICATES Trilinos_${grp}_LIBRARY_DIRS)
     endif ()
-    # message(STATUS " Trilinos_${grp}_LIBRARY_DIRS = ${Trilinos_${grp}_LIBRARY_DIRS}")
   endforeach ()
 
 # For windows only, find f2c

@@ -162,20 +162,6 @@ foreach (scilib ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES})
     endforeach ()
   endif ()
 
-# Pull out Hopper Cray pgi wrapper libraries that wrapper adds
-  if ((${C_COMPILER_ID} STREQUAL "PGI") AND NOT libprocessed)
-    foreach (lib scicpp_pgi sci_pgi_mp zceh stdmpz Cmpz pgmp nspgc pgc)
-      if (${scilib} STREQUAL ${lib})
-        if (DEBUG_CMAKE)
-          message("${scilib} is a Hopper Cray pgi wrapper library.  Ignoring.")
-        endif ()
-        set(Fortran_IGNORED_LIBRARIES ${Fortran_IGNORED_LIBRARIES} ${scilib})
-        set(libprocessed TRUE)
-        break ()
-      endif ()
-    endforeach ()
-  endif ()
-
 # Pull out Hopper Cray gnu wrapper libraries that wrapper adds
   if ((${C_COMPILER_ID} STREQUAL "GNU") AND NOT libprocessed)
     foreach (lib scicpp_gnu sci_gnu_mp sci_gnu)
@@ -190,13 +176,12 @@ foreach (scilib ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES})
     endforeach ()
   endif ()
 
-if (FALSE)
-# Ignore additional Franklin pgi Cray wrapper libraries
-  if (NOT libprocessed)
-    foreach (lib scicpp stdc++ sci_quadcore_mp portals)
+# Pull out Hopper Cray pgi wrapper libraries that wrapper adds
+  if ((${C_COMPILER_ID} STREQUAL "Intel") AND NOT libprocessed)
+    foreach (lib scicpp_intel sci_intel_mp zceh svml ipgo intlc irc_s iomp5)
       if (${scilib} STREQUAL ${lib})
         if (DEBUG_CMAKE)
-          message("${scilib} is a additional Franklin pgi Cray wrapper library.  Ignoring.")
+          message("${scilib} is a Hopper Cray pgi wrapper library.  Ignoring.")
         endif ()
         set(Fortran_IGNORED_LIBRARIES ${Fortran_IGNORED_LIBRARIES} ${scilib})
         set(libprocessed TRUE)
@@ -205,12 +190,12 @@ if (FALSE)
     endforeach ()
   endif ()
 
-# Ignore additional Franklin pathscale Cray wrapper libraries
-  if (NOT libprocessed)
-    foreach (lib openmp eh mv mpath pscrt)
+# Pull out Hopper Cray pgi wrapper libraries that wrapper adds
+  if ((${C_COMPILER_ID} STREQUAL "PGI") AND NOT libprocessed)
+    foreach (lib scicpp_pgi sci_pgi_mp zceh stdmpz Cmpz pgmp nspgc pgc)
       if (${scilib} STREQUAL ${lib})
         if (DEBUG_CMAKE)
-          message("${scilib} is a additional Franklin pathscale Cray wrapper library.  Ignoring.")
+          message("${scilib} is a Hopper Cray pgi wrapper library.  Ignoring.")
         endif ()
         set(Fortran_IGNORED_LIBRARIES ${Fortran_IGNORED_LIBRARIES} ${scilib})
         set(libprocessed TRUE)
@@ -218,7 +203,6 @@ if (FALSE)
       endif ()
     endforeach ()
   endif ()
-endif ()
 
 # Ignore bgp libraries
   if (NOT libprocessed)
