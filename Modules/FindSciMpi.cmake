@@ -203,7 +203,7 @@ if (MPI_FOUND)
 
 # set the root directory variable
   get_filename_component(MPI_ROOT_DIR ${MPIEXEC}/../.. REALPATH)
-  
+
 # determine if openmpi
   string(FIND "${MPI_ROOT_DIR}" "openmpi"  OPENMPI_SUBSTR_LOC)
   if (OPENMPI_SUBSTR_LOC)

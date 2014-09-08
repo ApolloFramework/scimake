@@ -262,7 +262,7 @@ if (SSE2_COMPILES)
   endforeach ()
 endif ()
 
-foreach(INSTSET AVX AVX2 AVX512)
+foreach (INSTSET AVX AVX2 AVX512)
   if (${INSTSET}_RUNS)
     set(${INSTSET}_BUILDS FULL)
     if (ALLOW_${INSTSET})

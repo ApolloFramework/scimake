@@ -39,11 +39,11 @@ if (Python_EXE)
   set(PYTHON_FOUND TRUE)
   get_filename_component(Python_EXE ${Python_EXE} REALPATH)
   get_filename_component(Python_NAME ${Python_EXE} NAME)
-  if(WIN32)  # Remove .exe on windows
+  if (WIN32)  # Remove .exe on windows
     get_filename_component(Python_NAME_WE ${Python_EXE} NAME_WE)
-  else()
+  else ()
     set(Python_NAME_WE ${Python_NAME})
-  endif()
+  endif ()
   #string(REGEX REPLACE ".exe$" "" Python_NAME_WE "${Python_NAME}")
   get_filename_component(Python_BINDIR ${Python_EXE}/.. REALPATH)
   get_filename_component(Python_BINDIR_NAME ${Python_BINDIR} NAME)
@@ -115,12 +115,12 @@ else ()
   set(PYTHON_FOUND FALSE)
 endif ()
 
-foreach(var Python_ROOT_DIR Python_BINDIR Python_EXE Python_NAME Python_NAME_WE
+foreach (var Python_ROOT_DIR Python_BINDIR Python_EXE Python_NAME Python_NAME_WE
     Python_INCLUDE_DIRS Python_MAJMIN Python_LIBRARY Python_LIBRARY_NAME
     Python_LIBRARIES Python_LIBRARY_DIRS Python_DLLS Python_MODULES_DIR
     Python_MODULES_SUBDIR Python_SITE)
   SciPrintVar(${var})
-endforeach()
+endforeach ()
 
 if (PYTHON_FOUND)
   message(STATUS "[FindSciPython.cmake] - Found Python")

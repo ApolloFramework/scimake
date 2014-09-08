@@ -137,7 +137,7 @@ macro(getuname name flag)
   exec_program("${UNAME}" ARGS "${flag}" OUTPUT_VARIABLE "${name}")
 endmacro(getuname)
 
-if(UNAME)
+if (UNAME)
   getuname(osname -s)
   getuname(osrel  -r)
   getuname(cpu    -m)
@@ -145,9 +145,9 @@ if(UNAME)
   SciPrintString("HOSTTYPE = ${HOSTTYPE}")
   site_name(HOSTNAME)
   SciPrintString("hostname is ${HOSTNAME}")
-else()
+else ()
   message(WARNING "SciInit: find_program for 'uname' returned nothing")
-endif()
+endif ()
 
 ######################################################################
 #

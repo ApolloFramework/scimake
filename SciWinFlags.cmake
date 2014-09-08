@@ -25,11 +25,11 @@ if (WIN32)
       set(CMAKE_C_FLAGS_${i} "${CMAKE_C_FLAGS_${i}} /Qstd:c99")
     endforeach ()
   elseif (USING_CL)
-  
+
     # There are so many things wrong with giving "-DCL" to the compiler
     # just because the compiler is cl.exe.  So commenting out this
     # blanket macro.  Rationale:
-    # 
+    #
     # - Non standard.  _MSC_VER is the existing standard.
     # - Applies to Fortran code also, perhaps one that we cannot change.
     #   Fortran code will have small identifiers and capitalized too.
@@ -40,9 +40,9 @@ if (WIN32)
     # If some code breaks, use builtin _MSC_VER there instead of CL.
     #
     # -- CJ
-    
+
     # add_definitions(-DCL)
-    
+
     set(_TIMEVAL_DEFINED 1
         CACHE STRING "Define whether system has timeval(for Windows)")
   endif ()

@@ -40,7 +40,7 @@ endif ()
 SciFindPackage(PACKAGE "Hdf5"
   HEADERS hdf5.h H5pubconf.h
 # Last in list is for finding within VisIt installation
-  INCLUDE_SUBDIRS include include/hdf5/include 
+  INCLUDE_SUBDIRS include include/hdf5/include
   ${instdirargs}
   FIND_QUIETLY
 )

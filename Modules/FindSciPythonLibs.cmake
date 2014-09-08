@@ -78,7 +78,7 @@ if (ENABLE_PYTHON)
         Python_VERSION "${Python_VERSION}"
       )
       string(REGEX MATCH "^[0-9]+\\.[0-9]"
-		Python_MAJMIN "${Python_VERSION}")
+                Python_MAJMIN "${Python_VERSION}")
 
       if (WIN32)
         string(REPLACE "." "" Python_MAJMIN "${Python_MAJMIN}")
@@ -120,8 +120,8 @@ if (ENABLE_PYTHON)
         if (WIN32)
           get_filename_component(Python_TOPLIBDIR "${Python_TOPLIBDIR}/.." REALPATH)
           file(TO_CMAKE_PATH "${Python_TOPLIBDIR}" Python_TOPLIBDIR)
-        endif()
-        if (DEBUG_CMAKE) 
+        endif ()
+        if (DEBUG_CMAKE)
           message(STATUS "find_library(Python_LIBRARIES ${Python_LIB}
               PATHS ${Python_TOPLIBDIR}/config ${Python_TOPLIBDIR}/libs
               NO_DEFAULT_PATH)"
@@ -200,7 +200,7 @@ if (ENABLE_PYTHON)
       string(STRIP "${Python_VERSION}" Python_VERSION)
     if (WIN32)
       string(REGEX REPLACE "\\." "" Python_VERSION_WINSTR "${Python_VERSION}")
-      
+
       file(TO_CMAKE_PATH "${Python_INCLUDE_DIRS}" Python_INCLUDE_DIRS)
     endif ()
     set(HAVE_PYTHON 1 CACHE BOOL "Whether have Python")
