@@ -84,6 +84,10 @@ else ()
   message(FATAL_ERROR "[SciInit.cmake] Unrecognized OS!")
 endif ()
 SciPrintString("CMAKE_SYSTEM_PROCESSOR = ${CMAKE_SYSTEM_PROCESSOR}.")
+set(HOST_PROCESSOR ${CMAKE_SYSTEM_PROCESSOR})
+if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL x86_64)
+  set(HAVE_X86_64 TRUE)
+endif ()
 
 ######################################################################
 #
