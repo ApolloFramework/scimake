@@ -281,22 +281,14 @@ foreach (INSTSET AVX AVX2 AVX512)
   endif ()
 endforeach ()
 
-# Print results
-SciPrintString(" After analyzing vector capabilities:")
-foreach (cmp C CXX)
-  foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
-    SciPrintVar(CMAKE_${cmp}_FLAGS_${bld})
-  endforeach ()
-  SciPrintVar(CMAKE_${cmp}_FLAGS)
-endforeach ()
-SciPrintString("")
-
 ######################################################################
 # OpenMP detection
 ######################################################################
 
 if (USE_OPENMP)
+  message(STATUS "OpenMP requested.")
   if (OPENMP_FLAG)
+    message(STATUS "OpenMP flag defined.")
     set(HAVE_OPENMP TRUE)
     foreach (cmp C CXX)
       foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL)
@@ -306,10 +298,24 @@ if (USE_OPENMP)
   else ()
     find_package(OpenMP)
     if (OPENMP_FOUND)
+      message(STATUS "OpenMP found.")
       set(HAVE_OPENMP TRUE)
     else ()
-      message(WARNING "OpenMP requested but flags not specified or determined")
+      message(WARNING "OpenMP requested but flags not known.")
     endif ()
   endif ()
 endif ()
+
+######################################################################
+# Print results
+######################################################################
+
+SciPrintString(" After analyzing vector and thread capabilities:")
+foreach (cmp C CXX)
+  foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
+    SciPrintVar(CMAKE_${cmp}_FLAGS_${bld})
+  endforeach ()
+  SciPrintVar(CMAKE_${cmp}_FLAGS)
+endforeach ()
+SciPrintString("")
 
