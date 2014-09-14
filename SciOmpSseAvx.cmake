@@ -107,7 +107,9 @@ include(CheckCSourceRuns)
 include(CheckCXXSourceCompiles)
 include(CheckCXXSourceRuns)
 
-message("Checking sse2 capabilities.")
+message(STATUS "Checking vector capabilities.  CMAKE_REQUIRED_FLAGS = ${CMAKE_REQUIRED_FLAGS}.")
+
+message(STATUS "Checking sse2 capabilities.")
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${SSE2_FLAG}")
 message("SSE2_FLAG = ${SSE2_FLAG}.")
