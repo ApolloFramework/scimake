@@ -11,12 +11,12 @@
 #
 ######################################################################
 
-# Add the specified directory to the shared libraries path
-macro(SciAddSharedLibsDir)
+# Add the specified directories to the shared libraries path
+macro(SciAddSharedLibDirs)
   # parse the path argument
   set(multiValArgs ADDPATH)
   cmake_parse_arguments(SHLIB_DIRS "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
-  # if a directory was specified add it to the path in the parent scope
+  # if 1+ directories were specified add it/them to the path in the parent scope
   if (SHLIB_DIRS_ADDPATH)
     set(SHLIB_CMAKE_PATH_VAL ${SHLIB_DIRS_ADDPATH} ${SHLIB_CMAKE_PATH_VAL})
     if (NOT "${CMAKE_CURRENT_BINARY_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
@@ -32,7 +32,7 @@ endmacro()
 # Add current binary dir to shared lib path var. This is needed when doing
 # shared builds in order for executables to run.
 macro(SciAddCurrentBinaryDir)
-  SciAddSharedLibsDir(ADDPATH "${CMAKE_CURRENT_BINARY_DIR}")
+  SciAddSharedLibDirs(ADDPATH "${CMAKE_CURRENT_BINARY_DIR}")
 endmacro()
 
 # make a macro for converting a cmake path into a platform specific path
