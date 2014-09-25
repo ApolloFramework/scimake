@@ -74,7 +74,7 @@ check_include_file_cxx(sstream HAVE_SSTREAM)
 check_include_file_cxx(iostream HAVE_IOSTREAM)
 
 # Find a standard type as either std or tr1
-macro(SciFindStdType incbase type tmpl)
+macro(SciFindStdType incbase type tmpl args)
   string(TOUPPER ${type} varuc)
   set(HAVE_ANY_${varuc} FALSE)
   foreach (pfx "" tr1)
@@ -96,6 +96,7 @@ macro(SciFindStdType incbase type tmpl)
           message(STATUS "Trying empty namespace.")
           set(SFX)
         endif ()
+        # message(STATUS "Construction is: std${nmsp}::${type}${tmpl} a(${args});")
         check_cxx_source_compiles(
           "
           #include <${incfile}>
