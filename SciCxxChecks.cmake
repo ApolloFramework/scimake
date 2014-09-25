@@ -73,63 +73,52 @@ include(CheckIncludeFileCXX)
 check_include_file_cxx(sstream HAVE_SSTREAM)
 check_include_file_cxx(iostream HAVE_IOSTREAM)
 
-# Find array include and namespace
-check_include_file_cxx(array HAVE_ARRAY)
-set(ARRAY_INC_FILE)
-if (HAVE_ARRAY)
-  set(ARRAY_INC_FILE array)
-else ()
-  check_include_file_cxx(tr1/array HAVE_TR1_ARRAY)
-  if (HAVE_TR1_ARRAY)
-    set(ARRAY_INC_FILE tr1/array)
-  endif ()
-endif ()
-set(HAVE_ALL_ARRAY FALSE)
-if (ARRAY_INC_FILE)
-  message(STATUS "ARRAY_INC_FILE = ${ARRAY_INC_FILE}.")
-  check_cxx_source_compiles(
-    "
-    #include <${ARRAY_INC_FILE}>
-    int main(int argc, char** argv) {std::array<float, 2> a; return 0;}
-    "
-    ARRAY_NAMESPACE_IS_STD
-  )
-  if (ARRAY_NAMESPACE_IS_STD)
-    message(STATUS "array is in namespace std.")
-    set(HAVE_ALL_ARRAY TRUE)
-  else ()
+# Find a standard type as either std or tr1
+macro(SciFindStdType incfile type tmpl)
+  string(TOUPPER ${type} varuc)
+  set(HAVE_ANY_${varuc} FALSE)
+  foreach (pfx "" tr1)
+    if (pfx)
+      string(TOUPPER ${pfx} PFX)
+      set(SFX "_${PFX}")
+      set(PFX "${PFX}_")
+      set(nmsp "::${pfx}")
+      set(${varuc}_INCLUDE ${pfx}/${incfile})
+    else ()
+      set(PFX)
+      set(SFX)
+      set(PFX)
+      set(nmsp)
+      set(${varuc}_INCLUDE ${incfile})
+    endif ()
+    check_include_file_cxx(${incfile} HAVE_${PFX}${varuc})
     check_cxx_source_compiles(
       "
-      #include <${ARRAY_INC_FILE}>
-      int main(int argc, char** argv) {std::tr1::array<float, 2> a; return 0;}
+      #include <${${varuc}_INCLUDE}>
+      int main(int argc, char** argv) {
+        std${nmsp}::${type}${tmpl} a(${args});
+        return 0;
+      }
       "
-      ARRAY_NAMESPACE_IS_STD_TR1
+      ${varuc}_NAMESPACE_IS_STD${SFX}
     )
-# The below is not compiling.  Will commit and look on :w
-    if (ARRAY_NAMESPACE_IS_STD_TR1)
-      message(STATUS "array is in namespace std::tr1.")
-      set(HAVE_ALL_ARRAY TRUE)
+    if (${varuc}_NAMESPACE_IS_STD${SFX})
+      set(${varuc}_NAMESPACE std${nmsp})
+      message(STATUS "${type} is in ${${varuc}_INCLUDE} as part of ${${varuc}_NAMESPACE}.")
+      set(HAVE_ANY_${varuc} TRUE)
+      break ()
     else ()
-      message(STATUS "namespace for array unknown.")
+      set(HAVE_${PFX}${varuc})
     endif ()
+  endforeach ()
+  if(NOT HAVE_ANY_${varuc})
+    message(STATUS "namespace for ${type} unknown.")
   endif ()
-endif ()
+endmacro()
 
-# Look for shared pointers
-try_compile(HAVE_STD_SHARED_PTR
-  ${PROJECT_BINARY_DIR}/scimake ${SCIMAKE_DIR}/trycompile/shared_ptr.cxx
-  CMAKE_FLAGS
-  COMPILE_DEFINITIONS "-DHAVE_STD_SHARED_PTR -I${SCIMAKE_DIR}/include"
-)
-message(STATUS "HAVE_STD_SHARED_PTR = ${HAVE_STD_SHARED_PTR}.")
-if (NOT HAVE_STD_SHARED_PTR)
-  try_compile(HAVE_STD_TR1_SHARED_PTR
-    ${PROJECT_BINARY_DIR}/scimake ${SCIMAKE_DIR}/trycompile/shared_ptr.cxx
-    CMAKE_FLAGS
-    COMPILE_DEFINITIONS "-DHAVE_STD_TR1_SHARED_PTR -I${SCIMAKE_DIR}/include"
-  )
-  message(STATUS "HAVE_STD_TR1_SHARED_PTR = ${HAVE_STD_TR1_SHARED_PTR}.")
-endif ()
+# Find types that can be in either std or tr1
+SciFindStdType(array array "<float, 2>" "")
+SciFindStdType(memory shared_ptr "<float>" "new float")
 
 # See whether generally declared statics work
 try_compile(HAVE_GENERALLY_DECLARED_STATICS ${PROJECT_BINARY_DIR}/scimake

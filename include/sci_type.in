@@ -1,0 +1,19 @@
+/**
+ *
+ * @brief   Define @SCI_TYPE@ type that works with C++ 11 or tr1
+ *
+ * @version $Id$
+ *
+ * Copyright &copy; 2012-2013, Tech-X Corporation
+ * See LICENSE file (EclipseLicense.txt) for conditions of use.
+ *
+ */
+
+#ifndef @SCI_PACKAGE_PREFIX_UC@_@SCI_TYPE@
+#define @SCI_PACKAGE_PREFIX_UC@_@SCI_TYPE@
+
+#include <@SCI_INCLUDE@>
+#define @SCI_PACKAGE_PREFIX@_@SCI_TYPE@ @SCI_NAMESPACE@::@SCI_TYPE@
+
+#endif // @SCI_PACKAGE_PREFIX_UC@_@SCI_TYPE@
+
