@@ -91,24 +91,26 @@ macro(SciFindStdType incfile type tmpl)
       set(nmsp)
       set(${varuc}_INCLUDE ${incfile})
     endif ()
-    check_include_file_cxx(${incfile} HAVE_${PFX}${varuc})
-    check_cxx_source_compiles(
-      "
-      #include <${${varuc}_INCLUDE}>
-      int main(int argc, char** argv) {
-        std${nmsp}::${type}${tmpl} a(${args});
-        return 0;
-      }
-      "
-      ${varuc}_NAMESPACE_IS_STD${SFX}
-    )
-    if (${varuc}_NAMESPACE_IS_STD${SFX})
-      set(${varuc}_NAMESPACE std${nmsp})
-      message(STATUS "${type} is in ${${varuc}_INCLUDE} as part of ${${varuc}_NAMESPACE}.")
-      set(HAVE_ANY_${varuc} TRUE)
-      break ()
-    else ()
-      set(HAVE_${PFX}${varuc})
+    check_include_file_cxx(${${varuc}_INCLUDE} HAVE_${PFX}${varuc})
+    if (HAVE_${PFX}${varuc})
+      check_cxx_source_compiles(
+        "
+        #include <${${varuc}_INCLUDE}>
+        int main(int argc, char** argv) {
+          std${nmsp}::${type}${tmpl} a(${args});
+          return 0;
+        }
+        "
+        ${varuc}_NAMESPACE_IS_STD${SFX}
+      )
+      if (${varuc}_NAMESPACE_IS_STD${SFX})
+        set(${varuc}_NAMESPACE std${nmsp})
+        message(STATUS "${type} is in ${${varuc}_INCLUDE} as part of ${${varuc}_NAMESPACE}.")
+        set(HAVE_ANY_${varuc} TRUE)
+        break ()
+      else ()
+        set(HAVE_${PFX}${varuc})
+      endif ()
     endif ()
   endforeach ()
   if(NOT HAVE_ANY_${varuc})
