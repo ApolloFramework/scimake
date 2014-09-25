@@ -74,43 +74,49 @@ check_include_file_cxx(sstream HAVE_SSTREAM)
 check_include_file_cxx(iostream HAVE_IOSTREAM)
 
 # Find a standard type as either std or tr1
-macro(SciFindStdType incfile type tmpl)
+macro(SciFindStdType incbase type tmpl)
   string(TOUPPER ${type} varuc)
   set(HAVE_ANY_${varuc} FALSE)
   foreach (pfx "" tr1)
     if (pfx)
       string(TOUPPER ${pfx} PFX)
-      set(SFX "_${PFX}")
       set(PFX "${PFX}_")
-      set(nmsp "::${pfx}")
-      set(${varuc}_INCLUDE ${pfx}/${incfile})
+      set(incfile ${pfx}/${incbase})
     else ()
       set(PFX)
-      set(SFX)
-      set(PFX)
-      set(nmsp)
-      set(${varuc}_INCLUDE ${incfile})
+      set(incfile ${pfx}/${incbase})
     endif ()
-    check_include_file_cxx(${${varuc}_INCLUDE} HAVE_${PFX}${varuc})
+    check_include_file_cxx(${incfile} HAVE_${PFX}${varuc})
     if (HAVE_${PFX}${varuc})
-      check_cxx_source_compiles(
-        "
-        #include <${${varuc}_INCLUDE}>
-        int main(int argc, char** argv) {
-          std${nmsp}::${type}${tmpl} a(${args});
-          return 0;
-        }
-        "
-        ${varuc}_NAMESPACE_IS_STD${SFX}
-      )
-      if (${varuc}_NAMESPACE_IS_STD${SFX})
-        set(${varuc}_NAMESPACE std${nmsp})
-        message(STATUS "${type} is in ${${varuc}_INCLUDE} as part of ${${varuc}_NAMESPACE}.")
-        set(HAVE_ANY_${varuc} TRUE)
-        break ()
-      else ()
-        set(HAVE_${PFX}${varuc})
-      endif ()
+      foreach (nmsp "" ::tr1)
+        if (nmsp)
+          string(TOUPPER ${nmsp} SFX)
+          string(REGEX REPLACE "::*" "_" SFX ${SFX})
+        else ()
+          set(SFX)
+        endif ()
+        check_cxx_source_compiles(
+          "
+          #include <${incfile}>
+          int main(int argc, char** argv) {
+            std${nmsp}::${type}${tmpl} a(${args});
+            return 0;
+          }
+          "
+          ${varuc}_NAMESPACE_IS_STD${SFX}
+        )
+        if (${varuc}_NAMESPACE_IS_STD${SFX})
+          set(${varuc}_NAMESPACE std${nmsp})
+          message(STATUS "${type} is in ${${varuc}_INCLUDE} as part of ${${varuc}_NAMESPACE}.")
+          set(HAVE_ANY_${varuc} TRUE)
+          break ()
+        else ()
+          set(HAVE_${PFX}${varuc})
+        endif ()
+      endforeach ()
+    endif ()
+    if(HAVE_ANY_${varuc})
+      break()
     endif ()
   endforeach ()
   if(NOT HAVE_ANY_${varuc})
