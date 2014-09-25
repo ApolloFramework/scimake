@@ -16,41 +16,30 @@ if (NOT DEFINED SCI_STD_TYPES_INSTALL)
 endif ()
 
 macro(CreateStdTypeFile type)
+  string(TOUPPER ${type} typeuc)
+  if (HAVE_ANY_${typeuc})
+    message(STATUS "creating ${SCI_PACKAGE_PREFIX}_${type}.")
+    set(SCI_INCLUDE ${${typeuc}_INCLUDE})
+    get_filename_component(SCI_INCLUDE_NAME ${${typeuc}_INCLUDE} NAME)
+    string(REPLACE "." "_" SCI_INCLUDE_NAME ${SCI_INCLUDE_NAME})
+    string(TOUPPER ${SCI_INCLUDE_NAME} SCI_INCLUDE_NAME_UC)
+    set(SCI_TYPE ${type})
+    set(SCI_NAMESPACE ${${typeuc}_NAMESPACE})
+    configure_file(sci_type.in
+      ${CMAKE_CURRENT_BINARY_DIR}/${SCI_PACKAGE_PREFIX}_${type}
+      # ${CMAKE_CURRENT_BINARY_DIR}/sci_${type}
+    )
+    if (SCI_STD_TYPES_INSTALL)
+      install(FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/${SCI_PACKAGE_PREFIX}_${type}
+        # ${CMAKE_CURRENT_BINARY_DIR}/sci_${type}
+        DESTINATION include
+      )
+    endif ()
+  endif ()
 endmacro()
 
-# Create c++11 array
-if (HAVE_ANY_ARRAY)
-  message(STATUS "creating ${SCI_PACKAGE_PREFIX}_array.")
-  set(SCI_INCLUDE ${ARRAY_INCLUDE})
-  get_filename_component(SCI_INCLUDE_NAME ${ARRAY_INCLUDE} NAME)
-  string(REPLACE "." "_" SCI_INCLUDE_NAME ${SCI_INCLUDE_NAME})
-  string(TOUPPER ${SCI_INCLUDE_NAME} SCI_INCLUDE_NAME_UC)
-  set(SCI_TYPE array)
-  set(SCI_NAMESPACE ${ARRAY_NAMESPACE})
-  configure_file(sci_type.in
-    ${CMAKE_CURRENT_BINARY_DIR}/${SCI_PACKAGE_PREFIX}_array
-    # ${CMAKE_CURRENT_BINARY_DIR}/sci_array
-  )
-  if (SCI_STD_TYPES_INSTALL)
-    install(FILES
-      ${CMAKE_CURRENT_BINARY_DIR}/${SCI_PACKAGE_PREFIX}_array
-      # ${CMAKE_CURRENT_BINARY_DIR}/sci_array
-      DESTINATION include
-    )
-  endif ()
-endif ()
-
-# Create c++11 shared_ptr
-if (HAVE_ANY_SHARED_PTR)
-  message(STATUS "creating ${SCI_PACKAGE_PREFIX}_memory.")
-  set(SCI_INCLUDE ${SHARED_PTR_INCLUDE})
-  set(SCI_TYPE shared_ptr)
-  set(SCI_NAMESPACE ${SHARED_PTR_NAMESPACE})
-  configure_file(sci_type.in
-    ${CMAKE_CURRENT_BINARY_DIR}/${SCI_PACKAGE_PREFIX}_memory
-  )
-  set(instfiles ${instfiles}
-    ${CMAKE_CURRENT_BINARY_DIR}/${SCI_PACKAGE_PREFIX}_memory
-  )
-endif ()
+# Create c++11 files
+CreateStdTypeFile(array)
+CreateStdTypeFile(shared_ptr)
 
