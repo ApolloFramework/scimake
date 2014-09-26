@@ -9,6 +9,12 @@
 #
 ######################################################################
 
+if (NOT DEFINED SCI_CREATE_STD_INCLUDES)
+  set(SCI_CREATE_STD_INCLUDES TRUE)
+endif ()
+if (NOT DEFINED SCI_PACKAGE_PREFIX)
+  set(SCI_PACKAGE_PREFIX sci)
+endif ()
 string(TOUPPER ${SCI_PACKAGE_PREFIX} SCI_PACKAGE_PREFIX_UC)
 message(STATUS "SCI_PACKAGE_PREFIX_UC = ${SCI_PACKAGE_PREFIX_UC}")
 if (NOT DEFINED SCI_STD_TYPES_INSTALL)
@@ -40,6 +46,8 @@ macro(CreateStdTypeFile type)
 endmacro()
 
 # Create c++11 files
-CreateStdTypeFile(array)
-CreateStdTypeFile(shared_ptr)
+if (SCI_CREATE_STD_INCLUDES)
+  CreateStdTypeFile(array)
+  CreateStdTypeFile(shared_ptr)
+endif ()
 

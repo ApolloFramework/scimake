@@ -13,7 +13,9 @@
 #define @SCI_PACKAGE_PREFIX_UC@_@SCI_INCLUDE_NAME_UC@
 
 #include <@SCI_INCLUDE@>
+#ifndef @SCI_PACKAGE_PREFIX@_@SCI_TYPE@
 #define @SCI_PACKAGE_PREFIX@_@SCI_TYPE@ @SCI_NAMESPACE@::@SCI_TYPE@
+#endif
 #ifndef sci_@SCI_TYPE@
 #define sci_@SCI_TYPE@ @SCI_NAMESPACE@::@SCI_TYPE@
 #endif
