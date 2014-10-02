@@ -146,7 +146,7 @@ if (${C_COMPILER_ID} STREQUAL GNU OR ${C_COMPILER_ID} STREQUAL Clang)
     # set(AVX2_FLAG "${AVX2_FLAG} -Wa,-q")
   endif ()
   if (${C_COMPILER_ID} STREQUAL GNU)
-    set(OPENMP_FLAG -fopenmp)
+    set(OPENMP_FLAGS -fopenmp)
   endif ()
 
 elseif (${C_COMPILER_ID} STREQUAL Cray)
@@ -160,9 +160,7 @@ elseif (${C_COMPILER_ID} STREQUAL Intel)
     set(AVX_FLAG "${AVX_FLAG} -Wa,-q")
   endif ()
   set(AVX2_FLAG "-march=core-avx2")
-  if (${C_COMPILER_ID} STREQUAL GNU)
-    set(OPENMP_FLAG -openmp)
-  endif ()
+  set(OPENMP_FLAGS -openmp)
 
 elseif (${C_COMPILER_ID} STREQUAL MSVC)
 
@@ -179,7 +177,7 @@ elseif (${C_COMPILER_ID} STREQUAL PGI)
   # set(SSE2_FLAG -h intrinsics)
   set(AVX_FLAG -Mvect=simd:256)
   # set(AVX_FLAG -h intrinsics)
-  set(OPENMP_FLAG -mp)
+  set(OPENMP_FLAGS -mp)
 
 elseif (${C_COMPILER_ID} STREQUAL XL)
 
