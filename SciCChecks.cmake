@@ -153,6 +153,17 @@ elseif (${C_COMPILER_ID} STREQUAL Cray)
 
 elseif (${C_COMPILER_ID} STREQUAL Intel)
 
+  set(SSE2_FLAG -msse2)
+  set(AVX_FLAG "-mavx")
+  if (APPLE)
+# On OS X direct to use clang assembler.  Needs testing.
+    set(AVX_FLAG "${AVX_FLAG} -Wa,-q")
+  endif ()
+  set(AVX2_FLAG "-march=core-avx2")
+  if (${C_COMPILER_ID} STREQUAL GNU)
+    set(OPENMP_FLAG -openmp)
+  endif ()
+
 elseif (${C_COMPILER_ID} STREQUAL MSVC)
 
 elseif (${C_COMPILER_ID} STREQUAL PathScale)
