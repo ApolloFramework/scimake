@@ -206,7 +206,7 @@ if (MPI_FOUND)
 
 # determine if openmpi
   string(FIND "${MPI_ROOT_DIR}" "openmpi"  OPENMPI_SUBSTR_LOC)
-  if (OPENMPI_SUBSTR_LOC)
+  if (OPENMPI_SUBSTR_LOC GREATER "-1")
     set(MPI_IS_OPEN_MPI TRUE)
     message(STATUS "Found open source message passing interface (OpenMpi).")
   endif (OPENMPI_SUBSTR_LOC)
