@@ -209,7 +209,7 @@ if (MPI_FOUND)
   if (OPENMPI_SUBSTR_LOC GREATER "-1")
     set(MPI_IS_OPEN_MPI TRUE)
     message(STATUS "Found open source message passing interface (OpenMpi).")
-  endif (OPENMPI_SUBSTR_LOC)
+  endif ()
 
 # MPI link for flags
 # The string strip line is needed because cmake
