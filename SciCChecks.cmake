@@ -150,6 +150,8 @@ if (${C_COMPILER_ID} STREQUAL GNU OR ${C_COMPILER_ID} STREQUAL Clang)
   endif ()
 
 elseif (${C_COMPILER_ID} STREQUAL Cray)
+  
+  set(OPENMP_FLAGS "-h omp")
 
 elseif (${C_COMPILER_ID} STREQUAL Intel)
 
@@ -180,6 +182,8 @@ elseif (${C_COMPILER_ID} STREQUAL PGI)
   set(OPENMP_FLAGS -mp)
 
 elseif (${C_COMPILER_ID} STREQUAL XL)
+
+  set(OPENMP_FLAGS "-qsmp=omp -qsmp=stackcheck")
 
 else ()
   message(STATUS "FULL flags not known for ${C_COMPILER_ID}")
