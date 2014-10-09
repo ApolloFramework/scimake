@@ -86,8 +86,8 @@ message(STATUS "In SciAddUnitTestMacros.cmake, SHLIB_CMAKE_PATH_VAL = ${SHLIB_CM
 #                   against expected output.
 
 macro(SciAddUnitTest)
-  set(oneValArgs NAME COMMAND DIFFER RESULTS_DIR STDOUT_FILE ARGS NUMPROCS MPIEXEC_PROG)
-  set(multiValArgs RESULTS_FILES SOURCES LIBS
+  set(oneValArgs NAME COMMAND DIFFER RESULTS_DIR TEST_DIR DIFF_DIR STDOUT_FILE ARGS NUMPROCS MPIEXEC_PROG)
+  set(multiValArgs RESULTS_FILES TEST_FILES DIFF_FILES SOURCES LIBS
                            PROPERTIES ATTACHED_FILES)
   cmake_parse_arguments(TEST "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
   if (NOT TEST_COMMAND)
@@ -97,6 +97,20 @@ macro(SciAddUnitTest)
     set(TEST_EXECUTABLE "${TEST_COMMAND}")
   else ()
     set(TEST_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/${TEST_COMMAND}")
+  endif ()
+  # make sure there is a diff directory
+  if (NOT TEST_DIFF_DIR)
+    set(TEST_DIFF_DIR ${TEST_RESULTS_DIR})
+  endif ()
+  # make sure there are test and diff files
+  if (NOT TEST_TEST_FILES)
+    set(TEST_TEST_FILES ${TEST_RESULTS_FILES})
+  endif ()
+  if (NOT TEST_DIFF_FILES)
+    foreach (fname ${TEST_TEST_FILES})
+      get_filename_component(TEST_DIFF_FILE "${fname}" NAME)
+      set(TEST_DIFF_FILES ${TEST_DIFF_FILES} "${TEST_DIFF_FILE}")
+    endforeach ()
   endif ()
   # if parallel set the mpiexec argument
   if (TEST_NUMPROCS AND ENABLE_PARALLEL AND MPIEXEC)
@@ -116,15 +130,18 @@ macro(SciAddUnitTest)
       -DTEST_MPIEXEC:STRING=${TEST_MPIEXEC}
       -DTEST_ARGS:STRING=${TEST_ARGS}
       -DTEST_STDOUT_FILE:STRING=${TEST_STDOUT_FILE}
-      -DTEST_RESULTS:STRING=${TEST_RESULTS_FILES}
-      -DTEST_RESULTS_DIR:PATH=${TEST_RESULTS_DIR}
+      -DTEST_TEST_FILES:STRING=${TEST_TEST_FILES}
+      -DTEST_TEST_DIR:PATH=${TEST_TEST_DIR}
+      -DTEST_DIFF_FILES:STRING=${TEST_DIFF_FILES}
+      -DTEST_DIFF_DIR:PATH=${TEST_DIFF_DIR}
+      -DTEST_SCIMAKE_DIR:PATH=${SCIMAKE_DIR}
       -P ${SCIMAKE_DIR}/SciTextCompare.cmake
   )
 
 # $ATTACHED_FILES is a list of files to attache and if non-empty, it
 # overrides the default, which is ${TEST_RESULTS_FILES}.
-  if (ATTACHED_FILES)
-    set(FILES_TO_ATTACH ${ATTACHED_FILES})
+  if (TEST_ATTACHED_FILES)
+    set(FILES_TO_ATTACH ${TEST_ATTACHED_FILES})
   else ()
     set(FILES_TO_ATTACH ${TEST_RESULTS_FILES})
   endif ()
