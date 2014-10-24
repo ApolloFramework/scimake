@@ -33,12 +33,10 @@ macro(CreateStdTypeFile type)
     set(SCI_NAMESPACE ${${typeuc}_NAMESPACE})
     configure_file(sci_type.in
       ${CMAKE_CURRENT_BINARY_DIR}/${SCI_PACKAGE_PREFIX}_${type}
-      # ${CMAKE_CURRENT_BINARY_DIR}/sci_${type}
     )
     if (SCI_STD_TYPES_INSTALL)
       install(FILES
         ${CMAKE_CURRENT_BINARY_DIR}/${SCI_PACKAGE_PREFIX}_${type}
-        # ${CMAKE_CURRENT_BINARY_DIR}/sci_${type}
         DESTINATION include
       )
     endif ()
@@ -47,7 +45,10 @@ endmacro()
 
 # Create c++11 files
 if (SCI_CREATE_STD_INCLUDES)
-  CreateStdTypeFile(array)
   CreateStdTypeFile(shared_ptr)
+  CreateStdTypeFile(array)
 endif ()
+
+# Create derived files
+configure_file(sci_array_arith.in sci_array_arith)
 
