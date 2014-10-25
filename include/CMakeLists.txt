@@ -9,6 +9,8 @@
 #
 ######################################################################
 
+if (FALSE)
+
 if (NOT DEFINED SCI_CREATE_STD_INCLUDES)
   set(SCI_CREATE_STD_INCLUDES TRUE)
 endif ()
@@ -51,4 +53,6 @@ endif ()
 
 # Create derived files
 configure_file(sci_array_arith.in sci_array_arith)
+
+endif ()
 
