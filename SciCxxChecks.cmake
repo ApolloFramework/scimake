@@ -73,69 +73,6 @@ include(CheckIncludeFileCXX)
 check_include_file_cxx(sstream HAVE_SSTREAM)
 check_include_file_cxx(iostream HAVE_IOSTREAM)
 
-# Find a standard type as either std or tr1
-macro(SciFindStdType incbase type tmpl args)
-  string(TOUPPER ${type} varuc)
-  set(HAVE_ANY_${varuc} FALSE)
-  foreach (pfx "" tr1)
-    if (pfx)
-      string(TOUPPER ${pfx} PFX)
-      set(PFX "${PFX}_")
-      set(incfile ${pfx}/${incbase})
-    else ()
-      set(PFX)
-      set(incfile ${incbase})
-    endif ()
-    check_include_file_cxx(${incfile} HAVE_${PFX}${varuc})
-    if (HAVE_${PFX}${varuc})
-      foreach (nmsp "" ::tr1)
-        if (nmsp)
-          # message(STATUS "Trying namespace, std${nmsp}.")
-          string(TOUPPER ${nmsp} SFX)
-          string(REGEX REPLACE "::*" "_" SFX ${SFX})
-        else ()
-          # message(STATUS "Trying namespace, std.")
-          set(SFX)
-        endif ()
-        unset(${varuc}_NAMESPACE_IS_STD${SFX} CACHE)
-        # message(STATUS "Include is: #include <${incfile}>")
-        # message(STATUS "Construction is: std${nmsp}::${type}${tmpl} a(${args});")
-        check_cxx_source_compiles(
-          "
-          #include <${incfile}>
-          int main(int argc, char** argv) {
-            std${nmsp}::${type}${tmpl} a(${args});
-            return 0;
-          }
-          "
-          ${varuc}_NAMESPACE_IS_STD${SFX}
-        )
-        if (${varuc}_NAMESPACE_IS_STD${SFX})
-          set(${varuc}_NAMESPACE std${nmsp})
-          message(STATUS "${type} is in ${incfile} as part of ${${varuc}_NAMESPACE}.")
-          set(${varuc}_INCLUDE ${incfile})
-          set(HAVE_ANY_${varuc} TRUE)
-          break ()
-        else ()
-          # message(STATUS "${type} not found in ${incfile} as part of std${nmsp}.")
-          set(HAVE_${PFX}${varuc})
-        endif ()
-      endforeach ()
-    endif ()
-    if(HAVE_ANY_${varuc})
-      break()
-    endif ()
-  endforeach ()
-  if(NOT HAVE_ANY_${varuc})
-    message(STATUS "namespace for ${type} unknown.")
-  endif ()
-endmacro()
-
-# Find types that can be in either std or tr1
-# check_include_file_cxx(array HAVE_ARRAY_TMP)
-SciFindStdType(array array "<float, 2>" "")
-SciFindStdType(memory shared_ptr "<float>" "new float")
-
 # See whether generally declared statics work
 try_compile(HAVE_GENERALLY_DECLARED_STATICS ${PROJECT_BINARY_DIR}/scimake
   ${SCIMAKE_DIR}/trycompile/gendeclstatics.cxx)
