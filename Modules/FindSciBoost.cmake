@@ -89,7 +89,8 @@ if (Boost_DLLS)
   set(Boost_DEFINITIONS -DBOOST_ALL_DYN_LINK)
 endif ()
 
-set(Boost_DEFINITIONS ${Boost_DEFINITIONS} -DBOOST_ALL_NO_LIB)  # Disable auto-linking
+# Disable auto-linking needed only at build time
+set(Boost_DEFINITIONS ${Boost_DEFINITIONS})
 message(STATUS "Boost_DEFINITIONS = ${Boost_DEFINITIONS}.")
 
 if (BOOST_FOUND AND NOT Boost_INCLUDE_DIRS)
