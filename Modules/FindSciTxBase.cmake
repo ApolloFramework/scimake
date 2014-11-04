@@ -37,6 +37,8 @@ else ()
   set(txbasefindlibs txbase)
 endif ()
 
+SciGetInstSubdirs(txbase instdirs)
+if (FALSE)
 # SERMD is as static as possible consistent with shared libraries
 if (USE_TXBASE_SERMD)
   if (WIN32)
@@ -45,8 +47,10 @@ if (USE_TXBASE_SERMD)
     set(instdirargs INSTALL_DIRS txbase)
   endif ()
 endif ()
+endif ()
+
 SciFindPackage(PACKAGE "TxBase"
-  ${instdirargs}
+  INSTALL_DIRS ${instdirs}
   HEADERS "txbase_version.h"
   LIBRARIES "${txbasefindlibs}"
   LIBRARY_SUBDIRS lib/${CXX_COMP_LIB_SUBDIR} lib

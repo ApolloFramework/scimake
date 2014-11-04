@@ -30,18 +30,21 @@
 message("")
 message(STATUS "Initial search for Hdf5 components")
 
+SciGetInstSubdirs(hdf5 instdirs)
+if (FALSE)
 set(instdirargs "")
 if (USE_HDF5_SERMD)
   if (WIN32)
     set(instdirargs INSTALL_DIRS hdf5-sermd)
   endif ()
 endif ()
+endif ()
 
 SciFindPackage(PACKAGE "Hdf5"
+  INSTALL_DIRS ${instdirs}
   HEADERS hdf5.h H5pubconf.h
 # Last in list is for finding within VisIt installation
   INCLUDE_SUBDIRS include include/hdf5/include
-  ${instdirargs}
   FIND_QUIETLY
 )
 
