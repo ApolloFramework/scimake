@@ -13,7 +13,7 @@
 
 ######################################################################
 #
-# FindHdf5: find includes and libraries for hdf5
+# FindSciHdf5: find includes and libraries for hdf5
 #
 # $Id$
 #
@@ -160,7 +160,7 @@ SciFindPackage(PACKAGE "Hdf5"
 )
 
 if (FALSE)
-# The executables are not always found, so we will hdf5 to found
+# The executables are not always found, so we set hdf5 to found
 # if includes and libraries found.
 if (NOT HDF5_FOUND)
   if (Hdf5_hdf5_h AND Hdf5_hdf5_LIBRARY AND Hdf5_hdf5_hl_LIBRARY)
