@@ -30,6 +30,7 @@
 #
 ######################################################################
 
+set(CMAKE_FIND_LIBRARY_SUFFIXES_SAV ${CMAKE_FIND_LIBRARY_SUFFIXES})
 set(libsubdirs lib)
 if (USE_PYCSH_LIBS)
 # Shared libs in ser for libssh
@@ -39,6 +40,11 @@ else ()
 endif ()
 if (NOT (USE_SHARED_LIBS OR BUILD_SHARED_LIBS))
   set(libsubdirs lib/static ${libsubdirs})
+  if (WIN32)
+    set(CMAKE_FIND_LIBRARY_SUFFIXES .lib)
+  else ()
+    set(CMAKE_FIND_LIBRARY_SUFFIXES .a)
+  endif ()
 endif ()
 # message(STATUS "libsubdirs = ${libsubdirs}.")
 
@@ -49,6 +55,7 @@ SciFindPackage(
   LIBRARY_SUBDIRS ${libsubdirs}
   LIBRARIES "ssh"
 )
+set(CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_FIND_LIBRARY_SUFFIXES_SAV})
 
 if (LIBSSH_FOUND)
   message(STATUS "Found Libssh")
