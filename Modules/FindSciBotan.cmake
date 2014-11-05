@@ -21,10 +21,10 @@
 #
 # Botan_ROOT_DIR           Specifies the root dir of the Botan installation
 #
-# BUILD_WITH_CC4PY_RUNTIME Specifies to look for installation dirs,
-#                          botan-cc4py or botan-sersh
+# BUILD_WITH_PYCSH_RUNTIME Specifies to look for installation dirs,
+#                          botan-pycsh or botan-sersh
 # ENABLE_SHARED OR BUILD_WITH_SHARED_RUNTIME OR BUILD_SHARED_LIBS
-#                          operative if BUILD_WITH_CC4PY_RUNTIME not set
+#                          operative if BUILD_WITH_PYCSH_RUNTIME not set
 #                          Specify to look for installation dir, botan-sersh.
 
 ######################################################################
@@ -42,8 +42,8 @@
 
 set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 
-if (BUILD_WITH_CC4PY_RUNTIME)
-  set(instdirs botan-cc4py botan-sersh)
+if (BUILD_WITH_PYCSH_RUNTIME)
+  set(instdirs botan-pycsh botan-sersh)
 elseif (ENABLE_SHARED OR BUILD_WITH_SHARED_RUNTIME OR BUILD_SHARED_LIBS)
   set(instdirs botan-sersh)
 else ()

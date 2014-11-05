@@ -135,7 +135,7 @@ endif ()
 # Should not set the below, as then how will we ever find visit_trunk?
 # set(VisIt_INST_SUBDIR visit)
 if (NOT VisIt_INSTALL_DIRS)
-  set(VisIt_INSTALL_DIRS visit-cc4py visit-sersh visit)
+  set(VisIt_INSTALL_DIRS visit-pycsh visit-sersh visit)
 endif ()
 SciFindPackage(PACKAGE VisIt
   INSTALL_DIRS ${VisIt_INSTALL_DIRS}

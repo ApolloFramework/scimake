@@ -28,8 +28,8 @@
 
 set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 
-if (BUILD_WITH_CC4PY_RUNTIME OR BUILD_WITH_SHARED_RUNTIME)
-  set(instdirs ne7ssh-cc4py ne7ssh-sersh)
+if (BUILD_WITH_PYCSH_RUNTIME OR BUILD_WITH_SHARED_RUNTIME)
+  set(instdirs ne7ssh-pycsh ne7ssh-sersh)
 else ()
   set(instdirs ne7ssh)
 endif ()

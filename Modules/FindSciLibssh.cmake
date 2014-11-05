@@ -31,9 +31,9 @@
 ######################################################################
 
 set(libsubdirs lib)
-if (USE_CC4PY_LIBS)
+if (USE_PYCSH_LIBS)
 # Shared libs in ser for libssh
-  set(instdirs libssh-cc4py libssh)
+  set(instdirs libssh-pycsh libssh)
 else ()
   set(instdirs libssh)
 endif ()
