@@ -183,9 +183,11 @@ if (HDF5_FOUND)
     message(STATUS "Adding to Hdf5_DEFINITIONS that H5 build dynamic.")
     SciPrintVar(Hdf5_DEFINITIONS)
   endif ()
-  # if linux add dl to the libraries variable
+# if linux add dl to the libraries variable
+# JRC: Cannot do this here as interferes with static linking of vorpal.
+# Must be done in the CMakeLists.txt where the executable is being linked.
   if (LINUX)
-    set(Hdf5_LIBRARIES ${Hdf5_LIBRARIES} dl)
+    # set(Hdf5_LIBRARIES ${Hdf5_LIBRARIES} dl)
   endif()
 else ()
   message(STATUS "Did not find Hdf5.  Use -DHdf5_ROOT_DIR to specify the installation directory.")
