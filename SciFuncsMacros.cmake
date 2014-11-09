@@ -80,3 +80,37 @@ macro(SciPrintAutotoolsResults pkg)
   endif ()
 endmacro()
 
+#
+# Install an executable in its own subdir
+#
+# EXECNAME: the name of the executable and also its installation subdir
+# LIBSSFX: ${EXECNAME}_${LIBSSFX} holds the libraries that need to be installed
+#
+macro(SciInstallExecutable)
+  set(oneValArgs EXECNAME LIBSSFX)
+  cmake_parse_arguments(TIE_
+    "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN}
+  )
+  install(TARGETS ${TIE_EXECNAME}
+    RUNTIME DESTINATION ${TIE_EXECNAME}/bin
+    LIBRARY DESTINATION ${TIE_EXECNAME}/lib
+    ARCHIVE DESTINATION ${TIE_EXECNAME}/lib
+    PERMISSIONS OWNER_READ OWNER_WRITE
+                GROUP_READ ${SCI_GROUP_WRITE}
+                ${SCI_WORLD_FILE_PERMS}
+    COMPONENT ${TIE_EXECNAME}
+  )
+  if (BUILD_SHARED_LIBS)
+# Install libraries into each executable installation
+    install(TARGETS txustd ${${TIE_EXECNAME}_${TIE_LIBSSFX}}
+      RUNTIME DESTINATION ${TIE_EXECNAME}/bin
+      LIBRARY DESTINATION ${TIE_EXECNAME}/lib
+      ARCHIVE DESTINATION ${TIE_EXECNAME}/lib
+      PERMISSIONS OWNER_READ OWNER_WRITE
+                  GROUP_READ ${SCI_GROUP_WRITE}
+                  ${SCI_WORLD_FILE_PERMS}
+      COMPONENT ${TIE_EXECNAME}
+    )
+  endif ()
+endmacro()
+
