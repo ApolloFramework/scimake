@@ -23,18 +23,15 @@
 #
 ######################################################################
 
-set(instdirs "muparser")
-if (USE_SHARED_LIBS)
-  set(instdirs "muparser-sersh")
-endif()
-
+SciGetInstSubdirs(muparser instdirs)
+# message(STATUS "instdirs = ${instdirs}.")
 SciFindPackage(PACKAGE "Muparser"
-              INSTALL_DIR ${instdirs} 
-              HEADERS "muParser.h"
-              LIBRARIES "muparser"
-              INCLUDE_SUBDIRS "include"
-              LIBRARY_SUBDIRS "lib"
-              )
+  INSTALL_DIRS ${instdirs}
+  HEADERS "muParser.h"
+  LIBRARIES "muparser"
+  INCLUDE_SUBDIRS "include"
+  LIBRARY_SUBDIRS "lib"
+)
 
 if (MUPARSER_FOUND)
   message(STATUS "Found Muparser")
