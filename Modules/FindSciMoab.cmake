@@ -24,12 +24,18 @@
 #
 ######################################################################
 
+# Finding sersh for all projects now, if at some time
+# later we are building ser and sersh, then we will have
+# to adjust this...
+set(instdirs moab-sersh)
+
 set(Moab_LIBRARY_LIST
   MOAB dagmc iMesh
 )
 
 SciFindPackage(
   PACKAGE "Moab"
+  INSTALL_DIRS ${instdirs}
   HEADERS "MBCore.hpp"
   LIBRARIES ${Moab_LIBRARY_LIST}
 )
