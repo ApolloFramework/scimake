@@ -23,6 +23,8 @@
 #
 ######################################################################
 
+set(ALLOW_SERIAL_WITH_PARALLEL_SAV ${ALLOW_SERIAL_WITH_PARALLEL})
+set(ALLOW_SERIAL_WITH_PARALLEL TRUE)
 SciGetInstSubdirs(muparser instdirs)
 # message(STATUS "instdirs = ${instdirs}.")
 SciFindPackage(PACKAGE "Muparser"
@@ -32,6 +34,7 @@ SciFindPackage(PACKAGE "Muparser"
   INCLUDE_SUBDIRS "include"
   LIBRARY_SUBDIRS "lib"
 )
+set(ALLOW_SERIAL_WITH_PARALLEL ${ALLOW_SERIAL_WITH_PARALLEL_SAV})
 
 if (MUPARSER_FOUND)
   message(STATUS "Found Muparser")
