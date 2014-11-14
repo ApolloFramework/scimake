@@ -24,21 +24,31 @@
 #
 ######################################################################
 
-# Finding sersh for all projects now, if at some time
-# later we are building ser and sersh, then we will have
-# to adjust this...
-set(instdirs moab-sersh)
+set(moabfindlibs MOAB dagmc iMesh)
+#set(moabfindlibs MOAB)
 
-set(Moab_LIBRARY_LIST
-  MOAB dagmc iMesh
-)
+SciGetInstSubdirs(moab instdirs)
 
-SciFindPackage(
-  PACKAGE "Moab"
+SciFindPackage(PACKAGE "Moab"
   INSTALL_DIRS ${instdirs}
   HEADERS "MBCore.hpp"
-  LIBRARIES ${Moab_LIBRARY_LIST}
+  LIBRARIES "${moabfindlibs}"
+  LIBRARY_SUBDIRS lib/${CXX_COMP_LIB_SUBDIR} lib
 )
+
+if (FALSE)
+set(txbasefindlibs txbase)
+
+SciGetInstSubdirs(txbase instdirs)
+
+SciFindPackage(PACKAGE "TxBase"
+  INSTALL_DIRS ${instdirs}
+  HEADERS "txbase_version.h"
+  LIBRARIES "${txbasefindlibs}"
+  LIBRARY_SUBDIRS lib/${CXX_COMP_LIB_SUBDIR} lib
+)
+endif()
+
 
 if (MOAB_FOUND)
   message(STATUS "Found Moab")

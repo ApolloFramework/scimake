@@ -104,7 +104,7 @@ function(SciGetStaticLibs origlibs statlibsvar)
       set(havestlib TRUE)
     endif ()
 # If not static, try replacing suffix
-    if (NOT ${havestlib})
+    if (NOT havestlib)
       foreach (sfx so;dylib;dll)
         if (${lib} MATCHES "\\.${sfx}$")
           if (DEBUG_CMAKE)
@@ -128,7 +128,7 @@ function(SciGetStaticLibs origlibs statlibsvar)
       endforeach ()
     endif ()
 # If still do not have static, try pulling out of library flags
-    if (${havestlib})
+    if (havestlib)
       list(APPEND statlibs ${newlib})
     elseif (${lib} MATCHES "^-L")
       if (DEBUG_CMAKE)
@@ -545,7 +545,7 @@ function(SciFindPkgFiles pkgname pkgfiles
 
 # Clean up the lists of files and directories
   list(LENGTH abspkgfiles numpkgfiles)
-  if (${numpkgfiles})
+  if (numpkgfiles)
     if (NOT ${ALLOWDUPS})
       list(REMOVE_DUPLICATES abspkgfiles)
     endif ()
@@ -825,11 +825,11 @@ macro(SciFindPackage)
 
 # If list not empty, search for files
       list(LENGTH ${srchfilesvar} scisrchlen)
-      if (${scisrchlen})
+      if (scisrchlen)
 
 # Create lists for search
         list(LENGTH TFP_${scitype}_SUBDIRS scilen)
-        if (${scilen})
+        if (scilen)
           set(scifilesubdirs ${TFP_${scitype}_SUBDIRS})
         else ()
 # Default search subdirectories
