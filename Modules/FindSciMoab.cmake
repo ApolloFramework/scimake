@@ -25,7 +25,6 @@
 ######################################################################
 
 set(moabfindlibs MOAB dagmc iMesh)
-#set(moabfindlibs MOAB)
 
 SciGetInstSubdirs(moab instdirs)
 
@@ -35,20 +34,6 @@ SciFindPackage(PACKAGE "Moab"
   LIBRARIES "${moabfindlibs}"
   LIBRARY_SUBDIRS lib/${CXX_COMP_LIB_SUBDIR} lib
 )
-
-if (FALSE)
-set(txbasefindlibs txbase)
-
-SciGetInstSubdirs(txbase instdirs)
-
-SciFindPackage(PACKAGE "TxBase"
-  INSTALL_DIRS ${instdirs}
-  HEADERS "txbase_version.h"
-  LIBRARIES "${txbasefindlibs}"
-  LIBRARY_SUBDIRS lib/${CXX_COMP_LIB_SUBDIR} lib
-)
-endif()
-
 
 if (MOAB_FOUND)
   message(STATUS "Found Moab")
