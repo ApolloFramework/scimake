@@ -18,6 +18,17 @@ message(STATUS "C_COMPILER_ID = ${C_COMPILER_ID}.")
 SciPrintVar(C_COMPILER)
 SciPrintVar(C_COMPILER_ID)
 
+# Type checks
+include(CheckTypeSize)
+
+# Check for ssize_t
+check_type_size(ssize_t SIZE_OF_SSIZE_T)
+if (HAVE_SIZE_OF_SSIZE_T)
+  message(STATUS "ssize_t available.")
+else ()
+  message(STATUS "ssize_t not available.")
+  set(ssize_t SSIZE_T)
+endif ()
 
 # Check whether time and sys/time can both be included
 include(CheckCSourceCompiles)
