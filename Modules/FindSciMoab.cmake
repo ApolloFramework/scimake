@@ -24,7 +24,7 @@
 #
 ######################################################################
 
-set(moabfindlibs MOAB dagmc iMesh)
+set(moabfindlibs dagmc iMesh MOAB)
 
 SciGetInstSubdirs(moab instdirs)
 

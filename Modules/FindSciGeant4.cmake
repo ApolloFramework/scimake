@@ -27,7 +27,6 @@
 set(Geant4_LIBRARY_LIST
   G4FR
   G4GMocren
-  G4OpenGL
   G4RayTracer
   G4Tree
   G4VRML
@@ -37,9 +36,9 @@ set(Geant4_LIBRARY_LIST
   G4error_propagation
   G4event
   G4geometry
-  G4gl2ps
   G4global
   G4graphics_reps
+  G4intercoms
   G4interfaces
   G4materials
   G4modeling
@@ -57,6 +56,10 @@ set(Geant4_LIBRARY_LIST
   G4vis_management
   G4zlib
 )
+
+# The below should be optional
+  # G4OpenGL
+  # G4gl2ps
 
 SciFindPackage(
   PACKAGE "Geant4"
