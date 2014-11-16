@@ -8,7 +8,10 @@
 # 2: source directory
 # 3-: all files to be linked
 #
-# See LICENSE file (EclipseLicense.txt) for conditions of use.
+# $Id$
+#
+# Copyright &copy; 2005-2013 Tech-X Corporation, Boulder, CO
+# See LICENSE file for conditions of use.
 #
 ######################################################################
 

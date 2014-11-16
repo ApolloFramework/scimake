@@ -1,3 +1,15 @@
+/**
+ *
+ * @file    checkCompilerRTTI.cxx
+ *
+ * @brief   For checking RTTI capabilities of compiler
+ *
+ * @version $Id$
+ *
+ * Copyright &copy; 2002-2014, Tech-X Corporation
+ * See LICENSE file for conditions of use.
+ */
+
 #include <typeinfo>
 #include <iostream>
 #include <string>
