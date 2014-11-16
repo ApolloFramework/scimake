@@ -1,4 +1,8 @@
-// $Id$
+/**
+ * $Id$
+ *
+ * Copyright &copy; 2014-2014, Tech-X Corporation
+ */
 
 #include <sci_shared_ptr>
 

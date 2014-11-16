@@ -4,6 +4,8 @@
 # functionality to a common cmake file
 #
 # $Id$
+# 
+# Copyright &copy; 2014-2014, Tech-X Corporation
 #
 # This script sets the following variables which are also options:
 #   ENABLE_DEVELDOCS

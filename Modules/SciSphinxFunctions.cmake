@@ -18,6 +18,8 @@
 # SciSphinxFunction
 #
 # $Id$
+# 
+# Copyright &copy; 2014-2014, Tech-X Corporation
 #
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #

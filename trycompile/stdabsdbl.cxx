@@ -1,5 +1,7 @@
 /**
  * $Id$
+ * 
+ * Copyright &copy; 2014-2014, Tech-X Corporation
  *
  * Determine whether the compiler knows std::abs<double>.
  */

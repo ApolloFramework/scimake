@@ -1,6 +1,8 @@
 #!/bin/sh
 
 # $Id$
+# 
+# Copyright &copy; 2014-2014, Tech-X Corporation
 
 # This script starts an instance of Xvfb, the "fake" X server, runs a command
 # with that server available, and kills the X server when done.  The return

@@ -1,6 +1,8 @@
 ######################################################################
 #
 # $Id$
+# 
+# Copyright &copy; 2014-2014, Tech-X Corporation
 #
 # For getting the svn revision of a directory
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
