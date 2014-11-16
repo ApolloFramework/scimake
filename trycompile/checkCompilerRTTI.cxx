@@ -6,7 +6,7 @@
  *
  * @version $Id$
  *
- * Copyright &copy; 2002-2014, Tech-X Corporation
+ * Copyright &copy; 2012-2014, Tech-X Corporation
  * See LICENSE file for conditions of use.
  */
 
