@@ -2,7 +2,7 @@
 #
 # SciDiffMacros: A collection of macros for diffing files
 #
-# $Id: SciDiffMacros.cmake 610 2014-08-16 21:29:40Z chrismdeluca $
+# $Id$
 #
 # Copyright 2010-2014, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

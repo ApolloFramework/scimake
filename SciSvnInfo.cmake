@@ -51,7 +51,7 @@ macro(SciGetSvnInfo dir revvar urlvar usechanged)
     set(usechanged TRUE)
   endif ()
   if (EXISTS ${dir}/.svn)
-    if (${usechanged})
+    if (usechanged)
       # message(STATUS "In ${dir}, executing ${SVNVERSION_BIN} -c")
       execute_process(COMMAND ${SVNVERSION_BIN} -c
         OUTPUT_VARIABLE ${revvar}

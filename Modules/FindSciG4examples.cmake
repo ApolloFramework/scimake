@@ -8,7 +8,7 @@
 #
 # Find module for G4engine examples  installation
 #
-# $Id: FindSciG4examples.cmake 643 2014-11-16 11:29:11Z cary $
+# $Id$
 #
 # Copyright 2014-2014, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
