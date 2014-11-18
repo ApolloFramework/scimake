@@ -4,10 +4,9 @@
 #
 # $Id$
 #
-# Copyright 2010-2013 Tech-X Corporation.
+# Copyright 2010-2014, Tech-X Corporation, Boulder, CO.
 # Arbitrary redistribution allowed provided this copyright remains.
 #
-# See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
 
@@ -161,7 +160,7 @@ if (${C_COMPILER_ID} STREQUAL GNU OR ${C_COMPILER_ID} STREQUAL Clang)
   endif ()
 
 elseif (${C_COMPILER_ID} STREQUAL Cray)
-  
+
   set(OPENMP_FLAGS "-h omp")
 
 elseif (${C_COMPILER_ID} STREQUAL Intel)

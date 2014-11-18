@@ -1,11 +1,11 @@
 ######################################################################
 #
 # $Id$
-# 
-# Copyright &copy; 2014-2014, Tech-X Corporation
+#
+# Copyright &copy; 2012-2014, Tech-X Corporation, Boulder, CO.
+# Arbitrary redistribution allowed provided this copyright remains.
 #
 # For getting the svn revision of a directory
-# See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
 if (0)

@@ -16,8 +16,8 @@
 #
 # $Id$
 #
-# Copyright 2010-2012 Tech-X Corporation.
-# All rights reserved.
+# Copyright 2010-2014, Tech-X Corporation, Boulder, CO.
+# Arbitrary redistribution allowed provided this copyright remains.
 #
 ###########################################################
 

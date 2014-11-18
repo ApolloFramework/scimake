@@ -4,8 +4,8 @@
 #
 # $Id$
 #
-# Copyright &copy; 2005-2013 Tech-X Corporation, Boulder, CO
-# See LICENSE file for conditions of use.
+# Copyright &copy; 2005-2014, Tech-X Corporation, Boulder, CO.
+# Arbitrary redistribution allowed provided this copyright remains.
 #
 ######################################################################
 

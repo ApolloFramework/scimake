@@ -5,8 +5,8 @@
 !
 ! @version $Id$
 !
-! Copyright &copy; 2002-2014, Tech-X Corporation
-! See LICENSE file for conditions of use.
+! Copyright &copy; 2012-2014, Tech-X Corporation, Boulder, CO.
+! Arbitrary redistribution allowed provided this copyright remains.
 !
 
 module moduleNAME

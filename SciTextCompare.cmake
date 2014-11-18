@@ -5,10 +5,9 @@
 #
 # $Id$
 #
-# Copyright 2010-2013 Tech-X Corporation.
+# Copyright 2010-2014, Tech-X Corporation, Boulder, CO.
 # Arbitrary redistribution allowed provided this copyright remains.
 #
-# See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
 if (NOT SCIMAKE_DIR)
@@ -68,7 +67,7 @@ if (TEST_TEST_FILES)
   string(REPLACE " " ";" TEST_FILES_LIST "${TEST_FILES_LIST}")
   string(REPLACE "\"" "" DIFF_FILES_LIST "${TEST_DIFF_FILES}")
   string(REPLACE " " ";" DIFF_FILES_LIST "${DIFF_FILES_LIST}")
-  
+
   list(LENGTH TEST_FILES_LIST tlen)
   list(LENGTH DIFF_FILES_LIST dlen)
   if (NOT ${tlen} MATCHES ${dlen})

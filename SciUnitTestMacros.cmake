@@ -4,10 +4,9 @@
 #
 # $Id$
 #
-# Copyright 2014 Tech-X Corporation.
+# Copyright 2014-2014, Tech-X Corporation, Boulder, CO.
 # Arbitrary redistribution allowed provided this copyright remains.
 #
-# See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
 

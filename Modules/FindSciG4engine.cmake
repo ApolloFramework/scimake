@@ -17,7 +17,7 @@
 # $Id: FindSciG4engine.cmake 643 2014-11-16 11:29:11Z cary $
 #
 # Copyright 2010-2014, Tech-X Corporation, Boulder, CO.
-# All rights reserved.
+# Arbitrary redistribution allowed provided this copyright remains.
 #
 ###########################################################
 
@@ -33,7 +33,7 @@ endif ()
 SciFindPackage(
   PACKAGE G4engine
   INSTALL_DIR g4engine-sersh
-  PROGRAMS g4engine 
+  PROGRAMS g4engine
 )
 
 if (G4ENGINE_FOUND)

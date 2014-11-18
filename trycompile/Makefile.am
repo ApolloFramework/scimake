@@ -5,8 +5,9 @@
 ## Purpose: Purpose: Needed for cmake in an autotools project
 ##
 ## $Id$
-## 
-## Copyright &copy; 2014-2014, Tech-X Corporation
+##
+## Copyright &copy; 2012-2014, Tech-X Corporation, Boulder, CO.
+## Arbitrary redistribution allowed provided this copyright remains.
 ##
 ## ############################################################
 

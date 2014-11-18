@@ -3,10 +3,10 @@
 # Include for common Windows flags and settings.
 #
 # $Id$
-# 
-# Copyright &copy; 2014-2014, Tech-X Corporation
 #
-# See LICENSE file (EclipseLicense.txt) for conditions of use.
+# Copyright &copy; 2012-2014, Tech-X Corporation, Boulder, CO.
+# Arbitrary redistribution allowed provided this copyright remains.
+#
 #
 ######################################################################
 

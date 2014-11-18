@@ -10,8 +10,8 @@
 #
 # $Id: FindSciG4examples.cmake 643 2014-11-16 11:29:11Z cary $
 #
-# Copyright 2014, Tech-X Corporation, Boulder, CO.
-# All rights reserved.
+# Copyright 2014-2014, Tech-X Corporation, Boulder, CO.
+# Arbitrary redistribution allowed provided this copyright remains.
 #
 ###########################################################
 

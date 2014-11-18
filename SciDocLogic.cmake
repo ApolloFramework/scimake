@@ -4,8 +4,9 @@
 # functionality to a common cmake file
 #
 # $Id$
-# 
-# Copyright &copy; 2014-2014, Tech-X Corporation
+#
+# Copyright &copy; 2012-2014, Tech-X Corporation, Boulder, CO.
+# Arbitrary redistribution allowed provided this copyright remains.
 #
 # This script sets the following variables which are also options:
 #   ENABLE_DEVELDOCS
@@ -20,7 +21,6 @@
 # Reading that document should be done if trying to understand this
 # logic
 #
-# See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 #####################################################################
 

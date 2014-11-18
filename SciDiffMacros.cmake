@@ -4,10 +4,9 @@
 #
 # $Id: SciDiffMacros.cmake 610 2014-08-16 21:29:40Z chrismdeluca $
 #
-# Copyright 2010-2013 Tech-X Corporation.
+# Copyright 2010-2014, Tech-X Corporation, Boulder, CO.
 # Arbitrary redistribution allowed provided this copyright remains.
 #
-# See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
 include(CMakeParseArguments)
@@ -54,7 +53,7 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
   if (NOT DIFF_COMMAND)
     set(DIFF_COMMAND diff --strip-trailing-cr)
   endif ()
-  
+
   # execute the diff process
   execute_process(COMMAND ${DIFF_COMMAND}
     "${DIFF_TEST_FILEPATH}" "${DIFF_DIFF_FILEPATH}"
