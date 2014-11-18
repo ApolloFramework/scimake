@@ -3,7 +3,7 @@
 # $Id$
 #
 # Copyright &copy; 2012-2014, Tech-X Corporation, Boulder, CO.
-# Arbitrary redistribution allowed provided this copyright remains.
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
 
 # This script starts an instance of Xvfb, the "fake" X server, runs a command
 # with that server available, and kills the X server when done.  The return
