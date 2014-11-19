@@ -121,7 +121,7 @@ elseif (CMAKE_CXX_COMPILER MATCHES "cl")
     OUTPUT_VARIABLE cxx_version_tmp
   )
   string(REGEX MATCH
-    "Version [0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+ for"
+    "Version [0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9]+)? for"
     cxx_version_tmp
     ${cxx_version_tmp}
   )
