@@ -151,6 +151,26 @@ else ()
   set(VECTOR_ITERATOR_IS_NOT_POINTER 1 CACHE BOOL "Whether std::vector<int>::iterator is the same as int*")
 endif ()
 
+# Check for template alias exists
+check_cxx_source_compiles(
+"
+#include <vector>
+using vec_int = std::vector<int>;
+int main(int argc, char** argv) {return 0;}
+"
+HAVE_TEMPLATE_ALIAS
+)
+if (HAVE_TEMPLATE_ALIAS)
+  if (DEBUG_CMAKE)
+    message(STATUS "Template alias with using works.")
+  endif ()
+else ()
+  if (DEBUG_CMAKE)
+    message(STATUS "Template alias with using does not work.")
+  endif ()
+  set(HAVE_TEMPLATE_ALIAS 1 CACHE BOOL "Whether template alias with using works")
+endif ()
+
 # Add in full flags
 set(CMAKE_CXX_FLAGS_FULL "${CMAKE_C_FLAGS_FULL}")
 
