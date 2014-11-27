@@ -9,7 +9,3 @@
 #
 ######################################################################
 
-# Only for creating self-contained sci_array
-message(STATUS "Adding include subdirectory")
-add_subdirectory(include)
-
