@@ -30,12 +30,13 @@ endif ()
 # scimake's find_program() will return the DIRECTORY instead
 # of the executable on windows (as scimake is a windows program
 # and the cygwin soft link just looks like a file).
-# So as a temporary hack-fix, we only look for dagmcser
+SciGetInstSubdirs(hdf5 instdirs)
 SciFindPackage(
   PACKAGE Dagmc
-  PROGRAMS DagGeant4  dagmc_get_materials.py
+  PROGRAMS DagGeant4 dagmc_get_materials.py
   FILES shape_zoo_unmerged.h5m shape_zoo_merged.h5m test_geom.h5m test_uwuw.h5m
   FILE_SUBDIRS tests
+  LIBRARIES dagsolid dagmciface
 )
 
 if (DAGMC_FOUND)
@@ -54,11 +55,16 @@ if (DAGMC_FOUND)
 # Dagmc_VERSION is required by SciComposerBase.cmake to set the package
 # installer name.  It is provided by executing "executable --version",
 # and contains version number/revision number.
-  include(${TXCMAKE_DIR}/TxEngFindVersion.cmake)
-  TxEngFindVersion(${Dagmc_remsim} EXE_VERSION EXE_REVISION)
-  set(Dagmc_VERSION ${EXE_VERSION})
-  set(DAGMC_VERSION ${EXE_VERSION})
-  set(Dagmc_REVISION ${EXE_REVISION})
+  if (FALSE)
+    include(${TXCMAKE_DIR}/TxEngFindVersion.cmake)
+    TxEngFindVersion(${Dagmc_DagGeant4} EXE_VERSION EXE_REVISION)
+    set(Dagmc_VERSION ${EXE_VERSION})
+    set(DAGMC_VERSION ${EXE_VERSION})
+    set(Dagmc_REVISION ${EXE_REVISION})
+  else ()
+    set(Dagmc_VERSION runknown)
+    set(Dagmc_REVISION runknown)
+  endif ()
 else ()
   message(STATUS "Dagmc not found. Use -DDAGMC_DIR to specify the installation directory.")
   if (TxDagmc_FIND_REQUIRED)
