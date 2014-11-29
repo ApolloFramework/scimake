@@ -33,7 +33,9 @@ endif ()
 # So as a temporary hack-fix, we only look for dagmcser
 SciFindPackage(
   PACKAGE Dagmc
-  PROGRAMS remsim
+  PROGRAMS DagGeant4  dagmc_get_materials.py
+  FILES shape_zoo_unmerged.h5m shape_zoo_merged.h5m test_geom.h5m test_uwuw.h5m
+  FILE_SUBDIRS tests
 )
 
 if (DAGMC_FOUND)
