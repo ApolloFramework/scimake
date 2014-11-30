@@ -10,6 +10,7 @@
 #
 #
 ######################################################################
+
 if (NOT SCIMAKE_DIR)
   set(SCIMAKE_DIR "${TEST_SCIMAKE_DIR}")
 endif ()

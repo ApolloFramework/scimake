@@ -90,5 +90,7 @@ int main() {
   flag = flag && testNonTemplate<Derived2>();
   flag = flag && testTemplate<Derived<double> >();
 
+  delete base;
+
   return !flag;
 }
