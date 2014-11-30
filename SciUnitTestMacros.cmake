@@ -157,7 +157,7 @@ endmacro()
 # Check the source with cppcheck
 #
 macro(SciCppCheckSource build)
-  if (NOT "${build}" OR (CppCheck_cppcheck AND ${CMAKE_INSTALL_PREFIX} MATCHES "${build}$"))
+  if (("${build}" STREQUAL "") OR (CppCheck_cppcheck AND ${CMAKE_INSTALL_PREFIX} MATCHES "${build}$"))
     message(STATUS "Source code checking enabled.")
     add_test(NAME cppcheck COMMAND ${CMAKE_COMMAND}
       -DCppCheck_cppcheck:FILEPATH=${CppCheck_cppcheck}
@@ -168,6 +168,8 @@ macro(SciCppCheckSource build)
       PROPERTIES ENVIRONMENT
         "${SHLIB_PATH_VAR}=${SCIMAKE_SHLIB_NATIVE_PATH_VAL}"
     )
+  else ()
+    message(STATUS "Source code checking not enabled.")
   endif ()
 endmacro()
 
