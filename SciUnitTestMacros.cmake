@@ -155,7 +155,7 @@ endmacro()
 # Check the source with cppcheck
 #
 macro(SciCppCheckSource build)
-  if (CppCheck_cppcheck AND ${CMAKE_INSTALL_PREFIX} MATCHES "${build}$")
+  if (NOT "${build}" OR (CppCheck_cppcheck AND ${CMAKE_INSTALL_PREFIX} MATCHES "${build}$"))
     message(STATUS "Source code checking enabled.")
     add_test(NAME cppcheck COMMAND ${CMAKE_COMMAND}
       -DCppCheck_cppcheck:FILEPATH=${CppCheck_cppcheck}
