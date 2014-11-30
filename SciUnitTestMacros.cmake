@@ -12,18 +12,20 @@
 
 # Add the specified directories to the shared libraries path
 macro(SciAddSharedLibDirs)
-  # parse the path argument
+# parse the path argument
   set(multiValArgs ADDPATH)
   cmake_parse_arguments(SHLIB_DIRS "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
-  # if 1+ directories were specified add it/them to the path in the parent scope
+# if 1+ directories were specified add it/them to the path in the parent scope
   if (SHLIB_DIRS_ADDPATH)
     set(SHLIB_CMAKE_PATH_VAL ${SHLIB_DIRS_ADDPATH} ${SHLIB_CMAKE_PATH_VAL})
     if (NOT "${CMAKE_CURRENT_BINARY_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
-      # it only makes sense to set the variable in the parent scope if not in the top level directory
+# it only makes sense to set the variable in the parent scope if not
+# in the top level directory
       set(SHLIB_CMAKE_PATH_VAL "${SHLIB_CMAKE_PATH_VAL}" PARENT_SCOPE)
     endif (NOT "${CMAKE_CURRENT_BINARY_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
 
-    # make a system native path var containing all of the shared libraries directories
+# make a system native path var containing all of the shared libraries
+# directories
     makeNativePath(INPATH "${SHLIB_CMAKE_PATH_VAL}" OUTPATH SCIMAKE_SHLIB_NATIVE_PATH_VAL)
   endif (SHLIB_DIRS_ADDPATH)
 endmacro()
@@ -146,7 +148,7 @@ macro(SciAddUnitTest)
   endif ()
   set_tests_properties(${TEST_NAME}
     PROPERTIES ENVIRONMENT
-            "${SHLIB_PATH_VAR}=${SCIMAKE_SHLIB_NATIVE_PATH_VAL}" ${TEST_PROPERTIES}
+      "${SHLIB_PATH_VAR}=${SCIMAKE_SHLIB_NATIVE_PATH_VAL}" ${TEST_PROPERTIES}
     ATTACHED_FILES_ON_FAIL "${FILES_TO_ATTACH}"
   )
 endmacro()
@@ -161,6 +163,10 @@ macro(SciCppCheckSource build)
       -DCppCheck_cppcheck:FILEPATH=${CppCheck_cppcheck}
       -DCPPCHECK_SOURCE_DIR:PATH=${CMAKE_SOURCE_DIR}
       -P ${SCIMAKE_DIR}/SciCppCheck.cmake
+    )
+    set_tests_properties(cppcheck
+      PROPERTIES ENVIRONMENT
+        "${SHLIB_PATH_VAR}=${SCIMAKE_SHLIB_NATIVE_PATH_VAL}"
     )
   endif ()
 endmacro()
