@@ -15,7 +15,7 @@ if (NOT SCIMAKE_DIR)
 endif ()
 
 # Execute cppcheck
-execute_process(COMMAND ${Cppcheck_cppcheck} ${CPPCHECK_SOURCE_DIR}
+execute_process(COMMAND ${CppCheck_cppcheck} ${CPPCHECK_SOURCE_DIR}
   RESULT_VARIABLE EXEC_ERROR
   OUTPUT_FILE cppcheck.out
   ERROR_FILE cppcheck.err
