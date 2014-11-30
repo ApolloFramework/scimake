@@ -130,6 +130,17 @@ if (TRILINOS_FOUND)
       set(Trilinos_SYSTEM_LIBRARIES ${Trilinos_SYSTEM_LIBRARIES} ${lib})
     endif ()
   endforeach ()
+# If trilinos does not get the mumps scalapack, add it.
+  if (Trilinos_MUMPS_LIBRARIES)
+    list(GET Trilinos_MUMPS_LIBRARIES 0 mumpslib1)
+    get_filename_component(mumpslibdir ${mumpslib1} PATH)
+    list(FIND Trilinos_MUMPS_LIBRARIES ${mumpslibdir}/libscalapack.so idx)
+    if ((${idx} EQUAL -1) AND (EXISTS ${mumpslibdir}/libscalapack.so))
+      set(Trilinos_MUMPS_LIBRARIES ${Trilinos_MUMPS_LIBRARIES}
+        ${mumpslibdir}/libscalapack.so
+      )
+    endif ()
+  endif ()
 
 # Make sure mp library present on Cray
   string(TOLOWER ${C_COMPILER_ID} cid)
