@@ -151,3 +151,17 @@ macro(SciAddUnitTest)
   )
 endmacro()
 
+#
+# Check the source with cppcheck
+#
+macro(SciCppCheckSource build)
+  if (CppCheck_cppcheck AND ${CMAKE_INSTALL_PREFIX} MATCHES "${build}$")
+    message(STATUS "Source code checking enabled.")
+    add_test(NAME cppcheck COMMAND ${CMAKE_COMMAND}
+      -DCppCheck_cppcheck:FILEPATH=${CppCheck_cppcheck}
+      -DCPPCHECK_SOURCE_DIR:PATH=${CMAKE_SOURCE_DIR}
+      -P ${SCIMAKE_DIR}/SciCppCheck.cmake
+    )
+  endif ()
+endmacro()
+
