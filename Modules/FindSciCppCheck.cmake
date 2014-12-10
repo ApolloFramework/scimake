@@ -1,5 +1,4 @@
-# - FindSciCppCheck: Module to find cppcheck and setup apidocs target for
-#   CppCheck.
+# - FindSciCppCheck: Module to find cppcheck
 #
 # Module usage:
 #   find_package(SciCppCheck ...)
@@ -10,7 +9,7 @@
 
 ######################################################################
 #
-# SciCppCheck: Find CppCheck and set up apidocs target
+# SciCppCheck: Find CppCheck
 #
 # $Id$
 #
