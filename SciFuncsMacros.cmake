@@ -145,14 +145,14 @@ macro(SciRplCompilerFlags CMPTYPE BLDTYPE)
       if  ( BUILD_WITH_SHARED_RUNTIME OR BUILD_SHARED_LIBS )
         set(RPLFLGS_ADDFLG "/MD")
       else ()
-        set(RPLFLGS_ADDFLG "/MT")
+        set(RPLFLGS_ADDFLG " ")
       endif ()
     endif ()
   endif ()
 
   if (NOT (RPLFLGS_RMVFLG EQUAL RPLFLGS_ADDFLG))  
     # Assemble the variable name and copy the associated value
-    set(thisvar "CMAKE_${cmptype}_FLAGS_${bldtype}")
+    set(thisvar "CMAKE_${CMPTYPE}_FLAGS_${BLDTYPE}")
     set(thisval "${${thisvar}}")
     # check if the remove flag is in the current variable
     string(FIND "${thisval}" "${RPLFLGS_RMVFLG}" md_found)
@@ -167,6 +167,7 @@ macro(SciRplCompilerFlags CMPTYPE BLDTYPE)
     # append /bigobj to the current compiler arguments
     set(thisval "${thisval} /bigobj")
     # force the compiler argument to be recached
-    set(${thisvar} "${thisval}" CACHE STRING "Flags used by the ${cmptype} compiler during ${bldtype} builds" FORCE)
+    set(${thisvar} "${thisval}" CACHE STRING "Flags used by the ${CMPTYPE} compiler during ${BLDTYPE} builds" FORCE)
   endif ()
+  
 endmacro()
