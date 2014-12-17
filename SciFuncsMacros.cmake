@@ -113,3 +113,61 @@ macro(SciInstallExecutable)
   endif ()
 endmacro()
 
+#
+# Replace compiler flags in specified flags variable
+#
+# Required arguments:
+# CMPTYPE: compiler type
+# BLDTYPE: build type
+#
+# Optional arguments:
+# RMVFLG: the flag to be removed
+# ADDFLG: the flag to be added
+#
+macro(SciRplCompilerFlags CMPTYPE BLDTYPE)
+  # parse the path argument
+  set(oneValArgs RMVFLG ADDFLG)
+  # parse the input argument
+  cmake_parse_arguments(RPLFLGS "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
+
+  # Determine default values if none specified
+  if ( NOT RPLFLGS_RMVFLG )
+    if ( WIN32 )
+      if  ( BUILD_WITH_SHARED_RUNTIME OR BUILD_SHARED_LIBS )
+        set(RPLFLGS_RMVFLG "/MT")
+      else ()
+        set(RPLFLGS_RMVFLG "/MD")
+      endif () 
+    endif ()
+  endif ()
+  if ( NOT RPLFLGS_ADDFLG )
+    if ( WIN32 )
+      if  ( BUILD_WITH_SHARED_RUNTIME OR BUILD_SHARED_LIBS )
+        set(RPLFLGS_ADDFLG "/MD")
+      else ()
+        set(RPLFLGS_ADDFLG " ")
+      endif ()
+    endif ()
+  endif ()
+
+  if (NOT (RPLFLGS_RMVFLG EQUAL RPLFLGS_ADDFLG))  
+    # Assemble the variable name and copy the associated value
+    set(thisvar "CMAKE_${CMPTYPE}_FLAGS_${BLDTYPE}")
+    set(thisval "${${thisvar}}")
+    # check if the remove flag is in the current variable
+    string(FIND "${thisval}" "${RPLFLGS_RMVFLG}" md_found)
+    if (md_found EQUAL -1) # if not just append the desired one
+      set(thisval "${thisval} ${RPLFLGS_ADDFLG}")
+    else () # otherwise replace the unwantedflag with the wanted flag
+      string(REPLACE "${RPLFLGS_RMVFLG}" "${RPLFLGS_ADDFLG}" thisval "${thisval}")
+      # removed any dagling d that might have been left behind by for example
+      # replacing "/MD" with " " when it was actually "/MDd" leaves behind " d"
+      string(REPLACE " d" " " thisval "${thisval}")
+    endif ()
+    # append /bigobj to the current compiler arguments
+    set(thisval "${thisval} /bigobj")
+    # force the compiler argument to be recached
+    set(${thisvar} "${thisval}" CACHE STRING "Flags used by the ${CMPTYPE} compiler during ${BLDTYPE} builds" FORCE)
+  endif ()
+  
+endmacro()

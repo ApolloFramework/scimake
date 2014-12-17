@@ -122,11 +122,6 @@ if (SEARCH_FOR_MPI)
   find_package(MPI ${mpireq})
 endif ()
 
-# Either gives MPI
-if (MPI_FOUND OR SCIMPI_FOUND)
-  set(HAVE_MPI 1)
-endif ()
-
 # If know more than compiler wrappers, pull out standard values
 set(MPI_IS_OPEN_MPI FALSE)
 if (MPI_FOUND)
@@ -226,6 +221,11 @@ if (MPI_FOUND)
 # Pass up the found variable.  This is all caps.
   set(SCIMPI_FOUND TRUE)
 
+endif ()
+
+# Either gives MPI
+if (MPI_FOUND OR SCIMPI_FOUND)
+  set(HAVE_MPI 1 CACHE BOOL "Whether MPI was found" FORCE)
 endif ()
 
 if (NOT SCIMPI_FOUND)
