@@ -1,11 +1,11 @@
-# - FindSciGraphviz: Module to find cppcheck
+# - FindSciGraphviz: Module to find dot
 #
 # Module usage:
 #   find_package(SciGraphviz ...)
 #
 # This module will define the following variables:
 #  GRAPHVIZ_FOUND         = Whether Graphviz was found
-#  Graphviz_cppcheck    = Path to cppcheck executable
+#  Graphviz_dot    = Path to dot executable
 
 ######################################################################
 #
@@ -20,17 +20,17 @@
 ######################################################################
 
 message("")
-message("--------- FindSciGraphviz looking for cppcheck ---------")
+message("--------- FindSciGraphviz looking for dot ---------")
 
 SciFindPackage(PACKAGE Graphviz
   PROGRAMS "dot"
 )
 
 if (GRAPHVIZ_FOUND)
-  message(STATUS "Graphviz_cppcheck found.")
-  message(STATUS "Graphviz_cppcheck = ${Graphviz_cppcheck}")
+  message(STATUS "Graphviz_dot found.")
+  message(STATUS "Graphviz_dot = ${Graphviz_dot}")
 else ()
-  message(STATUS "Graphviz_cppcheck not found. API documentation cannot be built.")
+  message(STATUS "Graphviz_dot not found. API documentation cannot be built.")
   set(ENABLE_DEVELDOCS FALSE)
 endif ()
 
