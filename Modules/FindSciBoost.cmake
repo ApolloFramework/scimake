@@ -77,7 +77,7 @@ endif ()
 
 SciFindPackage(PACKAGE "Boost"
   INSTALL_DIRS ${instdirs}
-  HEADERS "boost/thread.hpp"
+  HEADERS boost/thread.hpp OPTIONAL boost/align/aligned_allocator.hpp
   LIBRARIES "${SciBoost_LIBRARY_LIST}"
 )
 unset(SciBoost_LIBRARY_LIST CACHE)
