@@ -202,6 +202,7 @@ endif ()
 #endif ()
 
 # Check flags
+message(STATUS "C++ compiler options:")
 foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
   SciPrintVar(CMAKE_CXX_FLAGS_${bld})
 endforeach ()
