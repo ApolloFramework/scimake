@@ -42,10 +42,20 @@ if ("${Mkl_ROOT_DIR}" STREQUAL "")
 endif()
 
 ###
+##  By default, just use the blas and lapack, but some may want
+##  to use scalapack and pardiso as well
+#
+IF(ENABLE_MKL_SCALAPACK)
+  set(MKL_SEARCH_LIBS "mkl_scalapack_lp64;mkl_intel_lp64;mkl_core;mkl_intel_thread;mkl_blacs_intelmpi_lp64")
+else()
+  set(MKL_SEARCH_LIBS "mkl_intel_lp64;mkl_intel_thread;mkl_core")
+endif()
+
+###
 ##  Now start the searching
 #
 SciFindPackage(PACKAGE "Mkl"
-              LIBRARIES "mkl_intel_lp64;mkl_intel_thread;mkl_core"
+              LIBRARIES ${MKL_SEARCH_LIBS}
               INCLUDE_SUBDIRS "include"
               LIBRARY_SUBDIRS "lib/intel64"
               )
