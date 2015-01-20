@@ -68,4 +68,9 @@ endif ()
 #  Set iomp_dir
 get_filename_component(Iomp5_ROOT_DIR ${Mkl_ROOT_DIR}/../compiler/lib/intel64 REALPATH)
 
-SciFindPackage(PACKAGE "Iomp5" LIBRARIES "iomp5")
+# Not quite sure about this -- this comes from Rood
+if (WIN32)
+  SciFindPackage(PACKAGE "Iomp5" LIBRARIES "iomp5md")
+else()
+  SciFindPackage(PACKAGE "Iomp5" LIBRARIES "iomp5")
+endif()
