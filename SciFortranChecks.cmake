@@ -35,16 +35,8 @@ elseif ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL GNU)
 elseif ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL Intel)
   string(REGEX REPLACE "\\.[0-9]+.*$" "" Fortran_MAJOR_VERSION ${Fortran_VERSION})
   set(Fortran_COMP_LIB_SUBDIR icpc${Fortran_MAJOR_VERSION})
-  if (WIN32)
-# add openMP library, another possibility is libiomp5mt on Windows (Pletzer)
-    set(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES} libiomp5md)
-    # This was causing undefined references on windows (Pletzer)
-    #set(CMAKE_EXE_LINKER_FLAGS
-    #  "${CMAKE_EXE_LINKER_FLAGS} -NODEFAULTLIB:MSVCRT")
-  else ()
-# unix
-    set(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES} iomp5)
-  endif ()
+  # CMake sets it to i_dynamic by default but that's debateable
+  set(CMAKE_SHARED_LIBRARY_LINK_Fortran_FLAGS "")
   set(FC_DOUBLE_FLAGS "-autodouble")
 elseif ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL PathScale)
   string(SUBSTRING ${Fortran_VERSION} 0 1 Fortran_MAJOR_VERSION)
