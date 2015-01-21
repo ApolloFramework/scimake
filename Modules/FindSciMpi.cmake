@@ -128,10 +128,10 @@ if (MPI_FOUND)
   # Fix up problems with the stock find_package(MPI)
   if(NOT MPI_INCLUDE_DIRS OR NOT MPI_LIBRARIES OR NOT MPIEXEC)
     if (${CMAKE_C_COMPILER_ID} MATCHES "Intel")
-        execute_process(
-          COMMAND ${CMAKE_C_COMPILER} -show
-          OUTPUT_VARIABLE mpiiccOutput
-        )
+      execute_process(
+        COMMAND ${CMAKE_C_COMPILER} -show
+        OUTPUT_VARIABLE mpiiccOutput
+      )
       string(REPLACE " " ";" mpiiccOutputList "${mpiiccOutput}")
       foreach(arg ${mpiiccOutputList})
         if (${arg} MATCHES "^-I")
@@ -144,9 +144,25 @@ if (MPI_FOUND)
           string(REGEX REPLACE "^-l" "" lib ${arg})
           list(APPEND MPI_LIBRARIES ${lib})
         endif()
-        set(MPI_LIBRARY ${MPI_LIBRARIES})
+      endforeach()
+      # Try to find both static and dynamic
+      set(MPI_DYLIBS)
+      if (WIN32)
+        set(libsuffix "lib")
+      else()
+        set(libsuffix "a")
+      endif()
+      foreach(flib ${MPI_LIBRARIES})
+        set(libfile "lib${flib}.${libsuffix}")
+        find_file(libst ${libfile}  
+          PATHS ${MPI_LIBRARY_DIRS} NO_DEFAULT_PATH)
+        find_library(libdyn ${flib} lib${flib} 
+          PATHS ${MPI_LIBRARY_DIRS} NO_DEFAULT_PATH)
+        list(APPEND MPI_DYLIBS ${libdyn})
+        list(APPEND MPI_STLIBS ${libst})
       endforeach()
     endif()
+    set(MPI_LIBRARY ${MPI_DYLIBS})
   endif()
 
 # Fix the variables
