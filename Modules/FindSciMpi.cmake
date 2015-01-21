@@ -125,6 +125,29 @@ endif ()
 # If know more than compiler wrappers, pull out standard values
 set(MPI_IS_OPEN_MPI FALSE)
 if (MPI_FOUND)
+  # Fix up problems with the stock find_package(MPI)
+  if(NOT MPI_INCLUDE_DIRS OR NOT MPI_LIBRARIES OR NOT MPIEXEC)
+    if (${CMAKE_C_COMPILER_ID} MATCHES "Intel")
+        execute_process(
+          COMMAND ${CMAKE_C_COMPILER} -show
+          OUTPUT_VARIABLE mpiiccOutput
+        )
+      string(REPLACE " " ";" mpiiccOutputList "${mpiiccOutput}")
+      foreach(arg ${mpiiccOutputList})
+        if (${arg} MATCHES "^-I")
+          string(REGEX REPLACE "^-I" "" idir ${arg})
+          list(APPEND MPI_INCLUDE_DIRS ${idir})
+        elseif (${arg} MATCHES "^-L")
+          string(REGEX REPLACE "^-L" "" ldir ${arg})
+          list(APPEND MPI_LIBRARY_DIRS ${ldir})
+        elseif (${arg} MATCHES "^-l")
+          string(REGEX REPLACE "^-l" "" lib ${arg})
+          list(APPEND MPI_LIBRARIES ${lib})
+        endif()
+        set(MPI_LIBRARY ${MPI_LIBRARIES})
+      endforeach()
+    endif()
+  endif()
 
 # Fix the variables
   set(MPI_INCLUDE_DIRS ${MPI_INCLUDE_PATH})
