@@ -116,6 +116,7 @@ else ()
   set(desiredlibs)
   foreach (nm hdf5_tools hdf5_toolsdll hdf5_hl_fortran hdf5_hl_f90cstub
     hdf5_fortran hdf5_f90cstub hdf5_hl hdf5_hldll hdf5 hdf5dll
+    hdf5_debug
   )
     list(FIND hlnms ${nm} indx)
     if (NOT(${indx} EQUAL -1))
