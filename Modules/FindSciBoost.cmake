@@ -89,6 +89,10 @@ if (Boost_DLLS)
   set(Boost_DEFINITIONS -DBOOST_ALL_DYN_LINK)
 endif ()
 
+if (BUILD_SHARED_LIBS)
+  set(Boost_DEFINITIONS "${Boost_DEFINITIONS} -DBOOST_TEST_DYN_LINK")
+endif()
+
 # Disable auto-linking needed only at build time
 set(Boost_DEFINITIONS ${Boost_DEFINITIONS})
 message(STATUS "Boost_DEFINITIONS = ${Boost_DEFINITIONS}.")
