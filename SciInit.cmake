@@ -23,6 +23,7 @@ if (NOT DEFINED SCIMAKE_DIR)
 endif ()
 include(${SCIMAKE_DIR}/SciFuncsMacros.cmake)
 include(${SCIMAKE_DIR}/SciGetDepsFromInstall.cmake)
+include(GenerateExportHeader)
 
 #####################################################################
 #
