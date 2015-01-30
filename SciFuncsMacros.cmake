@@ -165,7 +165,11 @@ macro(SciRplCompilerFlags CMPTYPE BLDTYPE)
       string(REPLACE " d" " " thisval "${thisval}")
     endif ()
 # append /bigobj to the current compiler arguments
-    set(thisval "${thisval} /bigobj")
+# ...but only if it's not already there
+    string(FIND "${thisval}" "/bigobj" bigobj_found)
+    if (bigobj_found EQUAL -1)
+      set(thisval "${thisval} /bigobj")
+    endif()
 # force the compiler argument to be recached
     set(${thisvar} "${thisval}" CACHE STRING "Flags used by the ${CMPTYPE} compiler during ${BLDTYPE} builds" FORCE)
   endif ()
