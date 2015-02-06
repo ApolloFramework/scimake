@@ -1,6 +1,11 @@
 # - FindSciMkl: Module to find include directories and
 #   libraries for Mkl.
 #
+# $Id$
+#
+# Copyright 2010-2014, Tech-X Corporation, Boulder, CO.
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
+#
 # Module usage:
 #   find_package(SciMkl ...)
 #
@@ -11,16 +16,6 @@
 #  Mkl_LIBRARIES    = Required libraries
 #  Mkl_STLIB        = Static libraries
 #  Iomp5_LIBRARIES  = Openmp intel libraries
-
-######################################################################
-#
-# FindSciMkl: find includes and libraries for txbase
-#
-# $Id$
-#
-# Copyright 2010-2014, Tech-X Corporation, Boulder, CO.
-# See LICENSE file (EclipseLicense.txt) for conditions of use.
-#
 #
 ######################################################################
 ###
