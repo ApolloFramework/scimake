@@ -80,7 +80,7 @@ get_filename_component(Iomp5_ROOT_DIR ${Mkl_ROOT_DIR}/../compiler/lib/intel64 RE
 
 # Not quite sure about this -- this comes from Rood
 if (WIN32)
-  SciFindPackage(PACKAGE "Iomp5" LIBRARIES "iomp5md")
+  SciFindPackage(PACKAGE "Iomp5" LIBRARIES "libiomp5md")
 else()
   SciFindPackage(PACKAGE "Iomp5" LIBRARIES "iomp5")
 endif()
