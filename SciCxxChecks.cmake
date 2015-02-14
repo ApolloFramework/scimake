@@ -187,7 +187,7 @@ set(CMAKE_CXX_FLAGS_FULL "${CMAKE_C_FLAGS_FULL}")
 
 # Remove /MD etc for static builds on Windows
 if (WIN32 AND NOT MINGW)
-  foreach(bldtype FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
+  foreach (bldtype FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
     SciRplCompilerFlags(CXX ${bldtype})
   endforeach ()
 endif ()

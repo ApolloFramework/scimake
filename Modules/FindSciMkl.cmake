@@ -24,8 +24,8 @@
 if ("${Mkl_ROOT_DIR}" STREQUAL "")
   if (NOT "$ENV{MKLROOT}" STREQUAL "")
      set(Mkl_ROOT_DIR "$ENV{MKLROOT}")
-  endif()
-endif()
+  endif ()
+endif ()
 
 # Try hard-code directory if not specified already
 if ("${Mkl_ROOT_DIR}" STREQUAL "")
@@ -34,17 +34,17 @@ if ("${Mkl_ROOT_DIR}" STREQUAL "")
   else (WIN32)
     set(Mkl_ROOT_DIR "/usr/local/intel/mkl")
   endif (WIN32)
-endif()
+endif ()
 
 ###
 ##  By default, just use the blas and lapack, but some may want
 ##  to use scalapack and pardiso as well
 #
-IF(ENABLE_MKL_SCALAPACK)
+if (ENABLE_MKL_SCALAPACK)
   set(MKL_SEARCH_LIBS "mkl_scalapack_lp64;mkl_intel_lp64;mkl_core;mkl_intel_thread;mkl_blacs_intelmpi_lp64")
-else()
+else ()
   set(MKL_SEARCH_LIBS "mkl_intel_lp64;mkl_intel_thread;mkl_core")
-endif()
+endif ()
 
 ###
 ##  Now start the searching
@@ -67,7 +67,7 @@ if (MKL_FOUND)
 endif ()
 
 ###
-##  IOMP5 is sometimes needed to get link to work.  
+##  IOMP5 is sometimes needed to get link to work.
 ##  Go ahead and find it to be available.
 #
 #  Set iomp_dir
@@ -76,6 +76,6 @@ get_filename_component(Iomp5_ROOT_DIR ${Mkl_ROOT_DIR}/../compiler/lib/intel64 RE
 # Not quite sure about this -- this comes from Rood
 if (WIN32)
   SciFindPackage(PACKAGE "Iomp5" LIBRARIES "libiomp5md")
-else()
+else ()
   SciFindPackage(PACKAGE "Iomp5" LIBRARIES "iomp5")
-endif()
+endif ()

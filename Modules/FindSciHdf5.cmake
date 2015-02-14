@@ -180,7 +180,7 @@ if (HDF5_FOUND)
 # Must be done in the CMakeLists.txt where the executable is being linked.
   if (LINUX)
     # set(Hdf5_LIBRARIES ${Hdf5_LIBRARIES} dl)
-  endif()
+  endif ()
 else ()
   message(STATUS "Did not find Hdf5.  Use -DHdf5_ROOT_DIR to specify the installation directory.")
   if (SciHdf5_FIND_REQUIRED)

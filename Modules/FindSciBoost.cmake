@@ -91,7 +91,7 @@ endif ()
 
 if (BUILD_SHARED_LIBS)
   set(Boost_DEFINITIONS ${Boost_DEFINITIONS} -DBOOST_TEST_DYN_LINK)
-endif()
+endif ()
 
 # Disable auto-linking needed only at build time
 set(Boost_DEFINITIONS ${Boost_DEFINITIONS})

@@ -169,7 +169,7 @@ macro(SciRplCompilerFlags CMPTYPE BLDTYPE)
     string(FIND "${thisval}" "/bigobj" bigobj_found)
     if (bigobj_found EQUAL -1)
       set(thisval "${thisval} /bigobj")
-    endif()
+    endif ()
 # force the compiler argument to be recached
     set(${thisvar} "${thisval}" CACHE STRING "Flags used by the ${CMPTYPE} compiler during ${BLDTYPE} builds" FORCE)
   endif ()

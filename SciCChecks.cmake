@@ -197,7 +197,7 @@ SciPrintVar(OPENMP_FLAGS)
 
 # Remove /MD etc for static builds on Windows, Add /bigobj.
 if (WIN32 AND NOT MINGW)
-  foreach(bldtype FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
+  foreach (bldtype FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
     SciRplCompilerFlags(C ${bldtype})
   endforeach ()
 endif ()
