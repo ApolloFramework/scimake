@@ -43,6 +43,10 @@ else ()
   # SciGetInstSubdirs(openssl instdirs)
   set(instdirs openssl openssl-sersh)
   set(ssl_libs ssl crypto)
+  if (LINUX)
+# gssapi_krb5 required for libssh-0.6.4
+    set(ssl_libs ${ssl_libs} gssapi_krb5)
+  endif ()
 endif ()
 
 SciFindPackage(PACKAGE "OpenSsl"
