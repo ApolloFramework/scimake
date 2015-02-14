@@ -14,7 +14,7 @@
 #include <iostream>
 #include <string>
 
-template<class T>
+template <class T>
 class shared_ptr {
   public:
     shared_ptr(T* t) : ptr(t) {
@@ -37,13 +37,13 @@ struct Derived2 : public Base2 {
   }
 };
 
-template<class T>
+template <class T>
 struct Base {
   virtual void foo() {
   }
 };
 
-template<class T>
+template <class T>
 struct Derived : public Base<T> {
   void foo() {
   }
@@ -64,14 +64,14 @@ class Foo2 {
     }
 };
 
-template<class T>
+template <class T>
 bool testTemplate() {
   shared_ptr<Base<double> > b(new T());
   Foo f;
   return f.checkType(b);
 }
 
-template<class T>
+template <class T>
 bool testNonTemplate() {
   shared_ptr<Base2> b(new T());
   Foo2 f;
@@ -94,3 +94,4 @@ int main() {
 
   return !flag;
 }
+
