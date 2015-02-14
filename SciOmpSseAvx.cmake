@@ -303,11 +303,22 @@ if (USE_OPENMP)
     endif ()
   endif ()
   if (HAVE_OPENMP)
+    message(STATUS "OPENMP_FLAGS = ${OPENMP_FLAGS}.")
+# To test for openmp4, need to add openmp flags for compilation
+    set(CMAKE_CXX_FLAGS_SAV "${CMAKE_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPENMP_FLAGS}")
     try_compile(HAVE_PRAGMA_OMP_SIMD ${PROJECT_BINARY_DIR}/scimake
-                ${SCIMAKE_DIR}/trycompile/pragma_omp_simd.cxx)
+      ${SCIMAKE_DIR}/trycompile/pragma_omp_simd.cxx
+      # OUTPUT_VARIABLE BUILD_OUT
+    )
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_SAV}")
+    # message(STATUS "Build result = \n ${BUILD_OUT}")
     if(HAVE_PRAGMA_OMP_SIMD)
       message(STATUS "OpenMP 4 pragma omp simd available")
+    else ()
+      message(STATUS "OpenMP 4 pragma omp simd NOT available")
     endif()
+    exit()
     foreach (cmp C CXX)
       foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
         set(CMAKE_${cmp}_FLAGS_${bld} "${CMAKE_${cmp}_FLAGS_${bld}} ${OPENMP_FLAGS}")
