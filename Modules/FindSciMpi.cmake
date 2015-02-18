@@ -3,7 +3,7 @@
 # looks for MPI using the standard CMake module, unless the compilers
 # have the Cray names, in which case we know that this will fail.
 #
-# The following varialbes are set:
+# The following variables are set:
 #
 # SCI_HAVE_MPICXX_COMPILER_WRAPPER: TRUE if the C++ compiler automatically
 #   includes and links to MPI.  If this is named 'CC', then no further MPI
