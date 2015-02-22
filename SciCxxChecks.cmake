@@ -139,9 +139,9 @@ else ()
   endif ()
 endif ()
 
-include(CheckCXXSourceCompiles)
-
 # Check for iterator being same as pointer
+set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_CXX_FLAGS}")
 check_cxx_source_compiles(
 "
 #include <vector>
@@ -162,7 +162,6 @@ else ()
   set(VECTOR_ITERATOR_IS_NOT_POINTER 1 CACHE BOOL "Whether std::vector<int>::iterator is the same as int*")
 endif ()
 
-set(HAVE_TEMPLATE_ALIAS 0 CACHE BOOL "Whether template alias with using works")
 # Check for template alias exists
 check_cxx_source_compiles(
 "
@@ -181,8 +180,8 @@ else ()
     message(STATUS "Template alias with using does not work.")
   endif ()
 endif ()
+set(HAVE_TEMPLATE_ALIAS ${HAVE_TEMPLATE_ALIAS} CACHE BOOL "Whether template alias with using works")
 
-set(HAVE_CXX11_THREAD 0 CACHE BOOL "Whether template alias with using works")
 # Check for C++11 threads
 check_cxx_source_compiles(
 "
@@ -200,6 +199,9 @@ else ()
     message(STATUS "C++11 threads not present.")
   endif ()
 endif ()
+set(HAVE_CXX11_THREAD ${HAVE_CXX11_THREAD} CACHE BOOL "Whether have C++11 threads")
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS_SAV}")
+exit ()
 
 # Add in full flags
 set(CMAKE_CXX_FLAGS_FULL "${CMAKE_C_FLAGS_FULL}")
