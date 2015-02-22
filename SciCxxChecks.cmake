@@ -109,8 +109,8 @@ else ()
   if (DEBUG_CMAKE)
     message("${SCIMAKE_DIR}/trycompile/stdabsdbl.cxx did not compile.")
   endif ()
-  set(NOT_HAVE_STD_ABS_DOUBLE 1 CACHE BOOL "Define when the C++ compiler does not understand std::abs with double arg")
 endif ()
+set(NOT_HAVE_STD_ABS_DOUBLE ${NOT_HAVE_STD_ABS_DOUBLE} CACHE BOOL "Define when the C++ compiler does not understand std::abs with double arg")
 
 # See whether compiler RTTI typeid is working properly
 try_run(RTTI_RUN_RESULT RTTI_COMPILES ${PROJECT_BINARY_DIR}/scimake
@@ -140,8 +140,6 @@ else ()
 endif ()
 
 # Check for iterator being same as pointer
-set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
-set(CMAKE_REQUIRED_FLAGS "${CMAKE_CXX_FLAGS}")
 check_cxx_source_compiles(
 "
 #include <vector>
@@ -159,8 +157,8 @@ else ()
   if (DEBUG_CMAKE)
     message(STATUS "std::vector<int>::iterator and int* are the same.")
   endif ()
-  set(VECTOR_ITERATOR_IS_NOT_POINTER 1 CACHE BOOL "Whether std::vector<int>::iterator is the same as int*")
 endif ()
+set(VECTOR_ITERATOR_IS_NOT_POINTER ${VECTOR_ITERATOR_IS_NOT_POINTER} CACHE BOOL "Whether std::vector<int>::iterator is the same as int*")
 
 # Check for template alias exists
 check_cxx_source_compiles(
@@ -200,8 +198,6 @@ else ()
   endif ()
 endif ()
 set(HAVE_CXX11_THREAD ${HAVE_CXX11_THREAD} CACHE BOOL "Whether have C++11 threads")
-set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS_SAV}")
-exit ()
 
 # Add in full flags
 set(CMAKE_CXX_FLAGS_FULL "${CMAKE_C_FLAGS_FULL}")
