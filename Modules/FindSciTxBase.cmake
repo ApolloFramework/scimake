@@ -37,16 +37,6 @@ else ()
 endif ()
 
 SciGetInstSubdirs(txbase instdirs)
-if (FALSE)
-# SERMD is as static as possible consistent with shared libraries
-if (USE_TXBASE_SERMD)
-  if (WIN32)
-    set(instdirargs INSTALL_DIRS txbase-sermd)
-  else ()
-    set(instdirargs INSTALL_DIRS txbase)
-  endif ()
-endif ()
-endif ()
 
 SciFindPackage(PACKAGE "TxBase"
   INSTALL_DIRS ${instdirs}

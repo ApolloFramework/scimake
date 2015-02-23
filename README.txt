@@ -20,7 +20,7 @@ To commit changes:
 SHARED FLAGS
 
 We are currently (20131201) using the following Booleans:
-USE_PYCSH_LIBS
+USE_PYC_LIBS
 USE_SHARED_LIBS
 BUILD_SHARED_LIBS
 ENABLE_SHARED
@@ -29,7 +29,7 @@ BUILD_WITH_PYCSH_RUNTIME
 along with package specific booleans.
 The above are overlapping and it is not clear what they mean. To regularize:
 
-0) Keep USE_PYCSH_LIBS and USE_SHARED_LIBS.  These define what one
+0) Keep USE_PYC_LIBS and USE_SHARED_LIBS.  These define what one
    links with.
 
 1) Remove ENABLE_SHARED.  This is a holdover from autotools.  The
@@ -40,7 +40,7 @@ The above are overlapping and it is not clear what they mean. To regularize:
    BUILD_WITH_SHARED_RUNTIME, which means to add the /MD flags on Windows.
 
 So now only the following variables should be used:
-USE_PYCSH_LIBS: Look for installations in order: pycsh, sersh,
+USE_PYC_LIBS: Look for installations in order: pycsh, pycst, sersh,
   sermd (on Windows), ser
 USE_SHARED_LIBS: Look for installations in order: sersh, sermd (on Windows),
   ser
@@ -50,7 +50,7 @@ BUILD_SHARED_LIBS: CMake var meaning default libs to produce are shared. If
 BUILD_WITH_SHARED_RUNTIME: Add /MD to compiler flags on Windows
 
 The logic is implemented in the SciGetInstSubdirs function in
-SciFindPackage.cmake.  The USE_PYCSH_LIBS variable and other booleans
+SciFindPackage.cmake.  The USE_PYC_LIBS variable and other booleans
 must be set on the cmake command line, with
-e.g. -DUSE_PYCSH_LIBS:BOOL=TRUE.  When using Bilder this flag should
+e.g. -DUSE_PYC_LIBS:BOOL=TRUE.  When using Bilder this flag should
 be set via a bilder script.

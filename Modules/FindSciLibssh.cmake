@@ -31,7 +31,7 @@
 
 set(CMAKE_FIND_LIBRARY_SUFFIXES_SAV ${CMAKE_FIND_LIBRARY_SUFFIXES})
 set(libsubdirs lib)
-if (USE_PYCSH_LIBS)
+if (USE_PYC_LIBS)
 # Shared libs in ser for libssh
   set(instdirs libssh-pycsh libssh)
 else ()
