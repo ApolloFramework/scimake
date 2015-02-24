@@ -84,19 +84,29 @@ unset(SciBoost_LIBRARY_LIST CACHE)
 if (DEBUG_CMAKE)
   message(STATUS "Boost_DLLS = ${Boost_DLLS}.")
 endif ()
+
+# Determine whether Boost libs are shared
+set(Boost_LIBS_ARE_SHARED FALSE)
 if (Boost_DLLS)
-  message(STATUS "Correcting Boost DLL definition")
+  set(Boost_LIBS_ARE_SHARED TRUE)
+else ()
+  list(GET Boost_LIBRARIES 0 blib0)
+  message(STATUS "blib0 = ${blib0}.")
+  if ( (blib0 MATCHES "\\.dylib$") OR (blib0 MATCHES "\\.so$") OR (blib0 MATCHES "\\.so\\.") )
+    set(Boost_LIBS_ARE_SHARED TRUE)
+  endif ()
+endif ()
+message(STATUS "Boost_LIBS_ARE_SHARED = ${Boost_LIBS_ARE_SHARED}.")
+
+# If Boost libs are shared, one must have different defines
+# http://boost.2283326.n4.nabble.com/Undefined-reference-to-main-with-Boost-Test-Why-td2576147.html
+if (Boost_LIBS_ARE_SHARED)
+  message(STATUS "Correcting Boost shared library definitions")
   set(Boost_DEFINITIONS -DBOOST_ALL_DYN_LINK)
 endif ()
-
-if (BUILD_SHARED_LIBS)
-  set(Boost_DEFINITIONS ${Boost_DEFINITIONS} -DBOOST_TEST_DYN_LINK)
-endif ()
-
-# Disable auto-linking needed only at build time
-set(Boost_DEFINITIONS ${Boost_DEFINITIONS})
 message(STATUS "Boost_DEFINITIONS = ${Boost_DEFINITIONS}.")
 
+# Final check
 if (BOOST_FOUND AND NOT Boost_INCLUDE_DIRS)
   set(BOOST_FOUND FALSE)
   message(STATUS "Reversing Boost found as Boost_INCLUDE_DIRS is empty.")
