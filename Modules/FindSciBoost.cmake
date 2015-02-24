@@ -102,7 +102,12 @@ message(STATUS "Boost_LIBS_ARE_SHARED = ${Boost_LIBS_ARE_SHARED}.")
 # http://boost.2283326.n4.nabble.com/Undefined-reference-to-main-with-Boost-Test-Why-td2576147.html
 if (Boost_LIBS_ARE_SHARED)
   message(STATUS "Correcting Boost shared library definitions")
-  set(Boost_DEFINITIONS -DBOOST_ALL_DYN_LINK)
+  if (WIN32)
+    # set(Boost_DEFINITIONS ${Boost_DEFINITIONS} -DBOOST_TEST_DYN_LINK)
+  else ()
+# This not working on Windows
+    set(Boost_DEFINITIONS -DBOOST_ALL_DYN_LINK)
+  endif ()
 endif ()
 message(STATUS "Boost_DEFINITIONS = ${Boost_DEFINITIONS}.")
 

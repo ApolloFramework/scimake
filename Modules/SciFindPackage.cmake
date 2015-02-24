@@ -409,10 +409,11 @@ endfunction()
 #  pluralsfx: plural version of the file type
 #  allfoundvar: whether all files were found
 #  allowdups: whether duplicates are allowed in list
+#  rootpathvar: the variable in which the rootpath is stored
 #
 function(SciFindPkgFiles pkgname pkgfiles
   rootpath filesubdirs
-  singularsfx pluralsfx allfoundvar)
+  singularsfx pluralsfx allfoundvar rootpathvar)
 
   if (DEBUG_CMAKE)
     message(STATUS "Looking for files of type, ${singularsfx} under ${rootpath} with filesubdirs = ${filesubdirs}.")
@@ -550,6 +551,7 @@ function(SciFindPkgFiles pkgname pkgfiles
     endif ()
     list(REMOVE_DUPLICATES pkgdirs)
   endif ()
+  list(LENGTH pkgdirs lenpkgdirs)
 
 # For libraries, get names
   if (${singularsfx} STREQUAL LIBRARY)
@@ -699,10 +701,11 @@ macro(SciFindPackage)
   endif ()
 
 # Find the set of possible root installation dirs
-  SciGetRootPath(${scipkgreg} "${scipkginst}" scipath)
+  SciGetRootPath(${scipkgreg} "${scipkginst}" origscipath)
   if (DEBUG_CMAKE)
     message(STATUS "scipath = ${scipath}")
   endif ()
+  set(scipath "${origscipath}")
 
 #######################################################################
 #
@@ -858,11 +861,26 @@ macro(SciFindPackage)
         )
 # Okay not to find dlls
         if (NOT ${scipkgreg}_${scitypeplural}_FOUND)
-          message(WARNING "${scipkgreg}_${scitypeplural}_FOUND = ${${scipkgreg}_${scitypeplural}_FOUND}.")
+          if (NOT ${scitype} STREQUAL DLL)
+            message(WARNING "${scipkgreg}_${scitypeplural}_FOUND = ${${scipkgreg}_${scitypeplural}_FOUND}.")
+          endif ()
           if (NOT ${srchoptional})
             set(${scipkguc}_FOUND FALSE)
           endif ()
         endif ()
+      endif ()
+
+# At the end of the LIBRARY include, find the rootdir, and use it
+# for further searches
+      if ((${scitype} STREQUAL LIBRARY) AND ${scipkgreg}_INCLUDE_DIRS)
+        list(GET ${scipkgreg}_INCLUDE_DIRS 0 rootdir)
+        get_filename_component(rootdir "${rootdir}" DIRECTORY)
+# We should require rootdir to be a part of all library dirs, removing
+# subdirs until this happens.
+        foreach (libdir ${${scipkgreg}_LIBRARY_DIRS})
+        endforeach ()
+        set(scipath ${rootdir})
+        message(STATUS "scipath = ${scipath}.")
       endif ()
 
     endforeach ()
