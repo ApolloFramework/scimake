@@ -242,7 +242,8 @@ endfunction()
 #  pkgnamelc: the variable holding the package name in lower case
 #  instdirsvar: the variable holding possible installation directories
 #
-function(SciGetInstSubdirs pkgnamelc instdirsvar)
+function(SciGetInstSubdirs pkgname instdirsvar)
+  string(TOLOWER ${pkgname} pkgnamelc)
   if (DEBUG_CMAKE)
     message(STATUS "SciGetInstSubdirs called with pkgname = ${pkgname} and instdirsvar = ${instdirsvar}.")
     message(STATUS "${pkgname}_ROOT_DIR = ${${pkgname}_ROOT_DIR}.")
