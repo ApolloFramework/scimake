@@ -25,6 +25,10 @@
 
 set(moabfindlibs dagmc iMesh MOAB)
 
+set(USE_PYC_LIBS TRUE)
+if (NOT DEFINED USE_SHARED_LIBS)
+  set(USE_SHARED_LIBS TRUE)
+endif ()
 SciGetInstSubdirs(moab instdirs)
 
 SciFindPackage(PACKAGE "Moab"
