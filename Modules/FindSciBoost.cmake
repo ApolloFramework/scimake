@@ -33,23 +33,12 @@
 ######################################################################
 
 # Default: libraries have boost_ prepended.
-# set(BOOST_LIB_PREFIX boost_)
-# if (USE_PYC_LIBS)
-# Shared windows boost has libboost_ prepended to the name
-  # set(BOOST_LIB_PREFIX boost_)
-if (USE_SHARED_LIBS OR BUILD_SHARED_LIBS OR ENABLE_SHARED)
-  # set(instdirs boost-sersh)
-  set(BOOST_LIB_PREFIX boost_)
-# elseif (BUILD_WITH_SHARED_RUNTIME)
-  # if (WIN32)
-    # set(BOOST_LIB_PREFIX libboost_)
-  # endif ()
-else ()
-# Static cases Windows has libboost_ prepended to the name
-  if (WIN32)
-    set(BOOST_LIB_PREFIX libboost_)
-  endif ()
+set(BOOST_LIB_PREFIX boost_)
+# But Windows static have libboost_ prepended.
+if (WIN32 AND NOT(USE_SHARED_LIBS OR BUILD_SHARED_LIBS OR ENABLE_SHARED))
+  set(BOOST_LIB_PREFIX libboost_)
 endif ()
+message(STATUS "BOOST_LIB_PREFIX = ${BOOST_LIB_PREFIX}.")
 
 # Set boost libraries to find
 if (DEBUG_CMAKE)
@@ -65,7 +54,7 @@ if (DEBUG_CMAKE)
 endif ()
 
 SciGetInstSubdirs(Boost instdirs)
-message(STATUS "instdirs = ${instdirs}.")
+message(STATUS "Boost instdirs = ${instdirs}.")
 SciFindPackage(PACKAGE "Boost"
   INSTALL_DIRS ${instdirs}
   HEADERS boost/thread.hpp OPTIONAL boost/align/aligned_allocator.hpp
