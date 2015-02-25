@@ -157,7 +157,10 @@ macro(SciRplCompilerFlags CMPTYPE BLDTYPE)
 # check if the remove flag is in the current variable
     string(FIND "${thisval}" "${RPLFLGS_RMVFLG}" md_found)
     if (md_found EQUAL -1) # if not just append the desired one
-      set(thisval "${thisval} ${RPLFLGS_ADDFLG}")
+      string(FIND "${thisval}" "${RPLFLGS_ADDFLG}" des_found)
+      if (des_found EQUAL -1) # only add desired one if not there
+        set(thisval "${thisval} ${RPLFLGS_ADDFLG}")
+      endif()
     else () # otherwise replace the unwantedflag with the wanted flag
       string(REPLACE "${RPLFLGS_RMVFLG}" "${RPLFLGS_ADDFLG}" thisval "${thisval}")
 # removed any dangling d that might have been left behind by for example
