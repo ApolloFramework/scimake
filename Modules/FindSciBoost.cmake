@@ -33,32 +33,23 @@
 ######################################################################
 
 # Default: libraries have boost_ prepended.
-set(BOOST_LIB_PREFIX boost_)
-if (USE_PYC_LIBS)
-  # set(instdirs boost-pycsh boost-sersh)
+# set(BOOST_LIB_PREFIX boost_)
+# if (USE_PYC_LIBS)
 # Shared windows boost has libboost_ prepended to the name
-  set(BOOST_LIB_PREFIX boost_)
-elseif (USE_SHARED_LIBS OR BUILD_SHARED_LIBS OR ENABLE_SHARED)
+  # set(BOOST_LIB_PREFIX boost_)
+if (USE_SHARED_LIBS OR BUILD_SHARED_LIBS OR ENABLE_SHARED)
   # set(instdirs boost-sersh)
   set(BOOST_LIB_PREFIX boost_)
-elseif (BUILD_WITH_SHARED_RUNTIME)
-  # message(STATUS "Setting boost up for shared runtime linking")
-  # set(instdirs boost-pycmd boost-sermd boost)
-  if (WIN32)
-    set(BOOST_LIB_PREFIX libboost_)
-  endif ()
+# elseif (BUILD_WITH_SHARED_RUNTIME)
+  # if (WIN32)
+    # set(BOOST_LIB_PREFIX libboost_)
+  # endif ()
 else ()
-  # message(STATUS "Setting boost up for static linking")
-  # set(Boost_USE_STATIC_RUNTIME OFF)
-  # set(Boost_USE_STATIC_LIBS ON)
-  # set(Boost_USE_MULTITHREADED ON)
-  # set(instdirs boost)
 # Static cases Windows has libboost_ prepended to the name
   if (WIN32)
     set(BOOST_LIB_PREFIX libboost_)
   endif ()
 endif ()
-# message(STATUS "instdirs = ${instdirs}.")
 
 # Set boost libraries to find
 if (DEBUG_CMAKE)
