@@ -83,7 +83,7 @@ message(STATUS "Boost_LIBS_ARE_SHARED = ${Boost_LIBS_ARE_SHARED}.")
 if (Boost_LIBS_ARE_SHARED)
   message(STATUS "Setting Boost shared library definitions")
   set(Boost_DEFINITIONS -DBOOST_ALL_DYN_LINK)
-  if (WIN32 AND NOT BUILD_SHARED_LIBS)
+  if (WIN32 AND NOT Boost_boost_unit_test_framework_LIBRARY)
 # This reverses DYN_LINK for tests.  See boost/test/included/unit_test.hpp.
     set(Boost_DEFINITIONS ${Boost_DEFINITIONS} -DBOOST_TEST_INCLUDED)
   endif ()
