@@ -160,7 +160,7 @@ macro(SciRplCompilerFlags CMPTYPE BLDTYPE)
       set(thisval "${thisval} ${RPLFLGS_ADDFLG}")
     else () # otherwise replace the unwantedflag with the wanted flag
       string(REPLACE "${RPLFLGS_RMVFLG}" "${RPLFLGS_ADDFLG}" thisval "${thisval}")
-# removed any dagling d that might have been left behind by for example
+# removed any dangling d that might have been left behind by for example
 # replacing "/MD" with " " when it was actually "/MDd" leaves behind " d"
       string(REPLACE " d" " " thisval "${thisval}")
     endif ()
