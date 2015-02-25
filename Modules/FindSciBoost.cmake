@@ -30,7 +30,6 @@
 # Copyright 2010-2014, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
-#
 ######################################################################
 
 # Default: libraries have boost_ prepended.
@@ -61,7 +60,7 @@ else ()
 endif ()
 message(STATUS "instdirs = ${instdirs}.")
 
-include(FindPackageHandleStandardArgs)
+# include(FindPackageHandleStandardArgs)
 # Set names and dirs for finding boost
 if (DEBUG_CMAKE)
   message(STATUS "SciBoost_FIND_COMPONENTS = ${SciBoost_FIND_COMPONENTS}.")
@@ -75,6 +74,8 @@ if (DEBUG_CMAKE)
   message(STATUS "SciBoost_LIBRARY_LIST = ${SciBoost_LIBRARY_LIST}.")
 endif ()
 
+SciGetInstSubdirs(Boost instdirs)
+message(STATUS "instdirs = ${instdirs}.")
 SciFindPackage(PACKAGE "Boost"
   INSTALL_DIRS ${instdirs}
   HEADERS boost/thread.hpp OPTIONAL boost/align/aligned_allocator.hpp
