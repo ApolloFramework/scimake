@@ -144,19 +144,22 @@ foreach (res ${SEARCH_RESULTS})
   set(Oce_${res})
 endforeach ()
 set(OCE_FOUND TRUE)
-# Set the installation search directory for oce woth no component
-# suffix
-if (NOT USE_OCE_SHARED)
-  SciGetInstSubdirs(oce instDirs)
+# Set the installation search directory for oce with no component suffix
+if (USE_OCE_SHARED)
+  if (USE_PYC_LIBS)
+    set(instdirs oce-pycsh oce-sersh)
+  else ()
+    set(instdirs oce-sersh oce-pycsh)
+  endif ()
 else ()
-  set(instDirs oce-sersh oce-pycsh)
+  SciGetInstSubdirs(oce instdirs)
 endif ()
 
 foreach (comp ${SciOce_ALL_COMPONENTS})
   if (Oce${comp}_FIND)
     set(Oce${comp}_ROOT_DIR ${Oce_ROOT_DIR})
     SciFindPackage(PACKAGE Oce${comp}
-      INSTALL_DIRS "${instDirs}"
+      INSTALL_DIRS "${instdirs}"
       HEADERS "${Oce${comp}_SEARCHHDRS}"
       LIBRARIES "${Oce${comp}_SEARCHLIBS}"
       LIBRARY_SUBDIRS "${libsubdir}lib"
