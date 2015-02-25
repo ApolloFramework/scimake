@@ -99,14 +99,13 @@ endif ()
 message(STATUS "Boost_LIBS_ARE_SHARED = ${Boost_LIBS_ARE_SHARED}.")
 
 # If Boost libs are shared, one must have different defines
-# http://boost.2283326.n4.nabble.com/Undefined-reference-to-main-with-Boost-Test-Why-td2576147.html
+# http://boost.2283326.n4.nabble.com/Undefined-reference-to-main-with-Boost-Test -Why-td2576147.html
 if (Boost_LIBS_ARE_SHARED)
-  message(STATUS "Correcting Boost shared library definitions")
-  if (WIN32)
-    # set(Boost_DEFINITIONS ${Boost_DEFINITIONS} -DBOOST_TEST_DYN_LINK)
-  else ()
-# This not working on Windows
-    set(Boost_DEFINITIONS -DBOOST_ALL_DYN_LINK)
+  message(STATUS "Setting Boost shared library definitions")
+  set(Boost_DEFINITIONS -DBOOST_ALL_DYN_LINK)
+  if (WIN32 AND NOT BUILD_SHARED_LIBS)
+# This reverses DYN_LINK for tests.  See boost/test/included/unit_test.hpp.
+    set(Boost_DEFINITIONS ${Boost_DEFINITIONS} -DBOOST_TEST_INCLUDED)
   endif ()
 endif ()
 message(STATUS "Boost_DEFINITIONS = ${Boost_DEFINITIONS}.")
@@ -132,6 +131,4 @@ if ("${BOOST_LIB_PREFIX}" STREQUAL "libboost_")
     set(Boost_boost_${COMPONENT}_LIBRARY ${Boost_${BOOST_LIB_PREFIX}${COMPONENT}_LIBRARY})
   endforeach ()
 endif ()
-
-
 
