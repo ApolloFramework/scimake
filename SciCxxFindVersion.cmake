@@ -172,6 +172,6 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL XL)
 else ()
   message(FATAL_ERROR "Unknown compiler ID, ${CMAKE_CXX_COMPILER_ID}.")
 endif ()
-
+set(CXX ${CMAKE_CXX_COMPILER})
 set(CXX_VERSION ${cxx_version_tmp})
 
