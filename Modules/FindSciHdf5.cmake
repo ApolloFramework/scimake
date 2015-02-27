@@ -29,7 +29,7 @@
 message("")
 message(STATUS "Initial search for Hdf5 components")
 
-SciGetInstSubdirs(hdf5 instdirs)
+SciGetInstSubdirs(Hdf5 instdirs)
 
 SciFindPackage(PACKAGE "Hdf5"
   INSTALL_DIRS ${instdirs}
