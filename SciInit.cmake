@@ -10,6 +10,10 @@
 #
 ######################################################################
 
+string(TOUPPER ${PROJECT_NAME} PROJECT_NAMEUC)
+set(HAVE_CMAKE TRUE)
+set(${PROJECT_NAMEUC}_HAVE_CMAKE TRUE)
+
 #####################################################################
 #
 # Pull in useful macros
