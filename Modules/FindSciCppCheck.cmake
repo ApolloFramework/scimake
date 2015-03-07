@@ -29,8 +29,5 @@ SciFindPackage(PACKAGE CppCheck
 if (CPPCHECK_FOUND)
   message(STATUS "CppCheck_cppcheck found.")
   message(STATUS "CppCheck_cppcheck = ${CppCheck_cppcheck}")
-else ()
-  message(STATUS "CppCheck_cppcheck not found. API documentation cannot be built.")
-  set(ENABLE_DEVELDOCS FALSE)
 endif ()
 
