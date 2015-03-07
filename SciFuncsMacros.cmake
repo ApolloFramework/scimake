@@ -160,7 +160,7 @@ macro(SciRplCompilerFlags CMPTYPE BLDTYPE)
       string(FIND "${thisval}" "${RPLFLGS_ADDFLG}" des_found)
       if (des_found EQUAL -1) # only add desired one if not there
         set(thisval "${thisval} ${RPLFLGS_ADDFLG}")
-      endif()
+      endif ()
     else () # otherwise replace the unwantedflag with the wanted flag
       string(REPLACE "${RPLFLGS_RMVFLG}" "${RPLFLGS_ADDFLG}" thisval "${thisval}")
 # removed any dangling d that might have been left behind by for example

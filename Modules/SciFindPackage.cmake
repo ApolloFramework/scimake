@@ -885,11 +885,11 @@ macro(SciFindPackage)
         get_filename_component(subdir "${rootdir}" NAME)
         if (${subdir} STREQUAL visit OR ${subdir} MATCHES "^vtk-6.1")
           get_filename_component(rootdir "${rootdir}" DIRECTORY)
-        endif() 
+        endif ()
         get_filename_component(subdir "${rootdir}" NAME)
         if (${subdir} STREQUAL include)
           get_filename_component(rootdir "${rootdir}" DIRECTORY)
-        endif() 
+        endif ()
 # We should require rootdir to be a part of all library dirs, removing
 # subdirs until this happens.
         foreach (libdir ${${scipkgreg}_LIBRARY_DIRS})
