@@ -15,7 +15,7 @@ if (NOT SCIMAKE_DIR)
 endif ()
 
 # Execute cppcheck
-execute_process(COMMAND ${CppCheck_cppcheck} ${CPPCHECK_SOURCE_DIR}
+execute_process(COMMAND ${CppCheck_cppcheck} --enable=warning ${CPPCHECK_SOURCE_DIR}
   RESULT_VARIABLE EXEC_ERROR
   OUTPUT_FILE cppcheck.out
   ERROR_FILE cppcheck.err
@@ -36,5 +36,14 @@ if (errlen)
   message(STATUS "cppcheck failures:")
   string(REPLACE ";" "\n" CPPCHECK_ERRORS "${CPPCHECK_ERRORS}")
   message(FATAL_ERROR ${CPPCHECK_ERRORS})
+endif ()
+
+# Look for warning messages
+file(STRINGS cppcheck.err CPPCHECK_WARNINGS REGEX "(warning)")
+string(LENGTH "${CPPCHECK_WARNINGS}" errlen)
+if (errlen)
+  message(STATUS "cppcheck failures:")
+  string(REPLACE ";" "\n" CPPCHECK_WARNINGS "${CPPCHECK_WARNINGS}")
+  message(WARNING ${CPPCHECK_WARNINGS})
 endif ()
 
