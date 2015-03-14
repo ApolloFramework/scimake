@@ -10,7 +10,11 @@
 #include <omp.h>
 
 int main(int argc, char** argv) {
-  float a[8] = { 0.0 }, b[8] = { 0.0 };
+  float a[8] = {
+    0.0
+  }, b[8] = {
+    0.0
+  };
 #pragma omp for simd
   for (int i = 0; i < 8; ++i) {
     a[i] += b[i];
