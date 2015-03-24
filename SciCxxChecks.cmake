@@ -35,6 +35,11 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL GNU)
   else ()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
   endif ()
+# Make it an error not to give the return upe
+  if (CXX_VERSION VERSION_GREATER "4.4")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
+  endif ()
+# Obsolete directory installation dir
   string(SUBSTRING ${CXX_VERSION} 0 1 CXX_MAJOR_VERSION)
   set(CXX_COMP_LIB_SUBDIR gcc${CXX_MAJOR_VERSION})
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL Clang)
