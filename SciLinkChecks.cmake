@@ -27,6 +27,9 @@ if (BUILD_SHARED_LIBS)
     set(CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath,\$ORIGIN ${CMAKE_EXE_LINKER_FLAGS}")
     set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath,\$ORIGIN ${CMAKE_SHARED_LINKER_FLAGS}")
   endif ()
+# Add the automatically determined parts of the RPATH that
+# point to directories outside the build tree to the install RPATH
+# See: http://www.itk.org/Wiki/CMake_RPATH_handling
   if (NOT DEFINED CMAKE_INSTALL_RPATH_USE_LINK_PATH)
 # Add the automatically determined parts of the RPATH that
 # point to directories outside the build tree to the install RPATH
