@@ -4,7 +4,7 @@
  *
  * @brief   For checking RTTI capabilities of compiler
  *
- * @version $Id$
+ * @version $Id: checkCompilerRTTI.cxx 746 2015-02-14 17:15:33Z jrobcary$
  *
  * Copyright &copy; 2012-2014, Tech-X Corporation, Boulder, CO.
  * See LICENSE file (EclipseLicense.txt) for conditions of use.
