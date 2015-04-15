@@ -74,9 +74,21 @@ endif ()
 ######################################################################
 
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL Linux)
+
   message("")
-  message("--------- Checking for rpath ---------")
+  message("--------- Determining version of glibc ---------")
+  execute_process(
+    COMMAND ldd --version
+    COMMAND head -1
+    COMMAND sed "s/^.* //"
+    OUTPUT_VARIABLE GLIBC_VERSION
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  SciPrintVar(GLIBC_VERSION)
+
   if ("${CMAKE_C_COMPILER_ID}" STREQUAL GNU)
+    message("")
+    message("--------- Adding location of libstdc++ to rpath ---------")
     execute_process(COMMAND ${CMAKE_C_COMPILER} -print-file-name=libstdc++.so
       OUTPUT_VARIABLE libcxx)
     message("libcxx is ${libcxx}")
@@ -88,6 +100,7 @@ if ("${CMAKE_SYSTEM_NAME}" STREQUAL Linux)
       set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,${CXX_LIBDIR}")
     endif ()
   endif ()
+
 endif ()
 
 ######################################################################
