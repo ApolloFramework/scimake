@@ -2,7 +2,7 @@ SciMake CONVENTIONS FOR CMAKE FILES AND MODULES
 
 $Id$
 
-Copyright &copy; 2014-2014, Tech-X Corporation
+Copyright &copy; 2014-2015, Tech-X Corporation
 
 The scimake document is at
 https://ice.txcorp.com/support/wiki/CmakeCodingStandards

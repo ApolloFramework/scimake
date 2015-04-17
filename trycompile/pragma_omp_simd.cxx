@@ -4,7 +4,7 @@
  * Code stub for determining whether the compiler supports simd pragmas
  * from OpenMP 4.
  *
- * Copyright &copy; 2013-2014, Tech-X Corporation, Boulder, CO.
+ * Copyright &copy; 2013-2015, Tech-X Corporation, Boulder, CO.
  * See LICENSE file (EclipseLicense.txt) for conditions of use.
  */
 #include <omp.h>

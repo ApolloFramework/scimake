@@ -2,7 +2,7 @@
 #
 # $Id$
 #
-# Copyright &copy; 2012-2014, Tech-X Corporation, Boulder, CO.
+# Copyright &copy; 2012-2015, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 # For getting the svn revision of a directory
