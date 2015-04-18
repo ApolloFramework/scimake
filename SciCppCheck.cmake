@@ -15,10 +15,21 @@ if (NOT SCIMAKE_DIR)
 endif ()
 
 # Execute cppcheck
-execute_process(COMMAND ${CppCheck_cppcheck} --enable=warning ${CPPCHECK_SOURCE_DIR}
+set(CppCheck_suppargs)
+if (EXISTS ${CPPCHECK_SOURCE_DIR}/cppchecksupp.txt)
+  set(CppCheck_suppargs
+    --suppressions ${CPPCHECK_SOURCE_DIR}/cppchecksupp.txt
+  )
+endif ()
+set(cmd ${CppCheck_cppcheck} --enable=warning --xml ${CppCheck_suppargs} ${CPPCHECK_SOURCE_DIR})
+# Convert to list for printing
+string(REPLACE ";" " " cmdstr "${cmd}")
+message(STATUS "Executing ${cmdstr}")
+execute_process(COMMAND ${cmd}
   RESULT_VARIABLE EXEC_ERROR
-  OUTPUT_FILE cppcheck.out
-  ERROR_FILE cppcheck.err
+  OUTPUT_FILE ${CMAKE_BINARY_DIR}/cppcheck.out
+  ERROR_FILE ${CMAKE_BINARY_DIR}/cppcheck.err
+  WORKING_DIRECTORY ${CPPCHECK_SOURCE_DIR}
 )
 
 # Make sure cppcheck succeeded
