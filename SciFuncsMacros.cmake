@@ -178,3 +178,43 @@ macro(SciRplCompilerFlags CMPTYPE BLDTYPE)
   endif ()
 
 endmacro()
+
+#
+# Add generation of doxygen documentation, generated in doxdir
+# Args:
+#   doxdir: the subdirectory where the documentation is made
+#
+macro(SciAddDox doxdir)
+  find_package(SciDoxygen)
+  if (DOXYGEN_FOUND)
+    find_package(SciGraphviz)
+  endif ()
+  if (GRAPHVIZ_FOUND)
+    set(HAVE_GRAPHVIZ_DOT YES)
+  else ()
+    set(HAVE_GRAPHVIZ_DOT NO)
+  endif ()
+  if (DOXYGEN_FOUND AND ENABLE_DEVELDOCS)
+    message(STATUS "Adding ${doxdir} subdirectory.")
+    add_subdirectory(doxdir)
+  else ()
+    message(WARNING "Doxygen not found or develdocs not enabled. Not adding ${doxdir} subdirectory")
+  endif ()
+endmacro()
+
+#
+# Add static analysis, when build matches bld
+# Args:
+#   bld: the build that must be matched for cppcheck to be run
+#
+macro(SciAddCppCheck bld)
+  find_package(SciCppCheck)
+  find_package(SciPcre)  # Needed for location of shared libs
+  if (PCRE_FOUND)
+    SciAddSharedLibDirs(ADDPATH ${Pcre_LIBRARY_DIRS})
+    if (CPPCHECK_FOUND)
+      SciCppCheckSource(${bld})
+    endif ()
+  endif ()
+endmacro()
+
