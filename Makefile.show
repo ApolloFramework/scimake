@@ -10,7 +10,7 @@
 ######################################################################
 # Makefile to grab PETSc make variables
 # PETSC_DIR is passed though CMake
-include ${PETSC_DIR}/conf/rules
-include ${PETSC_DIR}/conf/variables
+include ${PETSC_CONF_DIR}/rules
+include ${PETSC_CONF_DIR}/variables
 showvar:
 	-@echo -n  ${${PKG_VARIABLE}}
