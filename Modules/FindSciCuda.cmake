@@ -5,14 +5,13 @@
 #   find_package(SciCuda ...)
 #
 # This module will define the following variables:
-#  HAVE_OPENCL, OPENCL_FOUND = Whether libraries and includes are found
+#  HAVE_CUDA, CUDA_FOUND = Whether libraries and includes are found
 #  CUDA_INCLUDE_DIRS       = Location of Cuda includes
 #  CUDA_LIBRARY_DIRS       = Location of Cuda libraries
 #  CUDA_LIBRARIES          = Required libraries
 #
 # Copyright 2013-2015, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
-#
 #
 ######################################################################
 
