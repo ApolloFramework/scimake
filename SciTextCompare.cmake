@@ -26,6 +26,7 @@ if (TEST_DIFFER)
 else ()
   set(TEST_DIFFER diff --strip-trailing-cr)
 endif ()
+message(STATUS "DIFFER SET TO   = ${TEST_DIFFER}")
 if (TEST_MPIEXEC)
   separate_arguments(TEST_MPIEXEC)
 endif (TEST_MPIEXEC)
@@ -36,6 +37,7 @@ endif (TEST_MPIEXEC)
 # more files which are to be compared, while also comparing the stdout
 # of the test.
 
+message(STATUS "EXECUTING ... ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}")
 if (TEST_STDOUT_FILE)
   execute_process(COMMAND ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}
     RESULT_VARIABLE EXEC_ERROR
