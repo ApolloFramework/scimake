@@ -20,7 +20,9 @@ message("--------- Looking for CUDA -----------")
 find_package(CUDA 5.0)
 # find_cuda_helper_libs(cusparse)
 if (CUDA_CUDART_LIBRARY AND NOT CUDA_LIBRARY_DIRS)
-  get_filename_component(CUDA_LIBRARY_DIRS ${CUDA_CUDART_LIBRARY}/..  REALPATH)
+  get_filename_component(CUDA_LIBRARY_DIRS ${CUDA_CUDART_LIBRARY}/..
+    REALPATH CACHE
+  )
 endif ()
 foreach (sfx VERSION CUDA_LIBRARY NVCC_EXECUTABLE
     TOOLKIT_ROOT_DIR TOOLKIT_INCLUDE INCLUDE_DIRS
