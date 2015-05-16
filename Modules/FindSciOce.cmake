@@ -58,7 +58,9 @@ set(OceIoBase_SEARCHLIBS TKXSBase)
 set(OceStl_SEARCHLIBS TKSTL)
 set(OceAlgo_SEARCHLIBS TKShHealing TKTopAlgo TKGeomAlgo)
 set(OceModelData_SEARCHLIBS TKBRep TKG3d TKG2d TKGeomBase)
-set(OceTools_SEARCHLIBS TKMath TKAdvTools)
+# AdvTools gone as of OCE-0.17
+# set(OceTools_SEARCHLIBS TKMath TKAdvTools)
+set(OceTools_SEARCHLIBS TKMath)
 set(OceKernel_SEARCHLIBS TKernel)
 
 # All the components
