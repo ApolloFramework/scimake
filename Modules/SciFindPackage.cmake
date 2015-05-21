@@ -660,6 +660,7 @@ macro(SciFindPackage)
       HEADERS          = ${TFP_HEADERS}
       LIBRARIES        = ${TFP_LIBRARIES}
       MODULES          = ${TFP_MODULES}
+      FILES            = ${TFP_FILES}
       CONFIG_SUBDIRS   = ${TFP_CONFIG_SUBDIRS}
       PROGRAM_SUBDIRS  = ${TFP_PROGRAM_SUBDIRS}
       INCLUDE_SUBDIRS  = ${TFP_INCLUDE_SUBDIRS}
