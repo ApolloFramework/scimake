@@ -36,7 +36,6 @@ execute_process(COMMAND ${cmd}
 # Make sure cppcheck succeeded
 if (EXEC_ERROR)
   message(STATUS "EXEC_ERROR      = ${EXEC_ERROR}")
-  message(STATUS "RESULT_VARIABLE = ${RESULT_VARIABLE}")
   message(FATAL_ERROR "Execution failure.")
 endif ()
 message(STATUS "Execution succeeded.")
