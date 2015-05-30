@@ -220,3 +220,27 @@ macro(SciAddCppCheck bld)
   endif ()
 endmacro()
 
+#
+# Generate an export header that has a general define for the
+# export header created by cmake
+# basedef The define that will lead to the directory definition
+# incincfile The name of the file to be generated
+# dirdef The definition created when basedef is not defined
+# dirincfile The file to be included
+#
+macro(SciGenExportHeaderContainer basedef incincfile dirdef dirincfile)
+  set(declinc
+"
+/**
+ * Generated header, do not edit
+ */
+
+#ifndef ${basedef}
+#define ${dirdef}
+#endif
+#include <${dirincfile}>
+"
+  )
+  file(WRITE ${incincfile} "${declinc}")
+endmacro()
+
