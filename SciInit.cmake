@@ -11,7 +11,7 @@
 ######################################################################
 
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAMEUC)
-set(HAVE_CMAKE TRUE)
+set(HAVE_CMAKE 1 CACHE STRING "Whether built with CMake")
 set(${PROJECT_NAMEUC}_HAVE_CMAKE TRUE)
 
 #####################################################################
