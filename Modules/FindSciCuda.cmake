@@ -20,11 +20,28 @@ message("--------- Looking for CUDA -----------")
 find_package(CUDA 5.0)
 # find_cuda_helper_libs(cusparse)
 if (CUDA_CUDART_LIBRARY AND NOT CUDA_LIBRARY_DIRS)
-  get_filename_component(CUDA_LIBRARY_DIRS ${CUDA_CUDART_LIBRARY}/..
-    REALPATH CACHE
+  get_filename_component(CUDA_LIBRARY_DIRS ${CUDA_CUDART_LIBRARY}
+    DIRECTORY CACHE
   )
 endif ()
-foreach (sfx VERSION CUDA_LIBRARY NVCC_EXECUTABLE
+
+# The cuda library may not be in the frameworks area
+find_library(CUDA_cuda_SHLIB cuda
+  PATHS /usr/local/cuda-${CUDA_VERSION}
+  PATH_SUFFIXES lib64 lib
+  NO_DEFAULT_PATH
+)
+if (CUDA_cuda_SHLIB)
+  get_filename_component(CUDA_cuda_SHLIB_DIR ${CUDA_cuda_SHLIB}
+    DIRECTORY CACHE
+  )
+  set(CUDA_LIBRARY_DIRS ${CUDA_LIBRARY_DIRS} ${CUDA_cuda_SHLIB_DIR})
+else ()
+  set(CUDA_cuda_SHLIB ${CUDA_CUDA_LIBRARY})
+endif ()
+
+# Print results
+foreach (sfx VERSION CUDA_LIBRARY cuda_SHLIB NVCC_EXECUTABLE
     TOOLKIT_ROOT_DIR TOOLKIT_INCLUDE INCLUDE_DIRS
     LIBRARY_DIRS LIBRARIES CUDART_LIBRARY
     curand_LIBRARY cublas_LIBRARY
