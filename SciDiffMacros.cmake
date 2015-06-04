@@ -59,9 +59,11 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
     "${DIFF_TEST_FILEPATH}" "${DIFF_DIFF_FILEPATH}"
     RESULT_VARIABLE DIFF_FILES_DIFFER)
   # return results in results variable
+  message(STATUS "DIFF_COMMAND == \"${DIFF_COMMAND}\"")
+  message(STATUS "DIFF_FILES_DIFFER == \"${DIFF_FILES_DIFFER}\"")
   if (DIFF_FILES_DIFFER)
-    set(${DIFF_FILES_EQUAL} TRUE)
-  else ()
     set(${DIFF_FILES_EQUAL} FALSE)
+  else ()
+    set(${DIFF_FILES_EQUAL} TRUE)
   endif ()
 endmacro()
