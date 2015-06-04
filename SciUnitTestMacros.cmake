@@ -87,7 +87,7 @@ message(STATUS "In SciAddUnitTestMacros.cmake, SHLIB_CMAKE_PATH_VAL = ${SHLIB_CM
 #                   against expected output.
 
 macro(SciAddUnitTest)
-  set(oneValArgs NAME COMMAND DIFFER RESULTS_DIR TEST_DIR DIFF_DIR STDOUT_FILE ARGS NUMPROCS MPIEXEC_PROG)
+  set(oneValArgs NAME COMMAND DIFFER RESULTS_DIR TEST_DIR DIFF_DIR STDOUT_FILE ARGS NUMPROCS MPIEXEC_PROG CUDA)
   set(multiValArgs RESULTS_FILES TEST_FILES DIFF_FILES SOURCES LIBS
                            PROPERTIES ATTACHED_FILES)
   cmake_parse_arguments(TEST "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
@@ -120,7 +120,11 @@ macro(SciAddUnitTest)
     set(TEST_MPIEXEC)
   endif (TEST_NUMPROCS AND ENABLE_PARALLEL AND MPIEXEC)
   if (TEST_SOURCES)
-    add_executable(${TEST_COMMAND} ${TEST_SOURCES})
+    if (TEST_CUDA)
+      cuda_add_executable(${TEST_COMMAND} ${TEST_SOURCES})
+    else ()
+      add_executable(${TEST_COMMAND} ${TEST_SOURCES})
+    endif ()
   endif ()
   if (TEST_LIBS)
     target_link_libraries(${TEST_COMMAND} ${TEST_LIBS})
