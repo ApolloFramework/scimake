@@ -46,9 +46,9 @@ if (TEST_STDOUT_FILE)
   SciDiffFiles("${TEST_STDOUT_FILE}" "${TEST_STDOUT_FILE}" ARE_FILES_EQUAL
                DIFF_DIR ${TEST_DIFF_DIR})
   if (ARE_FILES_EQUAL)
-    message(FATAL_ERROR "Comparison failure: ${TEST_STDOUT_FILE} differ.")
-  else ()
     message(STATUS "Comparison of ${TEST_STDOUT_FILE} succeeded.")
+  else ()
+    message(FATAL_ERROR "Comparison failure: ${TEST_STDOUT_FILE} differ.")
   endif ()
 else ()
   execute_process(COMMAND ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}

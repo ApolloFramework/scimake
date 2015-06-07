@@ -28,12 +28,14 @@ endmacro()
 
 # macro for diffing two files
 macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
-  # specify optional arguments
+# specify optional arguments
   set(oneValArgs TEST_DIR DIFF_DIR)
   set(multiValArgs COMMAND)
-  # parse optional arguments
-  cmake_parse_arguments(DIFF "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
-  # if no diff file was specified use the test file name with the results directory
+# parse optional arguments
+  cmake_parse_arguments(DIFF "${opts}" "${oneValArgs}" "${multiValArgs}"
+    ${ARGN}
+  )
+# if no diff file specified use the test file name with the results directory
   set(DIFF_TEST_FILEPATH "${DIFF_TEST_FILE}")
   set(DIFF_DIFF_FILEPATH "${DIFF_DIFF_FILE}")
   if (DIFF_TEST_DIR)
@@ -42,28 +44,31 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
   if (DIFF_DIFF_DIR)
     set(DIFF_DIFF_FILEPATH "${DIFF_DIFF_DIR}/${DIFF_DIFF_FILE}")
   endif ()
-  # make sure both files exist
+# make sure both files exist
   if (NOT EXISTS "${DIFF_TEST_FILE}")
     message(FATAL_ERROR "TEST FILE ${DIFF_TEST_FILE} does not exist.")
   endif ()
   if (NOT EXISTS "${DIFF_DIFF_FILE}")
     message(FATAL_ERROR "DIFF FILE ${DIFF_DIFF_FILE} does not exist.")
   endif ()
-  # make sure a diff command is specified
+# make sure a diff command is specified
   if (NOT DIFF_COMMAND)
     set(DIFF_COMMAND diff --strip-trailing-cr)
   endif ()
 
-  # execute the diff process
+# execute the diff process
   execute_process(COMMAND ${DIFF_COMMAND}
     "${DIFF_TEST_FILEPATH}" "${DIFF_DIFF_FILEPATH}"
     RESULT_VARIABLE DIFF_FILES_DIFFER)
-  # return results in results variable
-  message(STATUS "DIFF_COMMAND == \"${DIFF_COMMAND}\"")
-  message(STATUS "DIFF_FILES_DIFFER == \"${DIFF_FILES_DIFFER}\"")
+# return results in results variable
+  # message(STATUS "DIFF_COMMAND = \"${DIFF_COMMAND}\"")
+  # message(STATUS "DIFF_FILES_DIFFER = \"${DIFF_FILES_DIFFER}\"")
   if (DIFF_FILES_DIFFER)
     set(${DIFF_FILES_EQUAL} FALSE)
   else ()
     set(${DIFF_FILES_EQUAL} TRUE)
   endif ()
+  # message(STATUS "${DIFF_FILES_EQUAL} = \"${${DIFF_FILES_EQUAL}}\"")
+
 endmacro()
+
