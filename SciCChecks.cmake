@@ -100,13 +100,9 @@ int main(int argc, char** argv) {return 0;}"
 INT_IS_NOT_SSIZE_T
 )
 if (INT_IS_NOT_SSIZE_T)
-  if (DEBUG_CMAKE)
-    message("int and ssize_t are not the same size.")
-  endif ()
+  message("int and ssize_t are not the same size.")
 else ()
-  if (DEBUG_CMAKE)
-    message("int and ssize_t are the same size.")
-  endif ()
+  message("int and ssize_t are the same size.")
   set(INT_IS_SSIZE_T 1 CACHE BOOL "Whether int is the same as ssize_t")
 endif ()
 
