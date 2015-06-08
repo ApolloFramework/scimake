@@ -67,42 +67,43 @@ else ()
   endif ()
 endif ()
 
+include(CheckCSourceRuns)
 # Check variable sizes
-check_c_source_compiles(
-"#include <stdio.h>
-void f(unsigned int i){}
-void f(size_t i){}
-int main(int argc, char** argv) {return 0;}"
+check_c_source_runs(
+"
+#include <stdio.h>
+int main(int argc, char** argv) {
+  return (sizeof(unsigned int) == sizeof(size_t));
+}
+"
 UINT_IS_NOT_SIZE_T
 )
 if (UINT_IS_NOT_SIZE_T)
-  if (DEBUG_CMAKE)
-    message("uint and size_t are not the same.")
-  endif ()
+  message(STATUS "uint and size_t are not the same size.")
 else ()
-  if (DEBUG_CMAKE)
-    message("uint and size_t are the same.")
-  endif ()
+  message(STATUS "uint and size_t are the same size.")
   set(UINT_IS_SIZE_T 1 CACHE BOOL "Whether uint is the same as size_t")
 endif ()
 
-check_c_source_compiles(
-"#ifdef _WIN32
+check_c_source_runs(
+"
+#ifdef _WIN32
  #include <BaseTsd.h>
- void f(int i){}
- void f(SSIZE_T i){}
+ typedef SSIZE_T ssize_t;
 #else
  #include <unistd.h>
- void f(int i){}
- void f(ssize_t i){}
+ #include <string.h>
 #endif
-int main(int argc, char** argv) {return 0;}"
+int main(int argc, char** argv) {
+  return (sizeof(int) == sizeof(ssize_t));
+}
+"
 INT_IS_NOT_SSIZE_T
 )
 if (INT_IS_NOT_SSIZE_T)
-  message("int and ssize_t are not the same size.")
+  message(STATUS "int and ssize_t are not the same size.")
 else ()
-  message("int and ssize_t are the same size.")
+  message(STATUS "int and ssize_t are the same size.")
   set(INT_IS_SSIZE_T 1 CACHE BOOL "Whether int is the same as ssize_t")
 endif ()
 
