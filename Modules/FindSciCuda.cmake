@@ -21,7 +21,7 @@ find_package(CUDA 5.0)
 
 string(FIND ${CMAKE_CXX_FLAGS} "-std=c++11" POS)
 if (NOT ${POS} EQUAL -1)
-  set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -std=c++11")
+  list(APPEND CUDA_NVCC_FLAGS "-std=c++11")
 endif ()
 
 # find_cuda_helper_libs(cusparse)
