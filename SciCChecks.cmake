@@ -20,10 +20,46 @@ SciPrintVar(C_COMPILER_ID)
 # Type checks
 include(CheckTypeSize)
 
+# Print some sizes
+check_type_size(int SCI_SIZEOF_INT)
+message(STATUS "SCI_SIZEOF_INT = ${SCI_SIZEOF_INT}.")
+check_type_size("unsigned int" SCI_SIZEOF_UINT)
+message(STATUS "SCI_SIZEOF_UINT = ${SCI_SIZEOF_UINT}.")
+
+# Check for size_t
+set(CMAKE_REQUIRED_INCLUDES_SAV ${CMAKE_REQUIRED_INCLUDES})
+set(CMAKE_REQUIRED_INCLUDES stdio.h)
+check_type_size(size_t SCI_SIZEOF_SIZE_T)
+set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES_SAV})
+message(STATUS "SCI_SIZEOF_SIZE_T = ${SCI_SIZEOF_SIZE_T}.")
+if (HAVE_SCI_SIZEOF_SIZE_T)
+  message(STATUS "size_t available.")
+  if ("${SCI_SIZEOF_UINT}" EQUAL "${SCI_SIZEOF_SIZE_T}")
+    set(UINT_IS_NOT_SIZE_T FALSE)
+    set(UINT_IS_SIZE_T TRUE)
+    set(INT_IS_NOT_SSIZE_T FALSE)
+    set(INT_IS_SSIZE_T TRUE)
+  else ()
+    set(UINT_IS_NOT_SIZE_T TRUE)
+    set(UINT_IS_SIZE_T FALSE)
+    set(INT_IS_NOT_SSIZE_T TRUE)
+    set(INT_IS_SSIZE_T FALSE)
+  endif ()
+else ()
+  message(STATUS "Unable to find size_t.")
+endif ()
+
 # Check for ssize_t
-check_type_size(ssize_t SIZE_OF_SSIZE_T)
-if (HAVE_SIZE_OF_SSIZE_T)
-  message(STATUS "ssize_t available.")
+set(CMAKE_REQUIRED_INCLUDES_SAV ${CMAKE_REQUIRED_INCLUDES})
+if (WIN32)
+set(CMAKE_REQUIRED_INCLUDES BaseTsd.h)
+check_type_size(SSIZE_T SIZEOF_SSIZE_T)
+else ()
+check_type_size(ssize_t SIZEOF_SSIZE_T)
+endif ()
+set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES_SAV})
+if (HAVE_SIZEOF_SSIZE_T)
+  message(STATUS "Unable to find ssize_t or SSIZE_T.")
 else ()
   message(STATUS "ssize_t not available.")
   set(ssize_t SSIZE_T)
@@ -65,46 +101,6 @@ else ()
   if (DEBUG_CMAKE)
     message("struct tm is NOT in time.h.")
   endif ()
-endif ()
-
-include(CheckCSourceRuns)
-# Check variable sizes
-check_c_source_runs(
-"
-#include <stdio.h>
-int main(int argc, char** argv) {
-  return (sizeof(unsigned int) == sizeof(size_t));
-}
-"
-UINT_IS_NOT_SIZE_T
-)
-if (UINT_IS_NOT_SIZE_T)
-  message(STATUS "uint and size_t are not the same size.")
-else ()
-  message(STATUS "uint and size_t are the same size.")
-  set(UINT_IS_SIZE_T 1 CACHE BOOL "Whether uint is the same as size_t")
-endif ()
-
-check_c_source_runs(
-"
-#ifdef _WIN32
- #include <BaseTsd.h>
- typedef SSIZE_T ssize_t;
-#else
- #include <unistd.h>
- #include <string.h>
-#endif
-int main(int argc, char** argv) {
-  return (sizeof(int) == sizeof(ssize_t));
-}
-"
-INT_IS_NOT_SSIZE_T
-)
-if (INT_IS_NOT_SSIZE_T)
-  message(STATUS "int and ssize_t are not the same size.")
-else ()
-  message(STATUS "int and ssize_t are the same size.")
-  set(INT_IS_SSIZE_T 1 CACHE BOOL "Whether int is the same as ssize_t")
 endif ()
 
 # Get math into C for Windows
