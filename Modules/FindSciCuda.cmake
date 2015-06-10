@@ -19,6 +19,24 @@ message("")
 message("--------- Looking for CUDA -----------")
 find_package(CUDA 5.0)
 
+if (CMAKE_BUILD_TYPE EQUAL Debug)
+  list(APPEND CUDA_NVCC_FLAGS
+      -g -G --use_fast_math --generate-code arch=compute_20,code=sm_20)
+else ()
+  list(APPEND CUDA_NVCC_FLAGS
+      -O3
+      --use_fast_math
+      --ptxas-options=-v
+      --generate-code arch=compute_20,code=sm_20
+      --generate-code arch=compute_20,code=sm_21
+      --generate-code arch=compute_30,code=sm_30
+      --generate-code arch=compute_35,code=sm_35
+      --generate-code arch=compute_50,code=sm_50
+      --generate-code arch=compute_52,code=sm_52
+      --generate-code arch=compute_52,code=compute_52
+      )
+endif ()
+
 string(FIND ${CMAKE_CXX_FLAGS} "-std=c++11" POS)
 if (NOT ${POS} EQUAL -1)
   list(APPEND CUDA_NVCC_FLAGS "-std=c++11")
@@ -30,6 +48,35 @@ if (CUDA_CUDART_LIBRARY AND NOT CUDA_LIBRARY_DIRS)
     DIRECTORY CACHE
   )
 endif ()
+
+# If building in parallel, need to set -ccbin option to the serial
+# compiler on mac.
+if (ENABLE_PARALLEL)
+  execute_process(COMMAND ${CMAKE_C_COMPILER}
+                  --showme:command OUTPUT_VARIABLE SERIAL_C_COMPILER
+                  RESULT_VARIABLE SERIAL_C_COMPILER_RESULT)
+  if (SERIAL_C_COMPILER_RESULT EQUAL 0)
+    SciPrintVar(SERIAL_C_COMPILER)
+    if (APPLE)
+      list(APPEND CUDA_NVCC_FLAGS "-ccbin ${SERIAL_C_COMPILER}")
+    endif()
+  else()
+    message(STATUS "Could not detect serial C compiler.")
+  endif()
+endif()
+
+# If CMake version >= 2.8.11, need to add the CUDA library manually
+if (${CMAKE_VERSION} VERSION_GREATER 2.8.10)
+  if (CUDA_CUDA_LIBRARY)
+    get_filename_component(CUDA_CUDA_DIR ${CUDA_CUDA_LIBRARY}/.. REALPATH)
+    set(CUDA_LIBRARIES ${CUDA_LIBRARIES} ${CUDA_CUDA_LIBRARY})
+    if (NOT WIN32)
+      set(CUDA_LIBRARIES ${CUDA_LIBRARIES} "-Wl,-rpath -Wl,${CUDA_CUDA_DIR}")
+    endif()
+  else()
+    message(WARNING "CUDA_CUDA_LIBRARY not found, so link may fail.")
+  endif()
+endif()
 
 # The cuda library may not be in the frameworks area
 find_library(CUDA_cuda_SHLIB cuda
@@ -48,7 +95,7 @@ endif ()
 
 # Print results
 foreach (sfx VERSION CUDA_LIBRARY cuda_SHLIB NVCC_EXECUTABLE
-    TOOLKIT_ROOT_DIR TOOLKIT_INCLUDE INCLUDE_DIRS
+    NVCC_FLAGS TOOLKIT_ROOT_DIR TOOLKIT_INCLUDE INCLUDE_DIRS
     LIBRARY_DIRS LIBRARIES CUDART_LIBRARY
     curand_LIBRARY cublas_LIBRARY
     cusparse_LIBRARY cufft_LIBRARY npp_LIBRARY cupti_LIBRARY)
