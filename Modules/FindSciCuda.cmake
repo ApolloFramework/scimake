@@ -51,17 +51,9 @@ endif ()
 
 # If building in parallel, need to set -ccbin option to the serial
 # compiler on mac.
-if (ENABLE_PARALLEL)
-  execute_process(COMMAND ${CMAKE_C_COMPILER}
-                  --showme:command OUTPUT_VARIABLE SERIAL_C_COMPILER
-                  RESULT_VARIABLE SERIAL_C_COMPILER_RESULT)
-  if (SERIAL_C_COMPILER_RESULT EQUAL 0)
-    SciPrintVar(SERIAL_C_COMPILER)
-    if (APPLE)
-      list(APPEND CUDA_NVCC_FLAGS -ccbin ${SERIAL_C_COMPILER})
-    endif()
-  else()
-    message(STATUS "Could not detect serial C compiler.")
+if (ENABLE_PARALLEL AND SCI_SERIAL_C_COMPILER)
+  if (APPLE)
+      list(APPEND CUDA_NVCC_FLAGS -ccbin ${SCI_SERIAL_C_COMPILER})
   endif()
 endif()
 
@@ -93,19 +85,29 @@ else ()
   set(CUDA_cuda_SHLIB ${CUDA_CUDA_LIBRARY})
 endif ()
 
+if (CUDA_TOOLKIT_ROOT_DIR)
+  set(HAVE_CUDA_TOOLKIT TRUE)
+  set(CUDA_BASE_LIBRARIES ${CUDA_cusparse_LIBRARY} ${CUDA_CUDART_LIBRARY})
+# cublas is linked to cuda as opposed to dlopening it.  So it cannot
+# be linked but must be dlopened.
+  if (APPLE)
+# Could we instead use "-undefined dynamic_lookup"?
+    set(CUDA_BASE_LIBRARIES ${CUDA_BASE_LIBRARIES} ${CUDA_cuda_SHLIB})
+  endif ()
+else ()
+  set(HAVE_CUDA_TOOLKIT FALSE)
+endif ()
 # Print results
+SciPrintCMakeResults(CUDA)
 foreach (sfx VERSION CUDA_LIBRARY cuda_SHLIB NVCC_EXECUTABLE
     NVCC_FLAGS TOOLKIT_ROOT_DIR TOOLKIT_INCLUDE INCLUDE_DIRS
     LIBRARY_DIRS LIBRARIES CUDART_LIBRARY
     curand_LIBRARY cublas_LIBRARY
-    cusparse_LIBRARY cufft_LIBRARY npp_LIBRARY cupti_LIBRARY)
+    cusparse_LIBRARY cufft_LIBRARY npp_LIBRARY cupti_LIBRARY
+    cuda_SHLIB BASE_LIBRARIES
+)
   SciPrintVar(CUDA_${sfx})
 endforeach ()
-if (CUDA_TOOLKIT_ROOT_DIR)
-  set(HAVE_CUDA_TOOLKIT TRUE)
-else ()
-  set(HAVE_CUDA_TOOLKIT FALSE)
-endif ()
 SciPrintVar(HAVE_CUDA_TOOLKIT)
 message("")
 

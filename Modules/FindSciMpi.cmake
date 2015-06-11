@@ -50,6 +50,8 @@ if (SCI_HAVE_MPICXX_COMPILER_WRAPPER)
   if (${CMAKE_CXX_COMPILER} MATCHES "CC$")
     set(SEARCH_FOR_MPI FALSE)
   endif ()
+else()
+  set(SCI_SERIAL_C_COMPILER ${CMAKE_C_COMPILER})
 endif ()
 
 # If have fortran determine whether mpi is already in the Fortran compiler
@@ -256,6 +258,17 @@ if (MPI_FOUND)
   message(STATUS "Enabling MPI")
   SciPrintCMakeResults("MPI")
   SciPrintVar(MPI_LINK_FLAGS)
+  if (SCI_HAVE_MPICXX_COMPILER_WRAPPER)
+# Find the Serial C compiler
+# Does this work in general?
+    execute_process(COMMAND ${CMAKE_C_COMPILER}
+                  --showme:command OUTPUT_VARIABLE SCI_SERIAL_C_COMPILER
+                  RESULT_VARIABLE SERIAL_C_COMPILER_RESULT)
+    if (NOT SERIAL_C_COMPILER_RESULT EQUAL 0)
+      set(SCI_SERIAL_C_COMPILER ${CMAKE_C_COMPILER})
+    endif()
+  endif()
+  SciPrintVar(SCI_SERIAL_C_COMPILER)
 
 # Pass up the found variable.  This is all caps.
   set(SCIMPI_FOUND TRUE)
