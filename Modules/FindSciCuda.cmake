@@ -20,7 +20,7 @@ message("--------- Looking for CUDA -----------")
 message(STATUS "SciCuda_FIND_VERSION = ${SciCuda_FIND_VERSION}.")
 find_package(CUDA ${SciCuda_FIND_VERSION})
 
-if (CMAKE_BUILD_TYPE EQUAL Debug)
+if (CMAKE_BUILD_TYPE MATCHES Debug)
   list(APPEND CUDA_NVCC_FLAGS
       -g -G --use_fast_math --generate-code arch=compute_20,code=sm_20)
 else ()
