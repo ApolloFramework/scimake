@@ -34,8 +34,7 @@ else ()
       --generate-code arch=compute_35,code=sm_35
       --generate-code arch=compute_50,code=sm_50
       --generate-code arch=compute_52,code=sm_52
-      --generate-code arch=compute_52,code=compute_52
-      )
+   )
 endif ()
 
 string(FIND ${CMAKE_CXX_FLAGS} "-std=c++11" POS)
@@ -54,7 +53,7 @@ endif ()
 # compiler on mac.
 if (ENABLE_PARALLEL AND SCI_SERIAL_C_COMPILER)
   if (APPLE)
-      list(APPEND CUDA_NVCC_FLAGS -ccbin ${SCI_SERIAL_C_COMPILER})
+      # list(APPEND CUDA_NVCC_FLAGS -ccbin ${SCI_SERIAL_C_COMPILER})
   endif ()
 endif ()
 
