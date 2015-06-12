@@ -54,21 +54,21 @@ endif ()
 if (ENABLE_PARALLEL AND SCI_SERIAL_C_COMPILER)
   if (APPLE)
       list(APPEND CUDA_NVCC_FLAGS -ccbin ${SCI_SERIAL_C_COMPILER})
-  endif()
-endif()
+  endif ()
+endif ()
 
 # If CMake version >= 2.8.11, need to add the CUDA library manually
 if (${CMAKE_VERSION} VERSION_GREATER 2.8.10)
   if (CUDA_CUDA_LIBRARY)
     get_filename_component(CUDA_CUDA_DIR ${CUDA_CUDA_LIBRARY}/.. REALPATH)
     set(CUDA_LIBRARIES ${CUDA_LIBRARIES} ${CUDA_CUDA_LIBRARY})
-    if (NOT WIN32)
+    if (LINUX)
       set(CUDA_LIBRARIES ${CUDA_LIBRARIES} "-Wl,-rpath -Wl,${CUDA_CUDA_DIR}")
-    endif()
-  else()
+    endif ()
+  else ()
     message(WARNING "CUDA_CUDA_LIBRARY not found, so link may fail.")
-  endif()
-endif()
+  endif ()
+endif ()
 
 # The cuda library may not be in the frameworks area
 find_library(CUDA_cuda_SHLIB cuda
