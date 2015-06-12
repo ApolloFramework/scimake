@@ -17,7 +17,8 @@
 
 message("")
 message("--------- Looking for CUDA -----------")
-find_package(CUDA 5.0)
+message(STATUS "SciCuda_FIND_VERSION = ${SciCuda_FIND_VERSION}.")
+find_package(CUDA ${SciCuda_FIND_VERSION})
 
 if (CMAKE_BUILD_TYPE EQUAL Debug)
   list(APPEND CUDA_NVCC_FLAGS
