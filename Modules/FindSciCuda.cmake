@@ -97,6 +97,7 @@ if (CUDA_TOOLKIT_ROOT_DIR)
 else ()
   set(HAVE_CUDA_TOOLKIT FALSE)
 endif ()
+
 # Print results
 SciPrintCMakeResults(CUDA)
 foreach (sfx VERSION CUDA_LIBRARY cuda_SHLIB NVCC_EXECUTABLE
@@ -104,10 +105,27 @@ foreach (sfx VERSION CUDA_LIBRARY cuda_SHLIB NVCC_EXECUTABLE
     LIBRARY_DIRS LIBRARIES CUDART_LIBRARY
     curand_LIBRARY cublas_LIBRARY
     cusparse_LIBRARY cufft_LIBRARY npp_LIBRARY cupti_LIBRARY
-    cuda_SHLIB BASE_LIBRARIES
+    BASE_LIBRARIES
 )
   SciPrintVar(CUDA_${sfx})
 endforeach ()
 SciPrintVar(HAVE_CUDA_TOOLKIT)
 message("")
+
+# Macros covering presence or absence of cuda
+macro(scicuda_add_library)
+  if (HAVE_CUDA_TOOLKIT)
+    cuda_add_library(${ARGV})
+  else ()
+    add_library(${ARGV})
+  endif ()
+endmacro()
+
+macro(scicuda_add_executable)
+  if (HAVE_CUDA_TOOLKIT)
+    cuda_add_executable(${ARGV})
+  else ()
+    add_executable(${ARGV})
+  endif ()
+endmacro()
 
