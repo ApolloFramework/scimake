@@ -49,12 +49,13 @@ if (CUDA_CUDART_LIBRARY AND NOT CUDA_LIBRARY_DIRS)
   )
 endif ()
 
-# If building in parallel, need to set -ccbin option to the serial
-# compiler on mac.
-if (ENABLE_PARALLEL AND SCI_SERIAL_C_COMPILER)
-  if (APPLE)
-      # list(APPEND CUDA_NVCC_FLAGS -ccbin ${SCI_SERIAL_C_COMPILER})
-  endif ()
+# if (ENABLE_PARALLEL AND SCI_SERIAL_C_COMPILER)
+if (ENABLE_PARALLEL)
+# This is needed to get around nvcc finding what mpicc is linked to
+# and using that, which then prevents the openmpi compilers from knowing
+# what configuration file to use.
+  set(CUDA_HOST_COMPILER ${CMAKE_C_COMPILER})
+  # list(APPEND CUDA_NVCC_FLAGS -ccbin ${SCI_SERIAL_C_COMPILER})
 endif ()
 
 # If CMake version >= 2.8.11, need to add the CUDA library manually
