@@ -18,6 +18,10 @@
 message("")
 message("--------- Looking for CUDA -----------")
 message(STATUS "SciCuda_FIND_VERSION = ${SciCuda_FIND_VERSION}.")
+if (NOT WIN32 AND EXISTS /usr/local/cuda-${SciCuda_FIND_VERSION})
+    set(CUDA_BIN_PATH /usr/local/cuda-${SciCuda_FIND_VERSION})
+endif ()
+
 find_package(CUDA ${SciCuda_FIND_VERSION})
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
