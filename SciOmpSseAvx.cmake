@@ -288,6 +288,10 @@ endforeach ()
 
 if (USE_OPENMP)
   message(STATUS "OpenMP requested.")
+  # find_package(OpenMP) is broken for the XL compiler
+  if (${CMAKE_C_COMPILER_ID} MATCHES "XL") 
+    set(OPENMP_FLAGS "-qsmp=omp")
+  endif()
   if (OPENMP_FLAGS)
     message(STATUS "OpenMP flag defined.")
     set(HAVE_OPENMP TRUE)
@@ -304,6 +308,7 @@ if (USE_OPENMP)
   endif ()
   if (HAVE_OPENMP)
     message(STATUS "OPENMP_FLAGS = ${OPENMP_FLAGS}.")
+    set(OPENMP_FLAGS "${OPENMP_FLAGS}" PARENT_SCOPE)
 # To test for openmp4, need to add openmp flags for compilation
     set(CMAKE_CXX_FLAGS_SAV "${CMAKE_CXX_FLAGS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPENMP_FLAGS}")
