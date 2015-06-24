@@ -81,6 +81,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL XL)
     set(CXX_COMP_LIB_SUBDIR xlC${CXX_MAJOR_VERSION})
   endif ()
   set(SEPARATE_INSTANTIATIONS 1 CACHE BOOL "Whether to separate instantiations -- for correct compilation on xl")
+  set(CMAKE_CXX_FLAGS_RELEASE "-O4 -qarch=qp -qtune=qp")
 endif ()
 SciPrintVar(CXX_COMP_LIB_SUBDIR)
 

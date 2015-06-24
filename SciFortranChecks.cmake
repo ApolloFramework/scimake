@@ -67,6 +67,8 @@ elseif ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL XL)
     set(Fortran_COMP_LIB_SUBDIR xlC${Fortran_MAJOR_VERSION})
   endif ()
   set(SEPARATE_INSTANTIATIONS 1 CACHE BOOL "Whether to separate instantiations -- for correct compilation on xl")
+# Customize RELEASE flags
+  set(CMAKE_Fortran_FLAGS_RELEASE "-04 -qtune=qp -qarch=qp -qnooptdebug -qreport -qessl -qmaxmem=-1")
   set(FC_DOUBLE_FLAGS "-qautodbl=dbl4")
 endif ()
 if (SCI_FC_PROMOTE_REAL_TO_DOUBLE)

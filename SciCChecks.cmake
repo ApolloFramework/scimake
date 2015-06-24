@@ -174,6 +174,7 @@ elseif (${C_COMPILER_ID} STREQUAL PGI)
 
 elseif (${C_COMPILER_ID} STREQUAL XL)
 
+  set(CMAKE_C_FLAGS_RELEASE "-O4 -qarch=qp -qtune=qp")
   set(OPENMP_FLAGS "-qsmp=omp -qsmp=stackcheck")
 
 else ()

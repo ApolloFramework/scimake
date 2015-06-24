@@ -290,7 +290,7 @@ if (USE_OPENMP)
   message(STATUS "OpenMP requested.")
   # find_package(OpenMP) is broken for the XL compiler
   if (${CMAKE_C_COMPILER_ID} MATCHES "XL") 
-    set(OPENMP_FLAGS "-qsmp=omp")
+    set(OPENMP_FLAGS "-qsmp=omp -qsmp=stackcheck")
   endif()
   if (OPENMP_FLAGS)
     message(STATUS "OpenMP flag defined.")
