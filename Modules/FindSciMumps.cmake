@@ -59,6 +59,9 @@ if (NOT DEFINED Mumps_SEARCH_HEADERS)
 endif ()
 if (NOT DEFINED Mumps_SEARCH_LIBS)
   set(Mumps_SEARCH_LIBS "${MUMPS_LIB_PREFIX}cmumps.${MUMPS_LIB_SUFFIX};${MUMPS_LIB_PREFIX}dmumps.${MUMPS_LIB_SUFFIX};${MUMPS_LIB_PREFIX}smumps.${MUMPS_LIB_SUFFIX};${MUMPS_LIB_PREFIX}zmumps.${MUMPS_LIB_SUFFIX};${MUMPS_LIB_PREFIX}mumps_common.${MUMPS_LIB_SUFFIX};${MUMPS_LIB_PREFIX}pord.${MUMPS_LIB_SUFFIX}")
+  if (USE_Mumps_Scalapack)
+    set(Mumps_SEARCH_LIBS "${Mumps_SEARCH_LIBS};${MUMPS_LIB_PREFIX}scalapack.${MUMPS_LIB_SUFFIX}")
+  endif ()
 endif ()
 
 SciFindPackage(PACKAGE "Mumps"
