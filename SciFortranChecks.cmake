@@ -67,8 +67,11 @@ elseif ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL XL)
     set(Fortran_COMP_LIB_SUBDIR xlC${Fortran_MAJOR_VERSION})
   endif ()
   set(SEPARATE_INSTANTIATIONS 1 CACHE BOOL "Whether to separate instantiations -- for correct compilation on xl")
-# Customize RELEASE flags
-  set(CMAKE_Fortran_FLAGS_RELEASE "-O4 -qtune=qp -qarch=qp -qnooptdebug -qreport -qessl -qmaxmem=-1")
+# Customize flags because cmake defaults are very poor
+  set(CMAKE_Fortran_FLAGS_RELEASE "-O4 -qnooptdebug -qreport -qmaxmem=-1")
+  set(CMAKE_Fortran_FLAGS_FULL "${CMAKE_Fortran_FLAGS_RELEASE}")
+  set(CMAKE_Fortran_FLAGS_RELWITHDEBINFO "-O2")
+  set(CMAKE_Fortran_FLAGS_DEBUG "-g -qnoopt -O0 -qcheck")
   set(FC_DOUBLE_FLAGS "-qautodbl=dbl4")
 endif ()
 if (SCI_FC_PROMOTE_REAL_TO_DOUBLE)

@@ -174,7 +174,11 @@ elseif (${C_COMPILER_ID} STREQUAL PGI)
 
 elseif (${C_COMPILER_ID} STREQUAL XL)
 
-  set(CMAKE_C_FLAGS_RELEASE "-O4 -qarch=qp -qtune=qp")
+# CMake default XL compiler flags are very poor
+  set(CMAKE_C_FLAGS_RELEASE "-O4 -qnooptdebug")
+  set(CMAKE_C_FLAGS_FULL "${CMAKE_C_FLAGS_RELEASE}")
+  set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -qoptdebug")
+  set(CMAKE_C_FLAGS_DEBUG "-g -qnoopt -O0 -qcheck=all")
   set(OPENMP_FLAGS "-qsmp=omp -qsmp=stackcheck")
 
 else ()
