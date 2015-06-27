@@ -102,6 +102,10 @@ macro(SciAddUnitTest)
   else ()
     set(TEST_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/${TEST_COMMAND}")
   endif ()
+# Default for results dir
+  if (NOT TEST_RESULTS_DIR)
+    set(TEST_RESULTS_DIR ${CMAKE_CURRENT_BINARY_DIR})
+  endif ()
 # make sure there is a diff directory
   if (NOT TEST_DIFF_DIR)
     set(TEST_DIFF_DIR ${TEST_RESULTS_DIR})
