@@ -102,11 +102,11 @@ macro(SciAddUnitTest)
   else ()
     set(TEST_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/${TEST_COMMAND}")
   endif ()
-  # make sure there is a diff directory
+# make sure there is a diff directory
   if (NOT TEST_DIFF_DIR)
     set(TEST_DIFF_DIR ${TEST_RESULTS_DIR})
   endif ()
-  # make sure there are test and diff files
+# make sure there are test and diff files
   if (NOT TEST_TEST_FILES)
     set(TEST_TEST_FILES ${TEST_RESULTS_FILES})
   endif ()
@@ -116,7 +116,7 @@ macro(SciAddUnitTest)
       set(TEST_DIFF_FILES ${TEST_DIFF_FILES} "${TEST_DIFF_FILE}")
     endforeach ()
   endif ()
-  # if parallel set the mpiexec argument
+# if parallel set the mpiexec argument
   if (TEST_NUMPROCS AND ENABLE_PARALLEL AND MPIEXEC)
     set(TEST_MPIEXEC "${MPIEXEC} -np ${TEST_NUMPROCS}")
   else ()
@@ -124,10 +124,8 @@ macro(SciAddUnitTest)
   endif (TEST_NUMPROCS AND ENABLE_PARALLEL AND MPIEXEC)
   if (TEST_SOURCES)
     if (TEST_USE_CUDA_ADD)
-      # message(STATUS "Linking ${TEST_COMMAND} for CUDA.")
       cuda_add_executable(${TEST_COMMAND} ${TEST_SOURCES})
     else ()
-      # message(STATUS "Not linking ${TEST_COMMAND} for CUDA.")
       add_executable(${TEST_COMMAND} ${TEST_SOURCES})
     endif ()
   endif ()
@@ -148,7 +146,7 @@ macro(SciAddUnitTest)
       -P ${SCIMAKE_DIR}/SciTextCompare.cmake
   )
 
-# $ATTACHED_FILES is a list of files to attache and if non-empty, it
+# ATTACHED_FILES is a list of files to attach and if non-empty, it
 # overrides the default, which is ${TEST_RESULTS_FILES}.
   if (TEST_ATTACHED_FILES)
     set(FILES_TO_ATTACH ${TEST_ATTACHED_FILES})
