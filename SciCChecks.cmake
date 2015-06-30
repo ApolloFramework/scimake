@@ -175,7 +175,7 @@ elseif (${C_COMPILER_ID} STREQUAL PGI)
 elseif (${C_COMPILER_ID} STREQUAL XL)
 
 # CMake default XL compiler flags are very poor
-  set(CMAKE_C_FLAGS_RELEASE "-O4 -qnooptdebug")
+  set(CMAKE_C_FLAGS_RELEASE "-O3 -qnooptdebug")
   set(CMAKE_C_FLAGS_FULL "${CMAKE_C_FLAGS_RELEASE}")
   set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -qoptdebug")
   set(CMAKE_C_FLAGS_DEBUG "-g -qnoopt -O0 -qcheck=all")
