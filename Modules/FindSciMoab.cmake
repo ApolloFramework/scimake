@@ -23,7 +23,11 @@
 #
 ######################################################################
 
-set(moabfindlibs dagmc iMesh MOAB)
+if (NOT DEFINED MOAB_COMPONENTS)
+  set(moabfindlibs dagmc iMesh MOAB)
+else ()
+  set(moabfindlibs ${MOAB_COMPONENTS})
+endif ()
 
 set(USE_PYC_LIBS TRUE)
 if (NOT DEFINED USE_SHARED_LIBS)
@@ -33,7 +37,7 @@ SciGetInstSubdirs(moab instdirs)
 
 SciFindPackage(PACKAGE "Moab"
   INSTALL_DIRS ${instdirs}
-  HEADERS "MBCore.hpp"
+  HEADERS "moab/Core.hpp"
   LIBRARIES "${moabfindlibs}"
   LIBRARY_SUBDIRS lib/${CXX_COMP_LIB_SUBDIR} lib
 )
