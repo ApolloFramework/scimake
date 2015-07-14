@@ -11,18 +11,14 @@
 ######################################################################
 
 # Determine compiler version
-SciPrintString("")
-include(${SCIMAKE_DIR}/SciCxxFindVersion.cmake)
-if (CXX_VERSION)
-  SciPrintVar(CXX_VERSION)
-else ()
-  message(FATAL_ERROR "Could not determine compiler version.")
+message("")
+include(${SCIMAKE_DIR}/SciFindCompilerVersion.cmake)
+SciFindCompilerVersion(CXX)
+set(CXX ${CMAKE_CXX_COMPILER})
+if (NOT CXX_VERSION)
+  message(FATAL_ERROR "Could not determine C++ compiler version.")
 endif ()
 
-# Set the lib subdir from the Compiler ID and version
-if (DEBUG_CMAKE)
-  SciPrintVar(CMAKE_CXX_COMPILER_ID)
-endif ()
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL GNU)
   if (NOT USING_MINGW)
     if (NOT ("${CMAKE_CXX_FLAGS}" MATCHES "(^| )-pipe($| )"))

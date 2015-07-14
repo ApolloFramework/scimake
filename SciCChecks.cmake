@@ -10,12 +10,13 @@
 #
 ######################################################################
 
-# Determine the compiler id
-set(C_COMPILER ${CMAKE_C_COMPILER})
-set(C_COMPILER_ID ${CMAKE_C_COMPILER_ID})
-message(STATUS "C_COMPILER_ID = ${C_COMPILER_ID}.")
-SciPrintVar(C_COMPILER)
-SciPrintVar(C_COMPILER_ID)
+# Determine compiler version
+message("")
+include(${SCIMAKE_DIR}/SciFindCompilerVersion.cmake)
+SciFindCompilerVersion(C)
+if (NOT C_VERSION)
+  message(FATAL_ERROR "Could not determine compiler version.")
+endif ()
 
 # Type checks
 include(CheckTypeSize)
@@ -147,7 +148,7 @@ elseif (${C_COMPILER_ID} STREQUAL Cray)
 elseif (${C_COMPILER_ID} STREQUAL Intel)
 
   set(SSE2_FLAG "-msse2")
-  set(AVX_FLAG "-mavx")
+  # set(AVX_FLAG "-mavx") # Apparently not on Intel
   if (APPLE)
 # On OS X direct to use clang assembler.  Needs testing.
     set(AVX_FLAG "${AVX_FLAG} -Wa,-q")
