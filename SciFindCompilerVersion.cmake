@@ -17,8 +17,8 @@ macro(SciFindCompilerVersion COMPLANG)
   SciPrintVar(${COMPLANG}_COMPILER)
   SciPrintVar(${COMPLANG}_COMPILER_ID)
 
-  if ("${CMAKE_${COMPLANG}_COMPILER_ID}" STREQUAL GNU OR
-      "${CMAKE_${COMPLANG}_COMPILER_ID}" STREQUAL Clang)
+  if (CMAKE_${COMPLANG}_COMPILER_ID STREQUAL GNU OR
+      CMAKE_${COMPLANG}_COMPILER_ID STREQUAL Clang)
   # Get first line of version string
     execute_process(
       COMMAND ${CMAKE_${COMPLANG}_COMPILER} --version
@@ -40,7 +40,7 @@ macro(SciFindCompilerVersion COMPLANG)
       message(ERROR "Unable to extract version from '${_version_str}'")
     endif ()
 
-  elseif ("${CMAKE_${COMPLANG}_COMPILER_ID}" STREQUAL Cray)
+  elseif (CMAKE_${COMPLANG}_COMPILER_ID STREQUAL Cray)
     exec_program(${CMAKE_${COMPLANG}_COMPILER}
       ARGS -V
       OUTPUT_VARIABLE _version_tmp
@@ -53,9 +53,13 @@ macro(SciFindCompilerVersion COMPLANG)
     # MESSAGE("_version_tmp = ${_version_tmp}.")
     string(REPLACE "Version " "" _version_tmp ${_version_tmp})
     # MESSAGE("_version_tmp = ${_version_tmp}.")
-  elseif ("${CMAKE_${COMPLANG}_COMPILER_ID}" STREQUAL Intel)
-    if (CMAKE_${COMPLANG}_COMPILER MATCHES "icc" OR CMAKE_${COMPLANG}_COMPILER MATCHES "icpc" OR
-    CMAKE_${COMPLANG}_COMPILER MATCHES "mpi" OR CMAKE_${COMPLANG}_COMPILER MATCHES "CC")
+  elseif (CMAKE_${COMPLANG}_COMPILER_ID STREQUAL Intel)
+    # message(STATUS "Intel: CMAKE_${COMPLANG}_COMPILER = ${CMAKE_${COMPLANG}_COMPILER}")
+    if (CMAKE_${COMPLANG}_COMPILER MATCHES "icc"
+        OR CMAKE_${COMPLANG}_COMPILER MATCHES "icpc"
+        OR CMAKE_${COMPLANG}_COMPILER MATCHES "mpi"
+        OR CMAKE_${COMPLANG}_COMPILER MATCHES "CC"
+        OR CMAKE_${COMPLANG}_COMPILER MATCHES "cc")
       execute_process(
         COMMAND ${CMAKE_${COMPLANG}_COMPILER} --version
         OUTPUT_VARIABLE _version_str

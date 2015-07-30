@@ -17,18 +17,40 @@
 
 message("")
 message("--------- Looking for CUDA -----------")
+if (NOT SciCuda_FIND_VERSION)
+  set(SciCuda_FIND_VERSION 7.0)
+endif ()
 message(STATUS "SciCuda_FIND_VERSION = ${SciCuda_FIND_VERSION}.")
 if (NOT WIN32 AND EXISTS /usr/local/cuda-${SciCuda_FIND_VERSION})
     set(CUDA_BIN_PATH /usr/local/cuda-${SciCuda_FIND_VERSION})
+# Setting CUDA_BIN_PATH *should* be sufficient, according to the
+# cmake FindCUDA.cmake documentation, but if fails to find the
+# proper version. Use CUDA_TOOLKIT_ROOT_DIR for now.
+    set(CUDA_TOOLKIT_ROOT_DIR /usr/local/cuda-${SciCuda_FIND_VERSION})
 endif ()
 
 find_package(CUDA ${SciCuda_FIND_VERSION})
+SciPrintVar(CUDA_FOUND)
+if (CUDA_FOUND)
+  SciPrintVar(CUDA_VERSION)
+endif ()
 
-if (CMAKE_BUILD_TYPE MATCHES Debug)
-  list(APPEND CUDA_NVCC_FLAGS
-      -g -G --use_fast_math --generate-code arch=compute_20,code=sm_20)
-else ()
-  list(APPEND CUDA_NVCC_FLAGS
+# Macro to do what is needed when CUDA is found
+macro(SciDoCudaFound)
+
+  if (CMAKE_BUILD_TYPE MATCHES Debug)
+    list(APPEND CUDA_NVCC_FLAGS
+      -g -G --use_fast_math --generate-code arch=compute_20,code=sm_20
+    )
+  else ()
+    string(FIND ${CMAKE_CXX_FLAGS} "-std=c++11" POS)
+    if (NOT ${POS} EQUAL -1)
+      if (CUDA_VERSION LESS 7.0)
+        message(FATAL_ERROR "Cuda support of -std=c++11 requires a minimum CUDA version of 7.0")
+      endif ()
+      list(APPEND CUDA_NVCC_FLAGS "-std=c++11")
+    endif ()
+    list(APPEND CUDA_NVCC_FLAGS
       -O3
       --use_fast_math
       --ptxas-options=-v
@@ -36,86 +58,103 @@ else ()
       --generate-code arch=compute_20,code=sm_21
       --generate-code arch=compute_30,code=sm_30
       --generate-code arch=compute_35,code=sm_35
-      --generate-code arch=compute_50,code=sm_50
-      --generate-code arch=compute_52,code=sm_52
-   )
-endif ()
-
-string(FIND ${CMAKE_CXX_FLAGS} "-std=c++11" POS)
-if (NOT ${POS} EQUAL -1)
-  list(APPEND CUDA_NVCC_FLAGS "-std=c++11")
-endif ()
+     )
+# CUDA_VERSION is the found version
+     if (CUDA_VERSION LESS 5.0)
+       message(FATAL_ERROR "SciCuda requires a minimum CUDA version of 5.0")
+     endif ()
+     if (NOT (CUDA_VERSION LESS 6.0))
+       list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
+     endif ()
+     if (NOT (CUDA_VERSION LESS 7.0))
+       list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_52,code=sm_52)
+     endif ()
+   endif ()
 
 # find_cuda_helper_libs(cusparse)
-if (CUDA_CUDART_LIBRARY AND NOT CUDA_LIBRARY_DIRS)
-  get_filename_component(CUDA_LIBRARY_DIRS ${CUDA_CUDART_LIBRARY}
-    DIRECTORY CACHE
-  )
-endif ()
+  if (CUDA_CUDART_LIBRARY AND NOT CUDA_LIBRARY_DIRS)
+    get_filename_component(CUDA_LIBRARY_DIRS ${CUDA_CUDART_LIBRARY}
+      DIRECTORY CACHE
+    )
+  endif ()
 
 # if (ENABLE_PARALLEL AND SCI_SERIAL_C_COMPILER)
-if (ENABLE_PARALLEL)
+  if (ENABLE_PARALLEL)
 # This is needed to get around nvcc finding what mpicc is linked to
 # and using that, which then prevents the openmpi compilers from knowing
 # what configuration file to use.
-  set(CUDA_HOST_COMPILER ${CMAKE_C_COMPILER})
-  # list(APPEND CUDA_NVCC_FLAGS -ccbin ${SCI_SERIAL_C_COMPILER})
-endif ()
+    set(CUDA_HOST_COMPILER ${CMAKE_C_COMPILER})
+# list(APPEND CUDA_NVCC_FLAGS -ccbin ${SCI_SERIAL_C_COMPILER})
+  endif ()
 
 # If CMake version >= 2.8.11, need to add the CUDA library manually
-if (${CMAKE_VERSION} VERSION_GREATER 2.8.10)
-  if (CUDA_CUDA_LIBRARY)
-    get_filename_component(CUDA_CUDA_DIR ${CUDA_CUDA_LIBRARY}/.. REALPATH)
-    set(CUDA_LIBRARIES ${CUDA_LIBRARIES} ${CUDA_CUDA_LIBRARY})
-    if (LINUX)
-      set(CUDA_LIBRARIES ${CUDA_LIBRARIES} "-Wl,-rpath -Wl,${CUDA_CUDA_DIR}")
+  if (${CMAKE_VERSION} VERSION_GREATER 2.8.10)
+    if (CUDA_CUDA_LIBRARY)
+      get_filename_component(CUDA_CUDA_DIR ${CUDA_CUDA_LIBRARY}/.. REALPATH)
+      set(CUDA_LIBRARIES ${CUDA_LIBRARIES} ${CUDA_CUDA_LIBRARY})
+      if (LINUX)
+        set(CUDA_LIBRARIES ${CUDA_LIBRARIES} "-Wl,-rpath -Wl,${CUDA_CUDA_DIR}")
+      endif ()
+    else ()
+      message(WARNING "CUDA_CUDA_LIBRARY not found, so link may fail.")
     endif ()
-  else ()
-    message(WARNING "CUDA_CUDA_LIBRARY not found, so link may fail.")
   endif ()
-endif ()
 
 # The cuda library may not be in the frameworks area
-find_library(CUDA_cuda_SHLIB cuda
-  PATHS /usr/local/cuda-${CUDA_VERSION}
-  PATH_SUFFIXES lib64 lib
-  NO_DEFAULT_PATH
-)
-if (CUDA_cuda_SHLIB)
-  get_filename_component(CUDA_cuda_SHLIB_DIR ${CUDA_cuda_SHLIB}
-    DIRECTORY CACHE
+  find_library(CUDA_cuda_SHLIB cuda
+    PATHS /usr/local/cuda-${CUDA_VERSION}
+    PATH_SUFFIXES lib64 lib
+    NO_DEFAULT_PATH
   )
-  set(CUDA_LIBRARY_DIRS ${CUDA_LIBRARY_DIRS} ${CUDA_cuda_SHLIB_DIR})
-else ()
-  set(CUDA_cuda_SHLIB ${CUDA_CUDA_LIBRARY})
-endif ()
+  if (CUDA_cuda_SHLIB)
+    get_filename_component(CUDA_cuda_SHLIB_DIR ${CUDA_cuda_SHLIB}
+      DIRECTORY CACHE
+    )
+    set(CUDA_LIBRARY_DIRS ${CUDA_LIBRARY_DIRS} ${CUDA_cuda_SHLIB_DIR})
+  else ()
+    set(CUDA_cuda_SHLIB ${CUDA_CUDA_LIBRARY})
+  endif ()
 
-if (CUDA_TOOLKIT_ROOT_DIR)
-  set(HAVE_CUDA_TOOLKIT TRUE)
-  set(CUDA_BASE_LIBRARIES ${CUDA_cusparse_LIBRARY} ${CUDA_CUDART_LIBRARY})
+# Find the cudadevrt library
+  find_library(CUDA_CUDADEVRT_LIBRARY
+    NAMES cudadevrt
+    PATHS ${CUDA_LIBRARY_DIRS}
+    )
+
+  if (CUDA_TOOLKIT_ROOT_DIR)
+    set(HAVE_CUDA_TOOLKIT TRUE)
+    set(CUDA_BASE_LIBRARIES ${CUDA_cusparse_LIBRARY} ${CUDA_CUDART_LIBRARY})
 # cublas is linked to cuda as opposed to dlopening it.  So it cannot
 # be linked but must be dlopened.
-  if (APPLE)
+    if (APPLE)
 # Could we instead use "-undefined dynamic_lookup"?
-    set(CUDA_BASE_LIBRARIES ${CUDA_BASE_LIBRARIES} ${CUDA_cuda_SHLIB})
+      set(CUDA_BASE_LIBRARIES ${CUDA_BASE_LIBRARIES} ${CUDA_cuda_SHLIB})
+    endif ()
+  else ()
+    set(HAVE_CUDA_TOOLKIT FALSE)
   endif ()
+
+# Print results
+  SciPrintCMakeResults(CUDA)
+  foreach (sfx VERSION CUDA_LIBRARY cuda_SHLIB NVCC_EXECUTABLE
+      NVCC_FLAGS TOOLKIT_ROOT_DIR TOOLKIT_INCLUDE INCLUDE_DIRS
+      LIBRARY_DIRS LIBRARIES CUDART_LIBRARY
+      curand_LIBRARY cublas_LIBRARY
+      cusparse_LIBRARY cufft_LIBRARY npp_LIBRARY cupti_LIBRARY
+      CUDADEVRT_LIBRARY
+      BASE_LIBRARIES
+  )
+    SciPrintVar(CUDA_${sfx})
+  endforeach ()
+
+endmacro()
+SciPrintVar(HAVE_CUDA_TOOLKIT)
+
+if (CUDA_FOUND)
+  SciDoCudaFound()
 else ()
   set(HAVE_CUDA_TOOLKIT FALSE)
 endif ()
-
-# Print results
-SciPrintCMakeResults(CUDA)
-foreach (sfx VERSION CUDA_LIBRARY cuda_SHLIB NVCC_EXECUTABLE
-    NVCC_FLAGS TOOLKIT_ROOT_DIR TOOLKIT_INCLUDE INCLUDE_DIRS
-    LIBRARY_DIRS LIBRARIES CUDART_LIBRARY
-    curand_LIBRARY cublas_LIBRARY
-    cusparse_LIBRARY cufft_LIBRARY npp_LIBRARY cupti_LIBRARY
-    BASE_LIBRARIES
-)
-  SciPrintVar(CUDA_${sfx})
-endforeach ()
-SciPrintVar(HAVE_CUDA_TOOLKIT)
-message("")
 
 # Macros covering presence or absence of cuda
 macro(scicuda_add_library)

@@ -21,7 +21,9 @@
 #
 ##################################################################
 
-message(STATUS "Search for Python executable")
+message("")
+message(STATUS "--------- Looking for Python" --------- )
+message(STATUS "Seeking Python executable")
 # Find in the path
 if (WIN32)
   set(pynames python)
