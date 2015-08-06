@@ -24,10 +24,14 @@
 
 # Need to find paths with standard algorithm
 SciGetInstSubdirs(zlib zinstdirs)
+set(zlibs z zlib)
+if (WIN32 AND BUILD_SHARED_LIBS)
+  set(zlibs ${zlibs} zlib1)
+endif ()
 SciFindPackage(
   PACKAGE "Z"
   INSTALL_DIRS ${zinstdirs}
-  LIBRARIES z zlib zlib1 OPTIONAL
+  LIBRARIES ${zlibs} OPTIONAL
 )
 
 if (Z_FOUND)
