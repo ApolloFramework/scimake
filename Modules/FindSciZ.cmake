@@ -25,7 +25,7 @@
 # Need to find paths with standard algorithm
 SciGetInstSubdirs(zlib zinstdirs)
 set(zlibs z zlib)
-if (WIN32 AND BUILD_SHARED_LIBS)
+if (WIN32 AND (BUILD_SHARED_LIBS OR Z_DLLS_REQUIRED))
   set(zlibs ${zlibs} zlib1)
 endif ()
 SciFindPackage(
