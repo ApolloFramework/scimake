@@ -38,38 +38,37 @@ endif ()
 # Macro to do what is needed when CUDA is found
 macro(SciDoCudaFound)
 
-  if (CMAKE_BUILD_TYPE MATCHES Debug)
-    list(APPEND CUDA_NVCC_FLAGS
-      -g -G --use_fast_math --generate-code arch=compute_20,code=sm_20
-    )
-  else ()
-    string(FIND ${CMAKE_CXX_FLAGS} "-std=c++11" POS)
-    if (NOT ${POS} EQUAL -1)
-      if (CUDA_VERSION LESS 7.0)
-        message(FATAL_ERROR "Cuda support of -std=c++11 requires a minimum CUDA version of 7.0")
-      endif ()
-      list(APPEND CUDA_NVCC_FLAGS "-std=c++11")
+  string(FIND ${CMAKE_CXX_FLAGS} "-std=c++11" POS)
+  if (NOT ${POS} EQUAL -1)
+    if (CUDA_VERSION LESS 7.0)
+      message(FATAL_ERROR "Cuda support of -std=c++11 requires a minimum CUDA version of 7.0")
     endif ()
-    list(APPEND CUDA_NVCC_FLAGS
-      -O3
+    list(APPEND CUDA_NVCC_FLAGS "-std=c++11")
+  endif ()
+# CUDA_VERSION is the found version
+  if (CUDA_VERSION LESS 5.0)
+    message(FATAL_ERROR "SciCuda requires a minimum CUDA version of 5.0")
+  endif ()
+  list(APPEND CUDA_NVCC_FLAGS
       --use_fast_math
-      --ptxas-options=-v
       --generate-code arch=compute_20,code=sm_20
       --generate-code arch=compute_20,code=sm_21
       --generate-code arch=compute_30,code=sm_30
       --generate-code arch=compute_35,code=sm_35
-     )
-# CUDA_VERSION is the found version
-     if (CUDA_VERSION LESS 5.0)
-       message(FATAL_ERROR "SciCuda requires a minimum CUDA version of 5.0")
-     endif ()
-     if (NOT (CUDA_VERSION LESS 6.0))
-       list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
-     endif ()
-     if (NOT (CUDA_VERSION LESS 7.0))
-       list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_52,code=sm_52)
-     endif ()
-   endif ()
+  )
+  if (NOT (CUDA_VERSION LESS 6.0))
+    list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
+  endif ()
+  if (NOT (CUDA_VERSION LESS 7.0))
+    list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_52,code=sm_52)
+  endif ()
+  if (CMAKE_BUILD_TYPE MATCHES Debug)
+    list(APPEND CUDA_NVCC_FLAGS -g -G)
+  elseif (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
+    list(APPEND CUDA_NVCC_FLAGS -g -G -O2)
+  else ()
+    list(APPEND CUDA_NVCC_FLAGS -O3 --use_fast_math --ptxas-options=-v)
+  endif ()
 
 # find_cuda_helper_libs(cusparse)
   if (CUDA_CUDART_LIBRARY AND NOT CUDA_LIBRARY_DIRS)
