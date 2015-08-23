@@ -49,6 +49,8 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL Cray)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL Intel)
   string(REGEX REPLACE "\\.[0-9]+.*$" "" CXX_MAJOR_VERSION ${CXX_VERSION})
   set(CXX_COMP_LIB_SUBDIR icpc${CXX_MAJOR_VERSION})
+# Enable C++11.  Assuming Intel compiler supports.  If not, protect by version.
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL PathScale)
   string(SUBSTRING ${CXX_VERSION} 0 1 CXX_MAJOR_VERSION)
   set(CXX_COMP_LIB_SUBDIR path${CXX_MAJOR_VERSION})
