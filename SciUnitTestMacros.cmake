@@ -165,6 +165,17 @@ macro(SciAddUnitTest)
       "${SHLIB_PATH_VAR}=${SCIMAKE_SHLIB_NATIVE_PATH_VAL}" ${TEST_PROPERTIES}
     ATTACHED_FILES_ON_FAIL "${FILES_TO_ATTACH}"
   )
+
+# Add command to replace results
+  add_custom_target(${TEST_NAME}ReplaceResults)
+  string(REPLACE " " ";" resfiles "${TEST_RESULTS_FILES}")
+  foreach (file ${TEST_STDOUT_FILE} ${resfiles})
+    add_custom_command(TARGET ${TEST_NAME}ReplaceResults
+      COMMAND ${CMAKE_COMMAND} -E copy ${file} ${TEST_DIFF_DIR}
+      WORKING_DIRECTORY ${TEST_TEST_DIR}
+    )
+  endforeach ()
+
 endmacro()
 
 #
