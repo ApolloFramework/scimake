@@ -9,6 +9,7 @@
 #
 #
 ######################################################################
+
 include(CMakeParseArguments)
 
 # macro for determining the file type
@@ -29,12 +30,14 @@ endmacro()
 # macro for diffing two files
 macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
 # specify optional arguments
+  # set(opts SORT)
   set(oneValArgs TEST_DIR DIFF_DIR)
-  set(multiValArgs COMMAND)
+  set(multiValArgs DIFFER SORTER)
 # parse optional arguments
   cmake_parse_arguments(DIFF "${opts}" "${oneValArgs}" "${multiValArgs}"
     ${ARGN}
   )
+
 # if no diff file specified use the test file name with the results directory
   set(DIFF_TEST_FILEPATH "${DIFF_TEST_FILE}")
   set(DIFF_DIFF_FILEPATH "${DIFF_DIFF_FILE}")
@@ -44,6 +47,7 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
   if (DIFF_DIFF_DIR)
     set(DIFF_DIFF_FILEPATH "${DIFF_DIFF_DIR}/${DIFF_DIFF_FILE}")
   endif ()
+
 # make sure both files exist
   message(STATUS "DIFF_TEST_FILEPATH = \"${DIFF_TEST_FILEPATH}\"")
   if (NOT EXISTS "${DIFF_TEST_FILEPATH}")
@@ -55,17 +59,26 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
     set(${DIFF_FILES_EQUAL} FALSE)
     message(FATAL_ERROR "DIFF FILE ${DIFF_DIFF_FILEPATH} does not exist.")
   endif ()
+
+# Sort the new file if requested
+  if (DIFF_SORTER)
+    execute_process(COMMAND ${DIFF_SORTER} "${DIFF_TEST_FILEPATH}"
+      OUTPUT_FILE "${DIFF_TEST_FILEPATH}.sorted"
+    )
+    file(RENAME "${DIFF_TEST_FILEPATH}.sorted" "${DIFF_TEST_FILEPATH}")
+  endif ()
+
 # make sure a diff command is specified
-  if (NOT DIFF_COMMAND)
-    set(DIFF_COMMAND diff --strip-trailing-cr)
+  if (NOT DIFF_DIFFER)
+    set(DIFF_DIFFER diff --strip-trailing-cr)
   endif ()
 
 # execute the diff process
-  execute_process(COMMAND ${DIFF_COMMAND}
+  execute_process(COMMAND ${DIFF_DIFFER}
     "${DIFF_TEST_FILEPATH}" "${DIFF_DIFF_FILEPATH}"
     RESULT_VARIABLE DIFF_FILES_DIFFER)
 # return results in results variable
-  # message(STATUS "DIFF_COMMAND = \"${DIFF_COMMAND}\"")
+  # message(STATUS "DIFF_DIFFER = \"${DIFF_DIFFER}\"")
   # message(STATUS "DIFF_FILES_DIFFER = \"${DIFF_FILES_DIFFER}\"")
   if (DIFF_FILES_DIFFER)
     set(${DIFF_FILES_EQUAL} FALSE)

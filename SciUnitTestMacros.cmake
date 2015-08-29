@@ -85,10 +85,12 @@ message(STATUS "In SciAddUnitTestMacros.cmake, SHLIB_CMAKE_PATH_VAL = ${SHLIB_CM
 #   STDOUT_FILE   = Name of file into which stdout should be captured. This
 #                   file will be added to $RESULTS so it will be compared
 #                   against expected output.
+#   USE_CUDA_ADD  = Add libraries and executables using cuda
+#   SORTER        = Name of file to sort output with before comparing
 
 macro(SciAddUnitTest)
   set(opts USE_CUDA_ADD)
-  set(oneValArgs NAME COMMAND DIFFER RESULTS_DIR TEST_DIR DIFF_DIR STDOUT_FILE ARGS NUMPROCS MPIEXEC_PROG)
+  set(oneValArgs NAME COMMAND DIFFER RESULTS_DIR TEST_DIR DIFF_DIR STDOUT_FILE ARGS NUMPROCS MPIEXEC_PROG SORTER)
   set(multiValArgs RESULTS_FILES TEST_FILES DIFF_FILES SOURCES LIBS
                            PROPERTIES ATTACHED_FILES)
   cmake_parse_arguments(TEST
@@ -146,6 +148,7 @@ macro(SciAddUnitTest)
       -DTEST_TEST_DIR:PATH=${TEST_TEST_DIR}
       -DTEST_DIFF_FILES:STRING=${TEST_DIFF_FILES}
       -DTEST_DIFF_DIR:PATH=${TEST_DIFF_DIR}
+      -DTEST_SORTER:BOOL=${TEST_SORTER}
       -DTEST_SCIMAKE_DIR:PATH=${SCIMAKE_DIR}
       -P ${SCIMAKE_DIR}/SciTextCompare.cmake
   )

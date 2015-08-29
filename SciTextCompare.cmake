@@ -27,6 +27,10 @@ if (TEST_DIFFER)
 else ()
   set(TEST_DIFFER diff --strip-trailing-cr)
 endif ()
+if (TEST_SORTER)
+  message(STATUS "Sorting is on.")
+  set(SORTER_ARGS "SORTER ${TEST_SORTER}")
+endif ()
 message(STATUS "DIFFER SET TO   = ${TEST_DIFFER}")
 if (TEST_MPIEXEC)
   separate_arguments(TEST_MPIEXEC)
@@ -43,6 +47,7 @@ if (TEST_STDOUT_FILE)
   execute_process(COMMAND ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}
     RESULT_VARIABLE EXEC_ERROR
     OUTPUT_FILE ${TEST_STDOUT_FILE})
+# Assume stdout is not out of order by threading
   SciDiffFiles("${TEST_STDOUT_FILE}" "${TEST_STDOUT_FILE}" ARE_FILES_EQUAL
                DIFF_DIR ${TEST_DIFF_DIR})
   if (ARE_FILES_EQUAL)
@@ -54,7 +59,6 @@ else ()
   execute_process(COMMAND ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}
     RESULT_VARIABLE EXEC_ERROR)
 endif ()
-
 
 if (EXEC_ERROR)
   message(STATUS "EXEC_ERROR      = ${EXEC_ERROR}")
@@ -88,9 +92,10 @@ if (TEST_TEST_FILES)
     list(GET TEST_FILES_LIST ${ifile} testFile)
     list(GET DIFF_FILES_LIST ${ifile} diffFile)
     SciDiffFiles("${testFile}" "${diffFile}" ARE_FILES_EQUAL
-                 COMMAND  ${TEST_DIFFER}
-                 TEST_DIR ${TEST_TEST_DIR}
-                 DIFF_DIR ${TEST_DIFF_DIR}
+        COMMAND  ${TEST_DIFFER}
+        TEST_DIR ${TEST_TEST_DIR}
+        DIFF_DIR ${TEST_DIFF_DIR}
+        ${SORTER_ARGS}
     )
     if (ARE_FILES_EQUAL)
       message(STATUS "Comparison of ${testFile} succeeded.")
