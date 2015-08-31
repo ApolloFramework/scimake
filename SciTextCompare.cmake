@@ -8,7 +8,6 @@
 # Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
-#
 ######################################################################
 
 if (NOT SCIMAKE_DIR)
@@ -23,18 +22,26 @@ string(REPLACE " " ";" ARGS_LIST "${ARGS_LIST}")
 # make sure the file differ is set
 message(STATUS "TEST_DIFFER == \"${TEST_DIFFER}\"")
 if (TEST_DIFFER)
-  separate_arguments(TEST_DIFFER)
+  # separate_arguments(TEST_DIFFER)
 else ()
-  set(TEST_DIFFER diff --strip-trailing-cr)
+  set(TEST_DIFFER "diff --strip-trailing-cr")
 endif ()
 if (TEST_SORTER)
   message(STATUS "Sorting is on.")
-  set(SORTER_ARGS "SORTER ${TEST_SORTER}")
+  set(SORTER_ARGS SORTER "${TEST_SORTER}")
 endif ()
-message(STATUS "DIFFER SET TO   = ${TEST_DIFFER}")
+message(STATUS "[SciTextCompare] DIFFER IS = ${TEST_DIFFER}.")
+message(STATUS "[SciTextCompare] SORTER IS = ${TEST_SORTER}.")
 if (TEST_MPIEXEC)
   separate_arguments(TEST_MPIEXEC)
 endif (TEST_MPIEXEC)
+set(DIR_ARGS)
+if (TEST_TEST_DIR)
+  set(DIR_ARGS ${DIR_ARGS} TEST_DIR ${TEST_TEST_DIR})
+endif ()
+if (TEST_DIFF_DIR)
+  set(DIR_ARGS ${DIR_ARGS} DIFF_DIR ${TEST_DIFF_DIR})
+endif ()
 
 # if TEST_STDOUT_FILE is non-empty, then we use it as the output file
 # into for the execute_process(), and we add it to the ${TEST_TEST_FILES}
@@ -49,7 +56,8 @@ if (TEST_STDOUT_FILE)
     OUTPUT_FILE ${TEST_STDOUT_FILE})
 # Assume stdout is not out of order by threading
   SciDiffFiles("${TEST_STDOUT_FILE}" "${TEST_STDOUT_FILE}" ARE_FILES_EQUAL
-               DIFF_DIR ${TEST_DIFF_DIR})
+      ${DIR_ARGS}
+  )
   if (ARE_FILES_EQUAL)
     message(STATUS "Comparison of ${TEST_STDOUT_FILE} succeeded.")
   else ()
@@ -91,10 +99,10 @@ if (TEST_TEST_FILES)
   foreach (ifile RANGE ${loopLen})
     list(GET TEST_FILES_LIST ${ifile} testFile)
     list(GET DIFF_FILES_LIST ${ifile} diffFile)
+    message(STATUS "[SciTextCompare] Comparing ${testFile} and ${diffFile} using ${TEST_DIFFER} with ${SORTER_ARGS}.")
     SciDiffFiles("${testFile}" "${diffFile}" ARE_FILES_EQUAL
-        COMMAND  ${TEST_DIFFER}
-        TEST_DIR ${TEST_TEST_DIR}
-        DIFF_DIR ${TEST_DIFF_DIR}
+        DIFFER ${TEST_DIFFER}
+        ${DIR_ARGS}
         ${SORTER_ARGS}
     )
     if (ARE_FILES_EQUAL)
