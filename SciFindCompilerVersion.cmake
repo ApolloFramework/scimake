@@ -54,7 +54,34 @@ macro(SciFindCompilerVersion COMPLANG)
     string(REPLACE "Version " "" _version_tmp ${_version_tmp})
     # MESSAGE("_version_tmp = ${_version_tmp}.")
   elseif (CMAKE_${COMPLANG}_COMPILER_ID STREQUAL Intel)
-    # message(STATUS "Intel: CMAKE_${COMPLANG}_COMPILER = ${CMAKE_${COMPLANG}_COMPILER}")
+    message(STATUS "Intel: CMAKE_${COMPLANG}_COMPILER = ${CMAKE_${COMPLANG}_COMPILER}")
+    if (WIN32)
+    if (CMAKE_${COMPLANG}_COMPILER MATCHES "icl")
+      exec_program(${CMAKE_${COMPLANG}_COMPILER}
+        OUTPUT_VARIABLE _version_str
+      )
+      string(REGEX MATCH
+        "Version [0-9][0-9]\\.[0-9]\\.[0-9]\\.[0-9][0-9][0-9]"
+        _version_tmp
+        ${_version_str}
+      )
+      message(STATUS "Evaluating '${_version_str}'")
+      message(STATUS "Got '${_version_tmp}'")
+      string(REPLACE "Version " "" _version_tmp ${_version_tmp})
+    elseif (CMAKE_${COMPLANG}_COMPILER MATCHES "mpi")
+      exec_program(
+        icl OUTPUT_VARIABLE _version_str
+      )
+      string(REGEX MATCH
+        "Version [0-9][0-9]\\.[0-9]\\.[0-9]\\.[0-9][0-9][0-9]"
+        _version_tmp
+        ${_version_str}
+      )
+      message(STATUS "Evaluating '${_version_str}'")
+      message(STATUS "Got '${_version_tmp}'")
+      string(REPLACE "Version " "" _version_tmp ${_version_tmp})
+    endif () 
+    else () 
     if (CMAKE_${COMPLANG}_COMPILER MATCHES "icc"
         OR CMAKE_${COMPLANG}_COMPILER MATCHES "icpc"
         OR CMAKE_${COMPLANG}_COMPILER MATCHES "mpi"
@@ -79,18 +106,8 @@ macro(SciFindCompilerVersion COMPLANG)
       endif ()
       string(REPLACE "(ICC) " "" _version_tmp "${_version_tmp}")
       string(STRIP ${_version_tmp} _version_tmp)
-    elseif (CMAKE_${COMPLANG}_COMPILER MATCHES "icl")
-      exec_program(${CMAKE_${COMPLANG}_COMPILER}
-        OUTPUT_VARIABLE _version_tmp
-      )
-      string(REGEX MATCH
-        "Version [0-9][0-9]\\.[0-9]\\.[0-9]\\.[0-9][0-9][0-9]"
-        _version_tmp
-        ${_version_tmp}
-      )
-      string(REPLACE "Version " "" _version_tmp ${_version_tmp})
     endif ()
-
+    endif ()
   elseif (CMAKE_${COMPLANG}_COMPILER MATCHES "cl")
 
     exec_program(${CMAKE_${COMPLANG}_COMPILER}
