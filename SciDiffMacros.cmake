@@ -33,13 +33,13 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
   # set(opts SORT)
   # message(STATUS "SciDiffFiles called with ${ARGN}.")
   set(oneValArgs TEST_DIR DIFF_DIR)
-  set(multiValArgs SORTER DIFFER)
+  set(multiValArgs DIFFER SORTER)
 # parse optional arguments
   cmake_parse_arguments(DIFF "${opts}" "${oneValArgs}" "${multiValArgs}"
     ${ARGN}
   )
-  message(STATUS "DIFF_SORTER = ${DIFF_SORTER}.")
   message(STATUS "DIFF_DIFFER = ${DIFF_DIFFER}.")
+  message(STATUS "DIFF_SORTER = ${DIFF_SORTER}.")
 
 # if no diff file specified use the test file name with the results directory
   set(DIFF_TEST_FILEPATH "${DIFF_TEST_FILE}")
@@ -78,7 +78,7 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
 
 # execute the diff process
   separate_arguments(DIFF_DIFFER)
-  # message(STATUS "DIFF_DIFFER = ${DIFF_DIFFER}.")
+  #message(STATUS "DIFF_DIFFER = ${DIFF_DIFFER}.")
   execute_process(COMMAND ${DIFF_DIFFER}
     "${DIFF_TEST_FILEPATH}" "${DIFF_DIFF_FILEPATH}"
     RESULT_VARIABLE DIFF_FILES_DIFFER)

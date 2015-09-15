@@ -19,13 +19,6 @@ include(${SCIMAKE_DIR}/SciDiffMacros.cmake)
 string(REPLACE "\"" "" ARGS_LIST "${TEST_ARGS}")
 string(REPLACE " " ";" ARGS_LIST "${ARGS_LIST}")
 
-# Look for test sorter
-if (TEST_SORTER)
-  message(STATUS "Sorting is on.")
-  set(SORTER_ARGS SORTER "${TEST_SORTER}")
-endif ()
-message(STATUS "[SciTextCompare] SORTER IS = ${TEST_SORTER}.")
-
 # make sure the file differ is set
 message(STATUS "TEST_DIFFER == \"${TEST_DIFFER}\"")
 if (TEST_DIFFER)
@@ -33,7 +26,12 @@ if (TEST_DIFFER)
 else ()
   set(TEST_DIFFER "diff --strip-trailing-cr")
 endif ()
+if (TEST_SORTER)
+  message(STATUS "Sorting is on.")
+  set(SORTER_ARGS SORTER "${TEST_SORTER}")
+endif ()
 message(STATUS "[SciTextCompare] DIFFER IS = ${TEST_DIFFER}.")
+message(STATUS "[SciTextCompare] SORTER IS = ${TEST_SORTER}.")
 if (TEST_MPIEXEC)
   separate_arguments(TEST_MPIEXEC)
 endif (TEST_MPIEXEC)
@@ -58,7 +56,9 @@ if (TEST_STDOUT_FILE)
     OUTPUT_FILE ${TEST_STDOUT_FILE})
 # Assume stdout is not out of order by threading
   SciDiffFiles("${TEST_STDOUT_FILE}" "${TEST_STDOUT_FILE}" ARE_FILES_EQUAL
+      DIFFER ${TEST_DIFFER}
       ${DIR_ARGS}
+      ${SORTER_ARGS}
   )
   if (ARE_FILES_EQUAL)
     message(STATUS "Comparison of ${TEST_STDOUT_FILE} succeeded.")
