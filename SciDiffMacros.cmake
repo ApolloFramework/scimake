@@ -65,16 +65,20 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
 
 # Sort the new file if requested
   if (DIFF_SORTER)
-    separate_arguments(DIFF_SORTER)
+    # string(REPLACE ";" " " sorter "${DIFF_SORTER}")
+# Sort is a unix command, so need to pull off drive.  If we get a windows command,
+# will need to do differently
     message(STATUS "[SciDiffFiles] Executing ${DIFF_SORTER} \"${DIFF_TEST_FILEPATH}\".")
     execute_process(COMMAND ${DIFF_SORTER} "${DIFF_TEST_FILEPATH}"
       OUTPUT_FILE "${DIFF_TEST_FILEPATH}.sorted"
       RESULT_VARIABLE res
     )
-    if (res)
+    message (STATUS "res = ${res}.")
+    if (res EQUAL 2)
       message(STATUS "[SciDiffFiles] Execution failed.")
+    else ()
+      file(RENAME "${DIFF_TEST_FILEPATH}.sorted" "${DIFF_TEST_FILEPATH}")
     endif ()
-    file(RENAME "${DIFF_TEST_FILEPATH}.sorted" "${DIFF_TEST_FILEPATH}")
   endif ()
 
 # make sure a diff command is specified
@@ -84,7 +88,7 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
 
 # execute the diff process
   separate_arguments(DIFF_DIFFER)
-  #message(STATUS "DIFF_DIFFER = ${DIFF_DIFFER}.")
+  #message(STATUS "[SciDiffFiles] DIFF_DIFFER = ${DIFF_DIFFER}.")
   execute_process(COMMAND ${DIFF_DIFFER}
     "${DIFF_TEST_FILEPATH}" "${DIFF_DIFF_FILEPATH}"
     RESULT_VARIABLE DIFF_FILES_DIFFER)
