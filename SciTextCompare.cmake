@@ -52,7 +52,10 @@ message(STATUS "EXECUTING ... ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}")
 if (TEST_STDOUT_FILE)
   execute_process(COMMAND ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}
     RESULT_VARIABLE EXEC_ERROR
-    OUTPUT_FILE ${TEST_STDOUT_FILE})
+    # ERROR_VARIABLE errvar
+    OUTPUT_FILE ${TEST_STDOUT_FILE}
+  )
+  # message(STATUS "errvar = ${errvar}")
 # Assume stdout is not out of order by threading
   SciDiffFiles("${TEST_STDOUT_FILE}" "${TEST_STDOUT_FILE}" ARE_FILES_EQUAL
       DIFFER ${TEST_DIFFER}
@@ -66,7 +69,9 @@ if (TEST_STDOUT_FILE)
   endif ()
 else ()
   execute_process(COMMAND ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}
-    RESULT_VARIABLE EXEC_ERROR)
+    RESULT_VARIABLE EXEC_ERROR
+    # ERROR_VARIABLE errvar
+  )
 endif ()
 
 if (EXEC_ERROR)
