@@ -38,8 +38,8 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
   cmake_parse_arguments(DIFF "${opts}" "${oneValArgs}" "${multiValArgs}"
     ${ARGN}
   )
-  message(STATUS "DIFF_DIFFER = ${DIFF_DIFFER}.")
-  message(STATUS "DIFF_SORTER = ${DIFF_SORTER}.")
+  message(STATUS "[SciDiffFiles] DIFF_DIFFER = ${DIFF_DIFFER}.")
+  message(STATUS "[SciDiffFiles] DIFF_SORTER = ${DIFF_SORTER}.")
 
 # if no diff file specified use the test file name with the results directory
   set(DIFF_TEST_FILEPATH "${DIFF_TEST_FILE}")
@@ -65,9 +65,15 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
 
 # Sort the new file if requested
   if (DIFF_SORTER)
+    separate_arguments(DIFF_SORTER)
+    message(STATUS "[SciDiffFiles] Executing ${DIFF_SORTER} \"${DIFF_TEST_FILEPATH}\".")
     execute_process(COMMAND ${DIFF_SORTER} "${DIFF_TEST_FILEPATH}"
       OUTPUT_FILE "${DIFF_TEST_FILEPATH}.sorted"
+      RESULT_VARIABLE res
     )
+    if (res)
+      message(STATUS "[SciDiffFiles] Execution failed.")
+    endif ()
     file(RENAME "${DIFF_TEST_FILEPATH}.sorted" "${DIFF_TEST_FILEPATH}")
   endif ()
 
