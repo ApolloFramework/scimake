@@ -41,12 +41,16 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
   message(STATUS "[SciDiffFiles] DIFF_DIFFER = ${DIFF_DIFFER}.")
   message(STATUS "[SciDiffFiles] DIFF_SORTER = ${DIFF_SORTER}.")
   # message(STATUS "[SciDiffFiles] PATH = $ENV{PATH}.")
-  execute_process(COMMAND where sort
+  if (WIN32)
+    execute_process(COMMAND where sort
       COMMAND head -1
       OUTPUT_VARIABLE sortloc
       OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  file(TO_CMAKE_PATH "${sortloc}" sortloc)
+    )
+    file(TO_CMAKE_PATH "${sortloc}" sortloc)
+  else ()
+    set(sortloc sort)
+  endif ()
   message(STATUS "[SciDiffFiles] sortloc = ${sortloc}.")
 
 # if no diff file specified use the test file name with the results directory
