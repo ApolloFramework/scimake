@@ -40,6 +40,14 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
   )
   message(STATUS "[SciDiffFiles] DIFF_DIFFER = ${DIFF_DIFFER}.")
   message(STATUS "[SciDiffFiles] DIFF_SORTER = ${DIFF_SORTER}.")
+  # message(STATUS "[SciDiffFiles] PATH = $ENV{PATH}.")
+  execute_process(COMMAND where sort
+      COMMAND head -1
+      OUTPUT_VARIABLE sortloc
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  file(TO_CMAKE_PATH "${sortloc}" sortloc)
+  message(STATUS "[SciDiffFiles] sortloc = ${sortloc}.")
 
 # if no diff file specified use the test file name with the results directory
   set(DIFF_TEST_FILEPATH "${DIFF_TEST_FILE}")
@@ -68,16 +76,16 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
     # string(REPLACE ";" " " sorter "${DIFF_SORTER}")
 # Sort is a unix command, so need to pull off drive.  If we get a windows command,
 # will need to do differently
-    message(STATUS "[SciDiffFiles] Executing ${DIFF_SORTER} \"${DIFF_TEST_FILEPATH}\".")
-    execute_process(COMMAND ${DIFF_SORTER} "${DIFF_TEST_FILEPATH}"
+    message(STATUS "[SciDiffFiles] Executing ${sortloc} -df \"${DIFF_TEST_FILEPATH}\".")
+    execute_process(COMMAND ${sortloc} -df "${DIFF_TEST_FILEPATH}"
       OUTPUT_FILE "${DIFF_TEST_FILEPATH}.sorted"
       RESULT_VARIABLE res
     )
     message (STATUS "res = ${res}.")
-    if (res EQUAL 2)
-      message(STATUS "[SciDiffFiles] Execution failed.")
-    else ()
+    if (res EQUAL 0)
       file(RENAME "${DIFF_TEST_FILEPATH}.sorted" "${DIFF_TEST_FILEPATH}")
+    else ()
+      message(STATUS "[SciDiffFiles] Execution failed.")
     endif ()
   endif ()
 
@@ -87,8 +95,8 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
   endif ()
 
 # execute the diff process
-  separate_arguments(DIFF_DIFFER)
-  #message(STATUS "[SciDiffFiles] DIFF_DIFFER = ${DIFF_DIFFER}.")
+  # separate_arguments(DIFF_DIFFER)
+  # message(STATUS "[SciDiffFiles] DIFF_DIFFER = ${DIFF_DIFFER}.")
   execute_process(COMMAND ${DIFF_DIFFER}
     "${DIFF_TEST_FILEPATH}" "${DIFF_DIFF_FILEPATH}"
     RESULT_VARIABLE DIFF_FILES_DIFFER)
