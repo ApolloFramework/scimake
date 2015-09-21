@@ -98,9 +98,11 @@ macro(SciDiffFiles DIFF_TEST_FILE DIFF_DIFF_FILE DIFF_FILES_EQUAL)
     set(DIFF_DIFFER diff --strip-trailing-cr)
   endif ()
 
-# execute the diff process
-  # separate_arguments(DIFF_DIFFER)
+# SciAddUnitTest requires the differ to be passed as a single string, so
+# here we must separate the args for cmake.
+  separate_arguments(DIFF_DIFFER)
   # message(STATUS "[SciDiffFiles] DIFF_DIFFER = ${DIFF_DIFFER}.")
+# execute the diff process
   execute_process(COMMAND ${DIFF_DIFFER}
     "${DIFF_TEST_FILEPATH}" "${DIFF_DIFF_FILEPATH}"
     RESULT_VARIABLE DIFF_FILES_DIFFER)
