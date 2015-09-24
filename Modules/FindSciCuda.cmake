@@ -51,9 +51,9 @@ else ()
 # If CUDA not explicitly enabled, determine whether to use based on
 # whether supported
   set(COMPILER_BAD_4_CUDA FALSE)
-# This not a complete matrix, as assumes 7.0
+# This not a complete matrix, as assumes CUDA-7.0
   if ((${C_COMPILER_ID} STREQUAL Clang) AND NOT
-      (${C_VERSION} VERSION_LESS 7.0.0))
+      (${C_VERSION} VERSION_LESS 700.0.0))
     set(COMPILER_BAD_4_CUDA TRUE)
   elseif ((${C_COMPILER_ID} STREQUAL GNU) AND NOT
       (${C_VERSION} VERSION_LESS 5.0.0))
@@ -61,9 +61,11 @@ else ()
   endif ()
   if(COMPILER_BAD_4_CUDA)
     message(STATUS "CUDA not supported with ${C_COMPILER_ID}-${C_VERSION}.")
-    message(STATUS "Comment out the #error line in include/host_config.h in your CUDA installation to use CUDA anyway.")
-    message(STATUS "See https://www.pugetsystems.com/labs/articles/Install-NVIDIA-CUDA-on-Fedora-22-with-gcc-5-1-654")
-    message(STATUS "Also set SCI_ENABLE_CUDA=TRUE on the configure line or in your environment.")
+    if (LINUX)
+      message(STATUS "Comment out the #error line in include/host_config.h in your CUDA installation to use CUDA anyway.")
+      message(STATUS "See https://www.pugetsystems.com/labs/articles/Install-NVIDIA-CUDA-on-Fedora-22-with-gcc-5-1-654")
+      message(STATUS "Also set SCI_ENABLE_CUDA=TRUE on the configure line or in your environment.")
+    endif ()
     set(SCI_ENABLE_CUDA FALSE)
   else ()
     set(SCI_ENABLE_CUDA TRUE)
