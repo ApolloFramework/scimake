@@ -48,14 +48,16 @@ endif ()
 # more files which are to be compared, while also comparing the stdout
 # of the test.
 
-message(STATUS "EXECUTING ... ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}")
+string(REGEX REPLACE "([^\\]|^);" "\\1 " tmpStr "${ARGS_LIST}")
+string(REGEX REPLACE "[\\](.)" "\\1" tmpStr "${tmpStr}")
+set(argStr "${tmpStr}")
+message(STATUS "[SciTextCompare] EXECUTING ... ${TEST_MPIEXEC} ${TEST_PROG} ${argStr}")
+message(STATUS "[SciTextCompare] OUTPUT_FILE = ${TEST_STDOUT_FILE}")
 if (TEST_STDOUT_FILE)
   execute_process(COMMAND ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}
     RESULT_VARIABLE EXEC_ERROR
-    # ERROR_VARIABLE errvar
     OUTPUT_FILE ${TEST_STDOUT_FILE}
   )
-  # message(STATUS "errvar = ${errvar}")
 # Assume stdout is not out of order by threading
   SciDiffFiles("${TEST_STDOUT_FILE}" "${TEST_STDOUT_FILE}" ARE_FILES_EQUAL
       DIFFER ${TEST_DIFFER}
