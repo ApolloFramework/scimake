@@ -100,25 +100,45 @@ macro(SciDoCudaFound)
   if (CUDA_VERSION LESS 5.0)
     message(FATAL_ERROR "SciCuda requires a minimum CUDA version of 5.0")
   endif ()
-  list(APPEND CUDA_NVCC_FLAGS
+  if (CMAKE_BUILD_TYPE MATCHES Debug)
+    list(APPEND CUDA_NVCC_FLAGS
+      -g -G -lineinfo
+      )
+    if (DEFINED CUDA_DEBUG_GENERATE_FLAGS)
+      list(APPEND CUDA_NVCC_FLAGS ${CUDA_DEBUG_GENERATE_FLAGS})
+    else ()
+      list(APPEND CUDA_NVCC_FLAGS 
+        --generate-code arch=compute_20,code=sm_20
+        --generate-code arch=compute_20,code=sm_21
+        --generate-code arch=compute_30,code=sm_30
+        --generate-code arch=compute_35,code=sm_35
+        )
+      if (NOT (CUDA_VERSION LESS 6.0))
+        list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
+      endif ()
+      if (NOT (CUDA_VERSION LESS 7.0))
+        list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_52,code=sm_52)
+      endif ()
+    endif ()
+  else()
+    list(APPEND CUDA_NVCC_FLAGS
       --use_fast_math
       --generate-code arch=compute_20,code=sm_20
       --generate-code arch=compute_20,code=sm_21
       --generate-code arch=compute_30,code=sm_30
       --generate-code arch=compute_35,code=sm_35
-  )
-  if (NOT (CUDA_VERSION LESS 6.0))
-    list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
-  endif ()
-  if (NOT (CUDA_VERSION LESS 7.0))
-    list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_52,code=sm_52)
-  endif ()
-  if (CMAKE_BUILD_TYPE MATCHES Debug)
-    list(APPEND CUDA_NVCC_FLAGS -g -G)
-  elseif (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
-    list(APPEND CUDA_NVCC_FLAGS -g -G -O2)
-  else ()
-    list(APPEND CUDA_NVCC_FLAGS -O3 --use_fast_math --ptxas-options=-v)
+      )
+    if (NOT (CUDA_VERSION LESS 6.0))
+      list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
+    endif ()
+    if (NOT (CUDA_VERSION LESS 7.0))
+      list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_52,code=sm_52)
+    endif ()
+    if (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
+      list(APPEND CUDA_NVCC_FLAGS -g -G -O2)
+    else ()
+      list(APPEND CUDA_NVCC_FLAGS -O3 --use_fast_math --ptxas-options=-v)
+    endif ()
   endif ()
 
 # find_cuda_helper_libs(cusparse)
