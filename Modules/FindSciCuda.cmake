@@ -107,7 +107,7 @@ macro(SciDoCudaFound)
     if (DEFINED CUDA_DEBUG_GENERATE_FLAGS)
       list(APPEND CUDA_NVCC_FLAGS ${CUDA_DEBUG_GENERATE_FLAGS})
     else ()
-      list(APPEND CUDA_NVCC_FLAGS 
+      list(APPEND CUDA_NVCC_FLAGS
         --generate-code arch=compute_20,code=sm_20
         --generate-code arch=compute_20,code=sm_21
         --generate-code arch=compute_30,code=sm_30

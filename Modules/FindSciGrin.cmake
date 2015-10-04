@@ -43,8 +43,8 @@ else ()
   set(Grin_SEARCH "grin")
 endif ()
 
-###
-##  Define what to search for
+#
+#  Define what to search for
 #
 set(Grin_MESSAGE_SEARCH "grin")
 if (NOT DEFINED Grin_SEARCH_HEADERS)

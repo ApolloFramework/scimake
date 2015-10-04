@@ -51,8 +51,8 @@ else ()
   endif ()
 endif ()
 
-###
-##  Define what to search for
+#
+#  Define what to search for
 #
 if (NOT DEFINED Mumps_SEARCH_HEADERS)
   set(Mumps_SEARCH_HEADERS "cmumps_c.h;cmumps_root.h;cmumps_struc.h;dmumps_c.h;dmumps_root.h;dmumps_struc.h;mumps_compat.h;mumps_c_types.h;smumps_c.h;smumps_root.h;smumps_struc.h;zmumps_c.h;zmumps_root.h;zmumps_struc.h;mumps_common.h;mumps_headers.h;mumps_io.h;mumps_io_basic.h;mumps_io_err.h;mumps_io_thread.h;mumps_orderings.h;mumps_size.h;mumps_tags.h;")

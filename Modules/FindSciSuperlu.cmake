@@ -68,8 +68,8 @@ else ()
   endif ()
 endif ()
 
-###
-##  Define what to search for
+#
+#  Define what to search for
 #
 if (ENABLE_PARALLEL)
   set(Superlu_MESSAGE_SEARCH "superlu_dist")
