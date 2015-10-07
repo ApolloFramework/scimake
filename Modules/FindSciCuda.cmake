@@ -100,7 +100,7 @@ macro(SciDoCudaFound)
   if (CUDA_VERSION LESS 5.0)
     message(FATAL_ERROR "SciCuda requires a minimum CUDA version of 5.0")
   endif ()
-  list(APPEND CUDA_NVCC_FLAGS --Werror cross-execution-space-call)
+  # list(APPEND CUDA_NVCC_FLAGS --Werror cross-execution-space-call)
   if (CMAKE_BUILD_TYPE MATCHES Debug)
     list(APPEND CUDA_NVCC_FLAGS
       -g -G -lineinfo
