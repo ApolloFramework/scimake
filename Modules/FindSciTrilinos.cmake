@@ -109,9 +109,10 @@ if (TRILINOS_FOUND)
   foreach (lib ${Trilinos_TPL_LIBRARIES})
     get_filename_component(libname ${lib} NAME_WE)
     if (${libname} MATCHES "blas$" OR ${libname} MATCHES "lapack$" OR
-        ${libname} MATCHES "acml$" OR ${libname} MATCHES "mkl$" OR
+        ${libname} MATCHES "acml$" OR ${libname} MATCHES "mkl" OR
         ${libname} MATCHES "f2c$" OR ${libname} MATCHES "atlas$")
       set(Trilinos_LINALG_LIBRARIES ${Trilinos_LINALG_LIBRARIES} ${lib})
+      list(REMOVE_ITEM Trilinos_TPL_LIBRARIES ${lib})
 # Cray wrappers include these, but needed for serial build.
     elseif (${libname} MATCHES "sci_pgi" OR ${libname} MATCHES "sci_gnu" OR
         ${libname} MATCHES "sci_intel")
