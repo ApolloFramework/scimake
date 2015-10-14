@@ -5,7 +5,7 @@
 #   find_package(SciCuda ...)
 #
 # This module will define the following variables:
-#  HAVE_CUDA, CUDA_FOUND = Whether libraries and includes are found
+#  HAVE_CUDA, CUDA_FOUND   = Whether libraries and includes are found
 #  CUDA_INCLUDE_DIRS       = Location of Cuda includes
 #  CUDA_LIBRARY_DIRS       = Location of Cuda libraries
 #  CUDA_LIBRARIES          = Required libraries
@@ -25,11 +25,11 @@ message(STATUS "SciCuda_FIND_VERSIONS = ${SciCuda_FIND_VERSIONS}.")
 if (NOT WIN32)
   foreach (scver ${SciCuda_FIND_VERSIONS})
     if (EXISTS /usr/local/cuda-${scver})
-      set(CUDA_BIN_PATH /usr/local/cuda-${scver})
-# Setting CUDA_BIN_PATH *should* be sufficient, according to the
-# cmake FindCUDA.cmake documentation, but if fails to find the
-# proper version. Use CUDA_TOOLKIT_ROOT_DIR for now.
-      set(CUDA_TOOLKIT_ROOT_DIR /usr/local/cuda-${scver})
+      set(ENV{CUDA_BIN_PATH} /usr/local/cuda-${scver})
+# CUDA_BIN_PATH has to be set as an environment variable.
+# Should not set CUDA_TOOLKIT_ROOT_DIR as this will cause regeneration of
+# .depend files and a rebuild.
+      # set(CUDA_TOOLKIT_ROOT_DIR /usr/local/cuda-${scver})
       break ()
     endif ()
   endforeach ()
@@ -90,7 +90,6 @@ macro(SciDoCudaFound)
     if (CUDA_VERSION LESS 7.0)
       message(WARNING "Cuda support of -std=c++11 requires a minimum CUDA version of 7.0")
       set(CUDA_FOUND FALSE)
-      set(HAVE_CUDA_TOOLKIT FALSE)
       SciPrintVar(CUDA_FOUND)
       return()
     else ()
@@ -150,7 +149,6 @@ macro(SciDoCudaFound)
     )
   endif ()
 
-# if (ENABLE_PARALLEL AND SCI_SERIAL_C_COMPILER)
   if (ENABLE_PARALLEL)
 # This is needed to get around nvcc finding what mpicc is linked to
 # and using that, which then prevents the openmpi compilers from knowing
@@ -193,8 +191,7 @@ macro(SciDoCudaFound)
     PATHS ${CUDA_LIBRARY_DIRS}
     )
 
-  if (CUDA_TOOLKIT_ROOT_DIR)
-    set(HAVE_CUDA_TOOLKIT TRUE)
+  if (CUDA_FOUND)
     set(CUDA_BASE_LIBRARIES ${CUDA_cusparse_LIBRARY} ${CUDA_CUDART_LIBRARY})
 # cublas is linked to cuda as opposed to dlopening it.  So it cannot
 # be linked but must be dlopened.
@@ -203,8 +200,6 @@ macro(SciDoCudaFound)
       set(CUDA_BASE_LIBRARIES ${CUDA_BASE_LIBRARIES} ${CUDA_cuda_SHLIB})
     endif ()
   else ()
-    set(CUDA_FOUND FALSE)
-    set(HAVE_CUDA_TOOLKIT FALSE)
     return()
   endif ()
 
@@ -232,14 +227,15 @@ endmacro()
 if (CUDA_FOUND)
   SciDoCudaFound() # Can undo cuda found
 endif ()
-SciPrintVar(HAVE_CUDA_TOOLKIT)
 if (CUDA_FOUND)
+  set(HAVE_CUDA_TOOLKIT TRUE)
   message(STATUS "After CUDA additions:")
   SciPrintVar(CMAKE_C_FLAGS)
   SciPrintVar(CMAKE_CXX_FLAGS)
 else ()
   set(HAVE_CUDA_TOOLKIT FALSE)
 endif ()
+SciPrintVar(HAVE_CUDA_TOOLKIT)
 
 # Macros covering presence or absence of cuda
 macro(scicuda_add_library)
