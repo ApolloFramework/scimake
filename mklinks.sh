@@ -1,17 +1,18 @@
-#!/bin/bash
+#!/bin/sh
+######################################################################
 #
-# mklinks.sh: Make links from one directory to another if
-# distinct.  Create target.
+# @file    mklinks.sh
 #
-# Args:
-# 1: target stamp file
-# 2: source directory
-# 3-: all files to be linked
+# @brief   Make links from one directory to another if distinct.  Create target.
+#          Args:
+#            1: target stamp file
+#            2: source directory
+#            3-: all files to be linked
 #
-# $Id$
+# @version $Id$
 #
 # Copyright &copy; 2005-2015, Tech-X Corporation, Boulder, CO.
-# See LICENSE file (EclipseLicense.txt) for conditions of use.
+# All rights reserved.
 #
 ######################################################################
 
