@@ -145,7 +145,7 @@ macro(SciRplCompilerFlags CMPTYPE BLDTYPE)
       if (BUILD_WITH_SHARED_RUNTIME OR BUILD_SHARED_LIBS)
         set(RPLFLGS_ADDFLG "/MD")
       else ()
-        set(RPLFLGS_ADDFLG " ")
+        set(RPLFLGS_ADDFLG "/MT")
       endif ()
     endif ()
   endif ()
@@ -163,19 +163,17 @@ macro(SciRplCompilerFlags CMPTYPE BLDTYPE)
       endif ()
     else () # otherwise replace the unwantedflag with the wanted flag
       string(REPLACE "${RPLFLGS_RMVFLG}" "${RPLFLGS_ADDFLG}" thisval "${thisval}")
-# removed any dangling d that might have been left behind by for example
-# replacing "/MD" with " " when it was actually "/MDd" leaves behind " d"
-      string(REPLACE " d" " " thisval "${thisval}")
     endif ()
+  endif ()
+
 # append /bigobj to the current compiler arguments
 # ...but only if it's not already there
-    string(FIND "${thisval}" "/bigobj" bigobj_found)
-    if (bigobj_found EQUAL -1)
-      set(thisval "${thisval} /bigobj")
-    endif ()
-# force the compiler argument to be recached
-    set(${thisvar} "${thisval}" CACHE STRING "Flags used by the ${CMPTYPE} compiler during ${BLDTYPE} builds" FORCE)
+  string(FIND "${thisval}" "/bigobj" bigobj_found)
+  if (bigobj_found EQUAL -1)
+    set(thisval "${thisval} /bigobj")
   endif ()
+# force the compiler argument to be recached
+  set(${thisvar} "${thisval}" CACHE STRING "Flags used by the ${CMPTYPE} compiler during ${BLDTYPE} builds" FORCE)
 
 endmacro()
 
