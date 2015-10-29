@@ -117,7 +117,7 @@ if (TRILINOS_FOUND)
       if (${libname} MATCHES "mkl")
         set(Trilinos_USE_VENDOR_LINALG "mkl")
       endif()
-      set(Trilinos_USE_VENDOR_LINALG ${Trilinos_USE_VENDOR_LINALG} PARENT_SCOPE)
+      #set(Trilinos_USE_VENDOR_LINALG ${Trilinos_USE_VENDOR_LINALG} PARENT_SCOPE)
 # Cray wrappers include these, but needed for serial build.
     elseif (${libname} MATCHES "sci_pgi" OR ${libname} MATCHES "sci_gnu" OR
         ${libname} MATCHES "sci_intel")
