@@ -20,15 +20,14 @@ string(REPLACE "\"" "" ARGS_LIST "${TEST_ARGS}")
 string(REPLACE " " ";" ARGS_LIST "${ARGS_LIST}")
 
 # make sure the file differ is set
-message(STATUS "TEST_DIFFER == \"${TEST_DIFFER}\"")
 if (TEST_DIFFER)
   # separate_arguments(TEST_DIFFER)
 else ()
-  set(TEST_DIFFER "diff --strip-trailing-cr")
+  set(TEST_DIFFER diff --strip-trailing-cr)
 endif ()
 if (TEST_SORTER)
   message(STATUS "Sorting is on.")
-  set(SORTER_ARGS SORTER "${TEST_SORTER}")
+  set(SORTER_ARGS SORTER ${TEST_SORTER})
 endif ()
 message(STATUS "[SciTextCompare] DIFFER IS = ${TEST_DIFFER}.")
 message(STATUS "[SciTextCompare] SORTER IS = ${TEST_SORTER}.")
@@ -49,14 +48,21 @@ endif ()
 # more files which are to be compared, while also comparing the stdout
 # of the test.
 
-message(STATUS "EXECUTING ... ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}")
+string(REGEX REPLACE "([^\\]|^);" "\\1 " tmpStr "${ARGS_LIST}")
+string(REGEX REPLACE "[\\](.)" "\\1" tmpStr "${tmpStr}")
+set(argStr "${tmpStr}")
+message(STATUS "[SciTextCompare] EXECUTING ... ${TEST_MPIEXEC} ${TEST_PROG} ${argStr}")
+message(STATUS "[SciTextCompare] OUTPUT_FILE = ${TEST_STDOUT_FILE}")
 if (TEST_STDOUT_FILE)
   execute_process(COMMAND ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}
     RESULT_VARIABLE EXEC_ERROR
-    OUTPUT_FILE ${TEST_STDOUT_FILE})
+    OUTPUT_FILE ${TEST_STDOUT_FILE}
+  )
 # Assume stdout is not out of order by threading
   SciDiffFiles("${TEST_STDOUT_FILE}" "${TEST_STDOUT_FILE}" ARE_FILES_EQUAL
+      DIFFER ${TEST_DIFFER}
       ${DIR_ARGS}
+      ${SORTER_ARGS}
   )
   if (ARE_FILES_EQUAL)
     message(STATUS "Comparison of ${TEST_STDOUT_FILE} succeeded.")
@@ -65,7 +71,9 @@ if (TEST_STDOUT_FILE)
   endif ()
 else ()
   execute_process(COMMAND ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}
-    RESULT_VARIABLE EXEC_ERROR)
+    RESULT_VARIABLE EXEC_ERROR
+    # ERROR_VARIABLE errvar
+  )
 endif ()
 
 if (EXEC_ERROR)

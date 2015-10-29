@@ -77,22 +77,30 @@ message(STATUS "In SciAddUnitTestMacros.cmake, SHLIB_CMAKE_PATH_VAL = ${SHLIB_CM
 #   COMMAND       = test executable (typically same as NAME, but need not be)
 #   SOURCES       = 1+ source files to be compiled
 #   LIBS          = libraries needed to link test
-#   ARGS          = arguments to test
-#   RESULTS_FILES = Files to be compared against golden results. If this
-#                   var is empty, no comparisons will be done (but see
-#                   STDOUT_FILE below)
-#   RESULTS_DIR   = directory which contains expected results
+#   ARGS          = arguments to run the executable with
+#   DIFFER        = Name of executable to do diff.  If not given, assumed to
+#                   be "diff --strip-trailing-cr" in SciTextCompare.
+#   SORTER        = Name of executable to sort output with before comparing. If
+#                   not specified, no sorting is done.
+#   TEST_DIR      = Where the test files are generated.  Defaults to current
+#                   binary dir.
+#   DIFF_DIR      = Where the golden files are located.  Defaults to current
+#                   source dir.
+#   RESULTS_DIR   = Backward compatible way of specifying DIFF_DIR.
 #   STDOUT_FILE   = Name of file into which stdout should be captured. This
-#                   file will be added to $RESULTS so it will be compared
-#                   against expected output.
+#                   will be compared against a same named file in ${DIFF_DIR}.
+#   TEST_FILES    = Additional test generated files
+#   DIFF_FILES    = Golden generated files.  Should be same-length vector.
+#                   Defaults to TEST_FILES.
+#   MPIEXEC_PROG  = File to preface executable with for parallel run.
+#   NUMPROCS      = Number of processors to specify for parallel run.
 #   USE_CUDA_ADD  = Add libraries and executables using cuda
-#   SORTER        = Name of file to sort output with before comparing
 
 macro(SciAddUnitTest)
   set(opts USE_CUDA_ADD)
-  set(oneValArgs NAME COMMAND DIFFER RESULTS_DIR TEST_DIR DIFF_DIR STDOUT_FILE ARGS NUMPROCS MPIEXEC_PROG SORTER)
-  set(multiValArgs RESULTS_FILES TEST_FILES DIFF_FILES SOURCES LIBS
-                           PROPERTIES ATTACHED_FILES)
+  set(oneValArgs NAME COMMAND ARGS TEST_DIR DIFF_DIR RESULTS_DIR STDOUT_FILE NUMPROCS MPIEXEC_PROG)
+  set(multiValArgs SORTER DIFFER RESULTS_FILES TEST_FILES DIFF_FILES SOURCES LIBS
+      PROPERTIES ATTACHED_FILES)
   cmake_parse_arguments(TEST
       "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN}
   )
@@ -104,13 +112,17 @@ macro(SciAddUnitTest)
   else ()
     set(TEST_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/${TEST_COMMAND}")
   endif ()
-# Default for results dir
+# Backward compatible specification of goldern results localtion
   if (NOT TEST_RESULTS_DIR)
     set(TEST_RESULTS_DIR ${CMAKE_CURRENT_SOURCE_DIR})
   endif ()
-# make sure there is a diff directory
+# Actual golden results location
   if (NOT TEST_DIFF_DIR)
     set(TEST_DIFF_DIR ${TEST_RESULTS_DIR})
+  endif ()
+# Location of test files
+  if (NOT TEST_TEST_DIR)
+    set(TEST_TEST_DIR ${CMAKE_CURRENT_BINARY_DIR})
   endif ()
 # make sure there are test and diff files
   if (NOT TEST_TEST_FILES)
@@ -139,16 +151,16 @@ macro(SciAddUnitTest)
     target_link_libraries(${TEST_COMMAND} ${TEST_LIBS})
   endif ()
   add_test(NAME ${TEST_NAME} COMMAND ${CMAKE_COMMAND}
-      -DTEST_DIFFER:STRING=${TEST_DIFFER}
+      "-DTEST_SORTER:BOOL=${TEST_SORTER}"
+      "-DTEST_DIFFER:STRING=${TEST_DIFFER}"
       -DTEST_PROG:FILEPATH=${TEST_EXECUTABLE}
       -DTEST_MPIEXEC:STRING=${TEST_MPIEXEC}
       -DTEST_ARGS:STRING=${TEST_ARGS}
       -DTEST_STDOUT_FILE:STRING=${TEST_STDOUT_FILE}
-      -DTEST_TEST_FILES:STRING=${TEST_TEST_FILES}
       -DTEST_TEST_DIR:PATH=${TEST_TEST_DIR}
-      -DTEST_DIFF_FILES:STRING=${TEST_DIFF_FILES}
+      -DTEST_TEST_FILES:STRING=${TEST_TEST_FILES}
       -DTEST_DIFF_DIR:PATH=${TEST_DIFF_DIR}
-      -DTEST_SORTER:BOOL=${TEST_SORTER}
+      -DTEST_DIFF_FILES:STRING=${TEST_DIFF_FILES}
       -DTEST_SCIMAKE_DIR:PATH=${SCIMAKE_DIR}
       -P ${SCIMAKE_DIR}/SciTextCompare.cmake
   )

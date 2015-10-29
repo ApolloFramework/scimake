@@ -21,8 +21,8 @@
 # Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
-#
 ######################################################################
+
 set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 
 if (WIN32)
@@ -43,8 +43,8 @@ else ()
   set(Grin_SEARCH "grin")
 endif ()
 
-###
-##  Define what to search for
+#
+#  Define what to search for
 #
 set(Grin_MESSAGE_SEARCH "grin")
 if (NOT DEFINED Grin_SEARCH_HEADERS)

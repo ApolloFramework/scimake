@@ -38,8 +38,8 @@
 # Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
-#
 ######################################################################
+
 set(SUPRA_SEARCH_PATH ${SUPRA_SEARCH_PATH})
 
 if (WIN32)
@@ -68,8 +68,8 @@ else ()
   endif ()
 endif ()
 
-###
-##  Define what to search for
+#
+#  Define what to search for
 #
 if (ENABLE_PARALLEL)
   set(Superlu_MESSAGE_SEARCH "superlu_dist")

@@ -106,12 +106,18 @@ if (TRILINOS_FOUND)
   set(Trilinos_MUMPS_LIBRARIES)
   set(Trilinos_SYSTEM_LIBRARIES)
   set(Trilinos_WRAPPER_LIBRARIES)
+  set(Trilinos_USE_VENDOR_LINALG)
   foreach (lib ${Trilinos_TPL_LIBRARIES})
     get_filename_component(libname ${lib} NAME_WE)
     if (${libname} MATCHES "blas$" OR ${libname} MATCHES "lapack$" OR
-        ${libname} MATCHES "acml$" OR ${libname} MATCHES "mkl$" OR
+        ${libname} MATCHES "acml$" OR ${libname} MATCHES "mkl" OR
         ${libname} MATCHES "f2c$" OR ${libname} MATCHES "atlas$")
       set(Trilinos_LINALG_LIBRARIES ${Trilinos_LINALG_LIBRARIES} ${lib})
+      list(REMOVE_ITEM Trilinos_TPL_LIBRARIES ${lib})
+      if (${libname} MATCHES "mkl")
+        set(Trilinos_USE_VENDOR_LINALG "mkl")
+      endif()
+      #set(Trilinos_USE_VENDOR_LINALG ${Trilinos_USE_VENDOR_LINALG} PARENT_SCOPE)
 # Cray wrappers include these, but needed for serial build.
     elseif (${libname} MATCHES "sci_pgi" OR ${libname} MATCHES "sci_gnu" OR
         ${libname} MATCHES "sci_intel")

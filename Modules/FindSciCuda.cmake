@@ -5,7 +5,7 @@
 #   find_package(SciCuda ...)
 #
 # This module will define the following variables:
-#  HAVE_CUDA, CUDA_FOUND = Whether libraries and includes are found
+#  HAVE_CUDA, CUDA_FOUND   = Whether libraries and includes are found
 #  CUDA_INCLUDE_DIRS       = Location of Cuda includes
 #  CUDA_LIBRARY_DIRS       = Location of Cuda libraries
 #  CUDA_LIBRARIES          = Required libraries
@@ -17,19 +17,66 @@
 
 message("")
 message("--------- Looking for CUDA -----------")
-if (NOT SciCuda_FIND_VERSION)
-  set(SciCuda_FIND_VERSION 7.0)
+
+if (NOT SciCuda_FIND_VERSIONS)
+  set(SciCuda_FIND_VERSIONS 7.5 7.0)
 endif ()
-message(STATUS "SciCuda_FIND_VERSION = ${SciCuda_FIND_VERSION}.")
-if (NOT WIN32 AND EXISTS /usr/local/cuda-${SciCuda_FIND_VERSION})
-    set(CUDA_BIN_PATH /usr/local/cuda-${SciCuda_FIND_VERSION})
-# Setting CUDA_BIN_PATH *should* be sufficient, according to the
-# cmake FindCUDA.cmake documentation, but if fails to find the
-# proper version. Use CUDA_TOOLKIT_ROOT_DIR for now.
-    set(CUDA_TOOLKIT_ROOT_DIR /usr/local/cuda-${SciCuda_FIND_VERSION})
+message(STATUS "SciCuda_FIND_VERSIONS = ${SciCuda_FIND_VERSIONS}.")
+if (NOT WIN32)
+  foreach (scver ${SciCuda_FIND_VERSIONS})
+    if (EXISTS /usr/local/cuda-${scver})
+      set(ENV{CUDA_BIN_PATH} /usr/local/cuda-${scver})
+# CUDA_BIN_PATH has to be set as an environment variable.
+# Should not set CUDA_TOOLKIT_ROOT_DIR as this will cause regeneration of
+# .depend files and a rebuild.
+      # set(CUDA_TOOLKIT_ROOT_DIR /usr/local/cuda-${scver})
+      break ()
+    endif ()
+  endforeach ()
 endif ()
 
-find_package(CUDA ${SciCuda_FIND_VERSION})
+# Look for explicit enabling of CUDA from configure line or environment
+if (NOT DEFINED SCI_ENABLE_CUDA)
+  set(SCI_ENABLE_CUDA $ENV{SCI_ENABLE_CUDA})
+endif ()
+
+# Message if CUDA explicitly enabled
+if (DEFINED SCI_ENABLE_CUDA)
+  if (SCI_ENABLE_CUDA)
+    message(STATUS "CUDA explicitly enabled.")
+  else ()
+    message(STATUS "CUDA explicitly disabled.")
+  endif ()
+else ()
+# If CUDA not explicitly enabled, determine whether to use based on
+# whether supported
+  set(COMPILER_BAD_4_CUDA FALSE)
+# This not a complete matrix, as assumes CUDA-7.0
+  if ((${C_COMPILER_ID} STREQUAL Clang) AND NOT
+      (${C_VERSION} VERSION_LESS 700.0.0))
+    set(COMPILER_BAD_4_CUDA TRUE)
+  elseif ((${C_COMPILER_ID} STREQUAL GNU) AND NOT
+      (${C_VERSION} VERSION_LESS 5.0.0))
+    set(COMPILER_BAD_4_CUDA TRUE)
+  endif ()
+  if(COMPILER_BAD_4_CUDA)
+    message(STATUS "CUDA not supported with ${C_COMPILER_ID}-${C_VERSION}.")
+    if (LINUX)
+      message(STATUS "Comment out the #error line in include/host_config.h in your CUDA installation to use CUDA anyway.")
+      message(STATUS "See https://www.pugetsystems.com/labs/articles/Install-NVIDIA-CUDA-on-Fedora-22-with-gcc-5-1-654")
+      message(STATUS "Also set SCI_ENABLE_CUDA=TRUE on the configure line or in your environment.")
+    endif ()
+    set(SCI_ENABLE_CUDA FALSE)
+  else ()
+    set(SCI_ENABLE_CUDA TRUE)
+  endif ()
+endif ()
+
+if (SCI_ENABLE_CUDA)
+  find_package(CUDA ${SciCuda_FIND_VERSION})
+else ()
+  set(CUDA_FOUND FALSE)
+endif ()
 SciPrintVar(CUDA_FOUND)
 if (CUDA_FOUND)
   SciPrintVar(CUDA_VERSION)
@@ -41,33 +88,58 @@ macro(SciDoCudaFound)
   string(FIND ${CMAKE_CXX_FLAGS} "-std=c++11" POS)
   if (NOT ${POS} EQUAL -1)
     if (CUDA_VERSION LESS 7.0)
-      message(FATAL_ERROR "Cuda support of -std=c++11 requires a minimum CUDA version of 7.0")
+      message(WARNING "Cuda support of -std=c++11 requires a minimum CUDA version of 7.0")
+      set(CUDA_FOUND FALSE)
+      SciPrintVar(CUDA_FOUND)
+      return()
+    else ()
+      list(APPEND CUDA_NVCC_FLAGS "-std=c++11")
     endif ()
-    list(APPEND CUDA_NVCC_FLAGS "-std=c++11")
   endif ()
 # CUDA_VERSION is the found version
   if (CUDA_VERSION LESS 5.0)
     message(FATAL_ERROR "SciCuda requires a minimum CUDA version of 5.0")
   endif ()
-  list(APPEND CUDA_NVCC_FLAGS
+  # list(APPEND CUDA_NVCC_FLAGS --Werror cross-execution-space-call)
+  if (CMAKE_BUILD_TYPE MATCHES Debug)
+    list(APPEND CUDA_NVCC_FLAGS
+      -g -G -lineinfo
+      )
+    if (DEFINED CUDA_DEBUG_GENERATE_FLAGS)
+      list(APPEND CUDA_NVCC_FLAGS ${CUDA_DEBUG_GENERATE_FLAGS})
+    else ()
+      list(APPEND CUDA_NVCC_FLAGS
+        --generate-code arch=compute_20,code=sm_20
+        --generate-code arch=compute_20,code=sm_21
+        --generate-code arch=compute_30,code=sm_30
+        --generate-code arch=compute_35,code=sm_35
+        )
+      if (NOT (CUDA_VERSION LESS 6.0))
+        list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
+      endif ()
+      if (NOT (CUDA_VERSION LESS 7.0))
+        list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_52,code=sm_52)
+      endif ()
+    endif ()
+  else()
+    list(APPEND CUDA_NVCC_FLAGS
       --use_fast_math
       --generate-code arch=compute_20,code=sm_20
       --generate-code arch=compute_20,code=sm_21
       --generate-code arch=compute_30,code=sm_30
       --generate-code arch=compute_35,code=sm_35
-  )
-  if (NOT (CUDA_VERSION LESS 6.0))
-    list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
-  endif ()
-  if (NOT (CUDA_VERSION LESS 7.0))
-    list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_52,code=sm_52)
-  endif ()
-  if (CMAKE_BUILD_TYPE MATCHES Debug)
-    list(APPEND CUDA_NVCC_FLAGS -g -G)
-  elseif (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
-    list(APPEND CUDA_NVCC_FLAGS -g -G -O2)
-  else ()
-    list(APPEND CUDA_NVCC_FLAGS -O3 --use_fast_math --ptxas-options=-v)
+      )
+    if (NOT (CUDA_VERSION LESS 6.0))
+      list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
+    endif ()
+    if (NOT (CUDA_VERSION LESS 7.0))
+      list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_52,code=sm_52)
+    endif ()
+    if (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
+      list(APPEND CUDA_NVCC_FLAGS -g -G -O2)
+    else ()
+      list(APPEND CUDA_NVCC_FLAGS -O3 --use_fast_math --ptxas-options=-v)
+    endif ()
   endif ()
 
 # find_cuda_helper_libs(cusparse)
@@ -77,7 +149,6 @@ macro(SciDoCudaFound)
     )
   endif ()
 
-# if (ENABLE_PARALLEL AND SCI_SERIAL_C_COMPILER)
   if (ENABLE_PARALLEL)
 # This is needed to get around nvcc finding what mpicc is linked to
 # and using that, which then prevents the openmpi compilers from knowing
@@ -120,8 +191,7 @@ macro(SciDoCudaFound)
     PATHS ${CUDA_LIBRARY_DIRS}
     )
 
-  if (CUDA_TOOLKIT_ROOT_DIR)
-    set(HAVE_CUDA_TOOLKIT TRUE)
+  if (CUDA_FOUND)
     set(CUDA_BASE_LIBRARIES ${CUDA_cusparse_LIBRARY} ${CUDA_CUDART_LIBRARY})
 # cublas is linked to cuda as opposed to dlopening it.  So it cannot
 # be linked but must be dlopened.
@@ -130,7 +200,7 @@ macro(SciDoCudaFound)
       set(CUDA_BASE_LIBRARIES ${CUDA_BASE_LIBRARIES} ${CUDA_cuda_SHLIB})
     endif ()
   else ()
-    set(HAVE_CUDA_TOOLKIT FALSE)
+    return()
   endif ()
 
 # Print results
@@ -146,14 +216,26 @@ macro(SciDoCudaFound)
     SciPrintVar(CUDA_${sfx})
   endforeach ()
 
+# Flags to be added when CUDA is found on Windows
+  if (${CXX_COMPILER_ID} STREQUAL MSVC)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /FS")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /FS")
+  endif ()
+
 endmacro()
-SciPrintVar(HAVE_CUDA_TOOLKIT)
 
 if (CUDA_FOUND)
-  SciDoCudaFound()
+  SciDoCudaFound() # Can undo cuda found
+endif ()
+if (CUDA_FOUND)
+  set(HAVE_CUDA_TOOLKIT TRUE)
+  message(STATUS "After CUDA additions:")
+  SciPrintVar(CMAKE_C_FLAGS)
+  SciPrintVar(CMAKE_CXX_FLAGS)
 else ()
   set(HAVE_CUDA_TOOLKIT FALSE)
 endif ()
+SciPrintVar(HAVE_CUDA_TOOLKIT)
 
 # Macros covering presence or absence of cuda
 macro(scicuda_add_library)

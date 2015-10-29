@@ -288,10 +288,14 @@ endforeach ()
 
 if (USE_OPENMP)
   message(STATUS "OpenMP requested.")
-  # find_package(OpenMP) is broken for the XL compiler
-  if (${CMAKE_C_COMPILER_ID} MATCHES "XL") 
+# find_package(OpenMP) is broken for the XL compiler
+# JRC: But this is set in SciCChecks.cmake.  If you need it here also,
+# please state why.
+if (FALSE)
+  if (${CMAKE_C_COMPILER_ID} MATCHES "XL")
     set(OPENMP_FLAGS "-qsmp=omp -qsmp=stackcheck")
   endif()
+endif()
   if (OPENMP_FLAGS)
     message(STATUS "OpenMP flag defined.")
     set(HAVE_OPENMP TRUE)
