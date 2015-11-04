@@ -100,45 +100,32 @@ macro(SciDoCudaFound)
   if (CUDA_VERSION LESS 5.0)
     message(FATAL_ERROR "SciCuda requires a minimum CUDA version of 5.0")
   endif ()
-  # list(APPEND CUDA_NVCC_FLAGS --Werror cross-execution-space-call)
+# Set the optimization and debug type flags
   if (CMAKE_BUILD_TYPE MATCHES Debug)
+    list(APPEND CUDA_NVCC_FLAGS -g -G -lineinfo)
+  elseif (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
+    list(APPEND CUDA_NVCC_FLAGS -g -G -O2 --use_fast_math)
+  else ()
+    list(APPEND CUDA_NVCC_FLAGS -O3 --use_fast_math --ptxas-options=-v)
+  endif ()
+# Always do lowest compute capability
+  list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_20,code=sm_20)
+# Code remnant: obsolete?
+  # if (DEFINED CUDA_DEBUG_GENERATE_FLAGS)
+    # list(APPEND CUDA_NVCC_FLAGS ${CUDA_DEBUG_GENERATE_FLAGS})
+# Add other compute capabilities on reques
+  if (CUDA_ALL_COMPUTE_CAPABILITIES)
     list(APPEND CUDA_NVCC_FLAGS
-      -g -G -lineinfo
-      )
-    if (DEFINED CUDA_DEBUG_GENERATE_FLAGS)
-      list(APPEND CUDA_NVCC_FLAGS ${CUDA_DEBUG_GENERATE_FLAGS})
-    else ()
-      list(APPEND CUDA_NVCC_FLAGS
         --generate-code arch=compute_20,code=sm_20
         --generate-code arch=compute_20,code=sm_21
         --generate-code arch=compute_30,code=sm_30
         --generate-code arch=compute_35,code=sm_35
-        )
-      if (NOT (CUDA_VERSION LESS 6.0))
-        list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
-      endif ()
-      if (NOT (CUDA_VERSION LESS 7.0))
-        list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_52,code=sm_52)
-      endif ()
-    endif ()
-  else()
-    list(APPEND CUDA_NVCC_FLAGS
-      --use_fast_math
-      --generate-code arch=compute_20,code=sm_20
-      --generate-code arch=compute_20,code=sm_21
-      --generate-code arch=compute_30,code=sm_30
-      --generate-code arch=compute_35,code=sm_35
-      )
+    )
     if (NOT (CUDA_VERSION LESS 6.0))
       list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
     endif ()
     if (NOT (CUDA_VERSION LESS 7.0))
       list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_52,code=sm_52)
-    endif ()
-    if (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
-      list(APPEND CUDA_NVCC_FLAGS -g -G -O2)
-    else ()
-      list(APPEND CUDA_NVCC_FLAGS -O3 --use_fast_math --ptxas-options=-v)
     endif ()
   endif ()
 
@@ -224,6 +211,10 @@ macro(SciDoCudaFound)
 
 endmacro()
 
+# This to be a separate option.  Otherwise just use capability 2.0.
+option(CUDA_ALL_COMPUTE_CAPABILITIES
+  "Whether to compile for all cuda compute capabilities" OFF
+)
 if (CUDA_FOUND)
   SciDoCudaFound() # Can undo cuda found
 endif ()
