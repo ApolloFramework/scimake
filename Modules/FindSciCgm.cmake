@@ -37,7 +37,7 @@ SciGetInstSubdirs(cgm instdirs)
 
 SciFindPackage(PACKAGE "Cgm"
   INSTALL_DIRS ${instdirs}
-  HEADERS "cgm/Core.hpp"
+  HEADERS "cgm_version.h"
   LIBRARIES "${cgmfindlibs}"
   LIBRARY_SUBDIRS lib/${CXX_COMP_LIB_SUBDIR} lib
 )
