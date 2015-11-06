@@ -108,6 +108,8 @@ include(CheckCXXSourceRuns)
 
 message(STATUS "Checking vector capabilities.  CMAKE_REQUIRED_FLAGS = ${CMAKE_REQUIRED_FLAGS}.")
 
+set(SCI_MOST_POWERFUL_ISA Generic)
+
 # message(STATUS "Checking sse2 capabilities.")
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${SSE2_FLAG}")
@@ -139,6 +141,9 @@ int main(int argc, char** argv) {
 endif ()
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS_SAV}")
 SciPrintVar(SSE2_RUNS)
+if (SSE2_RUNS)
+  set(SCI_MOST_POWERFUL_ISA SSE2)
+endif ()
 
 # Check whether have avx.
 # message(STATUS "Checking avx capabilities.")
@@ -172,6 +177,9 @@ int main(int argc, char** argv) {
 endif ()
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS_SAV}")
 SciPrintVar(AVX_RUNS)
+if (AVX_RUNS)
+  set(SCI_MOST_POWERFUL_ISA AVX)
+endif ()
 
 # Check whether have avx2.
 # message(STATUS "Checking avx2 capabilities.")
@@ -207,6 +215,9 @@ int main(int argc, char** argv) {
 endif ()
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS_SAV}")
 SciPrintVar(AVX2_RUNS)
+if (AVX2_RUNS)
+  set(SCI_MOST_POWERFUL_ISA AVX2)
+endif ()
 
 # Check whether have avx512.
 # message(STATUS "Checking avx512 capabilities.")
@@ -240,6 +251,10 @@ int main(int argc, char** argv) {
 endif ()
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS_SAV}")
 SciPrintVar(AVX512_RUNS)
+if (AVX512_RUNS)
+  set(SCI_MOST_POWERFUL_ISA AVX512)
+endif ()
+SciPrintVar(SCI_MOST_POWERFUL_ISA)
 
 ######################################################################
 # Now handle the flags for sse2 and avx
