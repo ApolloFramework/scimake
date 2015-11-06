@@ -908,7 +908,12 @@ macro(SciFindPackage)
 # Find static libraries
     if (${scipkgreg}_LIBRARIES)
       SciGetStaticLibs("${${scipkgreg}_LIBRARIES}" ${scipkgreg}_STLIBS)
+# Prefer static if found
+      if (NOT USE_SHARED_LIBS AND DEFINED USE_SHARED_LIBS AND ${scipkgreg}_STLIBS)
+        set(${scipkgreg}_LIBRARIES ${${scipkgreg}_STLIBS})
+      endif ()
     endif ()
+
 
     if (${scipkgreg}_DLLS)
       set(${scipkgreg}_DEFINITIONS -D${scipkguc}_DLL)
