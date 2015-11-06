@@ -127,6 +127,7 @@ if (${C_COMPILER_ID} STREQUAL GNU)
     set(AVX_FLAG "${AVX_FLAG} -Wa,-q")
   endif ()
   set(AVX2_FLAG "-mavx2")
+  set(AVX512_FLAG "-mavx512f")
   set(OPENMP_FLAGS -fopenmp)
 
 elseif (${C_COMPILER_ID} STREQUAL Clang)
@@ -142,7 +143,7 @@ elseif (${C_COMPILER_ID} STREQUAL Cray)
 elseif (${C_COMPILER_ID} STREQUAL Intel)
 
   set(SSE2_FLAG "-msse2")
-  # set(AVX_FLAG "-mavx") # Apparently not on Intel
+  set(AVX_FLAG "-march=corei7-avx")
   if (APPLE)
 # On OS X direct to use clang assembler.  Needs testing.
     set(AVX_FLAG "${AVX_FLAG} -Wa,-q")
