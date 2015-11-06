@@ -110,10 +110,8 @@ message(STATUS "Checking vector capabilities.  CMAKE_REQUIRED_FLAGS = ${CMAKE_RE
 
 set(SCI_MOST_POWERFUL_ISA Generic)
 
-# message(STATUS "Checking sse2 capabilities.")
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${SSE2_FLAG}")
-# message(STATUS "SSE2_FLAG = ${SSE2_FLAG}.")
 check_c_source_compiles(
 "
 #include <emmintrin.h>
@@ -146,10 +144,8 @@ if (SSE2_RUNS)
 endif ()
 
 # Check whether have avx.
-# message(STATUS "Checking avx capabilities.")
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX_FLAG}")
-# message(STATUS "AVX_FLAG = ${AVX_FLAG}.")
 check_c_source_compiles(
 "
 #include <immintrin.h>
@@ -182,10 +178,8 @@ if (AVX_RUNS)
 endif ()
 
 # Check whether have avx2.
-# message(STATUS "Checking avx2 capabilities.")
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
-set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX_FLAG} ${AVX2_FLAG}")
-# message(STATUS "AVX2_FLAG = ${AVX2_FLAG}.")
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX2_FLAG}")
 check_cxx_source_compiles(
 "
 #include <immintrin.h>
@@ -220,10 +214,8 @@ if (AVX2_RUNS)
 endif ()
 
 # Check whether have avx512.
-# message(STATUS "Checking avx512 capabilities.")
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
-set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX_FLAG} ${AVX512_FLAG}")
-# message(STATUS "AVX512_FLAG = ${AVX512_FLAG}.")
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX512_FLAG}")
 check_cxx_source_compiles(
 "
 #include <immintrin.h>
