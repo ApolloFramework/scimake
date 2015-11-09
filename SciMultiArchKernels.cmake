@@ -32,5 +32,20 @@ else ()
   SciPrintString("Building multiarch kernels for minimal set of ISAs")
   set(SCI_MULTIARCH_INSTRUCTION_SETS Generic ${SCI_MOST_POWERFUL_ISA})
 endif ()
-SciPrintString("SCI_MULTIARCH_INSTRUCTION_SETS == ${SCI_MULTIARCH_INSTRUCTION_SETS}")
-message(STATUS "------------------------------------------------------")
+SciPrintVar(SCI_MULTIARCH_INSTRUCTION_SETS)
+
+# We use the SCI_MULTI_ARCH_cmp_FLAGS variables to construct compiler
+# flags for the multi-architecture libraries.  We start from the FULL
+# flags and remove all architecture specific flags.  The architecture
+# specific flags are later put back one by one in a controlled way for
+# each supported architecture.
+foreach(cmp C CXX)
+  set(SCI_MULTI_ARCH_${cmp}_FLAGS ${CMAKE_${cmp}_FLAGS_FULL})
+  foreach(instSet ${ALL_INSTRUCTION_SETS})
+    string(REPLACE "${${instSet}_FLAG}" ""
+           SCI_MULTI_ARCH_${cmp}_FLAGS
+           ${SCI_MULTI_ARCH_${cmp}_FLAGS})
+  endforeach()
+  SciPrintVar(SCI_MULTI_ARCH_${cmp}_FLAGS)
+endforeach()
+
