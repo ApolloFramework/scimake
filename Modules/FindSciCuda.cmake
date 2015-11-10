@@ -35,6 +35,12 @@ if (NOT WIN32)
   endforeach ()
 endif ()
 
+# CUDA not working with Intel
+message(STATUS "${CMAKE_CXX_COMPILER_ID}")
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+  set(SCI_ENABLE_CUDA FALSE)
+endif()
+
 # Look for explicit enabling of CUDA from configure line or environment
 if (NOT DEFINED SCI_ENABLE_CUDA)
   set(SCI_ENABLE_CUDA $ENV{SCI_ENABLE_CUDA})
