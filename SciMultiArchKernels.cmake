@@ -49,3 +49,18 @@ foreach(cmp C CXX)
   SciPrintVar(SCI_MULTI_ARCH_${cmp}_FLAGS)
 endforeach()
 
+function(add_multiarch_library multiarch_libraries library)
+  set(library_targets)
+  foreach(ia ${SCI_MULTIARCH_INSTRUCTION_SETS})
+    set(library_name ${multiarch_libraries}_${ia})
+    message(STATUS " >>> library_name == ${library_name}")
+    add_library(${library_name} ${ARGN})
+    set_target_properties(${library_name} PROPERTIES
+                          COMPILE_FLAGS ${${ia}_FLAG})
+    target_compile_definitions(${library_name} PRIVATE
+                               -DSCI_ARCH=${ia} -DSCI_BUILDING_${ia}
+                               -D${library}_EXPORTS)
+    list(APPEND library_targets ${library_name})
+  endforeach()
+  set(${multiarch_libraries} ${library_targets} PARENT_SCOPE)
+endfunction()
