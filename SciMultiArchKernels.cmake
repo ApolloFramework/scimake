@@ -42,7 +42,7 @@ SciPrintVar(SCI_MULTIARCH_INSTRUCTION_SETS)
 foreach(cmp C CXX)
   set(SCI_MULTI_ARCH_${cmp}_FLAGS ${CMAKE_${cmp}_FLAGS_FULL})
   foreach(instSet ${ALL_INSTRUCTION_SETS})
-    string(REPLACE "${${instSet}_FLAG}" ""
+    string(REPLACE "${${instSet}_FLAG}" " "
            SCI_MULTI_ARCH_${cmp}_FLAGS
            ${SCI_MULTI_ARCH_${cmp}_FLAGS})
   endforeach()
