@@ -180,8 +180,13 @@ else ()
   message(STATUS "FULL flags not known for ${C_COMPILER_ID}")
 endif ()
 
+# Define the following variable to make usage of ${instSet}_FLAG more
+# uniform
+set(Generic_FLAG " ")
+
 # Print the performance flags
 message(STATUS "Performance flags:")
+SciPrintVar(Generic_FLAG)
 SciPrintVar(SSE2_FLAG)
 SciPrintVar(AVX_FLAG)
 SciPrintVar(AVX2_FLAG)
