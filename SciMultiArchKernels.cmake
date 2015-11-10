@@ -49,17 +49,45 @@ foreach(cmp C CXX)
   SciPrintVar(SCI_MULTI_ARCH_${cmp}_FLAGS)
 endforeach()
 
-function(add_multiarch_library multiarch_libraries library)
+#
+# SciAddMultiArchLibrary: Create a multi architecture library
+#
+# Multi architecture libraries are libraries containing code for
+# multiple CPU instruction set architectures (ISAs).  They are created
+# by compiling the source files of the library multiple times.  This
+# process leads to multiple libraries, one for each ISA.  For each
+# library appropriate compiler flags are set to create binaries for one
+# specific ISA.  The set of ISAs for which binaries are created is
+# controlled by the SCI_MULTIARCH_INSTRUCTION_SETS architecture.
+#
+# Typical usage of this function is as follows:
+#
+# add_library(example_lib generic.cpp)
+# set(EXAMPLE_LIB_SRCS foo.cpp bar.cpp)
+# SciAddMultiArchLibrary(
+#   example_lib_multiarch example_lib ${EXAMPLE_LIB_SRCS})
+# add_executable(main main.cpp)
+# target_link_libaries(main example_lib ${example_lib_multiarch})
+#
+#
+# Args:
+#   multiarch_libraries: On entry the name of the multi architecture
+#                        library.  On exit this variable contains the
+#                        list of libraries that constitute the multi
+#                        architecture libraries.
+#   library:             The generic library associated with the multi
+#                        architecture library.  This controls the
+#                        -Dlib_EXPORTS macro for symbol visibility.
+#
+function(SciAddMultiArchLibrary multiarch_libraries library)
   set(library_targets)
   foreach(ia ${SCI_MULTIARCH_INSTRUCTION_SETS})
     set(library_name ${multiarch_libraries}_${ia})
-    message(STATUS " >>> library_name == ${library_name}")
     add_library(${library_name} ${ARGN})
     set_target_properties(${library_name} PROPERTIES
                           COMPILE_FLAGS ${${ia}_FLAG})
     target_compile_definitions(${library_name} PRIVATE
-                               -DSCI_ARCH=${ia} -DSCI_BUILDING_${ia}
-                               -D${library}_EXPORTS)
+                               -DSCI_ARCH=${ia} -DSCI_BUILDING_${ia} -D${library}_EXPORTS)
     list(APPEND library_targets ${library_name})
   endforeach()
   set(${multiarch_libraries} ${library_targets} PARENT_SCOPE)
