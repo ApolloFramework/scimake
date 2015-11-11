@@ -35,6 +35,12 @@ if (NOT WIN32)
   endforeach ()
 endif ()
 
+# CUDA not working with Intel
+message(STATUS "${CMAKE_CXX_COMPILER_ID}")
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+  set(SCI_ENABLE_CUDA FALSE)
+endif()
+
 # Look for explicit enabling of CUDA from configure line or environment
 if (NOT DEFINED SCI_ENABLE_CUDA)
   set(SCI_ENABLE_CUDA $ENV{SCI_ENABLE_CUDA})
@@ -108,17 +114,13 @@ macro(SciDoCudaFound)
   else ()
     list(APPEND CUDA_NVCC_FLAGS -O3 --use_fast_math --ptxas-options=-v)
   endif ()
-# Always do lowest compute capability
-  list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_20,code=sm_20)
-# Code remnant: obsolete?
-  # if (DEFINED CUDA_DEBUG_GENERATE_FLAGS)
-    # list(APPEND CUDA_NVCC_FLAGS ${CUDA_DEBUG_GENERATE_FLAGS})
+# Minimum compute capability for printf is 30
+  list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_30,code=sm_30)
 # Add other compute capabilities on reques
   if (CUDA_ALL_COMPUTE_CAPABILITIES)
     list(APPEND CUDA_NVCC_FLAGS
-        --generate-code arch=compute_20,code=sm_20
-        --generate-code arch=compute_20,code=sm_21
-        --generate-code arch=compute_30,code=sm_30
+        --generate-code arch=compute_20,code=sm_20 # Not needed?
+        --generate-code arch=compute_20,code=sm_21 # Not needed?
         --generate-code arch=compute_35,code=sm_35
     )
     if (NOT (CUDA_VERSION LESS 6.0))
