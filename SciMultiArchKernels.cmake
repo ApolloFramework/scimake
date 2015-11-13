@@ -84,8 +84,10 @@ function(SciAddMultiArchLibrary multiarch_libraries library)
   foreach(ia ${SCI_MULTIARCH_INSTRUCTION_SETS})
     set(library_name ${multiarch_libraries}_${ia})
     add_library(${library_name} ${ARGN})
-    set_target_properties(${library_name} PROPERTIES
-                          COMPILE_FLAGS ${${ia}_FLAG})
+    if (${${ia}_FLAG})
+      set_target_properties(${library_name} PROPERTIES
+                            COMPILE_FLAGS ${${ia}_FLAG})
+    endif ()
     target_compile_definitions(${library_name} PRIVATE
                                -DSCI_ARCH=${ia} -DSCI_BUILDING_${ia} -D${library}_EXPORTS)
     list(APPEND library_targets ${library_name})
