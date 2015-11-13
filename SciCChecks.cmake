@@ -113,6 +113,14 @@ endif ()
 # for this specific processor
 #
 
+
+set(Generic_FLAG " ")
+# Initialize the following flags to bogus values so we don't
+# get ISA_COMPILES and ISA_RUNS for ISAs that arent' really supported.
+set(SSE2_FLAG "compiler flags for this ISA not known")
+set(AVX_FLAG "compiler flags for this ISA not known")
+set(AVX2_FLAG "compiler flags for this ISA not known")
+set(AVX512_FLAG "compiler flags for this ISA not known")
 #
 # Determine flags by compiler
 #
@@ -185,10 +193,6 @@ elseif (${C_COMPILER_ID} STREQUAL XL)
 else ()
   message(STATUS "FULL flags not known for ${C_COMPILER_ID}")
 endif ()
-
-# Define the following variable to make usage of ${instSet}_FLAG more
-# uniform
-set(Generic_FLAG " ")
 
 # Print the performance flags
 message(STATUS "Performance flags:")
