@@ -81,11 +81,7 @@ if (Python_EXE)
   else ()
     set(Python_MAJMIN "${Python_MAJOR}.${Python_MINOR}")
   endif ()
-  if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-    set(Python_LIBRARY_NAMES python${Python_MAJMIN}_d)
-  else ()
-    set(Python_LIBRARY_NAMES python${Python_MAJMIN})
-  endif ()
+  set(Python_LIBRARY_NAMES python${Python_MAJMIN})
 
 # Shared library
   find_library(Python_LIBRARY
