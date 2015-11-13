@@ -113,9 +113,18 @@ endif ()
 # for this specific processor
 #
 
+# Initialize flags to empty so we don't have to distinguish special
+# cases when doing
+# set_target_properties(lib PROPERTIES COMPILE_FLAGS # ${${ia}_FLAG})
+set(Generic_FLAG "")
+set(SSE2_FLAG "")
+set(SSE3_FLAG "")
+set(AVX_FLAG "")
+set(AVX2_FLAG "")
+set(AVX512_FLAG "")
 #
 # Determine flags by compiler
-
+#
 set(CMAKE_C_FLAGS_FULL "${CMAKE_C_FLAGS_RELEASE}")
 if (${C_COMPILER_ID} STREQUAL GNU)
 
