@@ -16,7 +16,7 @@ message(STATUS "--------- Setting up multi-arch capabilities ---------")
 ######################################################################
 # Define the set of architectures we're building for
 ######################################################################
-set(ALL_INSTRUCTION_SETS Generic SSE2 SSE3 AVX AVX2 AVX512)
+set(ALL_INSTRUCTION_SETS Generic SSE2 AVX AVX2 AVX512)
 option(SCI_BUILD_ALL_INSTRUCTION_SETS
        "Whether to build for all architectures"
        FALSE)
