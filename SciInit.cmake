@@ -229,7 +229,7 @@ endif ()
 
 ######################################################################
 #
-# OpenMP, SSE, AVX,OpenCL
+# OpenMP, SSE, AVX, OpenCL
 #
 ######################################################################
 
@@ -238,6 +238,7 @@ option(ENABLE_OPENCL    "Whether to enable OpenCL" OFF)
 if (ENABLE_OPENCL)
 include(${SCIMAKE_DIR}/Modules/FindSciOpenCL.cmake)
 endif ()
+include(${SCIMAKE_DIR}/SciMultiArchKernels.cmake)
 
 ######################################################################
 #

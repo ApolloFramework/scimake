@@ -108,10 +108,10 @@ include(CheckCXXSourceRuns)
 
 message(STATUS "Checking vector capabilities.  CMAKE_REQUIRED_FLAGS = ${CMAKE_REQUIRED_FLAGS}.")
 
-# message(STATUS "Checking sse2 capabilities.")
+set(SCI_MOST_POWERFUL_ISA Generic)
+
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${SSE2_FLAG}")
-# message(STATUS "SSE2_FLAG = ${SSE2_FLAG}.")
 check_c_source_compiles(
 "
 #include <emmintrin.h>
@@ -139,12 +139,13 @@ int main(int argc, char** argv) {
 endif ()
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS_SAV}")
 SciPrintVar(SSE2_RUNS)
+if (SSE2_RUNS)
+  set(SCI_MOST_POWERFUL_ISA SSE2)
+endif ()
 
 # Check whether have avx.
-# message(STATUS "Checking avx capabilities.")
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX_FLAG}")
-# message(STATUS "AVX_FLAG = ${AVX_FLAG}.")
 check_c_source_compiles(
 "
 #include <immintrin.h>
@@ -172,12 +173,13 @@ int main(int argc, char** argv) {
 endif ()
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS_SAV}")
 SciPrintVar(AVX_RUNS)
+if (AVX_RUNS)
+  set(SCI_MOST_POWERFUL_ISA AVX)
+endif ()
 
 # Check whether have avx2.
-# message(STATUS "Checking avx2 capabilities.")
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
-set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX_FLAG} ${AVX2_FLAG}")
-# message(STATUS "AVX2_FLAG = ${AVX2_FLAG}.")
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX2_FLAG}")
 check_cxx_source_compiles(
 "
 #include <immintrin.h>
@@ -207,12 +209,13 @@ int main(int argc, char** argv) {
 endif ()
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS_SAV}")
 SciPrintVar(AVX2_RUNS)
+if (AVX2_RUNS)
+  set(SCI_MOST_POWERFUL_ISA AVX2)
+endif ()
 
 # Check whether have avx512.
-# message(STATUS "Checking avx512 capabilities.")
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
-set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX_FLAG} ${AVX512_FLAG}")
-# message(STATUS "AVX512_FLAG = ${AVX512_FLAG}.")
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX512_FLAG}")
 check_cxx_source_compiles(
 "
 #include <immintrin.h>
@@ -240,6 +243,10 @@ int main(int argc, char** argv) {
 endif ()
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS_SAV}")
 SciPrintVar(AVX512_RUNS)
+if (AVX512_RUNS)
+  set(SCI_MOST_POWERFUL_ISA AVX512)
+endif ()
+SciPrintVar(SCI_MOST_POWERFUL_ISA)
 
 ######################################################################
 # Now handle the flags for sse2 and avx
@@ -288,14 +295,6 @@ endforeach ()
 
 if (USE_OPENMP)
   message(STATUS "OpenMP requested.")
-# find_package(OpenMP) is broken for the XL compiler
-# JRC: But this is set in SciCChecks.cmake.  If you need it here also,
-# please state why.
-if (FALSE)
-  if (${CMAKE_C_COMPILER_ID} MATCHES "XL")
-    set(OPENMP_FLAGS "-qsmp=omp -qsmp=stackcheck")
-  endif()
-endif()
   if (OPENMP_FLAGS)
     message(STATUS "OpenMP flag defined.")
     set(HAVE_OPENMP TRUE)
@@ -323,7 +322,6 @@ endif()
       # OUTPUT_VARIABLE BUILD_OUT
     )
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_SAV}")
-    # message(STATUS "Build result = \n ${BUILD_OUT}")
     if (HAVE_PRAGMA_OMP_SIMD)
       message(STATUS "OpenMP 4 pragma omp simd available")
     else ()
