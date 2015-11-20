@@ -249,20 +249,18 @@ endif ()
 SciPrintVar(SCI_MOST_POWERFUL_ISA)
 
 ######################################################################
-# Now handle the flags for sse2 and avx
-# If we do runtime detection, we can add these flags more liberally
+# Now handle the compiler flags.
+# We build the optimized build types for SSE2.
+# The Full build type is compiled for the most powerful instruction set
+# supported by the CPU we're  building on.
 ######################################################################
 
 if (SSE2_COMPILES)
-  set(SSE2_BUILDS FULL RELEASE RELWITHDEBINFO MINSIZEREL)
+  set(SSE2_BUILDS RELEASE RELWITHDEBINFO MINSIZEREL)
   if (ALLOW_SSE2)
     set(SSE2_BUILDS ${SSE2_BUILDS} ${CMAKE_BUILD_TYPE_UC})
   endif ()
   list(REMOVE_DUPLICATES SSE2_BUILDS)
-  list(FIND SSE2_BUILDS ${CMAKE_BUILD_TYPE_UC} sse2found)
-  if (NOT ${sse2found} EQUAL -1)
-    set(HAVE_SSE2 TRUE)
-  endif ()
   foreach (cmp C CXX)
     foreach (bld ${SSE2_BUILDS})
       set(CMAKE_${cmp}_FLAGS_${bld} "${CMAKE_${cmp}_FLAGS_${bld}} ${SSE2_FLAG}")
@@ -270,24 +268,11 @@ if (SSE2_COMPILES)
   endforeach ()
 endif ()
 
-foreach (INSTSET AVX AVX2 AVX512)
-  if (${INSTSET}_RUNS)
-    set(${INSTSET}_BUILDS FULL)
-    if (ALLOW_${INSTSET})
-      set(${INSTSET}_BUILDS ${${INSTSET}_BUILDS} ${CMAKE_BUILD_TYPE_UC})
-    endif ()
-    list(REMOVE_DUPLICATES ${INSTSET}_BUILDS)
-    list(FIND ${INSTSET}_BUILDS ${CMAKE_BUILD_TYPE_UC} avxfound)
-    if (NOT ${avxfound} EQUAL -1)
-      set(HAVE_${INSTSET} TRUE)
-    endif ()
-    foreach (cmp C CXX)
-      foreach (bld ${${INSTSET}_BUILDS})
-        set(CMAKE_${cmp}_FLAGS_${bld} "${CMAKE_${cmp}_FLAGS_${bld}} ${${INSTSET}_FLAG}")
-      endforeach ()
-    endforeach ()
-  endif ()
+foreach (cmp C CXX)
+  set(CMAKE_${cmp}_FLAGS_FULL
+      "${CMAKE_${cmp}_FLAGS_FULL} ${${SCI_MOST_POWERFUL_ISA}_FLAG}")
 endforeach ()
+
 
 ######################################################################
 # OpenMP detection
