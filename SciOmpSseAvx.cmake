@@ -261,10 +261,6 @@ if (SSE2_COMPILES)
     set(SSE2_BUILDS ${SSE2_BUILDS} ${CMAKE_BUILD_TYPE_UC})
   endif ()
   list(REMOVE_DUPLICATES SSE2_BUILDS)
-  list(FIND SSE2_BUILDS ${CMAKE_BUILD_TYPE_UC} sse2found)
-  if (NOT ${sse2found} EQUAL -1)
-    set(HAVE_SSE2 TRUE)
-  endif ()
   foreach (cmp C CXX)
     foreach (bld ${SSE2_BUILDS})
       set(CMAKE_${cmp}_FLAGS_${bld} "${CMAKE_${cmp}_FLAGS_${bld}} ${SSE2_FLAG}")
@@ -276,14 +272,6 @@ foreach (cmp C CXX)
   set(CMAKE_${cmp}_FLAGS_FULL
       "${CMAKE_${cmp}_FLAGS_FULL} ${${SCI_MOST_POWERFUL_ISA}_FLAG}")
 endforeach ()
-
-if (${CMAKE_BUILD_TYPE_UC} STREQUAL FULL)
-  foreach (i AVX AVX2 AVX512)
-    if (${i}_RUNS)
-      set(HAVE_${i} TRUE)
-    endif ()
-  endforeach ()
-endif ()
 
 
 ######################################################################
