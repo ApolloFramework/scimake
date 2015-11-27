@@ -70,9 +70,11 @@ message(STATUS "Hdf5_ROOT_DIR = ${Hdf5_ROOT_DIR}.")
 # Version known, can look for config file
 SciFindPackage(PACKAGE "Hdf5"
   CONFIG_SUBDIRS
+# They keep changing the location
     lib/cmake/hdf5-${Hdf5_VERSION}   # 1.8.6
     share/cmake/hdf5-${Hdf5_VERSION} # 1.8.7
-    share/cmake/hdf5                # 1.8.12
+    share/cmake/hdf5   # 1.8.12
+    share/cmake        # 1.8.18
   # USE_CONFIG_FILE # Cannot always source, so decide later
   CONFIG_FILE_ONLY
   FIND_QUIETLY
