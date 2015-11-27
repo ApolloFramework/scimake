@@ -619,6 +619,7 @@ endfunction()
 # PROGRAM_SUBDIRS: executable subdirs
 # INCLUDE_SUBDIRS: include subdirectories
 # LIBRARY_SUBDIRS: library subdirectories
+# MODULE_SUBDIRS: library subdirectories
 # FILE_SUBDIRS: file subdirectories
 #
 # NOTE: One cannot reset calling variables
@@ -665,6 +666,7 @@ macro(SciFindPackage)
       PROGRAM_SUBDIRS  = ${TFP_PROGRAM_SUBDIRS}
       INCLUDE_SUBDIRS  = ${TFP_INCLUDE_SUBDIRS}
       LIBRARY_SUBDIRS  = ${TFP_LIBRARY_SUBDIRS}
+      MODULE_SUBDIRS  = ${TFP_LIBRARY_SUBDIRS}
       FILE_SUBDIRS     = ${TFP_FILE_SUBDIRS}
       FIND_QUIETLY     = ${TFP_FIND_QUIETLY}
       ALLOW_LIBRARY_DUPLICATES = ${TFP_ALLOW_LIBRARY_DUPLICATES}

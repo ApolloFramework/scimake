@@ -36,6 +36,8 @@ SciFindPackage(PACKAGE "Hdf5"
   HEADERS hdf5.h H5pubconf.h
 # Last in list is for finding within VisIt installation
   INCLUDE_SUBDIRS include include/hdf5/include
+  MODULE_SUBDIRS include
+      include/static  # 1.8.16
   FIND_QUIETLY
 )
 
@@ -153,7 +155,9 @@ SciFindPackage(PACKAGE "Hdf5"
   LIBRARIES ${desiredlibs}
   MODULES ${desiredmods}
   INCLUDE_SUBDIRS include include/hdf5/include # Last for VisIt installation
-  MODULE_SUBDIRS include/fortran include lib
+  MODULE_SUBDIRS include/fortran lib
+      include         # 1.8.13
+      include/static  # 1.8.16
 )
 
 if (FALSE)
