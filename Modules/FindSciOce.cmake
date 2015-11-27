@@ -56,7 +56,7 @@ set(OceStep_SEARCHHDRS STEPControl_Reader.hxx)
 # STEP and IGES depend on this, but not STL
 set(OceIoBase_SEARCHLIBS TKXSBase)
 set(OceStl_SEARCHLIBS TKSTL)
-set(OceAlgo_SEARCHLIBS TKShHealing TKTopAlgo TKGeomAlgo)
+set(OceAlgo_SEARCHLIBS TKFeat TKShHealing TKTopAlgo TKGeomAlgo)
 set(OceModelData_SEARCHLIBS TKBRep TKG3d TKG2d TKGeomBase)
 # AdvTools gone as of OCE-0.17
 # set(OceTools_SEARCHLIBS TKMath TKAdvTools)
