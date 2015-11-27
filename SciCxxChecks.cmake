@@ -225,7 +225,7 @@ set(BUILD_FLAGS_VAR  CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE})
 set(BUILD_FLAGS_VAL "${${BUILD_FLAGS_VAR}}")
 set(CXXFLAGS "${BUILD_FLAGS_VAL} ${CMAKE_CXX_FLAGS}")
 
-# Determine what to instantiate
+# Determine the types to instantiate
 if (NOT DEFINED INSTANTIATE_INT)
   set(INSTANTIATE_INT TRUE)
 endif ()
