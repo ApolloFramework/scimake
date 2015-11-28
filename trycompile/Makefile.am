@@ -7,7 +7,7 @@
 # $Id$
 #
 # Copyright &copy; 2012-2015, Tech-X Corporation, Boulder, CO.
-# All rights reserved.
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 # #############################################################
 

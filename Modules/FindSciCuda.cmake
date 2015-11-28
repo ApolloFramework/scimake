@@ -1,18 +1,10 @@
 ######################################################################
 #
-# @file    FindSciCuda.cmake
+# @file    FindSciCuda: Find include directories and libraries for Cuda.
 #
-# @brief
+# @brief   Find locations of CUDA items
 #
 # @version $Id$
-#
-# Copyright &copy; 2013-2015, Tech-X Corporation, Boulder, CO.
-# All rights reserved.
-#
-######################################################################
-
-######################################################################
-# - FindSciCuda: Find include directories and libraries for Cuda.
 #
 # Module usage:
 #   find_package(SciCuda ...)
@@ -24,7 +16,7 @@
 #  CUDA_LIBRARIES          = Required libraries
 #
 # Copyright 2013-2015, Tech-X Corporation, Boulder, CO.
-# All rights reserved.
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
 
