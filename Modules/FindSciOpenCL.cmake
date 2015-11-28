@@ -1,4 +1,17 @@
 ######################################################################
+#
+# @file    FindSciOpenCL.cmake
+#
+# @brief
+#
+# @version $Id$
+#
+# Copyright &copy; 2013-2015, Tech-X Corporation, Boulder, CO.
+# All rights reserved.
+#
+######################################################################
+
+######################################################################
 # - FindSciOpenCL: Find include directories and libraries for OpenCL.
 #
 # Module usage:
@@ -11,7 +24,7 @@
 #  OpenCL_LIBRARIES          = Required libraries
 #
 # Copyright 2013-2015, Tech-X Corporation, Boulder, CO.
-# See LICENSE file (EclipseLicense.txt) for conditions of use.
+# All rights reserved.
 #
 #
 ######################################################################

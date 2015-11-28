@@ -1,3 +1,16 @@
+######################################################################
+#
+# @file    FindSciFacetsIfc.cmake
+#
+# @brief
+#
+# @version $Id$
+#
+# Copyright &copy; 2012-2015, Tech-X Corporation, Boulder, CO.
+# All rights reserved.
+#
+######################################################################
+
 # - FindSciFacetsIfc: Module to find include directories and
 #   libraries for FacetsIfc.
 #
@@ -15,7 +28,7 @@
 # FindSciGeom: find includes for FacetsIfc
 #
 # Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
-# See LICENSE file (EclipseLicense.txt) for conditions of use.
+# All rights reserved.
 #
 #
 ######################################################################

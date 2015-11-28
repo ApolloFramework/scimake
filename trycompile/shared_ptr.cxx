@@ -2,7 +2,7 @@
  * $Id$
  *
  * Copyright &copy; 2013-2015, Tech-X Corporation, Boulder, CO.
- * See LICENSE file (EclipseLicense.txt) for conditions of use.
+ * All rights reserved.
  */
 
 #include <sci_shared_ptr>
