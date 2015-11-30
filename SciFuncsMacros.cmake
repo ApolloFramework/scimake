@@ -1,12 +1,13 @@
 ######################################################################
 #
-# SciFuncsMacros: Various functions and macros used by Tech-X scimake
+# @file    SciFuncsMacros
 #
-# $Id$
+# @brief   Various functions and macros used by Tech-X scimake
+#
+# @version $Id$
 #
 # Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
-#
 #
 ######################################################################
 
@@ -21,7 +22,7 @@ macro(SciPrintString str)
   if (DEFINED CONFIG_SUMMARY)
     file(APPEND "${CONFIG_SUMMARY}" "${str}\n")
   else ()
-    message(WARNING "Variable CONFIG_SUMMARY is not defined, SciPrintString is unable to write to the summary file.")
+    message(STATUS "NOTE: [SciFuncsMacros] Variable CONFIG_SUMMARY is not defined, SciPrintString is unable to write to the summary file.")
   endif ()
 endmacro()
 
