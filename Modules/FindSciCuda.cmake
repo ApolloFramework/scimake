@@ -119,8 +119,23 @@ macro(SciDoCudaFound)
   else ()
     list(APPEND CUDA_NVCC_FLAGS -O3 --use_fast_math --ptxas-options=-v)
   endif ()
+
+# Query devices and make sure we have enough compute capabilty
+# and then set flags according to the compute capabiltiy found.
+  set(deviceUtility ${TxSim_ROOT_DIR}/bin/devices)
+  if (WIN32)
+    set(deviceUtility ${TxSim_ROOT_DIR}/bin/devices.exe)
+  endif ()  
+  message(STATUS "deviceUtility = ${deviceUtility}")
+ 
+
+
+
 # Minimum compute capability for printf is 30
   list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_30,code=sm_30)
+  if (NOT (CUDA_VERSION LESS 6.0))
+    list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
+  endif ()
 # Add other compute capabilities on reques
   if (CUDA_ALL_COMPUTE_CAPABILITIES)
     list(APPEND CUDA_NVCC_FLAGS
@@ -128,9 +143,6 @@ macro(SciDoCudaFound)
         --generate-code arch=compute_20,code=sm_21 # Not needed?
         --generate-code arch=compute_35,code=sm_35
     )
-    if (NOT (CUDA_VERSION LESS 6.0))
-      list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
-    endif ()
     if (NOT (CUDA_VERSION LESS 7.0))
       list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_52,code=sm_52)
     endif ()
