@@ -228,16 +228,24 @@ endmacro()
 # dirincfile The file to be included
 #
 macro(SciGenExportHeaderContainer basedef incincfile dirdef dirincfile)
+  get_filename_component(def ${incincfile} NAME)
+  string(TOUPPER "${def}" def)
+  string(REGEX REPLACE "[\\.-]" "_" def "${def}")
   set(declinc
 "
 /**
  * Generated header, do not edit
  */
+#ifndef ${def}
+#define ${def}
 
 #ifndef ${basedef}
 #define ${dirdef}
 #endif
 #include <${dirincfile}>
+
+#endif // ${def}
+
 "
   )
   file(WRITE ${incincfile} "${declinc}")
