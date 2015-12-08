@@ -77,6 +77,7 @@ SciFindPackage(PACKAGE "Hdf5"
     share/cmake/hdf5-${Hdf5_VERSION} # 1.8.7
     share/cmake/hdf5   # 1.8.12
     share/cmake        # 1.8.18
+    cmake        # 1.8.16-windows
   # USE_CONFIG_FILE # Cannot always source, so decide later
   CONFIG_FILE_ONLY
   FIND_QUIETLY
