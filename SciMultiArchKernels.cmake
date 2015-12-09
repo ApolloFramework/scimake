@@ -17,20 +17,25 @@ message(STATUS "--------- Setting up multi-arch capabilities ---------")
 # Define the set of architectures we're building for
 ######################################################################
 set(ALL_INSTRUCTION_SETS Generic SSE2 AVX AVX2 AVX512)
-option(SCI_BUILD_ALL_INSTRUCTION_SETS
-       "Whether to build for all architectures"
-       FALSE)
-if (SCI_BUILD_ALL_INSTRUCTION_SETS)
-  SciPrintString("Building multiarch kernels for maximal set of ISAs")
-  set(SCI_MULTIARCH_INSTRUCTION_SETS Generic)
-  foreach(instSet ${ALL_INSTRUCTION_SETS})
-    if (${instSet}_COMPILES)
-      list(APPEND SCI_MULTIARCH_INSTRUCTION_SETS ${instSet})
-    endif()
-  endforeach()
+if (SCI_MULTIARCH_INSTRUCTION_SETS)
+# If SCI_MULTIARCH_INSTRUCTION_SETS has been explicitly set we use that
+# value
 else ()
-  SciPrintString("Building multiarch kernels for minimal set of ISAs")
-  set(SCI_MULTIARCH_INSTRUCTION_SETS Generic ${SCI_MOST_POWERFUL_ISA})
+  option(SCI_BUILD_ALL_INSTRUCTION_SETS
+         "Whether to build for all architectures"
+         FALSE)
+  if (SCI_BUILD_ALL_INSTRUCTION_SETS)
+    SciPrintString("Building multiarch kernels for maximal set of ISAs")
+    set(SCI_MULTIARCH_INSTRUCTION_SETS Generic)
+    foreach(instSet ${ALL_INSTRUCTION_SETS})
+      if (${instSet}_COMPILES)
+        list(APPEND SCI_MULTIARCH_INSTRUCTION_SETS ${instSet})
+      endif()
+    endforeach()
+  else ()
+    SciPrintString("Building multiarch kernels for minimal set of ISAs")
+    set(SCI_MULTIARCH_INSTRUCTION_SETS Generic ${SCI_MOST_POWERFUL_ISA})
+  endif ()
 endif ()
 list(REMOVE_DUPLICATES SCI_MULTIARCH_INSTRUCTION_SETS)
 SciPrintVar(SCI_MULTIARCH_INSTRUCTION_SETS)
