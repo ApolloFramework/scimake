@@ -32,6 +32,7 @@ else ()
   SciPrintString("Building multiarch kernels for minimal set of ISAs")
   set(SCI_MULTIARCH_INSTRUCTION_SETS Generic ${SCI_MOST_POWERFUL_ISA})
 endif ()
+list(REMOVE_DUPLICATES SCI_MULTIARCH_INSTRUCTION_SETS)
 SciPrintVar(SCI_MULTIARCH_INSTRUCTION_SETS)
 
 # We use the SCI_MULTI_ARCH_cmp_FLAGS variables to construct compiler
