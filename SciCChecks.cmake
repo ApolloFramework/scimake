@@ -193,6 +193,11 @@ else ()
   message(STATUS "FULL flags not known for ${C_COMPILER_ID}")
 endif ()
 
+SciPrintString("")
+SciPrintString("  CMake detected C implicit libraries before cleaning:")
+SciPrintVar(CMAKE_C_IMPLICIT_LINK_LIBRARIES)
+SciPrintVar(CMAKE_C_IMPLICIT_LINK_DIRECTORIES)
+
 # Print the performance flags
 message(STATUS "Performance flags:")
 SciPrintVar(Generic_FLAG)

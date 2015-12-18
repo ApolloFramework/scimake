@@ -81,7 +81,7 @@ set (CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${FC_MOD_FLAGS}")
 SciPrintString("  Fortran_COMP_LIB_SUBDIR = ${Fortran_COMP_LIB_SUBDIR}")
 
 SciPrintString("")
-SciPrintString("  RESULTS FOR cmake detected fortran implicit libraries before cleaning:")
+SciPrintString("  CMake detected fortran implicit libraries before cleaning:")
 SciPrintVar(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES)
 SciPrintVar(CMAKE_Fortran_IMPLICIT_LINK_DIRECTORIES)
 
@@ -237,19 +237,6 @@ list(REMOVE_DUPLICATES Fortran_IMPLICIT_LIBRARIES)
 list(REMOVE_DUPLICATES Fortran_IMPLICIT_LIBRARY_NAMES)
 list(REMOVE_DUPLICATES Fortran_IMPLICIT_LIBRARY_DIRS)
 SciGetStaticLibs("${Fortran_IMPLICIT_LIBRARIES}" Fortran_IMPLICIT_STLIBS)
-
-# JRC, 20111203: Why are we doing this?  We can use the other variables.
-if (0)
-unset(Fortran_IMPLICIT_LIBFLAGS)
-foreach (scilibdir ${Fortran_IMPLICIT_LIBRARY_DIRS})
-  set(Fortran_IMPLICIT_LIBFLAGS
-    "${Fortran_IMPLICIT_LIBFLAGS} -L${scilibdir} -Wl,-rpath,${scilibdir}")
-endforeach ()
-foreach (scilib ${Fortran_IMPLICIT_LIBRARY_NAMES})
-  set(Fortran_IMPLICIT_LIBFLAGS
-    "${Fortran_IMPLICIT_LIBFLAGS} -l${scilib}")
-endforeach ()
-endif ()
 
 if (Fortran_IMPLICIT_LIBFLAGS)
   string(STRIP ${Fortran_IMPLICIT_LIBFLAGS} Fortran_IMPLICIT_LIBFLAGS)
