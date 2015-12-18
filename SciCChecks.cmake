@@ -194,7 +194,7 @@ else ()
 endif ()
 
 SciPrintString("")
-SciPrintString("  CMake detected C implicit libraries before cleaning:")
+SciPrintString("  CMake detected C implicit libraries:")
 SciPrintVar(CMAKE_C_IMPLICIT_LINK_LIBRARIES)
 SciPrintVar(CMAKE_C_IMPLICIT_LINK_DIRECTORIES)
 

@@ -206,7 +206,7 @@ endif ()
 set(HAVE_CXX11_THREAD ${HAVE_CXX11_THREAD} CACHE BOOL "Whether have C++11 threads")
 
 SciPrintString("")
-SciPrintString("  CMake detected C implicit libraries before cleaning:")
+SciPrintString("  CMake detected C implicit libraries:")
 SciPrintVar(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES)
 SciPrintVar(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES)
 

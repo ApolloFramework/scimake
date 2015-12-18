@@ -81,11 +81,12 @@ set (CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${FC_MOD_FLAGS}")
 SciPrintString("  Fortran_COMP_LIB_SUBDIR = ${Fortran_COMP_LIB_SUBDIR}")
 
 SciPrintString("")
-SciPrintString("  CMake detected fortran implicit libraries before cleaning:")
+SciPrintString("  CMake detected fortran implicit libraries:")
 SciPrintVar(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES)
 SciPrintVar(CMAKE_Fortran_IMPLICIT_LINK_DIRECTORIES)
 
-# Remove mpi and system libs
+# The variables below will contain the libraries needed to add to
+# a C++ linked executable when it links fortran compiled objects
 set(Fortran_IMPLICIT_LIBRARY_DIRS "")
 set(Fortran_IMPLICIT_LIBRARY_NAMES "")
 set(Fortran_IMPLICIT_LIBRARIES "")
