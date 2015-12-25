@@ -166,7 +166,6 @@ macro(SciAddUnitTest)
       -DTEST_SCIMAKE_DIR:PATH=${SCIMAKE_DIR}
       -P ${SCIMAKE_DIR}/SciTextCompare.cmake
   )
-  message(STATUS "Labels = ${TEST_LABELS}.")
   if (TEST_LABELS)
     set_tests_properties(${TEST_NAME} PROPERTIES LABELS "${TEST_LABELS}")
   endif ()
