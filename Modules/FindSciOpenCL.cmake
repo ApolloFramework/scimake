@@ -1,4 +1,5 @@
 ######################################################################
+#
 # - FindSciOpenCL: Find include directories and libraries for OpenCL.
 #
 # Module usage:
@@ -12,7 +13,6 @@
 #
 # Copyright 2013-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
-#
 #
 ######################################################################
 
