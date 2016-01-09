@@ -1,6 +1,6 @@
 ######################################################################
 #
-# @file    FindSciCuda: Find include directories and libraries for Cuda.
+# @file    FindSciCuda: Find include directories and libraries for FindSciCuda.cmake
 #
 # @brief   Find locations of CUDA items
 #
@@ -15,7 +15,7 @@
 #  CUDA_LIBRARY_DIRS       = Location of Cuda libraries
 #  CUDA_LIBRARIES          = Required libraries
 #
-# Copyright 2013-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2013-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
@@ -125,9 +125,9 @@ macro(SciDoCudaFound)
   set(deviceUtility ${TxSim_ROOT_DIR}/bin/devices)
   if (WIN32)
     set(deviceUtility ${TxSim_ROOT_DIR}/bin/devices.exe)
-  endif ()  
+  endif ()
   message(STATUS "deviceUtility = ${deviceUtility}")
- 
+
 
 
 

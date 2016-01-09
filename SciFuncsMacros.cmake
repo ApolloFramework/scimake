@@ -1,12 +1,12 @@
 ######################################################################
 #
-# @file    SciFuncsMacros
+# @file    SciFuncsMacros.cmake
 #
 # @brief   Various functions and macros used by Tech-X scimake
 #
 # @version $Id$
 #
-# Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
