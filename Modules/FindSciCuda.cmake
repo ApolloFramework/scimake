@@ -108,7 +108,7 @@ macro(SciDoCudaFound)
 # FindCUDA.cmake says
 # -Xcompile -std=c++ will choke nvcc (it uses the C preprocessor)
 # Seems that this is true for CUDA-7.5 or cmake-3.4.1
-      if ((CMAKE_VERSION VERSION_LESS 3.4.0) OR (CUDA_VERSION VERSION_LESS 7.1))
+      if (NOT CUDA_PROPAGATE_HOST_FLAGS)
         list(APPEND CUDA_NVCC_FLAGS "-std=c++11")
       endif ()
     endif ()
