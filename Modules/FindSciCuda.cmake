@@ -104,7 +104,11 @@ macro(SciDoCudaFound)
       SciPrintVar(CUDA_FOUND)
       return()
     else ()
-      list(APPEND CUDA_NVCC_FLAGS "-std=c++11")
+# This fails at cmake-3.4.1, succeeds at cmake-3.2.2, where at the former
+# FindCUDA.cmake says
+# -Xcompile -std=c++ will choke nvcc (it uses the C preprocessor)
+# Try commenting out for all
+      # list(APPEND CUDA_NVCC_FLAGS "-std=c++11")
     endif ()
   endif ()
 # CUDA_VERSION is the found version
@@ -215,7 +219,7 @@ macro(SciDoCudaFound)
 # Print results
   SciPrintCMakeResults(CUDA)
   foreach (sfx VERSION CUDA_LIBRARY cuda_SHLIB NVCC_EXECUTABLE
-      NVCC_FLAGS TOOLKIT_ROOT_DIR TOOLKIT_INCLUDE INCLUDE_DIRS
+      HOST_FLAGS NVCC_FLAGS TOOLKIT_ROOT_DIR TOOLKIT_INCLUDE INCLUDE_DIRS
       LIBRARY_DIRS LIBRARIES CUDART_LIBRARY
       curand_LIBRARY cublas_LIBRARY
       cusparse_LIBRARY cufft_LIBRARY npp_LIBRARY cupti_LIBRARY
