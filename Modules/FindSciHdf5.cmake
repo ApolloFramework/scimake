@@ -161,17 +161,6 @@ SciFindPackage(PACKAGE "Hdf5"
       include/static  # 1.8.16
 )
 
-if (FALSE)
-# The executables are not always found, so we set hdf5 to found
-# if includes and libraries found.
-if (NOT HDF5_FOUND)
-  if (Hdf5_hdf5_h AND Hdf5_hdf5_LIBRARY AND Hdf5_hdf5_hl_LIBRARY)
-    set(HDF5_FOUND TRUE)
-    message(STATUS "Setting HDF5_FOUND to TRUE because header and libraries found.")
-  endif ()
-endif ()
-endif ()
-
 if (HDF5_FOUND)
 # Backward compatibility
   set(HAVE_HDF5 1 CACHE BOOL "Whether have the HDF5 library")
