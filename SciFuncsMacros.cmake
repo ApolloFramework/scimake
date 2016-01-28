@@ -251,3 +251,27 @@ macro(SciGenExportHeaderContainer basedef incincfile dirdef dirincfile)
   file(WRITE ${incincfile} "${declinc}")
 endmacro()
 
+# A macro for using hdf5
+#
+# libvar the library variable to add hdf5 to
+# Validated for cori-gcc-ser, cori-intel-ser, cori-gcc-par, cori-intel-par
+macro (addHdf5MpiZDlLibs libvar)
+  link_directories(${Hdf5_LIBRARY_DIRS})
+  if (ENABLE_PARALLEL AND NOT SCI_HAVE_MPICXX_COMPILER_WRAPPER)
+    link_directories(${MPI_LIBRARY_DIRS})
+  endif ()
+
+  if (USE_STATIC_SYSLIBS)
+    set(${libvar} ${${libvar}} ${Hdf5_STLIBS})
+  else ()
+    set(${libvar} ${${libvar}} ${Hdf5_LIBRARY_NAMES})
+  endif ()
+  if (ENABLE_PARALLEL AND NOT SCI_HAVE_MPICXX_COMPILER_WRAPPER)
+    set(${libvar} ${${libvar}} ${MPI_LIBRARIES})
+  endif ()
+  set(${libvar} ${${libvar}} ${Z_LIBRARY_NAMES})
+  if (LINUX)
+    set(${libvar} ${${libvar}} dl)
+  endif ()
+endmacro ()
+
