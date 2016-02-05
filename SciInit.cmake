@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 #
@@ -229,7 +229,7 @@ endif ()
 
 ######################################################################
 #
-# OpenMP, SSE, AVX,OpenCL
+# OpenMP, SSE, AVX, OpenCL
 #
 ######################################################################
 
@@ -238,6 +238,7 @@ option(ENABLE_OPENCL    "Whether to enable OpenCL" OFF)
 if (ENABLE_OPENCL)
 include(${SCIMAKE_DIR}/Modules/FindSciOpenCL.cmake)
 endif ()
+include(${SCIMAKE_DIR}/SciMultiArchKernels.cmake)
 
 ######################################################################
 #

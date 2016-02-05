@@ -17,7 +17,7 @@
 #
 # $Id$
 #
-# Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 #
@@ -36,6 +36,8 @@ SciFindPackage(PACKAGE "Hdf5"
   HEADERS hdf5.h H5pubconf.h
 # Last in list is for finding within VisIt installation
   INCLUDE_SUBDIRS include include/hdf5/include
+  MODULE_SUBDIRS include
+      include/static  # 1.8.16
   FIND_QUIETLY
 )
 
@@ -70,9 +72,12 @@ message(STATUS "Hdf5_ROOT_DIR = ${Hdf5_ROOT_DIR}.")
 # Version known, can look for config file
 SciFindPackage(PACKAGE "Hdf5"
   CONFIG_SUBDIRS
+# They keep changing the location
     lib/cmake/hdf5-${Hdf5_VERSION}   # 1.8.6
     share/cmake/hdf5-${Hdf5_VERSION} # 1.8.7
-    share/cmake/hdf5                # 1.8.12
+    share/cmake/hdf5   # 1.8.12
+    share/cmake        # 1.8.18
+    cmake        # 1.8.16-windows
   # USE_CONFIG_FILE # Cannot always source, so decide later
   CONFIG_FILE_ONLY
   FIND_QUIETLY
@@ -151,19 +156,10 @@ SciFindPackage(PACKAGE "Hdf5"
   LIBRARIES ${desiredlibs}
   MODULES ${desiredmods}
   INCLUDE_SUBDIRS include include/hdf5/include # Last for VisIt installation
-  MODULE_SUBDIRS include/fortran include lib
+  MODULE_SUBDIRS include/fortran lib
+      include         # 1.8.13
+      include/static  # 1.8.16
 )
-
-if (FALSE)
-# The executables are not always found, so we set hdf5 to found
-# if includes and libraries found.
-if (NOT HDF5_FOUND)
-  if (Hdf5_hdf5_h AND Hdf5_hdf5_LIBRARY AND Hdf5_hdf5_hl_LIBRARY)
-    set(HDF5_FOUND TRUE)
-    message(STATUS "Setting HDF5_FOUND to TRUE because header and libraries found.")
-  endif ()
-endif ()
-endif ()
 
 if (HDF5_FOUND)
 # Backward compatibility

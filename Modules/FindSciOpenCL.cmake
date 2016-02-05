@@ -1,4 +1,5 @@
 ######################################################################
+#
 # - FindSciOpenCL: Find include directories and libraries for OpenCL.
 #
 # Module usage:
@@ -10,9 +11,8 @@
 #  OpenCL_LIBRARY_DIRS       = Location of OpenCL libraries
 #  OpenCL_LIBRARIES          = Required libraries
 #
-# Copyright 2013-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2013-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
-#
 #
 ######################################################################
 

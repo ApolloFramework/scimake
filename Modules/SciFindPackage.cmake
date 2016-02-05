@@ -70,7 +70,7 @@
 #
 # $Id$
 #
-# Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 #
@@ -619,6 +619,7 @@ endfunction()
 # PROGRAM_SUBDIRS: executable subdirs
 # INCLUDE_SUBDIRS: include subdirectories
 # LIBRARY_SUBDIRS: library subdirectories
+# MODULE_SUBDIRS: library subdirectories
 # FILE_SUBDIRS: file subdirectories
 #
 # NOTE: One cannot reset calling variables
@@ -665,6 +666,7 @@ macro(SciFindPackage)
       PROGRAM_SUBDIRS  = ${TFP_PROGRAM_SUBDIRS}
       INCLUDE_SUBDIRS  = ${TFP_INCLUDE_SUBDIRS}
       LIBRARY_SUBDIRS  = ${TFP_LIBRARY_SUBDIRS}
+      MODULE_SUBDIRS  = ${TFP_LIBRARY_SUBDIRS}
       FILE_SUBDIRS     = ${TFP_FILE_SUBDIRS}
       FIND_QUIETLY     = ${TFP_FIND_QUIETLY}
       ALLOW_LIBRARY_DUPLICATES = ${TFP_ALLOW_LIBRARY_DUPLICATES}
@@ -908,7 +910,12 @@ macro(SciFindPackage)
 # Find static libraries
     if (${scipkgreg}_LIBRARIES)
       SciGetStaticLibs("${${scipkgreg}_LIBRARIES}" ${scipkgreg}_STLIBS)
+# Prefer static if found
+      if (NOT USE_SHARED_LIBS AND DEFINED USE_SHARED_LIBS AND ${scipkgreg}_STLIBS)
+        set(${scipkgreg}_LIBRARIES ${${scipkgreg}_STLIBS})
+      endif ()
     endif ()
+
 
     if (${scipkgreg}_DLLS)
       set(${scipkgreg}_DEFINITIONS -D${scipkguc}_DLL)

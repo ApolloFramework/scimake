@@ -54,3 +54,6 @@ SciFindPackage.cmake.  The USE_PYC_LIBS variable and other booleans
 must be set on the cmake command line, with
 e.g. -DUSE_PYC_LIBS:BOOL=TRUE.  When using Bilder this flag should
 be set via a bilder script.
+
+Target properties
+  http://www.kitware.com/blog/home/post/390

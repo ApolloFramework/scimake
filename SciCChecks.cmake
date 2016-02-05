@@ -4,9 +4,8 @@
 #
 # $Id$
 #
-# Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
-#
 #
 ######################################################################
 
@@ -113,16 +112,21 @@ endif ()
 # for this specific processor
 #
 
+
+set(Generic_FLAG " ")
+# Initialize the following flags to bogus values so we don't
+# get ISA_COMPILES and ISA_RUNS for ISAs that arent' really supported.
+set(SSE2_FLAG "compiler flags for this ISA not known")
+set(AVX_FLAG "compiler flags for this ISA not known")
+set(AVX2_FLAG "compiler flags for this ISA not known")
+set(AVX512_FLAG "compiler flags for this ISA not known")
 #
 # Determine flags by compiler
-
+#
 set(CMAKE_C_FLAGS_FULL "${CMAKE_C_FLAGS_RELEASE}")
 if (${C_COMPILER_ID} STREQUAL GNU)
 
   set(CMAKE_C_FLAGS_FULL "${CMAKE_C_FLAGS_FULL} -ffast-math")
-  if (SSE_CAPABILITY)
-    set(CMAKE_C_FLAGS_FULL "${CMAKE_C_FLAGS_FULL} -m${SSE_CAPABILITY}")
-  endif ()
   set(SSE2_FLAG "-msse2")
   set(AVX_FLAG "-mavx")
   if (APPLE)
@@ -130,13 +134,11 @@ if (${C_COMPILER_ID} STREQUAL GNU)
     set(AVX_FLAG "${AVX_FLAG} -Wa,-q")
   endif ()
   set(AVX2_FLAG "-mavx2")
+  set(AVX512_FLAG "-mavx512f")
   set(OPENMP_FLAGS -fopenmp)
 
 elseif (${C_COMPILER_ID} STREQUAL Clang)
 
-  if (SSE_CAPABILITY)
-    set(CMAKE_C_FLAGS_FULL "${CMAKE_C_FLAGS_FULL} -m${SSE_CAPABILITY}")
-  endif ()
   set(SSE2_FLAG "-msse2")
   set(AVX_FLAG "-mavx")
   set(AVX2_FLAG "-mavx2")
@@ -148,7 +150,7 @@ elseif (${C_COMPILER_ID} STREQUAL Cray)
 elseif (${C_COMPILER_ID} STREQUAL Intel)
 
   set(SSE2_FLAG "-msse2")
-  # set(AVX_FLAG "-mavx") # Apparently not on Intel
+  set(AVX_FLAG "-march=corei7-avx")
   if (APPLE)
 # On OS X direct to use clang assembler.  Needs testing.
     set(AVX_FLAG "${AVX_FLAG} -Wa,-q")
@@ -157,6 +159,12 @@ elseif (${C_COMPILER_ID} STREQUAL Intel)
   set(OPENMP_FLAGS "-openmp")
 
 elseif (${C_COMPILER_ID} STREQUAL MSVC)
+
+  set(SSE2_FLAG "/arch:SSE2")
+  set(AVX_FLAG "/arch:AVX")
+  set(AVX2_FLAG "/arch:AVX2")
+  set(AVX512_FLAG "unknown architecture flags")
+  set(OPENMP_FLAGS "/openmp")
 
 elseif (${C_COMPILER_ID} STREQUAL PathScale)
 
@@ -185,8 +193,14 @@ else ()
   message(STATUS "FULL flags not known for ${C_COMPILER_ID}")
 endif ()
 
+SciPrintString("")
+SciPrintString("  CMake detected C implicit libraries:")
+SciPrintVar(CMAKE_C_IMPLICIT_LINK_LIBRARIES)
+SciPrintVar(CMAKE_C_IMPLICIT_LINK_DIRECTORIES)
+
 # Print the performance flags
 message(STATUS "Performance flags:")
+SciPrintVar(Generic_FLAG)
 SciPrintVar(SSE2_FLAG)
 SciPrintVar(AVX_FLAG)
 SciPrintVar(AVX2_FLAG)

@@ -4,10 +4,11 @@
 #
 # $Id$
 #
-# Copyright 2010-2013 Tech-X Corporation.
+# Copyright 2010-2015 Tech-X Corporation.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
+
 # Makefile to grab PETSc make variables
 # PETSC_DIR is passed though CMake
 include ${PETSC_CONF_DIR}/rules
