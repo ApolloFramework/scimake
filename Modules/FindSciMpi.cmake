@@ -290,3 +290,9 @@ if (NOT SCIMPI_FOUND)
   endif ()
 endif ()
 
+# The Intel MPI Wrappers are actually .bat scripts on Windows.
+# That means we have to set include and link lines by hand.
+if (CXX_COMPILER_ID EQUAL "Intel" AND CMAKE_SYSTEM_NAME EQUAL "Windows")
+  message(STATUS "Using Intel CXX Compilers on Windows. Disabling compiler wrappers.")
+  set(SCI_HAVE_MPICXX_COMPILER_WRAPPER 0)
+endif()
