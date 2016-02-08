@@ -1,12 +1,13 @@
 ######################################################################
 #
-# SciFuncsMacros: Various functions and macros used by Tech-X scimake
+# @file    SciFuncsMacros.cmake
 #
-# $Id$
+# @brief   Various functions and macros used by Tech-X scimake
 #
-# Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
+# @version $Id$
+#
+# Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
-#
 #
 ######################################################################
 
@@ -21,7 +22,7 @@ macro(SciPrintString str)
   if (DEFINED CONFIG_SUMMARY)
     file(APPEND "${CONFIG_SUMMARY}" "${str}\n")
   else ()
-    message(WARNING "Variable CONFIG_SUMMARY is not defined, SciPrintString is unable to write to the summary file.")
+    message(STATUS "NOTE: [SciFuncsMacros] Variable CONFIG_SUMMARY is not defined, SciPrintString is unable to write to the summary file.")
   endif ()
 endmacro()
 
@@ -227,18 +228,50 @@ endmacro()
 # dirincfile The file to be included
 #
 macro(SciGenExportHeaderContainer basedef incincfile dirdef dirincfile)
+  get_filename_component(def ${incincfile} NAME)
+  string(TOUPPER "${def}" def)
+  string(REGEX REPLACE "[\\.-]" "_" def "${def}")
   set(declinc
 "
 /**
  * Generated header, do not edit
  */
+#ifndef ${def}
+#define ${def}
 
 #ifndef ${basedef}
 #define ${dirdef}
 #endif
 #include <${dirincfile}>
+
+#endif // ${def}
+
 "
   )
   file(WRITE ${incincfile} "${declinc}")
 endmacro()
+
+# A macro for using hdf5
+#
+# libvar the library variable to add hdf5 to
+# Validated for cori-gcc-ser, cori-intel-ser, cori-gcc-par, cori-intel-par
+macro (addHdf5MpiZDlLibs libvar)
+  link_directories(${Hdf5_LIBRARY_DIRS})
+  if (ENABLE_PARALLEL AND NOT SCI_HAVE_MPICXX_COMPILER_WRAPPER)
+    link_directories(${MPI_LIBRARY_DIRS})
+  endif ()
+
+  if (USE_STATIC_SYSLIBS)
+    set(${libvar} ${${libvar}} ${Hdf5_STLIBS})
+  else ()
+    set(${libvar} ${${libvar}} ${Hdf5_LIBRARY_NAMES})
+  endif ()
+  if (ENABLE_PARALLEL AND NOT SCI_HAVE_MPICXX_COMPILER_WRAPPER)
+    set(${libvar} ${${libvar}} ${MPI_LIBRARIES})
+  endif ()
+  set(${libvar} ${${libvar}} ${Z_LIBRARY_NAMES})
+  if (LINUX)
+    set(${libvar} ${${libvar}} dl)
+  endif ()
+endmacro ()
 

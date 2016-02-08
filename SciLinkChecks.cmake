@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
@@ -101,6 +101,16 @@ if ("${CMAKE_SYSTEM_NAME}" STREQUAL Linux)
     endif ()
   endif ()
 
+endif ()
+
+######################################################################
+#
+# Parallel
+#
+######################################################################
+
+if (MPI_LINK_FLAGS AND NOT SCI_HAVE_MPICXX_COMPILER_WRAPPER)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${MPI_LINK_FLAGS}")
 endif ()
 
 ######################################################################

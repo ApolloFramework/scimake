@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 #
@@ -205,6 +205,11 @@ else ()
 endif ()
 set(HAVE_CXX11_THREAD ${HAVE_CXX11_THREAD} CACHE BOOL "Whether have C++11 threads")
 
+SciPrintString("")
+SciPrintString("  CMake detected C implicit libraries:")
+SciPrintVar(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES)
+SciPrintVar(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES)
+
 # Add in full flags
 set(CMAKE_CXX_FLAGS_FULL "${CMAKE_C_FLAGS_FULL}")
 
@@ -224,30 +229,4 @@ SciPrintVar(CMAKE_CXX_FLAGS)
 set(BUILD_FLAGS_VAR  CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE})
 set(BUILD_FLAGS_VAL "${${BUILD_FLAGS_VAR}}")
 set(CXXFLAGS "${BUILD_FLAGS_VAL} ${CMAKE_CXX_FLAGS}")
-
-# Determine what to instantiate
-if (NOT DEFINED INSTANTIATE_INT)
-  set(INSTANTIATE_INT TRUE)
-endif ()
-if (INSTANTIATE_INT)
-  message(STATUS "Instantiation of int template parameters requested.")
-endif ()
-if (NOT DEFINED INSTANTIATE_SSIZE_T)
-  set(INSTANTIATE_SSIZE_T TRUE)
-endif ()
-if (INSTANTIATE_SSIZE_T)
-  message(STATUS "Instantiation of ssize_t template parameters requested.")
-endif ()
-if (NOT DEFINED INSTANTIATE_FLOAT)
-  set(INSTANTIATE_FLOAT TRUE)
-endif ()
-if (INSTANTIATE_FLOAT)
-  message(STATUS "Instantiation of float template parameters requested.")
-endif ()
-if (NOT DEFINED INSTANTIATE_DOUBLE)
-  set(INSTANTIATE_DOUBLE TRUE)
-endif ()
-if (INSTANTIATE_DOUBLE)
-  message(STATUS "Instantiation of double template parameters requested.")
-endif ()
 

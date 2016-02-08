@@ -1,7 +1,7 @@
 /**
  * $Id$
  *
- * Copyright &copy; 2012-2015, Tech-X Corporation, Boulder, CO.
+ * Copyright &copy; 2012-2016, Tech-X Corporation, Boulder, CO.
  * See LICENSE file (EclipseLicense.txt) for conditions of use.
  */
 

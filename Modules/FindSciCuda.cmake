@@ -1,5 +1,10 @@
 ######################################################################
-# - FindSciCuda: Find include directories and libraries for Cuda.
+#
+# @file    FindSciCuda: Find include directories and libraries for FindSciCuda.cmake
+#
+# @brief   Find locations of CUDA items
+#
+# @version $Id$
 #
 # Module usage:
 #   find_package(SciCuda ...)
@@ -10,7 +15,7 @@
 #  CUDA_LIBRARY_DIRS       = Location of Cuda libraries
 #  CUDA_LIBRARIES          = Required libraries
 #
-# Copyright 2013-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2013-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
@@ -34,6 +39,12 @@ if (NOT WIN32)
     endif ()
   endforeach ()
 endif ()
+
+# CUDA not working with Intel
+message(STATUS "${CMAKE_CXX_COMPILER_ID}")
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+  set(SCI_ENABLE_CUDA FALSE)
+endif()
 
 # Look for explicit enabling of CUDA from configure line or environment
 if (NOT DEFINED SCI_ENABLE_CUDA)
@@ -93,53 +104,57 @@ macro(SciDoCudaFound)
       SciPrintVar(CUDA_FOUND)
       return()
     else ()
-      list(APPEND CUDA_NVCC_FLAGS "-std=c++11")
+# This fails at cmake-3.4.1, succeeds at cmake-3.2.2, where at the former
+# FindCUDA.cmake says
+# -Xcompile -std=c++ will choke nvcc (it uses the C preprocessor)
+# Seems that this is true for CUDA-7.5 or cmake-3.4.1
+      if (${CMAKE_VERSION} VERSION_LESS "3.4.0" OR NOT CUDA_PROPAGATE_HOST_FLAGS)
+        list(APPEND CUDA_NVCC_FLAGS "-std=c++11")
+      endif ()
     endif ()
   endif ()
 # CUDA_VERSION is the found version
   if (CUDA_VERSION LESS 5.0)
     message(FATAL_ERROR "SciCuda requires a minimum CUDA version of 5.0")
   endif ()
-  # list(APPEND CUDA_NVCC_FLAGS --Werror cross-execution-space-call)
+# Set the optimization and debug type flags
   if (CMAKE_BUILD_TYPE MATCHES Debug)
-    list(APPEND CUDA_NVCC_FLAGS
-      -g -G -lineinfo
-      )
-    if (DEFINED CUDA_DEBUG_GENERATE_FLAGS)
-      list(APPEND CUDA_NVCC_FLAGS ${CUDA_DEBUG_GENERATE_FLAGS})
-    else ()
+    list(APPEND CUDA_NVCC_FLAGS -g -G -lineinfo)
+  elseif (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
+    list(APPEND CUDA_NVCC_FLAGS -g -O2 --use_fast_math)
+  else ()
+    list(APPEND CUDA_NVCC_FLAGS -O3 --use_fast_math --ptxas-options=-v)
+  endif ()
+
+# Query devices and make sure we have enough compute capabilty
+# and then set flags according to the compute capabiltiy found.
+  set(deviceUtility ${TxSim_ROOT_DIR}/bin/devices)
+  if (WIN32)
+    set(deviceUtility ${TxSim_ROOT_DIR}/bin/devices.exe)
+  endif ()
+  message(STATUS "deviceUtility = ${deviceUtility}")
+
+# Allow user to set specific flags with SCI_CUDA_ARCH_FLAGS
+  if (NOT DEFINED SCI_CUDA_ARCH_FLAGS)
+# Minimum compute capability for printf is 30
+    list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_30,code=sm_30)
+    if (NOT (CUDA_VERSION LESS 6.0))
+      list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
+    endif ()
+# Add other compute capabilities on request
+    if (CUDA_ALL_COMPUTE_CAPABILITIES)
+      # compute_20 is required for old cards (e.g. 2070s on enrico)
       list(APPEND CUDA_NVCC_FLAGS
-        --generate-code arch=compute_20,code=sm_20
-        --generate-code arch=compute_20,code=sm_21
-        --generate-code arch=compute_30,code=sm_30
-        --generate-code arch=compute_35,code=sm_35
-        )
-      if (NOT (CUDA_VERSION LESS 6.0))
-        list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
-      endif ()
+          --generate-code arch=compute_20,code=sm_20
+          --generate-code arch=compute_20,code=sm_21
+          --generate-code arch=compute_35,code=sm_35
+      )
       if (NOT (CUDA_VERSION LESS 7.0))
         list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_52,code=sm_52)
       endif ()
     endif ()
-  else()
-    list(APPEND CUDA_NVCC_FLAGS
-      --use_fast_math
-      --generate-code arch=compute_20,code=sm_20
-      --generate-code arch=compute_20,code=sm_21
-      --generate-code arch=compute_30,code=sm_30
-      --generate-code arch=compute_35,code=sm_35
-      )
-    if (NOT (CUDA_VERSION LESS 6.0))
-      list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_50,code=sm_50)
-    endif ()
-    if (NOT (CUDA_VERSION LESS 7.0))
-      list(APPEND CUDA_NVCC_FLAGS --generate-code arch=compute_52,code=sm_52)
-    endif ()
-    if (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
-      list(APPEND CUDA_NVCC_FLAGS -g -G -O2)
-    else ()
-      list(APPEND CUDA_NVCC_FLAGS -O3 --use_fast_math --ptxas-options=-v)
-    endif ()
+  else ()
+    list(APPEND CUDA_NVCC_FLAGS ${SCI_CUDA_ARCH_FLAGS})
   endif ()
 
 # find_cuda_helper_libs(cusparse)
@@ -206,7 +221,7 @@ macro(SciDoCudaFound)
 # Print results
   SciPrintCMakeResults(CUDA)
   foreach (sfx VERSION CUDA_LIBRARY cuda_SHLIB NVCC_EXECUTABLE
-      NVCC_FLAGS TOOLKIT_ROOT_DIR TOOLKIT_INCLUDE INCLUDE_DIRS
+      HOST_FLAGS NVCC_FLAGS TOOLKIT_ROOT_DIR TOOLKIT_INCLUDE INCLUDE_DIRS
       LIBRARY_DIRS LIBRARIES CUDART_LIBRARY
       curand_LIBRARY cublas_LIBRARY
       cusparse_LIBRARY cufft_LIBRARY npp_LIBRARY cupti_LIBRARY
@@ -224,6 +239,10 @@ macro(SciDoCudaFound)
 
 endmacro()
 
+# This to be a separate option.  Otherwise just use capability 2.0.
+option(CUDA_ALL_COMPUTE_CAPABILITIES
+  "Whether to compile for all cuda compute capabilities" OFF
+)
 if (CUDA_FOUND)
   SciDoCudaFound() # Can undo cuda found
 endif ()

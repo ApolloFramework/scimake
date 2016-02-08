@@ -38,9 +38,8 @@
 #
 # $Id$
 #
-# Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
-#
 #
 ######################################################################
 
@@ -75,6 +74,7 @@ set(Trilinos_LIBRARIES)
 foreach (trilib ${Trilinos_LIBRARY_NAMES})
   find_library(Trilinos_${trilib}_LIBRARY ${trilib}
     PATHS ${Trilinos_LIBRARY_DIRS}
+    NO_DEFAULT_PATH
   )
   set(Trilinos_LIBRARIES ${Trilinos_LIBRARIES} ${Trilinos_${trilib}_LIBRARY})
 endforeach ()
@@ -162,7 +162,7 @@ if (TRILINOS_FOUND)
     endif ()
   endif ()
 
-  # Find the libdirs of all groups
+# Find the libdirs of all groups
   foreach (grp TPL LINALG SLU HYPRE MUMPS MPI SYSTEM)
     set(libs ${Trilinos_${grp}_LIBRARIES})
     unset(Trilinos_${grp}_LIBRARY_DIRS)
@@ -217,7 +217,7 @@ if (TRILINOS_FOUND)
     message(WARNING "Trilinos_LINALG_LIBRARY_NAMES does not contain blas.")
   endif ()
 
-  # Final calculations
+# Get static libs and print
   foreach (grp TPL LINALG MPI SLU HYPRE MUMPS SYSTEM WRAPPER)
     SciGetStaticLibs("${Trilinos_${grp}_LIBRARIES}" Trilinos_${grp}_STLIBS)
     SciPrintVar(Trilinos_${grp}_LIBRARY_DIRS)

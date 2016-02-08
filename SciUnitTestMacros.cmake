@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright 2014-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2014-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 #
@@ -95,11 +95,13 @@ message(STATUS "In SciAddUnitTestMacros.cmake, SHLIB_CMAKE_PATH_VAL = ${SHLIB_CM
 #   MPIEXEC_PROG  = File to preface executable with for parallel run.
 #   NUMPROCS      = Number of processors to specify for parallel run.
 #   USE_CUDA_ADD  = Add libraries and executables using cuda
+#   LABELS        = Add these labels to the unit test
 
 macro(SciAddUnitTest)
   set(opts USE_CUDA_ADD)
   set(oneValArgs NAME COMMAND ARGS TEST_DIR DIFF_DIR RESULTS_DIR STDOUT_FILE NUMPROCS MPIEXEC_PROG)
-  set(multiValArgs SORTER DIFFER RESULTS_FILES TEST_FILES DIFF_FILES SOURCES LIBS
+  set(multiValArgs SORTER DIFFER RESULTS_FILES TEST_FILES DIFF_FILES
+      SOURCES LIBS LABELS
       PROPERTIES ATTACHED_FILES)
   cmake_parse_arguments(TEST
       "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN}
@@ -164,6 +166,9 @@ macro(SciAddUnitTest)
       -DTEST_SCIMAKE_DIR:PATH=${SCIMAKE_DIR}
       -P ${SCIMAKE_DIR}/SciTextCompare.cmake
   )
+  if (TEST_LABELS)
+    set_tests_properties(${TEST_NAME} PROPERTIES LABELS "${TEST_LABELS}")
+  endif ()
 
 # ATTACHED_FILES is a list of files to attach and if non-empty, it
 # overrides the default, which is ${TEST_RESULTS_FILES}.

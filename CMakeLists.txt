@@ -1,10 +1,12 @@
 ######################################################################
 #
-# CMakeLists.txt for scimake
+# @file    CMakeLists.txt
 #
-# $Id$
+# @brief   for scimake
 #
-# Copyright &copy; 2005-2015, Tech-X Corporation, Boulder, CO.
+# @version $Id$
+#
+# Copyright &copy; 2014-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
