@@ -160,7 +160,7 @@ elseif (${C_COMPILER_ID} STREQUAL Intel)
 
 elseif (${C_COMPILER_ID} STREQUAL MSVC)
 
-  set(SSE2_FLAG "/arch:SSE2")
+  set(SSE2_FLAG "")
   set(AVX_FLAG "/arch:AVX")
   set(AVX2_FLAG "/arch:AVX2")
   set(AVX512_FLAG "unknown architecture flags")

@@ -112,6 +112,12 @@ set(SCI_MOST_POWERFUL_ISA Generic)
 
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${SSE2_FLAG}")
+if (WIN32)
+  set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} /WX /W3")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
+      "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -Werror")
+endif ()
 check_c_source_compiles(
 "
 #include <emmintrin.h>
@@ -146,6 +152,12 @@ endif ()
 # Check whether have avx.
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX_FLAG}")
+if (WIN32)
+  set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} /WX /W3")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
+      "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -Werror")
+endif ()
 check_c_source_compiles(
 "
 #include <immintrin.h>
@@ -180,6 +192,12 @@ endif ()
 # Check whether have avx2.
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX2_FLAG}")
+if (WIN32)
+  set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} /WX /W3")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
+      "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -Werror")
+endif ()
 check_cxx_source_compiles(
 "
 #include <immintrin.h>
@@ -216,6 +234,12 @@ endif ()
 # Check whether have avx512.
 set(CMAKE_REQUIRED_FLAGS_SAV "${CMAKE_REQUIRED_FLAGS}")
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${AVX512_FLAG}")
+if (WIN32)
+  set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} /WX /W3")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
+      "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -Werror")
+endif ()
 check_cxx_source_compiles(
 "
 #include <immintrin.h>
