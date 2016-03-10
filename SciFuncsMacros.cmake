@@ -239,7 +239,7 @@ macro(SciGenExportHeaderContainer basedef incincfile dirdef dirincfile)
 #ifndef ${def}
 #define ${def}
 
-#ifndef ${basedef}
+#if !defined(${basedef}) || defined(__CUDA_ARCH__)
 #define ${dirdef}
 #endif
 #include <${dirincfile}>
