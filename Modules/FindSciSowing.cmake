@@ -29,7 +29,7 @@ SciFindPackage(PACKAGE Sowing
 if (SOWING_FOUND)
       message(STATUS "Sowing_sowing found.")
       message(STATUS "Sowing_sowing = ${Sowing_sowing}")
-      get_filename_component(sdir ${Sowing_PROGRAMS}/.. REALPATH)
+      get_filename_component(sdir ${Sowing_PROGRAMS}/../.. REALPATH)
       set(Sowing_ROOT_DIR ${sdir})
       SciPrintVar(Sowing_ROOT_DIR)
 endif ()
