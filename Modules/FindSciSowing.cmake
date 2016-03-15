@@ -23,11 +23,14 @@ message("")
 message("--------- FindSciSowing looking for sowing ---------")
 
 SciFindPackage(PACKAGE Sowing
-  PROGRAMS "bfort;tohtml"
+  PROGRAMS "bfort"
 )
 
 if (SOWING_FOUND)
       message(STATUS "Sowing_sowing found.")
       message(STATUS "Sowing_sowing = ${Sowing_sowing}")
+      get_filename_component(sdir ${Sowing_PROGRAMS}/.. REALPATH)
+      set(Sowing_ROOT_DIR ${sdir})
+      SciPrintVar(Sowing_ROOT_DIR)
 endif ()
 
