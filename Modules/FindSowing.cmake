@@ -1,0 +1,33 @@
+# - FindSciSowing: Module to find sowing
+#
+# Module usage:
+#   find_package(SciSowing ...)
+#
+# This module will define the following variables:
+#  SOWING_FOUND         = Whether Sowing was found
+#  Sowing_sowing    = Path to sowing executables
+
+######################################################################
+#
+# SciSowing: Find Sowing
+#
+# $Id$
+#
+# Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
+#
+#
+######################################################################
+
+message("")
+message("--------- FindSciSowing looking for sowing ---------")
+
+SciFindPackage(PACKAGE Sowing
+  PROGRAMS "bfort;tohtml"
+)
+
+if (SOWING_FOUND)
+      message(STATUS "Sowing_sowing found.")
+      message(STATUS "Sowing_sowing = ${Sowing_sowing}")
+endif ()
+
