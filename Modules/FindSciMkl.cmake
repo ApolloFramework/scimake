@@ -24,11 +24,7 @@
 if ("${Mkl_ROOT_DIR}" STREQUAL "")
   if (NOT "$ENV{MKLROOT}" STREQUAL "")
      set(Mkl_ROOT_DIR "$ENV{MKLROOT}")
-    if (WIN32)
-      # Need to convert to unix style path
-      string(REGEX REPLACE "\\\\" "/" Mkl_ROOT_DIR ${Mkl_ROOT_DIR})
-    endif ()
-  endif()
+  endif ()
 endif ()
 
 # Try hard-code directory if not specified already
