@@ -127,7 +127,7 @@ endif ()
 # If know more than compiler wrappers, pull out standard values
 set(MPI_IS_OPEN_MPI FALSE)
 if (MPI_FOUND)
-# Fix up problems with the stock find_package(MPI)
+  # Fix up problems with the stock find_package(MPI)
   if (NOT MPI_INCLUDE_DIRS OR NOT MPI_LIBRARIES OR NOT MPIEXEC)
     if (${CMAKE_C_COMPILER_ID} MATCHES "Intel")
       execute_process(
@@ -147,7 +147,7 @@ if (MPI_FOUND)
           list(APPEND MPI_LIBRARIES ${lib})
         endif ()
       endforeach ()
-# Try to find both static and dynamic
+      # Try to find both static and dynamic
       set(MPI_DYLIBS)
       if (WIN32)
         set(libsuffix "lib")
@@ -226,26 +226,18 @@ if (MPI_FOUND)
   endif ()
 
 # Assume only one include dir
-  if (MPI_INCLUDE_DIRS AND NOT MPI_DIR)
+  if (MPI_DIR AND MPI_INCLUDE_DIRS)
     get_filename_component(MPI_DIR ${MPI_INCLUDE_DIRS}/.. REALPATH)
-    set(MPI_ROOT_DIR ${MPI_DIR})
   endif ()
 
 # Get module includes
   set(MPI_MODULE_DIRS ${MPI_Fortran_INCLUDE_PATH})
 
-# If mpiexec not found, find it
-  if (MPI_DIR AND NOT MPIEXEC)
-    find_program(MPIEXEC NAMES mpiexec PATHS ${MPI_DIR}/bin NO_DEFAULT_PATH)
-  endif ()
-
 # Get the executables
   get_filename_component(MPI_PROGRAMS ${MPIEXEC} REALPATH)
 
 # set the root directory variable
-  if (NOT MPI_ROOT_DIR)
-    get_filename_component(MPI_ROOT_DIR ${MPIEXEC}/../.. REALPATH)
-  endif ()
+  get_filename_component(MPI_ROOT_DIR ${MPIEXEC}/../.. REALPATH)
 
 # determine if openmpi
   string(FIND "${MPI_ROOT_DIR}" "openmpi"  OPENMPI_SUBSTR_LOC)
