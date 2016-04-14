@@ -265,6 +265,7 @@ if (MPI_FOUND)
 
   message(STATUS "Enabling MPI")
   SciPrintCMakeResults("MPI")
+  SciPrintVar(MPIEXEC)
   SciPrintVar(MPI_LINK_FLAGS)
   if (SCI_HAVE_MPICXX_COMPILER_WRAPPER)
 # Find the Serial C compiler
