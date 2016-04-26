@@ -134,6 +134,7 @@ if (MPI_FOUND)
         COMMAND ${CMAKE_C_COMPILER} -show
         OUTPUT_VARIABLE mpiiccOutput
       )
+      string(STRIP ${mpiiccOutput} mpiiccOutput)
       string(REPLACE " " ";" mpiiccOutputList "${mpiiccOutput}")
       foreach (arg ${mpiiccOutputList})
         if (${arg} MATCHES "^-I")
