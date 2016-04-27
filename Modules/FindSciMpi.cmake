@@ -166,6 +166,9 @@ if (MPI_FOUND)
       endforeach ()
     endif ()
     set(MPI_LIBRARY ${MPI_DYLIBS})
+    if (LINUX)
+       set(MPIEXEC mpiexec.hydra)
+    endif()
   endif ()
 
 # Fix the variables
