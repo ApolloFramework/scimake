@@ -185,7 +185,7 @@ macro(SciAddUnitTest)
 
 # Add command to replace results
   add_custom_target(${TEST_NAME}ReplaceResults)
-  string(REPLACE " " ";" resfiles "${TEST_RESULTS_FILES}")
+  string(REPLACE " " ";" resfiles "${TEST_TEST_FILES}")
   foreach (file ${TEST_STDOUT_FILE} ${resfiles})
     add_custom_command(TARGET ${TEST_NAME}ReplaceResults
       COMMAND ${CMAKE_COMMAND} -E copy ${file} ${TEST_DIFF_DIR}
