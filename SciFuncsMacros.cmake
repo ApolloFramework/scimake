@@ -18,8 +18,6 @@
 #   str the string
 #
 macro(SciPrintString str)
-# Double the \ to get through
-  # string(REPLACE "\\" "\\\\" str "${str}")
   message(STATUS "${str}")
   if (DEFINED CONFIG_SUMMARY)
     file(APPEND "${CONFIG_SUMMARY}" "${str}\n")
