@@ -1,6 +1,6 @@
 ######################################################################
 #
-# SciTextCompare: Run an executable and check for differences between
+# SciTextCompareManyCmd: Run an executable and check for differences between
 #                 current and accepted results.
 #
 # $Id$
@@ -32,8 +32,8 @@ if (TEST_SORTER)
   message(STATUS "Sorting is on.")
   set(SORTER_ARGS SORTER ${TEST_SORTER})
 endif ()
-message(STATUS "[SciTextCompare] DIFFER IS = ${TEST_DIFFER}.")
-message(STATUS "[SciTextCompare] SORTER IS = ${TEST_SORTER}.")
+message(STATUS "[SciTextCompareManyCmd] DIFFER IS = ${TEST_DIFFER}.")
+message(STATUS "[SciTextCompareManyCmd] SORTER IS = ${TEST_SORTER}.")
 if (TEST_MPIEXEC)
   separate_arguments(TEST_MPIEXEC)
 endif (TEST_MPIEXEC)
@@ -56,8 +56,8 @@ string(REGEX REPLACE "[\\](.)" "\\1" tmpStr "${tmpStr}")
 string(REGEX REPLACE "([^\\]|^);" "\\1 " tmpStr "${ARGS2_LIST}")
 string(REGEX REPLACE "[\\](.)" "\\1" tmpStr "${tmpStr}")
 set(arg2Str "${tmpStr}")
-message(STATUS "[SciTextCompare] EXECUTING ... ${TEST_MPIEXEC} ${TEST_PROG1} ${arg1Str} && ${TEST_PROG2} ${arg2Str}")
-message(STATUS "[SciTextCompare] OUTPUT_FILE = ${TEST_STDOUT_FILE}")
+message(STATUS "[SciTextCompareManyCmd] EXECUTING ... ${TEST_MPIEXEC} ${TEST_PROG1} ${arg1Str} && ${TEST_PROG2} ${arg2Str}")
+message(STATUS "[SciTextCompareManyCmd] OUTPUT_FILE = ${TEST_STDOUT_FILE}")
 
 # Execute first command, quitting on error
 message(STATUS "Executing '${TEST_MPIEXEC} ${TEST_PROG1} ${ARGS1_LIST}'")
@@ -130,7 +130,12 @@ if (TEST_TEST_FILES)
   foreach (ifile RANGE ${loopLen})
     list(GET TEST_FILES_LIST ${ifile} testFile)
     list(GET ACCEPTED_FILES_LIST ${ifile} diffFile)
-    message(STATUS "[SciTextCompare] Comparing ${testFile} and ${diffFile} using ${TEST_DIFFER} with ${SORTER_ARGS}.")
+# If diffFile is a relative path, add TEST_ACCEPTED_DIR
+    message(STATUS "diffFile = ${diffFile}.")
+    if ((NOT diffFile MATCHES "^/") AND (NOT diffFile MATCHES "^[A-Z]:/"))
+      set(diffFile "${TEST_ACCEPTED_DIR}/${diffFile}")
+    endif ()
+    message(STATUS "[SciTextCompareManyCmd] Comparing ${testFile} and ${diffFile} using ${TEST_DIFFER} with ${SORTER_ARGS}.")
     SciDiffFiles("${testFile}" "${diffFile}" ARE_FILES_EQUAL
         DIFFER ${TEST_DIFFER}
         ${DIR_ARGS}
