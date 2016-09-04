@@ -51,16 +51,15 @@ endif ()
 # more files which are to be compared, while also comparing the stdout
 # of the test.
 
-string(REGEX REPLACE "([^\\]|^);" "\\1 " tmpStr "${ARGS1_LIST}")
-string(REGEX REPLACE "[\\](.)" "\\1" tmpStr "${tmpStr}")
-string(REGEX REPLACE "([^\\]|^);" "\\1 " tmpStr "${ARGS2_LIST}")
-string(REGEX REPLACE "[\\](.)" "\\1" tmpStr "${tmpStr}")
-set(arg2Str "${tmpStr}")
+string(REGEX REPLACE "([^\\]|^);" "\\1 " arg1Str "${ARGS1_LIST}")
+string(REGEX REPLACE "[\\](.)" "\\1" arg1Str "${arg1Str}")
+string(REGEX REPLACE "([^\\]|^);" "\\1 " arg2Str "${ARGS2_LIST}")
+string(REGEX REPLACE "[\\](.)" "\\1" arg2Str "${arg2Str}")
 message(STATUS "[SciTextCompareManyCmd] EXECUTING ... ${TEST_MPIEXEC} ${TEST_PROG1} ${arg1Str} && ${TEST_PROG2} ${arg2Str}")
 message(STATUS "[SciTextCompareManyCmd] OUTPUT_FILE = ${TEST_STDOUT_FILE}")
 
 # Execute first command, quitting on error
-message(STATUS "Executing '${TEST_MPIEXEC} ${TEST_PROG1} ${ARGS1_LIST}'")
+message(STATUS "Executing '${TEST_MPIEXEC} ${TEST_PROG1} ${arg1Str}'")
 execute_process(COMMAND ${TEST_MPIEXEC} ${TEST_PROG1} ${ARGS1_LIST}
   RESULT_VARIABLE EXEC_ERROR
 )
@@ -72,7 +71,7 @@ endif ()
 message(STATUS "Execution of ${CMD1} succeeded.")
 
 # Execute second command quitting on error possibly diffing stdout
-message(STATUS "Executing '${TEST_MPIEXEC} ${TEST_PROG2} ${ARGS2_LIST}'")
+message(STATUS "Executing '${TEST_MPIEXEC} ${TEST_PROG2} ${arg2Str}'")
 if (TEST_STDOUT_FILE)
   execute_process(
     COMMAND ${TEST_MPIEXEC} ${TEST_PROG2} ${ARGS2_LIST}
