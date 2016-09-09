@@ -30,4 +30,3 @@ SciFindPackage(PACKAGE "Fluxgrid"
   PROGRAMS "fluxgrid"
 )
 
-

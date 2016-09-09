@@ -182,3 +182,4 @@ macro(ADD_OSPL_DATAMODEL)
     set(${SCIADM_NAME}_OSPLDDS_DATAMODEL ${iall_ospldds_datamodel})
 
 endmacro(ADD_OSPL_DATAMODEL)
+

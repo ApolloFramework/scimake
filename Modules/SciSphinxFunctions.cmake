@@ -160,7 +160,7 @@ macro(SciSphinxTarget)
           ARGS ${all_opts} ${FD_SOURCE_DIR} ${${build}_DIR}
           DEPENDS ${FD_FILE_DEPS}
         )
-        add_custom_target(${FD_TARGET}-whoosh 
+        add_custom_target(${FD_TARGET}-whoosh
                           DEPENDS ${whoosh_OUTPUT})
        endif ()
     endif ()

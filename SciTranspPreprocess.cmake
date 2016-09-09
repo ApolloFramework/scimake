@@ -75,3 +75,4 @@ macro(SciInstallModules)
   set(modfiles ${FD_PACKAGE}_INC_MODULES)
   set(${modfiles} ${INC_MODFILES} )
 endmacro()
+

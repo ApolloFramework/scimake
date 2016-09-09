@@ -43,6 +43,3 @@ endif ()
 # The -d flag sets the cache directory to be non-hidden
 set(Nuitka_OPTS      "" CACHE STRING "Options to be passed to the nuitka executable")
 
-
-
-

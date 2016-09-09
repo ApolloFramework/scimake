@@ -100,3 +100,4 @@ function(SciAddMultiArchLibrary multiarch_libraries library)
   endforeach()
   set(${multiarch_libraries} ${library_targets} PARENT_SCOPE)
 endfunction()
+

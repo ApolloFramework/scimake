@@ -43,3 +43,4 @@ SciFindPackage(
         INCLUDE_SUBDIRS "src/SDDS/include;src/SDDS/gsl"
         LIBRARY_SUBDIRS "lib/linux-x86_64;lib/linux-x86"
 )
+

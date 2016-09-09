@@ -221,4 +221,3 @@ foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
 endforeach ()
 SciPrintVar(CMAKE_C_FLAGS)
 
-

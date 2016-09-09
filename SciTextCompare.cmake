@@ -124,3 +124,4 @@ if (TEST_TEST_FILES)
   endif ()
   message(STATUS "Comparison succeeded.")
 endif ()
+
