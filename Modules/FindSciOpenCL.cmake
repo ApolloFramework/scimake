@@ -1,21 +1,23 @@
 ######################################################################
 #
-# - FindSciOpenCL: Find include directories and libraries for OpenCL.
+# @file    FindSciOpenCL.cmake
 #
-# Module usage:
-#   find_package(OpenCL ...)
+# @brief   Find include directories and libraries for OpenCL.
+#          Module usage:
+#          find_package(OpenCL ...)
 #
-# This module will define the following variables:
-#  HAVE_OPENCL, OPENCL_FOUND = Whether libraries and includes are found
-#  OpenCL_INCLUDE_DIRS       = Location of OpenCL includes
-#  OpenCL_LIBRARY_DIRS       = Location of OpenCL libraries
-#  OpenCL_LIBRARIES          = Required libraries
+#          This module will define the following variables:
+#            HAVE_OPENCL, OPENCL_FOUND = Whether found libraries and includes
+#            OpenCL_INCLUDE_DIRS       = Location of OpenCL includes
+#            OpenCL_LIBRARY_DIRS       = Location of OpenCL libraries
+#            OpenCL_LIBRARIES          = Required libraries
 #
-# Copyright 2013-2016, Tech-X Corporation, Boulder, CO.
+# @version $Id$
+#
+# Copyright &copy; 2013-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
-
 
 find_package(CUDA)
 if (CUDA_FOUND)

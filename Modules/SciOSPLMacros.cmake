@@ -41,8 +41,6 @@
 #
 ##############################################################################
 
-
-
 # Macro to create a list with all the generated source files for a given .idl filename
 macro(DEFINE_OpenSplice_LANG_SOURCES lang idl)
         set(gensources)

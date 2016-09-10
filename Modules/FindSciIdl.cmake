@@ -83,7 +83,6 @@ if (NOT "$ENV{IDL_DIR}" STREQUAL "")
   set(_Idl_SEARCH_DIRS "$ENV{IDL_DIR}")
 endif ()
 
-
 find_path(Idl_INCLUDE_DIR
   idl_export.h
   PATHS ${_Idl_SEARCH_DIRS}

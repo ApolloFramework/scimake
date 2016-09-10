@@ -916,7 +916,6 @@ macro(SciFindPackage)
       endif ()
     endif ()
 
-
     if (${scipkgreg}_DLLS)
       set(${scipkgreg}_DEFINITIONS -D${scipkguc}_DLL)
     endif ()

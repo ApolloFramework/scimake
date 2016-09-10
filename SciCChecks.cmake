@@ -112,7 +112,6 @@ endif ()
 # for this specific processor
 #
 
-
 set(Generic_FLAG " ")
 # Initialize the following flags to bogus values so we don't
 # get ISA_COMPILES and ISA_RUNS for ISAs that arent' really supported.
