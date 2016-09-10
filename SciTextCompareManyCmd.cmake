@@ -1,9 +1,11 @@
 ######################################################################
 #
-# SciTextCompareManyCmd: Run an executable and check for differences between
-#                 current and accepted results.
+# @file    SciTextCompareManyCmd
 #
-# $Id$
+# @brief   Run an executable and check for differences between
+#          current and accepted results.
+#
+# @version $Id$
 #
 # Copyright 2016-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
