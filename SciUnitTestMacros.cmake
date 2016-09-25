@@ -121,7 +121,6 @@ endmacro()
 #   LABELS        = Add these labels to the unit test
 
 macro(SciAddUnitTest)
-  message(STATUS "SciAddUnitTest entered.")
   set(opts USE_CUDA_ADD JOIN_STDERR)
   set(oneValArgs NAME COMMAND ARGS TEST_DIR DIFF_DIR RESULTS_DIR STDOUT_FILE NUMPROCS MPIEXEC_PROG)
   set(multiValArgs SORTER DIFFER RESULTS_FILES TEST_FILES DIFF_FILES
@@ -176,19 +175,22 @@ macro(SciAddUnitTest)
   if (TEST_LIBS)
     target_link_libraries(${TEST_COMMAND} ${TEST_LIBS})
   endif ()
-  set (stdoutarg "-DTEST_STDOUT_FILE:STRING=${TEST_STDOUT_FILE}")
-  message(STATUS "JOIN_STDERR = ${JOIN_STDERR}.")
-  message(STATUS "TEST_JOIN_STDERR = ${TEST_JOIN_STDERR}.")
-  if (TEST_JOIN_STDERR)
-    set (stdoutarg ${stdoutarg} "-DTEST_STDERR_FILE:STRING=${TEST_STDOUT_FILE}")
+  set (stdoutarg)
+  if (TEST_STDOUT_FILE)
+    set (stdoutarg ${stdoutarg} "-DTEST_STDOUT_FILE:STRING=${TEST_STDOUT_FILE}")
   endif ()
+  # message(STATUS "TEST_JOIN_STDERR = ${TEST_JOIN_STDERR}.")
+  if (TEST_JOIN_STDERR)
+    set (stdoutarg ${stdoutarg} -DTEST_STDERR_FILE:STRING=${TEST_STDOUT_FILE})
+  endif ()
+  message(STATUS "stdoutarg = ${stdoutarg}.")
   add_test(NAME ${TEST_NAME} COMMAND ${CMAKE_COMMAND}
       "-DTEST_SORTER:BOOL=${TEST_SORTER}"
       "-DTEST_DIFFER:STRING=${TEST_DIFFER}"
       -DTEST_PROG:FILEPATH=${TEST_EXECUTABLE}
       -DTEST_MPIEXEC:STRING=${TEST_MPIEXEC}
-      -DTEST_ARGS:STRING=${TEST_ARGS}
-      ${stdoutarg)
+      "-DTEST_ARGS:STRING=${TEST_ARGS}"
+      ${stdoutarg}
       -DTEST_TEST_DIR:PATH=${TEST_TEST_DIR}
       -DTEST_TEST_FILES:STRING=${TEST_TEST_FILES}
       -DTEST_DIFF_DIR:PATH=${TEST_DIFF_DIR}
