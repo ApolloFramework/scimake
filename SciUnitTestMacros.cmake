@@ -175,15 +175,14 @@ macro(SciAddUnitTest)
   if (TEST_LIBS)
     target_link_libraries(${TEST_COMMAND} ${TEST_LIBS})
   endif ()
+# Have stderr go to same file as stdout if requested.
   set (stdoutarg)
   if (TEST_STDOUT_FILE)
     set (stdoutarg ${stdoutarg} "-DTEST_STDOUT_FILE:STRING=${TEST_STDOUT_FILE}")
   endif ()
-  # message(STATUS "TEST_JOIN_STDERR = ${TEST_JOIN_STDERR}.")
   if (TEST_JOIN_STDERR)
     set (stdoutarg ${stdoutarg} -DTEST_STDERR_FILE:STRING=${TEST_STDOUT_FILE})
   endif ()
-  message(STATUS "stdoutarg = ${stdoutarg}.")
   add_test(NAME ${TEST_NAME} COMMAND ${CMAKE_COMMAND}
       "-DTEST_SORTER:BOOL=${TEST_SORTER}"
       "-DTEST_DIFFER:STRING=${TEST_DIFFER}"
