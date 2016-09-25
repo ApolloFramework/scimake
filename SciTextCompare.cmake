@@ -43,7 +43,7 @@ if (TEST_DIFF_DIR)
 endif ()
 
 # if TEST_STDOUT_FILE is non-empty, then we use it as the output file
-# into for the execute_process(), and we add it to the ${TEST_TEST_FILES}
+# for the execute_process(), and we add it to the ${TEST_TEST_FILES}
 # to be compared. This allows us to have a test which generates one or
 # more files which are to be compared, while also comparing the stdout
 # of the test.
@@ -53,10 +53,15 @@ string(REGEX REPLACE "[\\](.)" "\\1" tmpStr "${tmpStr}")
 set(argStr "${tmpStr}")
 message(STATUS "[SciTextCompare] EXECUTING ... ${TEST_MPIEXEC} ${TEST_PROG} ${argStr}")
 message(STATUS "[SciTextCompare] OUTPUT_FILE = ${TEST_STDOUT_FILE}")
+set(errarg)
+if (TEST_STDERR_FILE)
+  set(errarg ERROR_FILE ${TEST_STDERR_FILE})
+  message(STATUS "[SciTextCompare] ERROR_FILE = ${TEST_STDERR_FILE}")
+endif ()
 if (TEST_STDOUT_FILE)
   execute_process(COMMAND ${TEST_MPIEXEC} ${TEST_PROG} ${ARGS_LIST}
     RESULT_VARIABLE EXEC_ERROR
-    OUTPUT_FILE ${TEST_STDOUT_FILE}
+    OUTPUT_FILE ${TEST_STDOUT_FILE} ${errarg}
   )
 # Assume stdout is not out of order by threading
   SciDiffFiles("${TEST_STDOUT_FILE}" "${TEST_STDOUT_FILE}" ARE_FILES_EQUAL
