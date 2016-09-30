@@ -4,26 +4,22 @@
 #
 # $Id$
 #
-# Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 #
 ######################################################################
 
 # Determine compiler version
-SciPrintString("")
-include(${SCIMAKE_DIR}/SciCxxFindVersion.cmake)
-if (CXX_VERSION)
-  SciPrintVar(CXX_VERSION)
-else ()
-  message(FATAL_ERROR "Could not determine compiler version.")
+message("")
+include(${SCIMAKE_DIR}/SciFindCompilerVersion.cmake)
+SciFindCompilerVersion(CXX)
+set(CXX ${CMAKE_CXX_COMPILER})
+if (NOT CXX_VERSION)
+  message(FATAL_ERROR "Could not determine C++ compiler version.")
 endif ()
 
-# Set the lib subdir from the Compiler ID and version
-if (DEBUG_CMAKE)
-  SciPrintVar(CMAKE_CXX_COMPILER_ID)
-endif ()
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL GNU)
+if (CMAKE_CXX_COMPILER_ID STREQUAL GNU)
   if (NOT USING_MINGW)
     if (NOT ("${CMAKE_CXX_FLAGS}" MATCHES "(^| )-pipe($| )"))
       set(CMAKE_CXX_FLAGS "-pipe ${CMAKE_CXX_FLAGS}")
@@ -43,20 +39,22 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL GNU)
 # Obsolete directory installation dir
   string(SUBSTRING ${CXX_VERSION} 0 1 CXX_MAJOR_VERSION)
   set(CXX_COMP_LIB_SUBDIR gcc${CXX_MAJOR_VERSION})
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL Clang)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL Clang)
   string(SUBSTRING ${CXX_VERSION} 0 1 CXX_MAJOR_VERSION)
   set(CXX_COMP_LIB_SUBDIR clang${CXX_MAJOR_VERSION})
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL Cray)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL Cray)
   string(REGEX REPLACE "\\.[0-9]+-.*$" "" CXX_MAJOR_VERSION ${CXX_VERSION})
   set(CXX_COMP_LIB_SUBDIR cray${CXX_MAJOR_VERSION})
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL Intel)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL Intel)
   string(REGEX REPLACE "\\.[0-9]+.*$" "" CXX_MAJOR_VERSION ${CXX_VERSION})
   set(CXX_COMP_LIB_SUBDIR icpc${CXX_MAJOR_VERSION})
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL PathScale)
+# Enable C++11.  Assuming Intel compiler supports.  If not, protect by version.
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL PathScale)
   string(SUBSTRING ${CXX_VERSION} 0 1 CXX_MAJOR_VERSION)
   set(CXX_COMP_LIB_SUBDIR path${CXX_MAJOR_VERSION})
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL PGI)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL PGI)
   string(REGEX REPLACE "\\.[0-9]+-.*$" "" CXX_MAJOR_VERSION ${CXX_VERSION})
   set(CXX_COMP_LIB_SUBDIR pgi${CXX_MAJOR_VERSION})
 # Don't automatically include standard library headers.
@@ -68,7 +66,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL PGI)
 # For a fully-optimized build, set IPA options for linker too
   set(CMAKE_EXE_LINKER_FLAGS_RELEASE
     "${CMAKE_EXE_LINKER_FLAGS_RELEASE} -Mipa=fast,inline")
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL XL)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL XL)
 # This should be the basename of the compiler
   string(REGEX REPLACE "\\.[0-9]+.*$" "" CXX_MAJOR_VERSION ${CXX_VERSION})
   string(REGEX REPLACE "^0+" "" CXX_MAJOR_VERSION ${CXX_MAJOR_VERSION})
@@ -81,6 +79,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL XL)
     set(CXX_COMP_LIB_SUBDIR xlC${CXX_MAJOR_VERSION})
   endif ()
   set(SEPARATE_INSTANTIATIONS 1 CACHE BOOL "Whether to separate instantiations -- for correct compilation on xl")
+  set(CMAKE_CXX_FLAGS_RELEASE "-O3 -qarch=qp -qtune=qp")
 endif ()
 SciPrintVar(CXX_COMP_LIB_SUBDIR)
 
@@ -206,6 +205,11 @@ else ()
 endif ()
 set(HAVE_CXX11_THREAD ${HAVE_CXX11_THREAD} CACHE BOOL "Whether have C++11 threads")
 
+SciPrintString("")
+SciPrintString("  CMake detected C implicit libraries:")
+SciPrintVar(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES)
+SciPrintVar(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES)
+
 # Add in full flags
 set(CMAKE_CXX_FLAGS_FULL "${CMAKE_C_FLAGS_FULL}")
 
@@ -225,30 +229,4 @@ SciPrintVar(CMAKE_CXX_FLAGS)
 set(BUILD_FLAGS_VAR  CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE})
 set(BUILD_FLAGS_VAL "${${BUILD_FLAGS_VAR}}")
 set(CXXFLAGS "${BUILD_FLAGS_VAL} ${CMAKE_CXX_FLAGS}")
-
-# Determine what to instantiate
-if (NOT DEFINED INSTANTIATE_INT)
-  set(INSTANTIATE_INT TRUE)
-endif ()
-if (INSTANTIATE_INT)
-  message(STATUS "Instantiation of int template parameters requested.")
-endif ()
-if (NOT DEFINED INSTANTIATE_SSIZE_T)
-  set(INSTANTIATE_SSIZE_T TRUE)
-endif ()
-if (INSTANTIATE_SSIZE_T)
-  message(STATUS "Instantiation of ssize_t template parameters requested.")
-endif ()
-if (NOT DEFINED INSTANTIATE_FLOAT)
-  set(INSTANTIATE_FLOAT TRUE)
-endif ()
-if (INSTANTIATE_FLOAT)
-  message(STATUS "Instantiation of float template parameters requested.")
-endif ()
-if (NOT DEFINED INSTANTIATE_DOUBLE)
-  set(INSTANTIATE_DOUBLE TRUE)
-endif ()
-if (INSTANTIATE_DOUBLE)
-  message(STATUS "Instantiation of double template parameters requested.")
-endif ()
 

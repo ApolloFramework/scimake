@@ -1,9 +1,9 @@
 #!/bin/sh
-
-# $Id$
+######################################################################
 #
-# Copyright &copy; 2012-2015, Tech-X Corporation, Boulder, CO.
-# See LICENSE file (EclipseLicense.txt) for conditions of use.
+# @file    xvfb-run.sh
+#
+# @brief   Make links from one directory to another if distinct.  Create target.
 
 # This script starts an instance of Xvfb, the "fake" X server, runs a command
 # with that server available, and kills the X server when done.  The return
@@ -20,6 +20,13 @@
 # Must install xorg-x11-server-Xvfb:
 # sudo yum install xorg-x11-server-Xvfb
 # sudo /usr/local/bin/rcom-nodes yum install xorg-x11-server-Xvfb
+#
+# @version $Id$
+#
+# Copyright &copy; 2012-2016, Tech-X Corporation, Boulder, CO.
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
+#
+######################################################################
 
 set -e
 

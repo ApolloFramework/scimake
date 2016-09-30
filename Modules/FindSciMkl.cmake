@@ -3,7 +3,7 @@
 #
 # $Id$
 #
-# Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2013-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 # Module usage:
@@ -18,8 +18,8 @@
 #  Iomp5_LIBRARIES  = Openmp intel libraries
 #
 ######################################################################
-###
-##  Order of precedence: Command-line, environment, hard-code try
+#
+#  Order of precedence: Command-line, environment, hard-code try
 #
 if ("${Mkl_ROOT_DIR}" STREQUAL "")
   if (NOT "$ENV{MKLROOT}" STREQUAL "")
@@ -36,16 +36,16 @@ if ("${Mkl_ROOT_DIR}" STREQUAL "")
   endif (WIN32)
 endif ()
 
-###
-##  Allow architecture modification: intel64 or mic
+#
+#  Allow architecture modification: intel64 or mic
 #
 if ("${Mkl_ARCH}" STREQUAL "")
   set(Mkl_ARCH "intel64")
 endif ()
 
-###
-##  By default, just use the blas and lapack, but some may want
-##  to use scalapack and pardiso as well
+#
+#  By default, just use the blas and lapack, but some may want
+#  to use scalapack and pardiso as well
 #
 if ("${Mkl_SEARCH_LIBS}" STREQUAL "")
   if (ENABLE_MKL_SCALAPACK)
@@ -55,8 +55,8 @@ if ("${Mkl_SEARCH_LIBS}" STREQUAL "")
   endif ()
 endif ()
 
-###
-##  Now start the searching
+#
+#  Now start the searching
 #
 SciFindPackage(PACKAGE "Mkl"
               LIBRARIES ${Mkl_SEARCH_LIBS}
@@ -75,9 +75,9 @@ if (MKL_FOUND)
   set(HAVE_MKL 1 CACHE BOOL "Whether have Mkl")
 endif ()
 
-###
-##  IOMP5 is sometimes needed to get link to work.
-##  Go ahead and find it to be available.
+#
+#  IOMP5 is sometimes needed to get link to work.
+#  Go ahead and find it to be available.
 #
 #  Set iomp_dir
 get_filename_component(Iomp5_ROOT_DIR ${Mkl_ROOT_DIR}/../compiler/lib/${Mkl_ARCH} REALPATH)

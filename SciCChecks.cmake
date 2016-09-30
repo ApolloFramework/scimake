@@ -4,18 +4,18 @@
 #
 # $Id$
 #
-# Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
-#
 #
 ######################################################################
 
-# Determine the compiler id
-set(C_COMPILER ${CMAKE_C_COMPILER})
-set(C_COMPILER_ID ${CMAKE_C_COMPILER_ID})
-message(STATUS "C_COMPILER_ID = ${C_COMPILER_ID}.")
-SciPrintVar(C_COMPILER)
-SciPrintVar(C_COMPILER_ID)
+# Determine compiler version
+message("")
+include(${SCIMAKE_DIR}/SciFindCompilerVersion.cmake)
+SciFindCompilerVersion(C)
+if (NOT C_VERSION)
+  message(FATAL_ERROR "Could not determine compiler version.")
+endif ()
 
 # Type checks
 include(CheckTypeSize)
@@ -33,7 +33,7 @@ check_type_size(size_t SCI_SIZEOF_SIZE_T)
 set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES_SAV})
 message(STATUS "SCI_SIZEOF_SIZE_T = ${SCI_SIZEOF_SIZE_T}.")
 if (HAVE_SCI_SIZEOF_SIZE_T)
-  message(STATUS "size_t available.")
+  message(STATUS "size_t defined.")
   if ("${SCI_SIZEOF_UINT}" EQUAL "${SCI_SIZEOF_SIZE_T}")
     set(UINT_IS_NOT_SIZE_T FALSE)
     set(UINT_IS_SIZE_T TRUE)
@@ -46,24 +46,23 @@ if (HAVE_SCI_SIZEOF_SIZE_T)
     set(INT_IS_SSIZE_T FALSE)
   endif ()
 else ()
-  message(STATUS "Unable to find size_t.")
+  message(STATUS "size_t not defined.")
 endif ()
 
-# Check for ssize_t
+# Check for ssize_t.  We know Windows has SSIZE_T.
+# Some compilers (Intel) even on Unix may not have ssize_t.
 set(CMAKE_REQUIRED_INCLUDES_SAV ${CMAKE_REQUIRED_INCLUDES})
-if (WIN32)
-set(CMAKE_REQUIRED_INCLUDES BaseTsd.h)
-check_type_size(SSIZE_T SIZEOF_SSIZE_T)
+set(CMAKE_REQUIRED_INCLUDES unistd.h)
+check_type_size(ssize_t SCI_SIZEOF_SSIZE_T)
+if (HAVE_SCI_SIZEOF_SSIZE_T)
+  message(STATUS "SCI_SIZEOF_SSIZE_T = ${SCI_SIZEOF_SSIZE_T}.")
+  message(STATUS "ssize_t defined.")
+  set(SCI_HAVE_SSIZE_T TRUE)
 else ()
-check_type_size(ssize_t SIZEOF_SSIZE_T)
+  message(STATUS "ssize_t not defined.")
+  set(SCI_HAVE_SSIZE_T FALSE)
 endif ()
 set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES_SAV})
-if (HAVE_SIZEOF_SSIZE_T)
-  message(STATUS "Unable to find ssize_t or SSIZE_T.")
-else ()
-  message(STATUS "ssize_t not available.")
-  set(ssize_t SSIZE_T)
-endif ()
 
 # Check whether time and sys/time can both be included
 include(CheckCSourceCompiles)
@@ -113,16 +112,21 @@ endif ()
 # for this specific processor
 #
 
+
+set(Generic_FLAG " ")
+# Initialize the following flags to bogus values so we don't
+# get ISA_COMPILES and ISA_RUNS for ISAs that arent' really supported.
+set(SSE2_FLAG "compiler flags for this ISA not known")
+set(AVX_FLAG "compiler flags for this ISA not known")
+set(AVX2_FLAG "compiler flags for this ISA not known")
+set(AVX512_FLAG "compiler flags for this ISA not known")
 #
 # Determine flags by compiler
-
+#
 set(CMAKE_C_FLAGS_FULL "${CMAKE_C_FLAGS_RELEASE}")
 if (${C_COMPILER_ID} STREQUAL GNU)
 
   set(CMAKE_C_FLAGS_FULL "${CMAKE_C_FLAGS_FULL} -ffast-math")
-  if (SSE_CAPABILITY)
-    set(CMAKE_C_FLAGS_FULL "${CMAKE_C_FLAGS_FULL} -m${SSE_CAPABILITY}")
-  endif ()
   set(SSE2_FLAG "-msse2")
   set(AVX_FLAG "-mavx")
   if (APPLE)
@@ -130,13 +134,11 @@ if (${C_COMPILER_ID} STREQUAL GNU)
     set(AVX_FLAG "${AVX_FLAG} -Wa,-q")
   endif ()
   set(AVX2_FLAG "-mavx2")
+  set(AVX512_FLAG "-mavx512f")
   set(OPENMP_FLAGS -fopenmp)
 
 elseif (${C_COMPILER_ID} STREQUAL Clang)
 
-  if (SSE_CAPABILITY)
-    set(CMAKE_C_FLAGS_FULL "${CMAKE_C_FLAGS_FULL} -m${SSE_CAPABILITY}")
-  endif ()
   set(SSE2_FLAG "-msse2")
   set(AVX_FLAG "-mavx")
   set(AVX2_FLAG "-mavx2")
@@ -148,7 +150,7 @@ elseif (${C_COMPILER_ID} STREQUAL Cray)
 elseif (${C_COMPILER_ID} STREQUAL Intel)
 
   set(SSE2_FLAG "-msse2")
-  set(AVX_FLAG "-mavx")
+  set(AVX_FLAG "-march=corei7-avx")
   if (APPLE)
 # On OS X direct to use clang assembler.  Needs testing.
     set(AVX_FLAG "${AVX_FLAG} -Wa,-q")
@@ -157,6 +159,12 @@ elseif (${C_COMPILER_ID} STREQUAL Intel)
   set(OPENMP_FLAGS "-openmp")
 
 elseif (${C_COMPILER_ID} STREQUAL MSVC)
+
+  set(SSE2_FLAG "/arch:SSE2")
+  set(AVX_FLAG "/arch:AVX")
+  set(AVX2_FLAG "/arch:AVX2")
+  set(AVX512_FLAG "unknown architecture flags")
+  set(OPENMP_FLAGS "/openmp")
 
 elseif (${C_COMPILER_ID} STREQUAL PathScale)
 
@@ -174,14 +182,25 @@ elseif (${C_COMPILER_ID} STREQUAL PGI)
 
 elseif (${C_COMPILER_ID} STREQUAL XL)
 
+# CMake default XL compiler flags are very poor
+  set(CMAKE_C_FLAGS_RELEASE "-O3 -qnooptdebug")
+  set(CMAKE_C_FLAGS_FULL "${CMAKE_C_FLAGS_RELEASE}")
+  set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -qoptdebug")
+  set(CMAKE_C_FLAGS_DEBUG "-g -qnoopt -O0 -qcheck=all")
   set(OPENMP_FLAGS "-qsmp=omp -qsmp=stackcheck")
 
 else ()
   message(STATUS "FULL flags not known for ${C_COMPILER_ID}")
 endif ()
 
+SciPrintString("")
+SciPrintString("  CMake detected C implicit libraries:")
+SciPrintVar(CMAKE_C_IMPLICIT_LINK_LIBRARIES)
+SciPrintVar(CMAKE_C_IMPLICIT_LINK_DIRECTORIES)
+
 # Print the performance flags
 message(STATUS "Performance flags:")
+SciPrintVar(Generic_FLAG)
 SciPrintVar(SSE2_FLAG)
 SciPrintVar(AVX_FLAG)
 SciPrintVar(AVX2_FLAG)

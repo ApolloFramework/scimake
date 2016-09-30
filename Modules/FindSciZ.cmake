@@ -16,7 +16,7 @@
 #
 # $Id$
 #
-# Copyright 2010-2015, Tech-X Corporation, Boulder, CO.
+# Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 #
@@ -24,10 +24,14 @@
 
 # Need to find paths with standard algorithm
 SciGetInstSubdirs(zlib zinstdirs)
+set(zlibs z zlib)
+if (WIN32 AND (BUILD_SHARED_LIBS OR Z_DLLS_REQUIRED))
+  set(zlibs ${zlibs} zlib1)
+endif ()
 SciFindPackage(
   PACKAGE "Z"
   INSTALL_DIRS ${zinstdirs}
-  LIBRARIES z zlib zlib1 OPTIONAL
+  LIBRARIES ${zlibs} OPTIONAL
 )
 
 if (Z_FOUND)
