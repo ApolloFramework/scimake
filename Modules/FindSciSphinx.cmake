@@ -44,6 +44,3 @@ endif ()
 # The -d flag sets the cache directory to be non-hidden
 set(Sphinx_OPTS      "" CACHE STRING "Options to be passed to the sphinx executable")
 
-
-
-

@@ -17,7 +17,7 @@ endif ()
 set(CppCheck_suppargs)
 if (EXISTS ${CPPCHECK_SOURCE_DIR}/cppchecksupp.txt)
   set(CppCheck_suppargs
-    --suppressions ${CPPCHECK_SOURCE_DIR}/cppchecksupp.txt
+    --suppressions-list=${CPPCHECK_SOURCE_DIR}/cppchecksupp.txt
   )
 endif ()
 # Run with --xml to get error ids

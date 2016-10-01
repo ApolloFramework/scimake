@@ -75,6 +75,9 @@ macro(SciSphinxTarget)
   else ()
     set(instdir ${CMAKE_INSTALL_PREFIX})
   endif ()
+  if (NOT DEFINED USE_WHOOSH )
+    set(USE_WHOOSH false)
+  endif ()
 
   #
   #  Basic sanity checks
@@ -147,6 +150,19 @@ macro(SciSphinxTarget)
         DEPENDS ${FD_FILE_DEPS}
       )
       add_custom_target(${FD_TARGET}-${build} DEPENDS ${${build}_OUTPUT})
+      if (USE_WHOOSH AND "${build}" STREQUAL html)
+        message(STATUS "XXXXXXXXXXX")
+        set(whoosh_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/html/whoosh.txt)
+        set(all_opts -b whoosh -c ${CMAKE_CURRENT_BINARY_DIR} ${Sphinx_OPTS} ${FD_SPHINX_ADDL_OPTS} ${FD_SPHINX_DOCTREE_DIR})
+        add_custom_command(
+          OUTPUT ${whoosh_OUTPUT}
+          COMMAND ${Sphinx_EXECUTABLE}
+          ARGS ${all_opts} ${FD_SOURCE_DIR} ${${build}_DIR}
+          DEPENDS ${FD_FILE_DEPS}
+        )
+        add_custom_target(${FD_TARGET}-whoosh
+                          DEPENDS ${whoosh_OUTPUT})
+       endif ()
     endif ()
   endforeach ()
 

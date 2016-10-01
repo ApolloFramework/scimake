@@ -1,10 +1,22 @@
+######################################################################
+#
+# @file    UseLATEX.cmake
+#
+# @brief   Documentation goes here.
+#
+# @version $Id$
+#
+# Copyright &copy; 2013-2016, Tech-X Corporation, Boulder, CO.
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
+#
+######################################################################
+
 # File: UseLATEX.cmake
 # CMAKE commands to actually use the LaTeX compiler
 # Version: 1.10.3
 # Author: Kenneth Moreland <kmorel@sandia.gov>
 #
 # Copyright 2004 Sandia Corporation.
-# See LICENSE file (EclipseLicense.txt) for conditions of use.
 # Under the terms of Contract DE-AC04-94AL85000, there is a non-exclusive
 # license for use of this work by or on behalf of the
 # U.S. Government. Redistribution and use in source and binary forms, with

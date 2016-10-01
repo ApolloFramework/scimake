@@ -112,7 +112,6 @@ endif ()
 # for this specific processor
 #
 
-
 set(Generic_FLAG " ")
 # Initialize the following flags to bogus values so we don't
 # get ISA_COMPILES and ISA_RUNS for ISAs that arent' really supported.
@@ -160,7 +159,7 @@ elseif (${C_COMPILER_ID} STREQUAL Intel)
 
 elseif (${C_COMPILER_ID} STREQUAL MSVC)
 
-  set(SSE2_FLAG "/arch:SSE2")
+  set(SSE2_FLAG "")
   set(AVX_FLAG "/arch:AVX")
   set(AVX2_FLAG "/arch:AVX2")
   set(AVX512_FLAG "unknown architecture flags")
@@ -220,5 +219,4 @@ foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
   SciPrintVar(CMAKE_C_FLAGS_${bld})
 endforeach ()
 SciPrintVar(CMAKE_C_FLAGS)
-
 

@@ -16,7 +16,6 @@ To commit changes:
 
   svn switch --relocate svn://svn.code.sf.net/p/scimake/code/trunk https://SOURCEFORGE_USERNAME@svn.code.sf.net/p/scimake/code/trunk
 
-
 SHARED FLAGS
 
 We are currently (20131201) using the following Booleans:
@@ -57,3 +56,4 @@ be set via a bilder script.
 
 Target properties
   http://www.kitware.com/blog/home/post/390
+

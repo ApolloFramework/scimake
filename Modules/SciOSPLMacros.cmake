@@ -41,8 +41,6 @@
 #
 ##############################################################################
 
-
-
 # Macro to create a list with all the generated source files for a given .idl filename
 macro(DEFINE_OpenSplice_LANG_SOURCES lang idl)
         set(gensources)
@@ -182,3 +180,4 @@ macro(ADD_OSPL_DATAMODEL)
     set(${SCIADM_NAME}_OSPLDDS_DATAMODEL ${iall_ospldds_datamodel})
 
 endmacro(ADD_OSPL_DATAMODEL)
+

@@ -112,7 +112,10 @@ install(PROGRAMS ${CONFIG_SCRIPTS} DESTINATION ${sharedir}
 # Generate autotools files for inclusion
 # Important for transitioning between autotools and scimake.
 # Used for fciowrappers, ntcc_transport, netlib_lite, fmcfm, facets, etc.
-if (EXISTS ${CMAKE_SOURCE_DIR}/configure.ac)
+if (NOT DEFINED GENERATE_AUTOTOOLS)
+  set(GENERATE_AUTOTOOLS TRUE)
+endif ()
+if (GENERATE_AUTOTOOLS AND EXISTS ${CMAKE_SOURCE_DIR}/configure.ac)
   message(STATUS "make dist will generating autotools files for inclusion in distribution.")
   add_custom_target(cleanconf
     COMMAND config/cleanconf.sh

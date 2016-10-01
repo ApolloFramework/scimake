@@ -96,6 +96,10 @@ endif ()
 # Macro to do what is needed when CUDA is found
 macro(SciDoCudaFound)
 
+# Make calling a __host__ function from a __host__ __device__ function
+# an error.
+  list(APPEND CUDA_NVCC_FLAGS "--Werror cross-execution-space-call")
+
   string(FIND ${CMAKE_CXX_FLAGS} "-std=c++11" POS)
   if (NOT ${POS} EQUAL -1)
     if (CUDA_VERSION LESS 7.0)
