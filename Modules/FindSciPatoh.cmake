@@ -22,7 +22,6 @@
 #
 ######################################################################
 
-
 SciFindPackage(PACKAGE "Patoh"
               INSTALL_DIR "patoh"
               PROGRAMS ""
@@ -30,11 +29,9 @@ SciFindPackage(PACKAGE "Patoh"
               LIBRARIES "patoh"
               )
 
-
 if (PATOH_FOUND)
   # message(STATUS "Found Patoh")
   set(HAVE_PATOH 1 CACHE BOOL "Whether have the Patoh library")
-
 
 else ()
    message(STATUS "Did not find Patoh.  Use -DPATOH_DIR to specify the installation directory.")

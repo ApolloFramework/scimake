@@ -43,6 +43,8 @@ macro(makeNativePath)
   cmake_parse_arguments(TO_NATIVE "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN})
   file(TO_NATIVE_PATH "${TO_NATIVE_INPATH}" NATIVE_OUTPATH)
   if (WIN32)
+    # string(REPLACE "\\" "\\\\\\\\" ${NATIVE_OUTPATH} "${NATIVE_OUTPATH}")
+    string(REPLACE "\\" "\\\\" ${NATIVE_OUTPATH} "${NATIVE_OUTPATH}")
     string(REPLACE ";" "\\;" ${TO_NATIVE_OUTPATH} "${NATIVE_OUTPATH}")
   else ()
     string(REPLACE ";" ":" ${TO_NATIVE_OUTPATH} "${NATIVE_OUTPATH}")
@@ -66,6 +68,26 @@ file(TO_CMAKE_PATH "$ENV{${SHLIB_PATH_VAR}}" SHLIB_CMAKE_PATH_VAL)
 makeNativePath(INPATH "${SHLIB_CMAKE_PATH_VAL}" OUTPATH SCIMAKE_SHLIB_NATIVE_PATH_VAL)
 
 message(STATUS "In SciAddUnitTestMacros.cmake, SHLIB_CMAKE_PATH_VAL = ${SHLIB_CMAKE_PATH_VAL}")
+
+#
+# Check the source with cppcheck
+#
+macro(SciCppCheckSource build)
+  if (("${build}" STREQUAL "") OR (CppCheck_cppcheck AND ${CMAKE_INSTALL_PREFIX} MATCHES "${build}$"))
+    message(STATUS "Source code checking enabled.")
+    add_test(NAME cppcheck COMMAND ${CMAKE_COMMAND}
+      -DCppCheck_cppcheck:FILEPATH=${CppCheck_cppcheck}
+      -DCPPCHECK_SOURCE_DIR:PATH=${CMAKE_SOURCE_DIR}
+      -P ${SCIMAKE_DIR}/SciCppCheck.cmake
+    )
+    set_tests_properties(cppcheck
+      PROPERTIES ENVIRONMENT
+        "${SHLIB_PATH_VAR}=${SCIMAKE_SHLIB_NATIVE_PATH_VAL}"
+    )
+  else ()
+    message(STATUS "Source code checking not enabled.")
+  endif ()
+endmacro()
 
 # Add a unit test. If the test needs to compare its results against some
 # expected results, then RESULTS_DIR and RESULTS (or STDOUT) must be set.
@@ -95,10 +117,11 @@ message(STATUS "In SciAddUnitTestMacros.cmake, SHLIB_CMAKE_PATH_VAL = ${SHLIB_CM
 #   MPIEXEC_PROG  = File to preface executable with for parallel run.
 #   NUMPROCS      = Number of processors to specify for parallel run.
 #   USE_CUDA_ADD  = Add libraries and executables using cuda
+#   JOIN_STDERR   = Join standard err to standard out
 #   LABELS        = Add these labels to the unit test
 
 macro(SciAddUnitTest)
-  set(opts USE_CUDA_ADD)
+  set(opts USE_CUDA_ADD JOIN_STDERR)
   set(oneValArgs NAME COMMAND ARGS TEST_DIR DIFF_DIR RESULTS_DIR STDOUT_FILE NUMPROCS MPIEXEC_PROG)
   set(multiValArgs SORTER DIFFER RESULTS_FILES TEST_FILES DIFF_FILES
       SOURCES LIBS LABELS
@@ -152,13 +175,21 @@ macro(SciAddUnitTest)
   if (TEST_LIBS)
     target_link_libraries(${TEST_COMMAND} ${TEST_LIBS})
   endif ()
+# Have stderr go to same file as stdout if requested.
+  set (stdoutarg)
+  if (TEST_STDOUT_FILE)
+    set (stdoutarg ${stdoutarg} "-DTEST_STDOUT_FILE:STRING=${TEST_STDOUT_FILE}")
+  endif ()
+  if (TEST_JOIN_STDERR)
+    set (stdoutarg ${stdoutarg} -DTEST_STDERR_FILE:STRING=${TEST_STDOUT_FILE})
+  endif ()
   add_test(NAME ${TEST_NAME} COMMAND ${CMAKE_COMMAND}
       "-DTEST_SORTER:BOOL=${TEST_SORTER}"
       "-DTEST_DIFFER:STRING=${TEST_DIFFER}"
       -DTEST_PROG:FILEPATH=${TEST_EXECUTABLE}
       -DTEST_MPIEXEC:STRING=${TEST_MPIEXEC}
-      -DTEST_ARGS:STRING=${TEST_ARGS}
-      -DTEST_STDOUT_FILE:STRING=${TEST_STDOUT_FILE}
+      "-DTEST_ARGS:STRING=${TEST_ARGS}"
+      ${stdoutarg}
       -DTEST_TEST_DIR:PATH=${TEST_TEST_DIR}
       -DTEST_TEST_FILES:STRING=${TEST_TEST_FILES}
       -DTEST_DIFF_DIR:PATH=${TEST_DIFF_DIR}
@@ -185,7 +216,7 @@ macro(SciAddUnitTest)
 
 # Add command to replace results
   add_custom_target(${TEST_NAME}ReplaceResults)
-  string(REPLACE " " ";" resfiles "${TEST_RESULTS_FILES}")
+  string(REPLACE " " ";" resfiles "${TEST_TEST_FILES}")
   foreach (file ${TEST_STDOUT_FILE} ${resfiles})
     add_custom_command(TARGET ${TEST_NAME}ReplaceResults
       COMMAND ${CMAKE_COMMAND} -E copy ${file} ${TEST_DIFF_DIR}
@@ -195,23 +226,114 @@ macro(SciAddUnitTest)
 
 endmacro()
 
+# Add a unit test with more than one command.
+# If the test needs to compare its results against some
+# expected results, then RESULTS_DIR and RESULTS (or STDOUT) must be set.
 #
-# Check the source with cppcheck
+# Args
 #
-macro(SciCppCheckSource build)
-  if (("${build}" STREQUAL "") OR (CppCheck_cppcheck AND ${CMAKE_INSTALL_PREFIX} MATCHES "${build}$"))
-    message(STATUS "Source code checking enabled.")
-    add_test(NAME cppcheck COMMAND ${CMAKE_COMMAND}
-      -DCppCheck_cppcheck:FILEPATH=${CppCheck_cppcheck}
-      -DCPPCHECK_SOURCE_DIR:PATH=${CMAKE_SOURCE_DIR}
-      -P ${SCIMAKE_DIR}/SciCppCheck.cmake
-    )
-    set_tests_properties(cppcheck
-      PROPERTIES ENVIRONMENT
-        "${SHLIB_PATH_VAR}=${SCIMAKE_SHLIB_NATIVE_PATH_VAL}"
-    )
-  else ()
-    message(STATUS "Source code checking not enabled.")
+# NAME          = the name of this test (which may or may not be the same
+#                 as the executable)
+# CMD1          = first test executable (NAME is set to this if NAME undef)
+# ARGS1         = arguments to run the first executable with
+# CMD2          = secon test executable
+# ARGS2         = arguments to run the second executable with
+# DIFFER        = Name of executable to do diff.  If not given, assumed to
+#                 be "diff --strip-trailing-cr" in SciTextCompare.
+# SORTER        = Name of executable to sort output with before comparing. If
+#                 not specified, no sorting is done.
+# TEST_DIR      = Where the test files are generated.  Defaults to current
+#                 binary dir.
+# ACCEPTED_DIR  = Where the golden files are located.  Defaults to current
+#                 source dir.
+# STDOUT_FILE   = Name of file into which stdout should be captured. This
+#                 will be compared against same named file in ${ACCEPTED_DIR}.
+# TEST_FILES    = Additional test generated files
+# ACCEPTED_FILES  = Golden generated files.  Should be same-length vector.
+#                 Defaults to TEST_FILES.
+# MPIEXEC_PROG  = File to preface executable with for parallel run.
+# NUMPROCS      = Number of processors to specify for parallel run.
+# LABELS        = Add these labels to the unit test
+
+macro(SciAddUnitTestMultiCmd)
+
+  set(oneValArgs NAME CMD1 ARGS1 CMD2 ARGS2 TEST_DIR ACCEPTED_DIR STDOUT_FILE NUMPROCS MPIEXEC_PROG)
+  set(multiValArgs SORTER DIFFER TEST_FILES ACCEPTED_FILES LABELS)
+  cmake_parse_arguments(TEST
+      "${opts}" "${oneValArgs}" "${multiValArgs}" ${ARGN}
+  )
+  if (NOT TEST_CMD1)
+    set (TEST_CMD1 ${TEST_NAME})
   endif ()
+  if (IS_ABSOLUTE ${TEST_CMD1})
+    set(TEST_EXEC1 "${TEST_CMD1}")
+  else ()
+    set(TEST_EXEC1 "${CMAKE_CURRENT_BINARY_DIR}/${TEST_CMD1}")
+  endif ()
+  if (IS_ABSOLUTE ${TEST_CMD2})
+    set(TEST_EXEC2 "${TEST_CMD2}")
+  else ()
+    set(TEST_EXEC2 "${CMAKE_CURRENT_BINARY_DIR}/${TEST_CMD2}")
+  endif ()
+# Backward compatible specification of new results location
+  if (NOT TEST_RESULTS_DIR)
+    set(TEST_RESULTS_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+  endif ()
+# Actual golden results location
+  if (NOT TEST_ACCEPTED_DIR)
+    set(TEST_ACCEPTED_DIR ${TEST_RESULTS_DIR})
+  endif ()
+# Location of test files
+  if (NOT TEST_TEST_DIR)
+    set(TEST_TEST_DIR ${CMAKE_CURRENT_BINARY_DIR})
+  endif ()
+# make sure there are test and diff files
+  if (NOT TEST_TEST_FILES)
+    set(TEST_TEST_FILES ${TEST_RESULTS_FILES})
+  endif ()
+  if (NOT TEST_ACCEPTED_FILES)
+    foreach (fname ${TEST_TEST_FILES})
+      get_filename_component(TEST_DIFF_FILE "${fname}" NAME)
+      set(TEST_ACCEPTED_FILES ${TEST_ACCEPTED_FILES} "${TEST_DIFF_FILE}")
+    endforeach ()
+  endif ()
+# if parallel set the mpiexec argument
+  if (TEST_NUMPROCS AND ENABLE_PARALLEL AND MPIEXEC)
+    set(TEST_MPIEXEC "${MPIEXEC} -np ${TEST_NUMPROCS}")
+  else ()
+    set(TEST_MPIEXEC)
+  endif (TEST_NUMPROCS AND ENABLE_PARALLEL AND MPIEXEC)
+
+# Add the test using  SciTextCompare
+  add_test(NAME ${TEST_NAME} COMMAND ${CMAKE_COMMAND}
+      -DTEST_PROG1:FILEPATH=${TEST_EXEC1}
+      -DTEST_ARGS1:STRING=${TEST_ARGS1}
+      -DTEST_PROG2:FILEPATH=${TEST_EXEC2}
+      -DTEST_ARGS2:STRING=${TEST_ARGS2}
+      "-DTEST_SORTER:BOOL=${TEST_SORTER}"
+      "-DTEST_DIFFER:STRING=${TEST_DIFFER}"
+      -DTEST_MPIEXEC:STRING=${TEST_MPIEXEC}
+      -DTEST_STDOUT_FILE:STRING=${TEST_STDOUT_FILE}
+      -DTEST_TEST_DIR:PATH=${TEST_TEST_DIR}
+      -DTEST_TEST_FILES:STRING=${TEST_TEST_FILES}
+      -DTEST_ACCEPTED_DIR:PATH=${TEST_ACCEPTED_DIR}
+      -DTEST_ACCEPTED_FILES:STRING=${TEST_ACCEPTED_FILES}
+      -DTEST_SCIMAKE_DIR:PATH=${SCIMAKE_DIR}
+      -P ${SCIMAKE_DIR}/SciTextCompareManyCmd.cmake
+  )
+  if (TEST_LABELS)
+    set_tests_properties(${TEST_NAME} PROPERTIES LABELS "${TEST_LABELS}")
+  endif ()
+
+# Add command to replace results
+  add_custom_target(${TEST_NAME}ReplaceResults)
+  string(REPLACE " " ";" resfiles "${TEST_TEST_FILES}")
+  foreach (file ${TEST_STDOUT_FILE} ${resfiles})
+    add_custom_command(TARGET ${TEST_NAME}ReplaceResults
+      COMMAND ${CMAKE_COMMAND} -E copy ${file} ${TEST_ACCEPTED_DIR}
+      WORKING_DIRECTORY ${TEST_TEST_DIR}
+    )
+  endforeach ()
+
 endmacro()
 

@@ -135,7 +135,7 @@ if (DEBUG_CMAKE)
 endif ()
 
 # Get execs
-file(GLOB hexecs ${Hdf5_ROOT_DIR}/bin/h5diff*)
+file(GLOB hexecs ${Hdf5_ROOT_DIR}/bin/h5diff* ${Hdf5_ROOT_DIR}/bin/h5ls*)
 set(desiredexecs)
 foreach (ex ${hexecs})
   get_filename_component(en ${ex} NAME_WE)

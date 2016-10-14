@@ -88,3 +88,4 @@ if (WIN32)
 else ()
   SciFindPackage(PACKAGE "Iomp5" LIBRARIES "iomp5")
 endif ()
+
