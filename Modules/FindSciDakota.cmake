@@ -25,7 +25,7 @@ if (DEFINED DAKOTA_DIR)
   message(STATUS "[FindDakota.cmake] - DAKOTA_DIR is ${DAKOTA_DIR}")
 endif ()
 
-SciGetInstSubdirs(Dakota instdirs)
+SciGetInstSubdirs(Dakota-ser instdirs)
 
 SciFindPackage(
   PACKAGE Dakota
@@ -64,17 +64,9 @@ if (DAKOTA_FOUND)
     message("Trying to run executable ${Dakota_FOUND_PROGRAM} to determine Dakota version.")
   endif ()
 
-# Dakota_VERSION is required by SciComposerBase.cmake to set the package
-# installer name.  It is provided by executing "executable --version",
-# and contains version number/revision number.
-  include(${TXCMAKE_DIR}/TxEngFindVersion.cmake)
-  TxEngFindVersion(${Dakota_FOUND_PROGRAM} EXE_VERSION EXE_REVISION)
-  set(Dakota_VERSION ${EXE_VERSION})
-  set(DAKOTA_VERSION ${EXE_VERSION})
-  set(Dakota_REVISION ${EXE_REVISION})
 else ()
   message(STATUS "Dakota not found. Use -DDAKOTA_DIR to specify the installation directory.")
-  if (TxDakota_FIND_REQUIRED)
+  if (SciDakota_FIND_REQUIRED)
     message(FATAL_ERROR "Failed.")
   endif ()
   set(Dakota_VERSION "DakotaNotFound")
