@@ -25,15 +25,11 @@ if (DEFINED DAKOTA_DIR)
   message(STATUS "[FindDakota.cmake] - DAKOTA_DIR is ${DAKOTA_DIR}")
 endif ()
 
-# We have a problem in SciFindPackage
-# where if the executable has the same name as a directory
-# scimake's find_program() will return the DIRECTORY instead
-# of the executable on windows (as scimake is a windows program
-# and the cygwin soft link just looks like a file).
-# So as a temporary hack-fix, we only look for dakotaser
+SciGetInstSubdirs(Dakota instdirs)
+
 SciFindPackage(
   PACKAGE Dakota
-  INSTALL_DIR dakota
+  INSTALL_DIRS ${instdirs}
   PROGRAMS dakota
 )
 
