@@ -39,6 +39,9 @@
 # Data exchange
 # TKVRML
 
+message (STATUS "")
+message (STATUS "--------- FindSciOce seeking Oce -----------")
+
 set(OceXdeIges_SEARCHLIBS TKXDEIGES)
 set(OceXdeStep_SEARCHLIBS TKXDESTEP)
 # The libs below were required by TKXDEIGES
@@ -203,4 +206,7 @@ else ()
     message(FATAL_ERROR "Failed.")
   endif ()
 endif ()
+
+message (STATUS "--------- FindSciOce done with Oce -----------")
+message (STATUS "")
 
