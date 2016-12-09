@@ -79,8 +79,8 @@ endif ()
 
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL Linux)
 
-  message("")
-  message("--------- Determining version of glibc ---------")
+  message(STATUS "")
+  message(STATUS "--------- Determining version of glibc ---------")
   execute_process(
     COMMAND ldd --version
     COMMAND head -1
@@ -91,11 +91,11 @@ if ("${CMAKE_SYSTEM_NAME}" STREQUAL Linux)
   SciPrintVar(GLIBC_VERSION)
 
   if ("${CMAKE_C_COMPILER_ID}" STREQUAL GNU)
-    message("")
-    message("--------- Adding location of libstdc++ to rpath ---------")
+    message(STATUS "")
+    message(STATUS "--------- Adding location of libstdc++ to rpath ---------")
     execute_process(COMMAND ${CMAKE_C_COMPILER} -print-file-name=libstdc++.so
       OUTPUT_VARIABLE libcxx)
-    message("libcxx is ${libcxx}")
+    message(STATUS "libcxx is ${libcxx}")
     if (${libcxx} MATCHES "^/")
       get_filename_component(CXX_LIBDIR ${libcxx}/.. REALPATH)
       message(STATUS "[SciLinkChecks]: libstdc++ is in ${CXX_LIBDIR}.")
