@@ -155,7 +155,12 @@ elseif (${C_COMPILER_ID} STREQUAL Intel)
     set(AVX_FLAG "${AVX_FLAG} -Wa,-q")
   endif ()
   set(AVX2_FLAG "-march=core-avx2")
-  set(OPENMP_FLAGS "-openmp")
+# As of 17.0, need to use -fopenmp.  Maybe before?  Change as discovered.
+  if (${C_VERSION} VERSION_LESS 17.0)
+    set(OPENMP_FLAGS "-openmp")
+  else ()
+    set(OPENMP_FLAGS "-fopenmp")
+  endif ()
 
 elseif (${C_COMPILER_ID} STREQUAL MSVC)
 
