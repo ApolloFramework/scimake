@@ -147,7 +147,12 @@ if (DEBUG_CMAKE)
 endif ()
 
 set(desiredmods)
-if (CMAKE_Fortran_COMPILER_WORKS)
+# We may have a working Fortran compiler, but perhaps don't
+# have a fortran Hdf5 build. 
+if (NOT DEFINED Hdf5_Fortran_REQUIRED)
+  set(Hdf5_Fortran_REQUIRED ${CMAKE_Fortran_COMPILER_WORKS})
+endif ()
+if (Hdf5_Fortran_REQUIRED)
   set(desiredmods hdf5)
 endif ()
 SciFindPackage(PACKAGE "Hdf5"
