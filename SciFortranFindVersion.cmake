@@ -65,6 +65,17 @@ elseif ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL GNU)
   string(STRIP ${fc_version_tmp} fc_version_tmp)
 elseif ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL Intel)
   if (WIN32)
+    if (CMAKE_Fortran_COMPILER MATCHES "mpi")
+      exec_program(
+        ifort OUTPUT_VARIABLE fc_version_str
+      )
+    string(REGEX MATCH
+      "Version [0-9][0-9]\\.[0-9]\\.[0-9]\\.[0-9][0-9][0-9]"
+      fc_version_tmp
+      ${fc_version_str}
+    )
+    string(REPLACE "Version " "" fc_version_tmp ${fc_version_tmp})
+    else ()
     exec_program(${CMAKE_Fortran_COMPILER}
       OUTPUT_VARIABLE fc_version_str
     )
@@ -74,6 +85,7 @@ elseif ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL Intel)
       ${fc_version_str}
     )
     string(REPLACE "Version " "" fc_version_tmp ${fc_version_tmp})
+    endif ()
   else ()
     execute_process(
       COMMAND ${CMAKE_Fortran_COMPILER} --version
