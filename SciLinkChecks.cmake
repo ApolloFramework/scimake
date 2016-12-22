@@ -9,6 +9,10 @@
 #
 ######################################################################
 
+message(STATUS "")
+message(STATUS "[SciLinkChecks]: STARTING.")
+message(STATUS "")
+
 ######################################################################
 #
 # rpaths
@@ -35,7 +39,7 @@ if (BUILD_SHARED_LIBS)
 # point to directories outside the build tree to the install RPATH
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
   endif ()
-  message(STATUS "After further modification:")
+  message(STATUS "[SciLinkChecks]: After further modification:")
   foreach (type EXE SHARED)
     SciPrintVar(CMAKE_${type}_LINKER_FLAGS)
   endforeach ()
@@ -53,7 +57,7 @@ endif ()
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL Darwin)
 # Get major version
   string(REPLACE "Darwin-" "" SCI_SYSTEM_VERSION "${CMAKE_SYSTEM}")
-  message(STATUS "SCI_SYSTEM_VERSION = ${SCI_SYSTEM_VERSION}.")
+  message(STATUS "[SciLinkChecks]: SCI_SYSTEM_VERSION = ${SCI_SYSTEM_VERSION}.")
   string(REGEX REPLACE "\\..*$" "" SCI_SYSTEM_MAJVER "${SCI_SYSTEM_VERSION}")
   if ("${SCI_SYSTEM_MAJVER}" LESS 11)   # Before Lion (Snow Leopard or before)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -mmacosx-version-min=10.4")
@@ -75,8 +79,8 @@ endif ()
 
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL Linux)
 
-  message("")
-  message("--------- Determining version of glibc ---------")
+  message(STATUS "")
+  message(STATUS "--------- Determining version of glibc ---------")
   execute_process(
     COMMAND ldd --version
     COMMAND head -1
@@ -87,14 +91,14 @@ if ("${CMAKE_SYSTEM_NAME}" STREQUAL Linux)
   SciPrintVar(GLIBC_VERSION)
 
   if ("${CMAKE_C_COMPILER_ID}" STREQUAL GNU)
-    message("")
-    message("--------- Adding location of libstdc++ to rpath ---------")
+    message(STATUS "")
+    message(STATUS "--------- Adding location of libstdc++ to rpath ---------")
     execute_process(COMMAND ${CMAKE_C_COMPILER} -print-file-name=libstdc++.so
       OUTPUT_VARIABLE libcxx)
-    message("libcxx is ${libcxx}")
+    message(STATUS "libcxx is ${libcxx}")
     if (${libcxx} MATCHES "^/")
       get_filename_component(CXX_LIBDIR ${libcxx}/.. REALPATH)
-      message(STATUS "libstdc++ is in ${CXX_LIBDIR}.")
+      message(STATUS "[SciLinkChecks]: libstdc++ is in ${CXX_LIBDIR}.")
 # Add to build rpath
       set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,${CXX_LIBDIR}")
       set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,${CXX_LIBDIR}")
@@ -120,7 +124,7 @@ endif ()
 ######################################################################
 
 message(STATUS "")
-message(STATUS "Link flags:")
+message(STATUS "[SciLinkChecks]: Link flags:")
 foreach (type EXE SHARED)
   foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
     SciPrintVar(CMAKE_${type}_LINKER_FLAGS_${bld})
@@ -129,3 +133,4 @@ foreach (type EXE SHARED)
   message(STATUS "")
 endforeach ()
 
+message(STATUS "[SciLinkChecks]: FINISHED.")
