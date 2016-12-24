@@ -149,15 +149,15 @@ foreach (res ${SEARCH_RESULTS})
   set(OpenCascade_${res})
 endforeach ()
 set(OPENCASCADE_FOUND TRUE)
-# Set the installation search directory for oce with no component suffix
+# Set the installation search directory for opencascade with no component suffix
 if (USE_OPENCASCADE_SHARED)
   if (USE_PYC_LIBS)
-    set(instdirs oce-pycsh oce-sersh)
+    set(instdirs opencascade-pycsh opencascade-sersh)
   else ()
-    set(instdirs oce-sersh oce-pycsh)
+    set(instdirs opencascade-sersh opencascade-pycsh)
   endif ()
 else ()
-  SciGetInstSubdirs(oce instdirs)
+  SciGetInstSubdirs(opencascade instdirs)
 endif ()
 
 foreach (comp ${SciOpenCascade_ALL_COMPONENTS})
@@ -166,6 +166,7 @@ foreach (comp ${SciOpenCascade_ALL_COMPONENTS})
     SciFindPackage(PACKAGE OpenCascade${comp}
       INSTALL_DIRS "${instdirs}"
       HEADERS "${OpenCascade${comp}_SEARCHHDRS}"
+      INCLUDE_SUBDIRS include/opencascade
       LIBRARIES "${OpenCascade${comp}_SEARCHLIBS}"
       LIBRARY_SUBDIRS "${libsubdir}lib"
       PROGRAM_SUBDIRS "${libsubdir}bin"
