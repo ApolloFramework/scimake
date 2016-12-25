@@ -45,8 +45,11 @@ message (STATUS "--------- FindSciOpenCascade seeking OpenCascade -----------")
 set(OpenCascadeXdeIges_SEARCHLIBS TKXDEIGES)
 set(OpenCascadeXdeStep_SEARCHLIBS TKXDESTEP)
 # The libs below were required by TKXDEIGES
-set(OpenCascadeXde_SEARCHLIBS TKCDF TKV3d TKService TKHLR TKOffset TKPLCAF PTKernel TKPShape TKShapeSchema TKPCAF TKStdLSchema TKStdSchema TKXmlXCAF TKXmlXCAF TKXmlL TKXml TKBinL TKBinXCAF TKBin)
-set(OpenCascadeXde_SEARCHLIBS ${OpenCascadeXde_SEARCHLIBS} TKXCAF TKXCAFSchema TKXmlXCAF TKBinXCAF TKCAF TKTObj TKLCAF)
+set(OpenCascadeXde_SEARCHLIBS TKCDF TKV3d TKService TKHLR TKOffset TKXmlXCAF TKXmlXCAF TKXmlL TKXml TKBinL TKBinXCAF TKBin)
+set(OpenCascadeXde_SEARCHLIBS ${OpenCascadeXde_SEARCHLIBS} TKXCAF TKXmlXCAF TKBinXCAF TKCAF TKTObj TKLCAF)
+# These disappears in 7.1?
+# set(OpenCascadeXde_SEARCHLIBS TKPLCAF PTKernel TKPShape TKShapeSchema TKPCAF TKStdLSchema)
+# set(OpenCascadeXde_SEARCHLIBS ${OpenCascadeXde_SEARCHLIBS} TKXCAFSchema)
 # Mesh contains triangulation
 set(OpenCascadeMesh_SEARCHLIBS TKXMesh TKMesh)
 set(OpenCascadeMesh_SEARCHHDRS XBRepMesh.hxx) # contains triangulation
