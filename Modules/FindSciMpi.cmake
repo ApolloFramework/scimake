@@ -303,3 +303,8 @@ if (NOT SCIMPI_FOUND)
   endif ()
 endif ()
 
+# The Intel MPI Wrappers are actually .bat scripts on Windows.
+# That means we have to set include and link lines by hand.
+if (${CXX_COMPILER_ID} STREQUAL "Intel" AND ${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+  set(SCI_HAVE_MPICXX_COMPILER_WRAPPER 0)
+endif()

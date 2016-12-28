@@ -35,7 +35,8 @@
 # Default: libraries have boost_ prepended.
 set(BOOST_LIB_PREFIX boost_)
 # But Windows static have libboost_ prepended.
-if (WIN32 AND NOT(USE_SHARED_LIBS OR BUILD_SHARED_LIBS OR ENABLE_SHARED))
+#if (WIN32 AND NOT(USE_SHARED_LIBS OR BUILD_SHARED_LIBS OR ENABLE_SHARED))
+if (WIN32)
   set(BOOST_LIB_PREFIX libboost_)
 endif ()
 if (DEBUG_CMAKE)
