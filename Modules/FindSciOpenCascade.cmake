@@ -131,14 +131,18 @@ message(STATUS "OpenCascade_SEARCHLIBS = ${OpenCascade_SEARCHLIBS}.")
 
 # Set library subdirs
 if (WIN32)
-  # if (WIN64)
+  set(incsubdir inc)
   if (${CMAKE_SIZEOF_VOID_P} MATCHES 8)
-    set(libsubdir Win64/)
+    set(libsubdir win64)
   else ()
-    set(libsubdir Win32/)
+    set(libsubdir win32)
   endif ()
 else ()
+  set(incsubdir include)
   set(libsubdir)
+endif ()
+if (CXX_VERSION MATCHES "^18\\.")
+ set(libsubdir ${libsubdir}/vc12)
 endif ()
 
 # Only sersh build exists
@@ -169,10 +173,10 @@ foreach (comp ${SciOpenCascade_ALL_COMPONENTS})
     SciFindPackage(PACKAGE OpenCascade${comp}
       INSTALL_DIRS "${instdirs}"
       HEADERS "${OpenCascade${comp}_SEARCHHDRS}"
-      INCLUDE_SUBDIRS include/opencascade
+      INCLUDE_SUBDIRS ${incsubdir}
       LIBRARIES "${OpenCascade${comp}_SEARCHLIBS}"
-      LIBRARY_SUBDIRS "${libsubdir}lib"
-      PROGRAM_SUBDIRS "${libsubdir}bin"
+      LIBRARY_SUBDIRS "${libsubdir}/lib"
+      PROGRAM_SUBDIRS "${libsubdir}/bin"
       FIND_QUIETLY
     )
     foreach (res ${SEARCH_RESULTS})
