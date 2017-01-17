@@ -22,18 +22,11 @@
 #
 ######################################################################
 
-set(pnglib "png")
-if (APPLE)
-  set(pnglib "png16")
-elseif (LINUX)
-  set(pnglib "png12")
-endif () 
-
 SciFindPackage(
   PACKAGE "Png"
   INSTALL_DIRS libpng-sersh
   HEADERS png.h
-  LIBRARIES "${pnglib}" 
+  LIBRARIES "png" 
 )
 
 if (PNG_FOUND)
