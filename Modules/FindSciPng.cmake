@@ -25,7 +25,7 @@
 set(pnglib "png")
 if (APPLE)
   set(pnglib "png16")
-elif (LINUX)
+elseif (LINUX)
   set(pnglib "png12")
 endif () 
 
