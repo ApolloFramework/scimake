@@ -5,7 +5,7 @@
 #
 # $Rev$ $Date$
 #
-# Copyright &copy; 2012-2016, Tech-X Corporation, Boulder, CO.
+# Copyright &copy; 2012-2017, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 # This script sets the following variables which are also options:

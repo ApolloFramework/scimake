@@ -15,7 +15,7 @@
 #  CUDA_LIBRARY_DIRS       = Location of Cuda libraries
 #  CUDA_LIBRARIES          = Required libraries
 #
-# Copyright 2013-2016, Tech-X Corporation, Boulder, CO.
+# Copyright 2013-2017, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ######################################################################
