@@ -12,7 +12,7 @@
 #            OpenCL_LIBRARY_DIRS       = Location of OpenCL libraries
 #            OpenCL_LIBRARIES          = Required libraries
 #
-# @version $Id$
+# @version $Rev$ $Date$
 #
 # Copyright &copy; 2013-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

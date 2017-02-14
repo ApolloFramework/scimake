@@ -3,7 +3,7 @@
 # To encourage our software to use the same documentation, moving
 # functionality to a common cmake file
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright &copy; 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

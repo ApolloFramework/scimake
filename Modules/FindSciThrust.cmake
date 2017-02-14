@@ -14,7 +14,7 @@
 #
 # FindSciThrust: find includes and libraries for thrust
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

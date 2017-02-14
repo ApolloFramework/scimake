@@ -4,7 +4,7 @@
 #
 # @brief   Find locations of CUDA items
 #
-# @version $Id$
+# @version $Rev$ $Date$
 #
 # Module usage:
 #   find_package(SciCuda ...)

@@ -3,7 +3,7 @@
 # SciSseAvx: Determine sse and avx capabilities to processor and add
 #            to appropriate flags.
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

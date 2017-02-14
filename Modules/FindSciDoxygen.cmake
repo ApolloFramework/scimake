@@ -12,7 +12,7 @@
 #
 # SciDoxygen: Find Doxygen and set up apidocs target
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

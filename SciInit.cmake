@@ -2,7 +2,7 @@
 #
 # SciInit: Do the startup stuff for any package
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

@@ -3,7 +3,7 @@
 !
 ! @brief   Source code for detecting module file name
 !
-! @version $Id$
+! @version $Rev$ $Date$
 !
 ! Copyright &copy; 2012-2016, Tech-X Corporation, Boulder, CO.
 ! See LICENSE file (EclipseLicense.txt) for conditions of use.

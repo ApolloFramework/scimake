@@ -68,7 +68,7 @@
 #
 # SciFindPackage: find includes and libraries of a package
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

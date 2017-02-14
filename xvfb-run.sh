@@ -21,7 +21,7 @@
 # sudo yum install xorg-x11-server-Xvfb
 # sudo /usr/local/bin/rcom-nodes yum install xorg-x11-server-Xvfb
 #
-# @version $Id$
+# @version $Rev$ $Date$
 #
 # Copyright &copy; 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

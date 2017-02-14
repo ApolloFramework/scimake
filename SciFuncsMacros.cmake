@@ -4,7 +4,7 @@
 #
 # @brief   Various functions and macros used by Tech-X scimake
 #
-# @version $Id$
+# @version $Rev$ $Date$
 #
 # Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

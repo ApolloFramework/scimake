@@ -2,7 +2,7 @@
 #
 # SciTestConfig: Set variables for testing.
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2014-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

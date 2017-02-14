@@ -9,7 +9,7 @@
 #            2: source directory
 #            3-: all files to be linked
 #
-# @version $Id$
+# @version $Rev$ $Date$
 #
 # Copyright &copy; 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

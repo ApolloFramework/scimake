@@ -2,7 +2,7 @@
 #
 # SciSeparateLibs: Separate unix style libs into cmake flags and lib lists
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

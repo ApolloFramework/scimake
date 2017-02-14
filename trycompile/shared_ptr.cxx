@@ -1,5 +1,5 @@
 /**
- * $Id$
+ * $Rev$ $Date$
  *
  * Copyright &copy; 2013-2016, Tech-X Corporation, Boulder, CO.
  * See LICENSE file (EclipseLicense.txt) for conditions of use.

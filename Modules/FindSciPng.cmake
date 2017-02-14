@@ -14,7 +14,7 @@
 #
 # SciFindPng: find includes and libraries for z(compression)
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
@@ -26,7 +26,7 @@ SciFindPackage(
   PACKAGE "Png"
   INSTALL_DIRS libpng-sersh
   HEADERS png.h
-  LIBRARIES "png" 
+  LIBRARIES "png"
 )
 
 if (PNG_FOUND)

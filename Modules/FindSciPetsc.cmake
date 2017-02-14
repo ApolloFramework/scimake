@@ -15,7 +15,7 @@
 # SciFindPetsc: find includes and libraries for petsc.  Complex
 # due to the many libraries that petsc builds
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

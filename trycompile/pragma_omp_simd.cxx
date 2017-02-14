@@ -1,5 +1,5 @@
 /**
- * $Id$
+ * $Rev$ $Date$
  *
  * Code stub for determining whether the compiler supports simd pragmas
  * from OpenMP 4.

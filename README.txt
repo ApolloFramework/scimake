@@ -1,6 +1,6 @@
 SciMake CONVENTIONS FOR CMAKE FILES AND MODULES
 
-$Id$
+$Rev$ $Date$
 
 Copyright &copy; 2014-2015, Tech-X Corporation
 

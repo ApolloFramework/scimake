@@ -15,7 +15,7 @@
 #
 # FindEigen3: find includes for Eigen3
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2013-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

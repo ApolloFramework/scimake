@@ -14,10 +14,10 @@
 #
 # Find module for Dakota installation
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2016-2016, Tech-X Corporation, Boulder, CO.
-# All rights reserved.
+# See LICENSE file (EclipseLicense.txt) for conditions of use.
 #
 ###########################################################
 

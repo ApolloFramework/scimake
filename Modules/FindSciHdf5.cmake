@@ -15,7 +15,7 @@
 #
 # FindSciHdf5: find includes and libraries for hdf5
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
@@ -148,7 +148,7 @@ endif ()
 
 set(desiredmods)
 # We may have a working Fortran compiler, but perhaps don't
-# have a fortran Hdf5 build. 
+# have a fortran Hdf5 build.
 if (NOT DEFINED Hdf5_Fortran_REQUIRED)
   set(Hdf5_Fortran_REQUIRED ${CMAKE_Fortran_COMPILER_WORKS})
 endif ()

@@ -3,7 +3,7 @@
 # SciGetDepsFromInstall: From the installation of one project, find
 #   the installations of other other projects from config.summary.
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

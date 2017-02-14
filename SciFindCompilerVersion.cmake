@@ -2,7 +2,7 @@
 #
 # SciFindCompilerVersion: Determine compiler version for any compiler
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
@@ -80,8 +80,8 @@ macro(SciFindCompilerVersion COMPLANG)
       message(STATUS "Evaluating '${_version_str}'")
       message(STATUS "Got '${_version_tmp}'")
       string(REPLACE "Version " "" _version_tmp ${_version_tmp})
-    endif () 
-    else () 
+    endif ()
+    else ()
     if (CMAKE_${COMPLANG}_COMPILER MATCHES "icc"
         OR CMAKE_${COMPLANG}_COMPILER MATCHES "icpc"
         OR CMAKE_${COMPLANG}_COMPILER MATCHES "mpi"

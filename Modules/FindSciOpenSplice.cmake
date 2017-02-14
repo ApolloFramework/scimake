@@ -23,7 +23,7 @@
 # FindOpenSplice: find includes and libraries for OpenSplice. Complex
 # due to the many libraries that OpenSplice has
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2012-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.

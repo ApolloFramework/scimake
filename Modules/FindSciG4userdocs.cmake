@@ -8,7 +8,7 @@
 #
 # Find module for G4engine user documentation installation
 #
-# $Id$
+# $Rev$ $Date$
 #
 # Copyright 2014-2016, Tech-X Corporation, Boulder, CO.
 # See LICENSE file (EclipseLicense.txt) for conditions of use.
