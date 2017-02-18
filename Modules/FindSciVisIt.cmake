@@ -26,7 +26,7 @@
 if (WIN32)
   set(VisIt_DIFF_LIBS enginelib_ser guilib viewerlib)
 else ()
-  set(VisIt_DIFF_LIBS engine_ser gui viewer )
+  set(VisIt_DIFF_LIBS engine_ser gui viewer)
 endif ()
 
 # Libraries that are only required to support the volume plot
@@ -265,6 +265,7 @@ if (VISIT_FOUND)
     ${VisIt_INCLUDE_DIR}/mdserver/main
     ${VisIt_INCLUDE_DIR}/mdserver/proxy
     ${VisIt_INCLUDE_DIR}/mdserver/rpc
+    ${VisIt_INCLUDE_DIR}/viewer/core
     ${VisIt_INCLUDE_DIR}/viewer/main
     ${VisIt_INCLUDE_DIR}/viewer/proxy
     ${VisIt_INCLUDE_DIR}/viewer/rpc
