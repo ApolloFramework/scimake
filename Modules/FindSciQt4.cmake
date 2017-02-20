@@ -29,6 +29,20 @@ else ()
   find_package(Qt4 4.7.1 REQUIRED)
 endif ()
 
+# The above can give the wrong directory, if one has copied a qt installation
+get_filename_component(QT_QMAKE_DIR ${QT_QMAKE_EXECUTABLE} DIRECTORY)
+get_filename_component(QT_QMAKE_DIR ${QT_QMAKE_DIR} DIRECTORY)
+message(STATUS "QT_QMAKE_DIR = ${QT_QMAKE_DIR}.")
+get_filename_component(QT_MOC_DIR ${QT_MOC_EXECUTABLE} DIRECTORY)
+get_filename_component(QT_MOC_DIR ${QT_MOC_DIR} DIRECTORY)
+message(STATUS "QT_MOC_DIR = ${QT_MOC_DIR}.")
+if (NOT "${QT_MOC_DIR}" STREQUAL "${QT_QMAKE_DIR}")
+  message(STATUS "Directories not same, will need to fix.")
+  foreach (var QT_MOC_EXECUTABLE QT_UIC_EXECUTABLE QT_INCLUDES QT_LIBRARY_DIR QT_BINARY_DIR)
+    string(REPLACE "${QT_MOC_DIR}" "${QT_QMAKE_DIR}" ${var} "${${var}}")
+  endforeach ()
+endif ()
+
 # Use file sets up variables
 if (DEBUG_CMAKE)
   message(STATUS "QT_USE_FILE = ${QT_USE_FILE}")
@@ -53,6 +67,12 @@ foreach (qtoptlib ${QT_OPTIONAL_LIBRARIES})
    set(QT_LIBRARIES ${QT_LIBRARIES} ${QT_${_uppercaseoptlib}_LIBRARY})
  endif ()
 endforeach ()
+
+# Same fix as above
+# message(STATUS "QT_LIBRARIES = ${QT_LIBRARIES}.")
+if (NOT "${QT_MOC_DIR}" STREQUAL "${QT_QMAKE_DIR}")
+  string(REPLACE "${QT_MOC_DIR}" "${QT_QMAKE_DIR}" QT_LIBRARIES "${QT_LIBRARIES}")
+endif ()
 
 get_filename_component(QT_DIR ${QT_LIBRARY_DIR}/.. REALPATH)
 
