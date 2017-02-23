@@ -80,12 +80,28 @@ endif ()
 #  Go ahead and find it to be available.
 #
 #  Set iomp_dir
-get_filename_component(Iomp5_ROOT_DIR ${Mkl_ROOT_DIR}/../compiler/lib/${Mkl_ARCH} REALPATH)
+get_filename_component(Iomp5_ROOT_DIR ${Mkl_ROOT_DIR}/../compiler/ REALPATH)
 
-# Not quite sure about this -- this comes from Rood
-if (WIN32)
-  SciFindPackage(PACKAGE "Iomp5" LIBRARIES "libiomp5md")
-else ()
-  SciFindPackage(PACKAGE "Iomp5" LIBRARIES "iomp5")
+if ("${Iomp5_SEARCH_LIBS}" STREQUAL "")
+  if (WIN32)
+    set(Iomp5_SEARCH_LIBS "libiomp5md")
+  else ()
+    set(Iomp5_SEARCH_LIBS "iomp5")
+  endif()
 endif ()
+
+#
+#  Now start the searching
+#
+SciFindPackage(PACKAGE "Iomp5" 
+               LIBRARIES ${Iomp5_SEARCH_LIBS}
+               INCLUDE_SUBDIRS "include"
+               LIBRARY_SUBDIRS "lib/${Mkl_ARCH}"
+              )
+
+
+
+
+
+
 
