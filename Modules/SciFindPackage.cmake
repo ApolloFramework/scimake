@@ -501,9 +501,10 @@ function(SciFindPkgFiles pkgname pkgfiles
     endif ()
 
 # If not found, try again with default paths
-    if (NOT ${pkgfilevar})
+    if ((NOT ${pkgfilevar}) AND (NOT rootpath))
       if (DEBUG_CMAKE)
         message(STATUS "Failed to find ${realpkgfile} in search path, trying default paths.")
+        message(STATUS "rootpath = ${rootpath}.")
       endif ()
       if (${singularsfx} STREQUAL PROGRAM)
         find_program(${basesrchargs}
