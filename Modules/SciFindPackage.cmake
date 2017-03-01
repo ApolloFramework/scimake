@@ -504,10 +504,11 @@ function(SciFindPkgFiles pkgname pkgfiles
     message(STATUS "${pkgfilevar} = ${${pkgfilevar}}.")
     message(STATUS "rootpath = ${rootpath}.")
     message(STATUS "singularsfx = ${singularsfx}.")
-    if ((NOT ${pkgfilevar}) AND (NOT rootpath) AND (NOT ${singularsfx} STREQUAL DLL))
-      if (DEBUG_CMAKE)
+    # if ((NOT ${pkgfilevar}) AND (NOT rootpath) AND NOT (singularsfx STREQUAL "DLL"))
+    if ((NOT singularsfx STREQUAL "DLL") AND (NOT ROOTPATH) AND (NOT "${${pkgfilevar}}"))
+      # if (DEBUG_CMAKE)
         message(STATUS "Failed to find ${realpkgfile} in search path, trying default paths.")
-      endif ()
+      # endif ()
       if (${singularsfx} STREQUAL PROGRAM)
         find_program(${basesrchargs}
           DOC " The ${realpkgfile} ${singularsfx} file"
@@ -532,6 +533,8 @@ function(SciFindPkgFiles pkgname pkgfiles
       if (DEBUG_CMAKE)
         message(STATUS "From second search: ${pkgfilevar} = ${${pkgfilevar}}.")
       endif ()
+    else ()
+      message(STATUS "Not doing second search.")
     endif ()
 
     if (${pkgfilevar})
