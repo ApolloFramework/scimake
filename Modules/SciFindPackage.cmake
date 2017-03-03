@@ -432,7 +432,7 @@ function(SciFindPkgFiles pkgname pkgfiles
 
 # Set the package path
 
-# Loop over list of files and try to find each one
+# Loop over list of executables and try to find each one
   set(abspkgfiles)
   set(pkgdirs)
   set(allfound TRUE)
@@ -500,13 +500,8 @@ function(SciFindPkgFiles pkgname pkgfiles
       message(STATUS "From first search: ${pkgfilevar} = ${${pkgfilevar}}.")
     endif ()
 
-# If not found, try again with default paths if not DLL and rootpath not defined
-    if (DEBUG_CMAKE)
-      message(STATUS "${pkgfilevar} = ${${pkgfilevar}}.")
-      message(STATUS "rootpath = ${rootpath}.")
-      message(STATUS "singularsfx = ${singularsfx}.")
-    endif ()
-    if ((NOT singularsfx STREQUAL "DLL") AND (NOT rootpath) AND (NOT "${${pkgfilevar}}"))
+# If not found, try again with default paths
+    if (NOT ${pkgfilevar})
       if (DEBUG_CMAKE)
         message(STATUS "Failed to find ${realpkgfile} in search path, trying default paths.")
       endif ()
@@ -533,10 +528,6 @@ function(SciFindPkgFiles pkgname pkgfiles
       endif ()
       if (DEBUG_CMAKE)
         message(STATUS "From second search: ${pkgfilevar} = ${${pkgfilevar}}.")
-      endif ()
-    else ()
-      if (DEBUG_CMAKE)
-        message(STATUS "Not doing second search.")
       endif ()
     endif ()
 
@@ -650,7 +641,7 @@ macro(SciFindPackage)
   set(TFP_DLL_SUBDIRS ${TFP_PROGRAM_SUBDIRS} bin lib .)
 
 # This message is purposefully NOT a STATUS message
-# to provide more readable output
+# To provide more readable output
   if (NOT DEBUG_CMAKE AND TFP_FIND_QUIETLY)
     message(STATUS "Seeking ${TFP_PACKAGE}.")
   else ()
@@ -725,10 +716,10 @@ macro(SciFindPackage)
 
 # Find the set of possible root installation dirs
   SciGetRootPath(${scipkgreg} "${scipkginst}" origscipath)
-  set(scipath "${origscipath}")
   if (DEBUG_CMAKE)
     message(STATUS "scipath = ${scipath}")
   endif ()
+  set(scipath "${origscipath}")
 
 #######################################################################
 #
