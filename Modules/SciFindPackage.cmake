@@ -535,7 +535,9 @@ function(SciFindPkgFiles pkgname pkgfiles
         message(STATUS "From second search: ${pkgfilevar} = ${${pkgfilevar}}.")
       endif ()
     else ()
-      message(STATUS "Not doing second search.")
+      if (DEBUG_CMAKE)
+        message(STATUS "Not doing second search.")
+      endif ()
     endif ()
 
     if (${pkgfilevar})
