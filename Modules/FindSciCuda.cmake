@@ -42,7 +42,7 @@ endif ()
 
 # CUDA not working with Intel
 message(STATUS "${CMAKE_CXX_COMPILER_ID}")
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
   set(SCI_ENABLE_CUDA FALSE)
 endif()
 
