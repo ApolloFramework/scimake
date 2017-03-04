@@ -501,13 +501,21 @@ function(SciFindPkgFiles pkgname pkgfiles
     endif ()
 
 # If not found, try again with default paths if not DLL and rootpath not defined
+    list(LENGTH rootpath rootpathlen)
     if (DEBUG_CMAKE)
       message(STATUS "${pkgfilevar} = ${${pkgfilevar}}.")
       message(STATUS "rootpath = ${rootpath}.")
+      message(STATUS "rootpathlen = ${rootpathlen}.")
       message(STATUS "singularsfx = ${singularsfx}.")
     endif ()
-    if (NOT ${pkgfilevar})
-    # if ((NOT singularsfx STREQUAL "DLL") AND (NOT rootpath) AND (NOT "${${pkgfilevar}}"))
+    # if (NOT ${pkgfilevar})
+    # if ((NOT "${singularsfx}" STREQUAL "DLL") AND (rootpath) AND (NOT "${${pkgfilevar}}"))
+    # if ((NOT "${singularsfx}" STREQUAL "DLL") AND (${rootpathlen}))
+    # if ((NOT ${pkgfilevar}) AND (NOT "${singularsfx}" STREQUAL "DLL") AND (${rootpathlen} EQUAL 1))
+    # if ((NOT ${pkgfilevar}) AND (NOT "${singularsfx}" STREQUAL "DLL") AND (${rootpathlen}))
+# To prevent finding of spurious DLLs, we need to set the particular rootpath
+# once anything is found and use that from then forward if not a system path.
+    if ((NOT ${pkgfilevar}) AND (NOT "${singularsfx}" STREQUAL "DLL")))
       if (DEBUG_CMAKE)
         message(STATUS "Failed to find ${realpkgfile} in search path, trying default paths.")
       endif ()
