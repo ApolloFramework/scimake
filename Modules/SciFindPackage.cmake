@@ -419,15 +419,16 @@ endfunction()
 #  singularsfx: singular version of the file type
 #  pluralsfx: plural version of the file type
 #  allfoundvar: whether all files were found
-#  allowdups: whether duplicates are allowed in list
-#  rootpathvar: the variable in which the rootpath is stored
+#  nodefvar: if true, do not look in system paths
 #
 function(SciFindPkgFiles pkgname pkgfiles
   rootpath filesubdirs
-  singularsfx pluralsfx allfoundvar rootpathvar)
+  singularsfx pluralsfx allfoundvar nodefvar)
 
+  set(nodef ${${nodefvar}})
   if (DEBUG_CMAKE)
     message(STATUS "Looking for files of type, ${singularsfx} under ${rootpath} with filesubdirs = ${filesubdirs}.")
+    message(STATUS "nodef from ${nodefvar} = ${nodef}.")
   endif ()
 
 # Set the package path
@@ -499,8 +500,15 @@ function(SciFindPkgFiles pkgname pkgfiles
     if (DEBUG_CMAKE)
       message(STATUS "From first search: ${pkgfilevar} = ${${pkgfilevar}}.")
     endif ()
+# Once found not in default paths, no more searching in default paths.
+    if (${pkgfilevar})
+      set(nodef TRUE)
+    endif ()
+    if (DEBUG_CMAKE)
+      message(STATUS "nodef = ${nodef}.")
+    endif ()
 
-# If not found, try again with default paths if not DLL and rootpath not defined
+# If not found, try again with default paths if allowed
     list(LENGTH rootpath rootpathlen)
     if (DEBUG_CMAKE)
       message(STATUS "${pkgfilevar} = ${${pkgfilevar}}.")
@@ -508,14 +516,7 @@ function(SciFindPkgFiles pkgname pkgfiles
       message(STATUS "rootpathlen = ${rootpathlen}.")
       message(STATUS "singularsfx = ${singularsfx}.")
     endif ()
-    # if (NOT ${pkgfilevar})
-    # if ((NOT "${singularsfx}" STREQUAL "DLL") AND (rootpath) AND (NOT "${${pkgfilevar}}"))
-    # if ((NOT "${singularsfx}" STREQUAL "DLL") AND (${rootpathlen}))
-    # if ((NOT ${pkgfilevar}) AND (NOT "${singularsfx}" STREQUAL "DLL") AND (${rootpathlen} EQUAL 1))
-    # if ((NOT ${pkgfilevar}) AND (NOT "${singularsfx}" STREQUAL "DLL") AND (${rootpathlen}))
-# To prevent finding of spurious DLLs, we need to set the particular rootpath
-# once anything is found and use that from then forward if not a system path.
-    if ((NOT ${pkgfilevar}) AND (NOT "${singularsfx}" STREQUAL "DLL")))
+    if ((NOT ${pkgfilevar}) AND (NOT nodef))
       if (DEBUG_CMAKE)
         message(STATUS "Failed to find ${realpkgfile} in search path, trying default paths.")
       endif ()
@@ -618,6 +619,10 @@ function(SciFindPkgFiles pkgname pkgfiles
   set(${pkgname}_${pluralsfx} ${abspkgfiles} PARENT_SCOPE)
   set(${pkgname}_${singularsfx}_DIRS ${pkgdirs} PARENT_SCOPE)
   set(${allfoundvar} ${allfound} PARENT_SCOPE)
+  set(${nodefvar} ${nodef} PARENT_SCOPE)
+  if (DEBUG_CMAKE)
+    message(STATUS "${nodefvar} = ${nodef} PARENT_SCOPE.")
+  endif ()
 
 endfunction()
 
@@ -824,6 +829,7 @@ macro(SciFindPackage)
     if (WIN32)
       set(scitypes ${scitypes} DLL)
     endif ()
+    set(${scipkgreg}_NODEFAULT_PATHS FALSE)
     foreach (scitype ${scitypes})
 
 # Get plural
@@ -889,8 +895,9 @@ macro(SciFindPackage)
         SciFindPkgFiles(${scipkgreg} "${${srchfilesvar}}"
           "${scipath}" "${scifilesubdirs}"
           ${scitype} ${scitypeplural} ${scipkgreg}_${scitypeplural}_FOUND
-          ${TFP_ALLOW_LIBRARY_DUPLICATES}
+          ${scipkgreg}_NODEFAULT_PATHS
         )
+        message(STATUS "${scipkgreg}_NODEFAULT_PATHS = ${${scipkgreg}_NODEFAULT_PATHS}.")
 # Okay not to find dlls
         if (NOT ${scipkgreg}_${scitypeplural}_FOUND)
           if (NOT ${scitype} STREQUAL DLL)
