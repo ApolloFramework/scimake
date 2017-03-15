@@ -55,13 +55,22 @@ if ("${Mkl_SEARCH_LIBS}" STREQUAL "")
   endif ()
 endif ()
 
+if ("${Mkl_SEARCH_HEADERS}" STREQUAL "")
+  if (ENABLE_MKL_SCALAPACK)
+    set(Mkl_SEARCH_HEADERS "mkl.h;mkl.fi;mkl_lapack.h;lapack.f90;mkl_lapack.fi;mkl_scalapack.h;mkl_pardiso.f90;mkl_pardiso.fi;mkl_pardiso.h")
+  else ()
+    set(Mkl_SEARCH_HEADERS "mkl.h;mkl.fi")
+  endif ()
+endif ()
+
 #
 #  Now start the searching
 #
 SciFindPackage(PACKAGE "Mkl"
               LIBRARIES ${Mkl_SEARCH_LIBS}
-              INCLUDE_SUBDIRS "include"
               LIBRARY_SUBDIRS "lib/${Mkl_ARCH}"
+              HEADERS  ${Mkl_SEARCH_HEADERS}
+              INCLUDE_SUBDIRS "include"
               )
 
 if (NOT MKL_FOUND)
@@ -98,10 +107,3 @@ SciFindPackage(PACKAGE "Iomp5"
                INCLUDE_SUBDIRS "include"
                LIBRARY_SUBDIRS "lib/${Mkl_ARCH}"
               )
-
-
-
-
-
-
-
