@@ -41,7 +41,7 @@ macro(SciFindQtPkg)
 
 # Construct various names(upper/lower case) for package
   string(REGEX REPLACE "[./-]" "_" qtpkgreg ${SFQP_PACKAGE})
-# scipkgreg is the regularized package name
+# qtpkgreg is the regularized package name
   string(TOUPPER ${qtpkgreg} qtpkguc)
 
 # Assume Qt found
