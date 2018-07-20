@@ -9,8 +9,15 @@
 #
 ######################################################################
 
+# We need to set this policy to NEW so that strings that
+# happend to be variables inside quotes are not intrepreted
+# as the variables. We want "MSVC" to be the string MSVC not
+# the value of the variable MSVC.
+cmake_policy(SET CMP0054 NEW)
+
 # Determine compiler version
-message("")
+message(STATUS "Checking C compiler capabilities.")
+SciPrintVar(C_COMPILER_ID)
 include(${SCIMAKE_DIR}/SciFindCompilerVersion.cmake)
 SciFindCompilerVersion(C)
 if (NOT C_VERSION)
@@ -76,7 +83,7 @@ TIME_WITH_SYS_TIME
 )
 if (TIME_WITH_SYS_TIME)
   if (DEBUG_CMAKE)
-    message("time.h and sys/time.h are compatible.")
+    message(STATUS "time.h and sys/time.h are compatible.")
   endif ()
   set(TIME_WITH_SYS_TIME 1 CACHE BOOL "Whether time and sys/time are compatible")
 else ()
@@ -93,7 +100,7 @@ TM_IN_SYS_TIME
 )
 if (TM_IN_SYS_TIME)
   if (DEBUG_CMAKE)
-    message("struct tm is in time.h.")
+    message(STATUS "struct tm is in time.h.")
   endif ()
   set(TM_IN_SYS_TIME 1 CACHE BOOL "Whether struct tm is in sys/time.")
 else ()
@@ -119,11 +126,13 @@ set(SSE2_FLAG "compiler flags for this ISA not known")
 set(AVX_FLAG "compiler flags for this ISA not known")
 set(AVX2_FLAG "compiler flags for this ISA not known")
 set(AVX512_FLAG "compiler flags for this ISA not known")
+
 #
-# Determine flags by compiler
+# Determine full-build compiler flags and auxiliary flags
 #
 set(CMAKE_C_FLAGS_FULL "${CMAKE_C_FLAGS_RELEASE}")
-if (${C_COMPILER_ID} STREQUAL GNU)
+set(CMAKE_C_FLAGS_DEBUGINFO "${CMAKE_C_FLAGS_DEBUG}")
+if (C_COMPILER_ID STREQUAL "GNU")
 
   set(CMAKE_C_FLAGS_FULL "${CMAKE_C_FLAGS_FULL} -ffast-math")
   set(SSE2_FLAG "-msse2")
@@ -136,43 +145,55 @@ if (${C_COMPILER_ID} STREQUAL GNU)
   set(AVX512_FLAG "-mavx512f")
   set(OPENMP_FLAGS -fopenmp)
 
-elseif (${C_COMPILER_ID} STREQUAL Clang)
+elseif (C_COMPILER_ID STREQUAL "Clang")
 
   set(SSE2_FLAG "-msse2")
   set(AVX_FLAG "-mavx")
   set(AVX2_FLAG "-mavx2")
 
-elseif (${C_COMPILER_ID} STREQUAL Cray)
+elseif (C_COMPILER_ID STREQUAL "Cray")
 
   set(OPENMP_FLAGS "-h omp")
 
-elseif (${C_COMPILER_ID} STREQUAL Intel)
+elseif (C_COMPILER_ID STREQUAL "Intel")
 
-  set(SSE2_FLAG "-msse2")
-  set(AVX_FLAG "-march=corei7-avx")
+  set(SSE2_FLAG "-axSSE2")
+  set(AVX_FLAG "-axAVX")
   if (APPLE)
-# On OS X direct to use clang assembler.  Needs testing.
-    set(AVX_FLAG "${AVX_FLAG} -Wa,-q")
+# On OS X direct to use clang assembler.  Needs testing.  benc: Won't
+# work with -ax flag.
+    # set(AVX_FLAG "${AVX_FLAG} -Wa,-q")
   endif ()
-  set(AVX2_FLAG "-march=core-avx2")
-# As of 17.0, need to use -fopenmp.  Maybe before?  Change as discovered.
-  if (${C_VERSION} VERSION_LESS 17.0)
-    set(OPENMP_FLAGS "-openmp")
-  else ()
+  set(AVX2_FLAG "-axCORE-AVX2")
+  set(AVX512_FLAG "-axCORE-AVX512,MIC-AVX512")
+  if (${C_VERSION} VERSION_GREATER_EQUAL 18.0)
+# As of 18.0, need to use -qopenmp.
+    set(OPENMP_FLAGS "-qopenmp")
+  elseif (${C_VERSION} VERSION_GREATER_EQUAL 17.0)
+# As of 17.0, need to use -fopenmp.
     set(OPENMP_FLAGS "-fopenmp")
+  elseif (${C_VERSION} VERSION_GREATER_EQUAL 16.0)
+# For 16.0, need to use -qopenmp.
+    set(OPENMP_FLAGS "-qopenmp")
+  else ()
+    set(OPENMP_FLAGS "-openmp")
   endif ()
 
-elseif (${C_COMPILER_ID} STREQUAL MSVC)
+elseif (C_COMPILER_ID STREQUAL "MSVC")
 
   set(SSE2_FLAG "")
   set(AVX_FLAG "/arch:AVX")
   set(AVX2_FLAG "/arch:AVX2")
   set(AVX512_FLAG "unknown architecture flags")
   set(OPENMP_FLAGS "/openmp")
+  SciRplCompilerFlags(C DEBUGINFO RMVFLG "/MDd" ADDFLG "/MD")
+  SciRplCompilerFlags(C DEBUGINFO RMVFLG "/MDd" ADDFLG "/MD")
+  SciRplCompilerFlags(CXX DEBUGINFO RMVFLG "/DNDEBUG" ADDFLG "")
+  SciRplCompilerFlags(CXX DEBUGINFO RMVFLG "/DNDEBUG" ADDFLG "")
 
-elseif (${C_COMPILER_ID} STREQUAL PathScale)
+elseif (C_COMPILER_ID STREQUAL PathScale)
 
-elseif (${C_COMPILER_ID} STREQUAL PGI)
+elseif (C_COMPILER_ID STREQUAL PGI)
 
 # Compiler optimization flags set based on "ultra" optimization in
 # flags.m4.  Overrides scimake default, since that had -Mipa=fast
@@ -184,7 +205,7 @@ elseif (${C_COMPILER_ID} STREQUAL PGI)
   # set(AVX_FLAG -h intrinsics)
   set(OPENMP_FLAGS "-mp")
 
-elseif (${C_COMPILER_ID} STREQUAL XL)
+elseif (C_COMPILER_ID STREQUAL XL)
 
 # CMake default XL compiler flags are very poor
   set(CMAKE_C_FLAGS_RELEASE "-O3 -qnooptdebug")
@@ -194,7 +215,7 @@ elseif (${C_COMPILER_ID} STREQUAL XL)
   set(OPENMP_FLAGS "-qsmp=omp -qsmp=stackcheck")
 
 else ()
-  message(STATUS "FULL flags not known for ${C_COMPILER_ID}")
+  message(WARNING "C_COMPILER_ID is '${C_COMPILER_ID}'. Flags were not set for this ID.")
 endif ()
 
 SciPrintString("")
@@ -213,14 +234,14 @@ SciPrintVar(OPENMP_FLAGS)
 
 # Remove /MD etc for static builds on Windows, Add /bigobj.
 if (WIN32 AND NOT MINGW)
-  foreach (bldtype FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
+  foreach (bldtype FULL DEBUGINFO RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
     SciRplCompilerFlags(C ${bldtype})
   endforeach ()
 endif ()
 
 # Print results
 message(STATUS "C compiler options:")
-foreach (bld FULL RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
+foreach (bld FULL DEBUGINFO RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
   SciPrintVar(CMAKE_C_FLAGS_${bld})
 endforeach ()
 SciPrintVar(CMAKE_C_FLAGS)

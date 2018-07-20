@@ -232,12 +232,18 @@ endif ()
 #
 ######################################################################
 
-include(${SCIMAKE_DIR}/SciOmpSseAvx.cmake)
-option(ENABLE_OPENCL    "Whether to enable OpenCL" OFF)
-if (ENABLE_OPENCL)
-include(${SCIMAKE_DIR}/Modules/FindSciOpenCL.cmake)
+# option(CHECK_OMP_SSE_AVX "Whether to check for OpenMP, SSE or AVX" TRUE)
+if (NOT DEFINED CHECK_OMP_SSE_AVX)
+  set(CHECK_OMP_SSE_AVX TRUE)
 endif ()
-include(${SCIMAKE_DIR}/SciMultiArchKernels.cmake)
+if (C_COMPILER AND CHECK_OMP_SSE_AVX)
+  include(${SCIMAKE_DIR}/SciOmpSseAvx.cmake)
+  option(ENABLE_OPENCL    "Whether to enable OpenCL" OFF)
+  if (ENABLE_OPENCL)
+    include(${SCIMAKE_DIR}/Modules/FindSciOpenCL.cmake)
+  endif ()
+  include(${SCIMAKE_DIR}/SciMultiArchKernels.cmake)
+endif ()
 
 ######################################################################
 #
@@ -245,7 +251,9 @@ include(${SCIMAKE_DIR}/SciMultiArchKernels.cmake)
 #
 ######################################################################
 
-include(${SCIMAKE_DIR}/SciLinkChecks.cmake)
+if (C_COMPILER)
+  include(${SCIMAKE_DIR}/SciLinkChecks.cmake)
+endif ()
 
 ######################################################################
 #
@@ -253,13 +261,13 @@ include(${SCIMAKE_DIR}/SciLinkChecks.cmake)
 #
 ######################################################################
 
-if (ENABLE_SHARED)
+if (C_COMPILER AND ENABLE_SHARED)
   message(WARNING "ENABLE_SHARED is deprecated.  Use BUILD_SHARED_LIBS.")
   if (NOT DEFINED BUILD_SHARED_LIBS)
     set(BUILD_SHARED_LIBS TRUE)
   endif ()
 endif ()
-if (BUILD_SHARED_LIBS AND NOT DEFINED USE_SHARED_LIBS)
+if (C_COMPILER AND BUILD_SHARED_LIBS AND NOT DEFINED USE_SHARED_LIBS)
   set(USE_SHARED_LIBS TRUE)
 endif ()
 
@@ -270,7 +278,8 @@ endif ()
 ######################################################################
 
 if (USING_MINGW)
-  message("")
+  message(STATUS "
+")
   message("--------- Setting MinGW library prefix and suffix to windows style  ---------")
   set(CMAKE_STATIC_LIBRARY_PREFIX "")
   set(CMAKE_STATIC_LIBRARY_SUFFIX .lib)
@@ -303,7 +312,9 @@ endif ()
 #
 ######################################################################
 
-message("")
+message(STATUS "
+")
+cmake_host_system_information(RESULT SCIHOSTNAME QUERY HOSTNAME)
 if (NOT RESULTS_DIR)
   message(STATUS "[SciInit]: RESULTS_DIR not specified.")
 endif ()

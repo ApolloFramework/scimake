@@ -11,7 +11,7 @@
 ######################################################################
 
 # Determine compiler version
-message("")
+message(STATUS "Checking C++ compiler capabilities.")
 include(${SCIMAKE_DIR}/SciFindCompilerVersion.cmake)
 SciFindCompilerVersion(CXX)
 set(CXX ${CMAKE_CXX_COMPILER})
@@ -95,11 +95,11 @@ try_compile(HAVE_GENERALLY_DECLARED_STATICS ${PROJECT_BINARY_DIR}/scimake
 set(HAVE_GENERALLY_DECLARED_STATICS ${HAVE_GENERALLY_DECLARED_STATICS} CACHE BOOL "Whether the C++ compiler allows generally declared templated static variables")
 if (HAVE_GENERALLY_DECLARED_STATICS)
   if (DEBUG_CMAKE)
-    message("${SCIMAKE_DIR}/trycompile/gendeclstatics.cxx compiled.")
+    message(STATUS "${SCIMAKE_DIR}/trycompile/gendeclstatics.cxx compiled.")
   endif ()
 else ()
   if (DEBUG_CMAKE)
-    message("${SCIMAKE_DIR}/trycompile/gendeclstatics.cxx did not compile.")
+    message(STATUS "${SCIMAKE_DIR}/trycompile/gendeclstatics.cxx did not compile.")
   endif ()
 endif ()
 
@@ -109,7 +109,7 @@ try_compile(HAVE_STD_ABS_DOUBLE ${PROJECT_BINARY_DIR}/scimake
 set(HAVE_STD_ABS_DOUBLE ${HAVE_STD_ABS_DOUBLE} CACHE BOOL "Whether the C++ compiler understands std::abs with double arg")
 if (HAVE_STD_ABS_DOUBLE)
   if (DEBUG_CMAKE)
-    message("${SCIMAKE_DIR}/trycompile/stdabsdbl.cxx compiled.")
+    message(STATUS "${SCIMAKE_DIR}/trycompile/stdabsdbl.cxx compiled.")
   endif ()
 else ()
   if (DEBUG_CMAKE)
@@ -127,7 +127,7 @@ set(RTTI_RUN_RESULT ${RTTI_RUN_RESULT} CACHE BOOL "Whether the C++ compiler buil
 set(RTTI_COMPILES ${RTTI_COMPILES} CACHE BOOL "Whether the C++ compiler compiles source using run-time type identification.")
 if (RTTI_COMPILES)
   if (DEBUG_CMAKE)
-    message("${SCIMAKE_DIR}/trycompile/checkCompilerRTTI.cxx compiled.")
+    message(STATUS "${SCIMAKE_DIR}/trycompile/checkCompilerRTTI.cxx compiled.")
   endif ()
   if (RTTI_RUN_RESULT EQUAL 0)
     set(COMPILER_TYPEID_IS_VALID 1)
@@ -212,6 +212,7 @@ SciPrintVar(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES)
 
 # Add in full flags
 set(CMAKE_CXX_FLAGS_FULL "${CMAKE_C_FLAGS_FULL}")
+set(CMAKE_CXX_FLAGS_DEBUGINFO "${CMAKE_C_FLAGS_DEBUGINFO}")
 
 # Remove /MD etc for static builds on Windows
 if (WIN32 AND NOT MINGW)
